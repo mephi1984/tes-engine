@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Salmon Engine Wallpaper Template</string>
+	<string name="description">Salmon Engine Wallpaper Template</string>
+	<string name="feedback">This template made by fishrungames.com</string>
+
+	<string name="p_red_background">Background color</string>
+	<string name="p_red_background_on">Red background</string>
+	<string name="p_red_background_off">Blue background</string>
+	
+	<declare-styleable name="Wallpaper">
+		<!--
+			Component name of an activity that allows the user to modify the
+			current settings for this wallpaper.
+		-->
+		<attr name="settingsActivity" format="reference" />
+		<!-- Reference to a the wallpaper's thumbnail bitmap. -->
+		<attr name="thumbnail" format="reference" />
+		<!-- Name of the author of this component, e.g. Google. -->
+		<attr name="author" format="reference" />
+		<!-- Short description of the component's purpose or behavior. -->
+		<attr name="description" format="reference" />
+	</declare-styleable>
+	
+	
+</resources>
+

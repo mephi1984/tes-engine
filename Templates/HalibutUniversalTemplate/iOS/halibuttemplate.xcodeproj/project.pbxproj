@@ -1,0 +1,504 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C49B2BE15B0991B003512CD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C49B2BD15B0991B003512CD /* UIKit.framework */; };
+		4C49B2C015B0991B003512CD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C49B2BF15B0991B003512CD /* Foundation.framework */; };
+		4C49B2C215B0991B003512CD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C49B2C115B0991B003512CD /* CoreGraphics.framework */; };
+		4C49B2C415B0991B003512CD /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C49B2C315B0991B003512CD /* GLKit.framework */; };
+		4C49B2C615B0991B003512CD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C49B2C515B0991B003512CD /* OpenGLES.framework */; };
+		4C49B2CC15B0991B003512CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C49B2CA15B0991B003512CD /* InfoPlist.strings */; };
+		4C49B2CE15B0991B003512CD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2CD15B0991B003512CD /* main.m */; };
+		4C49B2D215B0991B003512CD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2D115B0991B003512CD /* AppDelegate.m */; };
+		4C49B2D915B0991B003512CD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2D815B0991B003512CD /* ViewController.m */; };
+		4C49B2DC15B0991B003512CD /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C49B2DA15B0991B003512CD /* ViewController_iPhone.xib */; };
+		4C49B2DF15B0991B003512CD /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C49B2DD15B0991B003512CD /* ViewController_iPad.xib */; };
+		4C4C807515BA8F460037C6CE /* libsquirrel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C807415BA8F460037C6CE /* libsquirrel.a */; };
+		4C4C807715BA8F5B0037C6CE /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C807615BA8F5B0037C6CE /* libz.a */; };
+		4C6EB44515C3CFD300316CB6 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6EB44415C3CFD300316CB6 /* libpng.a */; };
+		4C74848615C5AD6E0056EC44 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C74848315C5AD6E0056EC44 /* Icon.png */; };
+		4C74848715C5AD6E0056EC44 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 4C74848415C5AD6E0056EC44 /* iTunesArtwork */; };
+		4C74848815C5AD6E0056EC44 /* Splash-landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C74848515C5AD6E0056EC44 /* Splash-landscape.png */; };
+		4C74849815C5AF7C0056EC44 /* main_code.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C74849615C5AF7C0056EC44 /* main_code.cpp */; };
+		4C7484AC15C5BF580056EC44 /* libHalibut Engine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7484AB15C5BDD70056EC44 /* libHalibut Engine.a */; };
+		4C77831315BABD68003D5142 /* libvorbis-tremor-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C77831215BABD68003D5142 /* libvorbis-tremor-ios.a */; };
+		4C77831815BABE26003D5142 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C77831415BABD8B003D5142 /* AudioToolbox.framework */; };
+		4C77831915BABE26003D5142 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C77831515BABD8B003D5142 /* OpenAL.framework */; };
+		4C7AD44C15B1D77700A599F6 /* ios_api.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD44B15B1D77700A599F6 /* ios_api.cpp */; };
+		4C7C584B15C31E6500CAE4F4 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7C584A15C31E6500CAE4F4 /* libboost.a */; };
+		4CCC0ECC15B30D6B005432FB /* CustomGLKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC0ECB15B30D6B005432FB /* CustomGLKView.m */; };
+		4CE6A9D215B2F979006A3965 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 4CE6A9D115B2F979006A3965 /* assets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C7484AA15C5BDD70056EC44 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C7484A315C5BDD60056EC44 /* Halibut Engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C8CE90215B0A0F400078175;
+			remoteInfo = "Halibut Engine";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C49B2B915B0991B003512CD /* halibuttemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = halibuttemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C49B2BD15B0991B003512CD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4C49B2BF15B0991B003512CD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4C49B2C115B0991B003512CD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4C49B2C315B0991B003512CD /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		4C49B2C515B0991B003512CD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		4C49B2C915B0991B003512CD /* template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "template-Info.plist"; sourceTree = "<group>"; };
+		4C49B2CB15B0991B003512CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C49B2CD15B0991B003512CD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C49B2CF15B0991B003512CD /* template-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "template-Prefix.pch"; sourceTree = "<group>"; };
+		4C49B2D015B0991B003512CD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4C49B2D115B0991B003512CD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4C49B2D715B0991B003512CD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4C49B2D815B0991B003512CD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4C49B2DB15B0991B003512CD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
+		4C49B2DE15B0991B003512CD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
+		4C4C807415BA8F460037C6CE /* libsquirrel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsquirrel.a; path = "../../libs/SQUIRREL2_1_1_sqplus/build-ios/ios-device/libsquirrel.a"; sourceTree = "<group>"; };
+		4C4C807615BA8F5B0037C6CE /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = "../../libs/zlib-1.2.7/build-ios/ios-device/libz.a"; sourceTree = "<group>"; };
+		4C6EB44415C3CFD300316CB6 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../libs/libpng-1.5.12/build-ios/ios-simulator/libpng.a"; sourceTree = "<group>"; };
+		4C74848315C5AD6E0056EC44 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = res/Icon.png; sourceTree = "<group>"; };
+		4C74848415C5AD6E0056EC44 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = res/iTunesArtwork; sourceTree = "<group>"; };
+		4C74848515C5AD6E0056EC44 /* Splash-landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Splash-landscape.png"; path = "res/Splash-landscape.png"; sourceTree = "<group>"; };
+		4C74849615C5AF7C0056EC44 /* main_code.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main_code.cpp; path = ../jni/main_code.cpp; sourceTree = "<group>"; };
+		4C74849715C5AF7C0056EC44 /* main_code.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main_code.h; path = ../jni/main_code.h; sourceTree = "<group>"; };
+		4C7484A315C5BDD60056EC44 /* Halibut Engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Halibut Engine.xcodeproj"; path = "../../Engine/iOS/Halibut Engine/Halibut Engine.xcodeproj"; sourceTree = "<group>"; };
+		4C77831215BABD68003D5142 /* libvorbis-tremor-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libvorbis-tremor-ios.a"; path = "../../libs/vorbis-tremor-ios/build-ios/ios-device/libvorbis-tremor-ios.a"; sourceTree = "<group>"; };
+		4C77831415BABD8B003D5142 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4C77831515BABD8B003D5142 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		4C7AD44B15B1D77700A599F6 /* ios_api.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ios_api.cpp; sourceTree = "<group>"; };
+		4C7C584A15C31E6500CAE4F4 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = "../../libs/boost_1_47_0/build-ios/ios-simulator/libboost.a"; sourceTree = "<group>"; };
+		4CCC0ECA15B30D6A005432FB /* CustomGLKView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomGLKView.h; sourceTree = "<group>"; };
+		4CCC0ECB15B30D6B005432FB /* CustomGLKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomGLKView.m; sourceTree = "<group>"; };
+		4CCC0ECD15B310FB005432FB /* ios_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ios_api.h; sourceTree = "<group>"; };
+		4CE6A9D115B2F979006A3965 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C49B2B615B0991B003512CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C7484AC15C5BF580056EC44 /* libHalibut Engine.a in Frameworks */,
+				4C77831815BABE26003D5142 /* AudioToolbox.framework in Frameworks */,
+				4C77831915BABE26003D5142 /* OpenAL.framework in Frameworks */,
+				4C49B2BE15B0991B003512CD /* UIKit.framework in Frameworks */,
+				4C49B2C015B0991B003512CD /* Foundation.framework in Frameworks */,
+				4C49B2C215B0991B003512CD /* CoreGraphics.framework in Frameworks */,
+				4C49B2C415B0991B003512CD /* GLKit.framework in Frameworks */,
+				4C49B2C615B0991B003512CD /* OpenGLES.framework in Frameworks */,
+				4C4C807515BA8F460037C6CE /* libsquirrel.a in Frameworks */,
+				4C4C807715BA8F5B0037C6CE /* libz.a in Frameworks */,
+				4C77831315BABD68003D5142 /* libvorbis-tremor-ios.a in Frameworks */,
+				4C7C584B15C31E6500CAE4F4 /* libboost.a in Frameworks */,
+				4C6EB44515C3CFD300316CB6 /* libpng.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C49B2AE15B0991B003512CD = {
+			isa = PBXGroup;
+			children = (
+				4C7484A315C5BDD60056EC44 /* Halibut Engine.xcodeproj */,
+				4C7B819515C40F770024D61A /* Libs */,
+				4CC1FC3415B200130025C6F7 /* Resources */,
+				4C49B2C715B0991B003512CD /* Sources */,
+				4C49B2BC15B0991B003512CD /* Frameworks */,
+				4C49B2BA15B0991B003512CD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C49B2BA15B0991B003512CD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C49B2B915B0991B003512CD /* halibuttemplate.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C49B2BC15B0991B003512CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C77831415BABD8B003D5142 /* AudioToolbox.framework */,
+				4C77831515BABD8B003D5142 /* OpenAL.framework */,
+				4C49B2BD15B0991B003512CD /* UIKit.framework */,
+				4C49B2BF15B0991B003512CD /* Foundation.framework */,
+				4C49B2C115B0991B003512CD /* CoreGraphics.framework */,
+				4C49B2C315B0991B003512CD /* GLKit.framework */,
+				4C49B2C515B0991B003512CD /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C49B2C715B0991B003512CD /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4CE6A9E315B2F9A4006A3965 /* Game */,
+				4CCC0ECD15B310FB005432FB /* ios_api.h */,
+				4C7AD44B15B1D77700A599F6 /* ios_api.cpp */,
+				4C49B2D015B0991B003512CD /* AppDelegate.h */,
+				4C49B2D115B0991B003512CD /* AppDelegate.m */,
+				4C49B2D715B0991B003512CD /* ViewController.h */,
+				4C49B2D815B0991B003512CD /* ViewController.m */,
+				4C49B2DA15B0991B003512CD /* ViewController_iPhone.xib */,
+				4C49B2DD15B0991B003512CD /* ViewController_iPad.xib */,
+				4C49B2C815B0991B003512CD /* Supporting Files */,
+				4CCC0ECA15B30D6A005432FB /* CustomGLKView.h */,
+				4CCC0ECB15B30D6B005432FB /* CustomGLKView.m */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		4C49B2C815B0991B003512CD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C49B2C915B0991B003512CD /* template-Info.plist */,
+				4C49B2CA15B0991B003512CD /* InfoPlist.strings */,
+				4C49B2CD15B0991B003512CD /* main.m */,
+				4C49B2CF15B0991B003512CD /* template-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C7484A415C5BDD60056EC44 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C7484AB15C5BDD70056EC44 /* libHalibut Engine.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C7B819515C40F770024D61A /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				4C6EB44415C3CFD300316CB6 /* libpng.a */,
+				4C7C584A15C31E6500CAE4F4 /* libboost.a */,
+				4C77831215BABD68003D5142 /* libvorbis-tremor-ios.a */,
+				4C4C807615BA8F5B0037C6CE /* libz.a */,
+				4C4C807415BA8F460037C6CE /* libsquirrel.a */,
+			);
+			name = Libs;
+			sourceTree = "<group>";
+		};
+		4CC1FC3415B200130025C6F7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4C74848315C5AD6E0056EC44 /* Icon.png */,
+				4C74848415C5AD6E0056EC44 /* iTunesArtwork */,
+				4C74848515C5AD6E0056EC44 /* Splash-landscape.png */,
+				4CE6A9D115B2F979006A3965 /* assets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4CE6A9E315B2F9A4006A3965 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				4C74849615C5AF7C0056EC44 /* main_code.cpp */,
+				4C74849715C5AF7C0056EC44 /* main_code.h */,
+			);
+			name = Game;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C49B2B815B0991B003512CD /* halibuttemplate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C49B2E215B0991B003512CD /* Build configuration list for PBXNativeTarget "halibuttemplate" */;
+			buildPhases = (
+				4C49B2B515B0991B003512CD /* Sources */,
+				4C49B2B615B0991B003512CD /* Frameworks */,
+				4C49B2B715B0991B003512CD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = halibuttemplate;
+			productName = doublehitballs;
+			productReference = 4C49B2B915B0991B003512CD /* halibuttemplate.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C49B2B015B0991B003512CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 4C49B2B315B0991B003512CD /* Build configuration list for PBXProject "halibuttemplate" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4C49B2AE15B0991B003512CD;
+			productRefGroup = 4C49B2BA15B0991B003512CD /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4C7484A415C5BDD60056EC44 /* Products */;
+					ProjectRef = 4C7484A315C5BDD60056EC44 /* Halibut Engine.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				4C49B2B815B0991B003512CD /* halibuttemplate */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4C7484AB15C5BDD70056EC44 /* libHalibut Engine.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libHalibut Engine.a";
+			remoteRef = 4C7484AA15C5BDD70056EC44 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C49B2B715B0991B003512CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49B2CC15B0991B003512CD /* InfoPlist.strings in Resources */,
+				4C49B2DC15B0991B003512CD /* ViewController_iPhone.xib in Resources */,
+				4C49B2DF15B0991B003512CD /* ViewController_iPad.xib in Resources */,
+				4CE6A9D215B2F979006A3965 /* assets in Resources */,
+				4C74848615C5AD6E0056EC44 /* Icon.png in Resources */,
+				4C74848715C5AD6E0056EC44 /* iTunesArtwork in Resources */,
+				4C74848815C5AD6E0056EC44 /* Splash-landscape.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C49B2B515B0991B003512CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C49B2CE15B0991B003512CD /* main.m in Sources */,
+				4C49B2D215B0991B003512CD /* AppDelegate.m in Sources */,
+				4C49B2D915B0991B003512CD /* ViewController.m in Sources */,
+				4C7AD44C15B1D77700A599F6 /* ios_api.cpp in Sources */,
+				4CCC0ECC15B30D6B005432FB /* CustomGLKView.m in Sources */,
+				4C74849815C5AF7C0056EC44 /* main_code.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4C49B2CA15B0991B003512CD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C49B2CB15B0991B003512CD /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4C49B2DA15B0991B003512CD /* ViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C49B2DB15B0991B003512CD /* en */,
+			);
+			name = ViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		4C49B2DD15B0991B003512CD /* ViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C49B2DE15B0991B003512CD /* en */,
+			);
+			name = ViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4C49B2E015B0991B003512CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C49B2E115B0991B003512CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C49B2E315B0991B003512CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "template-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_IOS,
+					TARGET_HALIBUT,
+					DEBUG,
+					"$(inherited)",
+					BOOST_NO_CXX11_NUMERIC_LIMITS,
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				HEADER_SEARCH_PATHS = (
+					"$(SalmonEnginePath)",
+					"$(LibsPath)/lpng1510",
+					"$(LibsPath)/sqplus/sqplus",
+					"$(LibsPath)/sqplus/include",
+					"$(LibsPath)/boost_1_52_0",
+					../jni,
+					"$(LibsPath)/vorbis-tremor-ios/vorbis",
+				);
+				INFOPLIST_FILE = "template-Info.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(LibsPath)/lpng1510/build-ios/ios-device",
+					"$(LibsPath)/boost_1_52_0/build-ios/ios-device",
+					"$(LibsPath)/sqplus/build-ios/ios-device",
+					"$(LibsPath)/zlib-1.2.6/build-ios/ios-device",
+					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-device",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(LibsPath)/lpng1510/build-ios/ios-simulator",
+					"$(LibsPath)/sqplus/build-ios/ios-simulator",
+					"$(LibsPath)/boost_1_52_0/build-ios/ios-simulator",
+					"$(LibsPath)/zlib-1.2.6/build-ios/ios-simulator",
+					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-simulator",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = build;
+				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4C49B2E415B0991B003512CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "template-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TARGET_IOS,
+					TARGET_HALIBUT,
+					BOOST_NO_CXX11_NUMERIC_LIMITS,
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				HEADER_SEARCH_PATHS = (
+					"$(SalmonEnginePath)",
+					"$(LibsPath)/lpng1510",
+					"$(LibsPath)/sqplus/sqplus",
+					"$(LibsPath)/sqplus/include",
+					"$(LibsPath)/boost_1_52_0",
+					../jni,
+					"$(LibsPath)/vorbis-tremor-ios/vorbis",
+				);
+				INFOPLIST_FILE = "template-Info.plist";
+				LIBRARY_SEARCH_PATHS = "";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(LibsPath)/lpng1510/build-ios/ios-device",
+					"$(LibsPath)/boost_1_52_0/build-ios/ios-device",
+					"$(LibsPath)/sqplus/build-ios/ios-device",
+					"$(LibsPath)/zlib-1.2.6/build-ios/ios-device",
+					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-device",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(LibsPath)/lpng1510/build-ios/ios-simulator",
+					"$(LibsPath)/sqplus/build-ios/ios-simulator",
+					"$(LibsPath)/boost_1_52_0/build-ios/ios-simulator",
+					"$(LibsPath)/zlib-1.2.6/build-ios/ios-simulator",
+					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-simulator",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C49B2B315B0991B003512CD /* Build configuration list for PBXProject "halibuttemplate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C49B2E015B0991B003512CD /* Debug */,
+				4C49B2E115B0991B003512CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C49B2E215B0991B003512CD /* Build configuration list for PBXNativeTarget "halibuttemplate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C49B2E315B0991B003512CD /* Debug */,
+				4C49B2E415B0991B003512CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C49B2B015B0991B003512CD /* Project object */;
+}
