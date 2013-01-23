@@ -55,6 +55,8 @@ public:
 
 	void Draw();
 
+	TDataTriangleList& GetDataTriangleList();
+
 	friend class TFlexModelManager;
 };
 

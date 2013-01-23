@@ -109,6 +109,11 @@ void TFlexModel::Draw()
 	Renderer->DrawTriangleList(RenderPair.second);
 }
 
+TDataTriangleList& TFlexModel::GetDataTriangleList()
+{
+	
+	return RenderPair.second.Data;
+}
 
 void TFlexModelManager::LoadModelFromXml(std::string xmlFileName)
 {

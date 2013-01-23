@@ -30,7 +30,10 @@ cardinal LastTickCount;
 //User application
 TApplication* App = NULL;
 
-
+vec2 MouseButtonPos;
+vec2 MouseTotalShift;
+bool MouseButtonPressed = false;
+bool MouseMoved = false;
 
 void TApplication::OnKeyPress(cardinal key)
 {
@@ -183,7 +186,7 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}*/
 		break;
 
-	case WM_MOUSEMOVE:
+case WM_MOUSEMOVE:
 		mouseState.X = (lParam << 16) >> 16;
 		mouseState.Y = lParam >> 16;
 		mouseState.LeftButtonPressed = (wParam & MK_LBUTTON);
@@ -191,6 +194,24 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		mouseState.RightButtonPressed = (wParam & MK_RBUTTON);
 
 		App->OnMouseMove(mouseState);
+
+		if (MouseButtonPressed)
+		{
+			vec2 currentMousePos(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y));
+			vec2 shift = (MouseButtonPos - currentMousePos);
+			//shift.v[1] = - shift.v[1];
+			App->OuterOnMove(shift);
+			//App->OuterOnMove(currentMousePos - MouseButtonPos);
+			MouseButtonPos = currentMousePos;
+
+			MouseTotalShift += shift;
+
+			if (fabs(MouseTotalShift.v[0]) > 10.f || fabs(MouseTotalShift.v[1]) > 10.f)
+			{
+				MouseMoved = true;
+			}
+		}
+
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -201,7 +222,22 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.RightButtonPressed = (wParam & MK_RBUTTON);
 
-		App->OnMouseDown(mouseState);
+		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y));
+
+		if (mouseState.LeftButtonPressed)
+		{
+			App->OuterOnTapDown(MouseButtonPos);
+
+		}
+
+		MouseButtonPressed = true;
+
+		MouseMoved = false;
+
+		MouseTotalShift = vec2(0,0);
+		
+
+
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
@@ -211,7 +247,13 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_RBUTTON);
 
-		App->OnMouseUp(mouseState);
+		if (!MouseMoved)
+		{
+			App->OuterOnTapUp(vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y)));
+		}
+
+		MouseButtonPressed = false;
+
 		break;
 	
 	case WM_MOUSEWHEEL:

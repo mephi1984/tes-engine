@@ -151,6 +151,29 @@ bool IsFloatEqual(float a, float b)
 	return (fabs(b-a) <= CONST_EPSILON) ? true : false;
 }
 
+bool LineCouldCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr)
+{
+	for (int i=0; i<3; i++)
+	{
+		float min_tr = min(min(tr.p[0].v[i], tr.p[1].v[i]), tr.p[2].v[i]);
+	
+		if (max(a.v[i], b.v[i]) < min_tr)
+		{
+			return false;
+		}
+
+		float max_tr = max(max(tr.p[0].v[i], tr.p[1].v[i]), tr.p[2].v[i]);
+	
+		if (min(a.v[i], b.v[i]) > max_tr)
+		{
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
 
 int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr)
 {

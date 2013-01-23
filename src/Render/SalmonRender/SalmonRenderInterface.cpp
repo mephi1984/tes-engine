@@ -6,13 +6,226 @@
 namespace SE
 {
 
+TCameraInterface::TCameraInterface()
+	: CamShift(ZeroVec3)
+	, CamVec(ZeroVec3)
+{
+}
 
-TSalmonRendererInterface::TSalmonRendererInterface()
+TPanoramicCamera::TPanoramicCamera()
 	: CamAlpha(0.0f)
 	, CamPhi(0.0f)
 	, CamDist(0.0f)
-	, CamShift(ZeroVec3)
-	, GlobalShadowAreaHalfSize(CONST_DEFAULT_GLOBAL_SHADOW_AREA_HALFSIZE)
+{
+}
+
+
+void TPanoramicCamera::MoveAlpha(float dAlpha) 
+{ 
+	if (dAlpha == 0.0f)
+		return;
+
+	CamAlpha += dAlpha; 
+
+	while (CamAlpha >= 2*pi) 
+	{
+		CamAlpha -= 2*pi; 
+	}
+
+	while (CamAlpha<0.0f)
+	{
+		CamAlpha += 2*pi;
+	}
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+	
+}
+
+void TPanoramicCamera::MovePhi(float dPhi) 
+{ 
+	if (dPhi == 0.0f)
+		return;
+
+	//float oldCamPhi = CamPhi;
+	CamPhi += dPhi;
+	
+	if (CamPhi > CONST_MAX_CAM_PHI) 
+	{
+		CamPhi = CONST_MAX_CAM_PHI;
+	}
+	
+	if (CamPhi < CONST_MIN_CAM_PHI)
+	{
+		CamPhi = CONST_MIN_CAM_PHI;
+	}
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+	
+}
+
+void TPanoramicCamera::MoveDist(float dDist)
+{ 
+	CamDist += dDist; 
+	
+	if (CamDist<CONST_MIN_CAM_DIST) 
+	{
+		CamDist = CONST_MIN_CAM_DIST; 
+	}
+
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+	
+}
+
+void TPanoramicCamera::SetAlpha(float alpha)
+{
+	if (alpha == CamAlpha)
+		return;
+
+	CamAlpha = alpha; 
+
+	while (CamAlpha >= 2*pi) 
+	{
+		CamAlpha -= 2*pi; 
+	}
+
+	while (CamAlpha<0.0f)
+	{
+		CamAlpha += 2*pi;
+	}
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+}
+
+void TPanoramicCamera::MoveForward()
+{
+	vec3 mov;
+	
+	float sina = sinf(CamAlpha);
+	float cosa = cosf(CamAlpha);
+
+	mov.v[0] = sina;
+	mov.v[1] = 0;
+	mov.v[2] = - cosa;
+
+	CamShift = CamShift + mov;
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+}
+
+void TPanoramicCamera::MoveBackward()
+{
+	vec3 mov;
+	
+	float sina = sinf(CamAlpha);
+	float cosa = cosf(CamAlpha);
+
+	mov.v[0] = - sina;
+	mov.v[1] = 0;
+	mov.v[2] = cosa;
+
+	CamShift = CamShift + mov;
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+	
+}
+
+void TPanoramicCamera::MoveLeft()
+{
+	vec3 mov;
+	
+	float sina = sinf(CamAlpha);
+	float cosa = cosf(CamAlpha);
+
+	mov.v[0] = - cosa;
+	mov.v[1] = 0;
+	mov.v[2] = - sina;
+
+	CamShift = CamShift + mov;
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+	
+}
+
+void TPanoramicCamera::MoveRight()
+{
+	vec3 mov;
+	
+	float sina = sinf(CamAlpha);
+	float cosa = cosf(CamAlpha);
+
+	mov.v[0] = cosa;
+	mov.v[1] = 0;
+	mov.v[2] = sina;
+
+	CamShift = CamShift + mov;
+	
+	//Possibly refactor???
+	Renderer->CalcCamPosVec();
+	
+}
+
+
+void TPanoramicCamera::CalcCamVec()
+{
+	vec3 camPos;
+	vec3 camVec;
+
+	float sina = sinf(CamAlpha);
+	float cosa = cosf(CamAlpha);
+	float sinp = sinf(CamPhi);
+	float cosp = cosf(CamPhi);
+
+	CamVec.v[0] = CamDist * cosp * sina;
+	CamVec.v[1] = - CamDist * sinp;
+	CamVec.v[2] = - CamDist * cosp * cosa;
+
+}
+
+void TPanoramicCamera::SetCamView()
+{
+	
+	Renderer->LoadIdentity();
+	Renderer->TranslateMatrix(vec3(0.0f, 0.0f, -CamDist));
+	Renderer->RotateMatrix(vec4(1.f * sin(CamPhi/2.f), 0.f, 0.f, 1.f * cos(CamPhi/2.f)));
+	Renderer->RotateMatrix(vec4(0.f, 1.f * sin(CamAlpha/2.f), 0.f, 1.f * cos(CamAlpha/2.f)));
+	Renderer->TranslateMatrix(-CamShift);
+}
+
+
+void TPitCamera::SetCamView()
+{
+	Renderer->LoadIdentity();
+	Renderer->RotateMatrix(InverseQuat(CameraQuat));
+
+	Renderer->TranslateMatrix(-CamShift);
+}
+
+void TPitCamera::CalcCamVec()
+{
+	vec3 r = vec3(0,0,-1);
+
+	CamVec = Normalize(CameraQuat * vec4(r) * InverseQuat(CameraQuat));
+}
+
+void TPitCamera::RotateByQuat(vec4 quat)
+{
+	CameraQuat = quat * CameraQuat;
+	//float len = Length(CameraQuat);
+}
+
+//============================================
+//============================================
+//============================================
+
+TSalmonRendererInterface::TSalmonRendererInterface()
+	: GlobalShadowAreaHalfSize(CONST_DEFAULT_GLOBAL_SHADOW_AREA_HALFSIZE)
 {
 	ProjectionMatrixStack.push(IdentityMatrix4);
 	
@@ -100,17 +313,12 @@ void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, flo
 
 void TSalmonRendererInterface::CalcCamPosVec()
 {
+	
+	TCalcCamVecVisitor v;
 
-	float sina = sinf(CamAlpha);
-	float cosa = cosf(CamAlpha);
-	float sinp = sinf(CamPhi);
-	float cosp = cosf(CamPhi);
+	boost::apply_visitor(v, CameraMover);
 
-	CamVec.v[0] = CamDist * cosp * sina;
-	CamVec.v[1] = - CamDist * sinp;
-	CamVec.v[2] = - CamDist * cosp * cosa;
-
-	CamPos = CamShift - CamVec;
+	CamPos = GetCamShift() - GetCamVec();
 
 	RenderUniform3fv(CONST_STRING_CAMPOS_UNIFORM,(float*)&CamPos);
 }
@@ -175,26 +383,8 @@ void TSalmonRendererInterface::PushPerspectiveProjectionMatrix(float angle, floa
 
 void TSalmonRendererInterface::SetGLCamView()
 {
-	/*
-	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -CamDist);
-	glRotatef(CamPhi*180.0f/pi, 1.0f, 0.0f, 0.0f);
-	glRotatef(CamAlpha*180.0f/pi, 0.0f, 1.0f, 0.0f);
-
-	//TODO
-	glTranslatef(-CamShift.v[0], -CamShift.v[1], -CamShift.v[2]);
-
-	glGetFloatv(GL_MODELVIEW_MATRIX,CamModelViewMatrix.m);
-
-	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
-
-	RenderUniform3fv(CONST_STRING_CAMPOS_UNIFORM,CamPos.v);*/
-
-	LoadIdentity();
-	TranslateMatrix(vec3(0.0f, 0.0f, -CamDist));
-	RotateMatrix(vec4(1.f * sin(CamPhi/2.f), 0.f, 0.f, 1.f * cos(CamPhi/2.f)));
-	RotateMatrix(vec4(0.f, 1.f * sin(CamAlpha/2.f), 0.f, 1.f * cos(CamAlpha/2.f)));
-	TranslateMatrix(-CamShift);
+	TSetCameraViewVisitor v;
+	boost::apply_visitor(v, CameraMover);
 
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -238,7 +428,7 @@ void TSalmonRendererInterface::SetGlPosXView()
 	RotateMatrix(vec4(0.f, 1.f * sin(pi / 4.f), 0.f, 1.f * cos(pi / 4.f)));
 	RotateMatrix(vec4(1.f * sin(pi / 2.f), 0.f, 0.f, 1.f * cos(pi / 2.f)));
 	
-	TranslateMatrix(-CamShift);
+	TranslateMatrix(-GetCamShift());
 	
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -264,7 +454,7 @@ void TSalmonRendererInterface::SetGlNegXView()
 	RotateMatrix(vec4(0.f, -1.f * sin(pi / 4.f), 0.f, 1.f * cos(pi / 4.f)));
 	RotateMatrix(vec4(1.f * sin(pi / 2.f), 0.f, 0.f, 1.f * cos(pi / 2.f)));
 	
-	TranslateMatrix(-CamShift);
+	TranslateMatrix(-GetCamShift());
 	
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -286,7 +476,7 @@ void TSalmonRendererInterface::SetGlPosYView()
 	LoadIdentity();
 	RotateMatrix(vec4(-1.f * sin(pi / 4.f), 0.f, 0.f, 1.f * cos(pi / 4.f)));
 	
-	TranslateMatrix(-CamShift);
+	TranslateMatrix(-GetCamShift());
 	
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -309,7 +499,7 @@ void TSalmonRendererInterface::SetGlNegYView()
 	LoadIdentity();
 	RotateMatrix(vec4(1.f * sin(pi / 4.f), 0.f, 0.f, 1.f * cos(pi / 4.f)));
 	
-	TranslateMatrix(-CamShift);
+	TranslateMatrix(-GetCamShift());
 	
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -335,7 +525,7 @@ void TSalmonRendererInterface::SetGlPosZView()
 	RotateMatrix(vec4(0.f, 1.f * sin(pi / 2.f), 0.f, 1.f * cos(pi / 2.f)));
 	RotateMatrix(vec4(0.f, 0.f, 1.f * sin(pi / 2.f), 1.f * cos(pi / 2.f)));
 	
-	TranslateMatrix(-CamShift);
+	TranslateMatrix(-GetCamShift());
 	
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -358,7 +548,7 @@ void TSalmonRendererInterface::SetGlNegZView()
 
 	RotateMatrix(vec4(0.f, 0.f, 1.f * sin(pi / 2.f), 1.f * cos(pi / 2.f)));
 	
-	TranslateMatrix(-CamShift);
+	TranslateMatrix(-GetCamShift());
 	
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -372,368 +562,6 @@ vec3 TSalmonRendererInterface::GetCamPos()
 { 
 	return CamPos; 
 }
-
-
-void TSalmonRendererInterface::MoveAlpha(float dAlpha) 
-{ 
-	if (dAlpha == 0.0f)
-		return;
-
-	CamAlpha += dAlpha; 
-
-	while (CamAlpha >= 2*pi) 
-	{
-		CamAlpha -= 2*pi; 
-	}
-
-	while (CamAlpha<0.0f)
-	{
-		CamAlpha += 2*pi;
-	}
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}
-	*/
-}
-
-void TSalmonRendererInterface::MovePhi(float dPhi) 
-{ 
-	if (dPhi == 0.0f)
-		return;
-
-	//float oldCamPhi = CamPhi;
-	CamPhi += dPhi;
-	
-	if (CamPhi > CONST_MAX_CAM_PHI) 
-	{
-		CamPhi = CONST_MAX_CAM_PHI;
-	}
-	
-	if (CamPhi < CONST_MIN_CAM_PHI)
-	{
-		CamPhi = CONST_MIN_CAM_PHI;
-	}
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}*/
-	
-}
-
-void TSalmonRendererInterface::MoveDist(float dDist)
-{ 
-	CamDist += dDist; /*
-	if (CamDist>CONST_MAX_CAM_DIST) 
-	{
-		CamDist = CONST_MAX_CAM_DIST; 
-	}*/
-	
-	if (CamDist<CONST_MIN_CAM_DIST) 
-	{
-		CamDist = CONST_MIN_CAM_DIST; 
-	}
-
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}*/
-
-}
-
-
-void TSalmonRendererInterface::SetAlpha(float alpha)
-{
-	if (alpha == CamAlpha)
-		return;
-
-	CamAlpha = alpha; 
-
-	while (CamAlpha >= 2*pi) 
-	{
-		CamAlpha -= 2*pi; 
-	}
-
-	while (CamAlpha<0.0f)
-	{
-		CamAlpha += 2*pi;
-	}
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-}
-
-void TSalmonRendererInterface::MoveForward()
-{
-	vec3 mov;
-	
-	float sina = sinf(CamAlpha);
-	float cosa = cosf(CamAlpha);
-
-	mov.v[0] = sina;
-	mov.v[1] = 0;
-	mov.v[2] = - cosa;
-
-	CamShift = CamShift + mov;
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}*/
-	
-}
-
-void TSalmonRendererInterface::MoveBackward()
-{
-	vec3 mov;
-	
-	float sina = sinf(CamAlpha);
-	float cosa = cosf(CamAlpha);
-
-	mov.v[0] = - sina;
-	mov.v[1] = 0;
-	mov.v[2] = cosa;
-
-	CamShift = CamShift + mov;
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}*/
-	
-}
-
-void TSalmonRendererInterface::MoveLeft()
-{
-	vec3 mov;
-	
-	float sina = sinf(CamAlpha);
-	float cosa = cosf(CamAlpha);
-
-	mov.v[0] = - cosa;
-	mov.v[1] = 0;
-	mov.v[2] = - sina;
-
-	CamShift = CamShift + mov;
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}
-	*/
-}
-
-void TSalmonRendererInterface::MoveRight()
-{
-	vec3 mov;
-	
-	float sina = sinf(CamAlpha);
-	float cosa = cosf(CamAlpha);
-
-	mov.v[0] = cosa;
-	mov.v[1] = 0;
-	mov.v[2] = sina;
-
-	CamShift = CamShift + mov;
-	
-	//Possibly refactor???
-	CalcCamPosVec();
-	/*
-	if (!IsCameraTransparentToLand && LandToCalcCollision->IsOnTheLand(CamPos))
-	{
-		CamPhi -= CONST_CAMERA_PHI_ELEVATION_STEP;
-		
-		CalcCamPosVec();
-		
-		float h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-		
-		if (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-		{
-			CamPhi = CONST_MIN_CAM_PHI;
-
-			CalcCamPosVec();
-
-			h = LandToCalcCollision->CalcVerticalCrossingFast(CamPos);
-
-			while (h + CONST_CAMERA_VERTICAL_SHIFT > CamPos.v[1])
-			{
-				CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-				CalcCamPosVec();
-			}
-		}
-		else
-		{
-			CamPhi += CONST_CAMERA_PHI_ELEVATION_STEP;
-			CalcCamPosVec();
-		}
-	}*/
-	
-}
-
 
 
 void TSalmonRendererInterface::SwitchToScreen()

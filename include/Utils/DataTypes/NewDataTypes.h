@@ -34,7 +34,7 @@ public:
 	tvec2<TYPENAME> operator+(const tvec2<TYPENAME>& a) const;
 	tvec2<TYPENAME>& operator-=(const tvec2<TYPENAME>& vc);
 	tvec2<TYPENAME> operator-(const tvec2<TYPENAME>& a) const;
-	tvec2<TYPENAME>& operator-();
+	tvec2<TYPENAME> operator-();
 	tvec2<TYPENAME>& operator*=(TYPENAME c);
 };
 
@@ -70,7 +70,7 @@ public:
 	tvec3<TYPENAME1>& operator-=(const tvec3<TYPENAME1>& vc);
 	tvec3<TYPENAME1> operator+(const tvec3<TYPENAME1>& a) const;
 	tvec3<TYPENAME1> operator-(const tvec3<TYPENAME1>& a) const;
-	tvec3<TYPENAME1>& operator-();
+	tvec3<TYPENAME1> operator-();
 	tvec3<TYPENAME1>& operator*=(TYPENAME1 c);
 	tvec3<TYPENAME1> operator*(const tmat3<TYPENAME1>& mt) const; //MultRowMatrix()
 };
@@ -114,6 +114,7 @@ typedef tvec4<float> vec4;
 
 
 vec4 InverseQuat(const vec4& q);
+vec4 NormalizeQuat(const vec4& q);
 
 
 template<typename TYPENAME1>
@@ -279,12 +280,14 @@ inline tvec2<TYPENAME> tvec2<TYPENAME>::operator-(const tvec2<TYPENAME>& a) cons
 }
 
 template<typename TYPENAME>
-inline tvec2<TYPENAME>& tvec2<TYPENAME>::operator-()
+inline tvec2<TYPENAME> tvec2<TYPENAME>::operator-()
 {
-	v[0] = -v[0];
-	v[1] = -v[1];
+	tvec2<TYPENAME> r = *this;
 
-	return *this;
+	r.v[0] = -v[0];
+	r.v[1] = -v[1];
+
+	return r;
 }
 
 template<typename TYPENAME>
@@ -440,13 +443,15 @@ inline tvec3<TYPENAME1> tvec3<TYPENAME1>::operator-(const tvec3<TYPENAME1>& a) c
 }
 
 template<typename TYPENAME1>
-inline tvec3<TYPENAME1>& tvec3<TYPENAME1>::operator-()
+inline tvec3<TYPENAME1> tvec3<TYPENAME1>::operator-()
 {
-	v[0] = -v[0];
-	v[1] = -v[1];
-	v[2] = -v[2];
+	tvec3<TYPENAME1> r = *this;
 
-	return *this;
+	r.v[0] = -v[0];
+	r.v[1] = -v[1];
+	r.v[2] = -v[2];
+
+	return r;
 }
 
 template<typename TYPENAME1>
@@ -732,14 +737,14 @@ inline vec4 InverseQuat(const vec4& q)
 {
 	float n;
 	vec4 r;
-	n = (q.v[0]*q.v[0]+q.v[1]*q.v[1]+q.v[2]*q.v[2]);
+	n = (q.v[0]*q.v[0]+q.v[1]*q.v[1]+q.v[2]*q.v[2]+q.v[3]*q.v[3]);
 
 	if (n!=0.0f)
 	{
 		r.v[0] = -q.v[0] / n;
 		r.v[1] = -q.v[1] / n;
 		r.v[2] = -q.v[2] / n;
-		r.v[3] = q.v[3];
+		r.v[3] = q.v[3] / n;
 	}
 	else
 	{
@@ -748,6 +753,26 @@ inline vec4 InverseQuat(const vec4& q)
 		r.v[2] = 0.0f;
 		r.v[3] = 1.0f;
 	};
+	
+	return r;
+
+}
+
+inline vec4 NormalizeQuat(const vec4& q)
+{
+	float n;
+
+	vec4 r;
+
+	n = (q.v[0]*q.v[0]+q.v[1]*q.v[1]+q.v[2]*q.v[2]+q.v[3]*q.v[3]);
+
+	if (n!=0.0f)
+	{
+		r.v[0] = q.v[0] / n;
+		r.v[1] = q.v[1] / n;
+		r.v[2] = q.v[2] / n;
+		r.v[3] = q.v[3] / n;
+	}
 	
 	return r;
 

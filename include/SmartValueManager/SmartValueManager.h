@@ -3,10 +3,9 @@
 
 #include "include/Utils/Utils.h"
 
-#pragma warning(disable: 4503) //ololo, DisctionariesMap expands into looong boolshit
-
 namespace SE
 {
+
 
 typedef boost::variant<
 	std::shared_ptr<TBindableVar<int>>,

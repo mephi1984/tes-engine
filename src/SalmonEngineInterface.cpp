@@ -64,10 +64,23 @@ void TApplicationAncestor::OuterUpdate(cardinal timer)
 	CheckGlError();
 }
 
-void TApplicationAncestor::OuterOnMove(vec2 shift)
+
+void TApplicationAncestor::OuterOnTapDown(vec2 p)
 {
-	InnerOnMove(shift);
+	//ResourceManager->GUIManager.OnMouseDown(p);
+	InnerOnTapDown(p);
 }
 
+void TApplicationAncestor::OuterOnTapUp(vec2 p)
+{
+	//ResourceManager->GUIManager.OnMouseUp(p);
+	InnerOnTapUp(p);
+}
+
+void TApplicationAncestor::OuterOnMove(vec2 shift)
+{
+	//ResourceManager->GUIManager.OnMove(shift);
+	InnerOnMove(shift);
+}
 
 } //namespace SE
