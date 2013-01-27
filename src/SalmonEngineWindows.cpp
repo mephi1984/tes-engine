@@ -132,13 +132,23 @@ void DrawScene()
 
 void ProcessTickCount()
 {
+	//Can't choose witch one is better
 
+	/*
 	App->UpdateQuick();
 	NewTickCount = GetTickCount();
 	if (NewTickCount - LastTickCount > CONST_TIMER_INTERVAL)
 	{
 		LastTickCount = NewTickCount;
 		App->OuterUpdate(CONST_TIMER_INTERVAL);
+	}*/
+
+
+	NewTickCount = GetTickCount();
+	if (NewTickCount - LastTickCount > CONST_TIMER_INTERVAL)
+	{
+		App->OuterUpdate(NewTickCount - LastTickCount);
+		LastTickCount = NewTickCount;
 	}
 
 }
@@ -247,7 +257,11 @@ case WM_MOUSEMOVE:
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_RBUTTON);
 
-		if (!MouseMoved)
+		if (MouseMoved)
+		{
+			App->OuterOnTapUpAfterShift(vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y)));
+		}
+		else
 		{
 			App->OuterOnTapUp(vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y)));
 		}

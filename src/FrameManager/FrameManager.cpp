@@ -87,6 +87,8 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
 			FrameMap[frameName].Width = width;
 			FrameMap[frameName].Height = height;
 			FrameMap[frameName].TexName = texName;
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			
 			return FrameMap[frameName].FrameBuffer;
 
@@ -180,7 +182,8 @@ cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal w
 			FrameMap[frameName].Height = height;
 			FrameMap[frameName].TexName = texName;
 
-			//return FrameMap[frameName].TexID; //That is easier
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 			return FrameMap[frameName].FrameBuffer;
 
 			break;
@@ -261,6 +264,8 @@ cardinal TFrameManager::AddDepthBuffer(const std::string& frameName, cardinal wi
 			FrameMap[frameName].Width = width;
 			FrameMap[frameName].Height = height;
 			FrameMap[frameName].TexName = texName;
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 			return FrameMap[frameName].FrameBuffer;
 			break;

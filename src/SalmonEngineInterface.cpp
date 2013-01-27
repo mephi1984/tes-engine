@@ -44,6 +44,12 @@ void TApplicationAncestor::OuterDraw()
 	InnerDraw();
 
 	glDisable(GL_DEPTH_TEST);
+
+	Renderer->SetOrthoProjection();
+	Renderer->LoadIdentity();
+
+	ResourceManager->GUIManager.Draw();
+
 	Renderer->PushShader("DefaultShader");
 	
 	if (IsConsoleOut) 
@@ -59,6 +65,8 @@ void TApplicationAncestor::OuterUpdate(cardinal timer)
 {
 	ResourceManager->SoundManager.Update(timer);
 
+	ResourceManager->GUIManager.Update(timer);
+
 	InnerUpdate(timer);
 
 	CheckGlError();
@@ -67,19 +75,24 @@ void TApplicationAncestor::OuterUpdate(cardinal timer)
 
 void TApplicationAncestor::OuterOnTapDown(vec2 p)
 {
-	//ResourceManager->GUIManager.OnMouseDown(p);
+	ResourceManager->GUIManager.OnMouseDown(p);
 	InnerOnTapDown(p);
 }
 
 void TApplicationAncestor::OuterOnTapUp(vec2 p)
 {
-	//ResourceManager->GUIManager.OnMouseUp(p);
+	ResourceManager->GUIManager.OnMouseUp(p);
 	InnerOnTapUp(p);
+}
+
+void TApplicationAncestor::OuterOnTapUpAfterShift(vec2 p)
+{
+	InnerOnTapUpAfterShift(p);
 }
 
 void TApplicationAncestor::OuterOnMove(vec2 shift)
 {
-	//ResourceManager->GUIManager.OnMove(shift);
+	ResourceManager->GUIManager.OnMove(shift);
 	InnerOnMove(shift);
 }
 

@@ -324,6 +324,7 @@ LOCAL_SRC_FILES += src/SmartValueManager/SmartValueManager.cpp
 LOCAL_SRC_FILES += src/ModelManager/ModelManager.cpp
 LOCAL_SRC_FILES += src/ModelManager/NewModelManager.cpp
 LOCAL_SRC_FILES += src/SimpleLand/SimpleLand.cpp
+LOCAL_SRC_FILES += src/PhysicsManager/PhysicsManager.cpp
 
 
 LOCAL_SRC_FILES += src/Render/RenderMisc.cpp

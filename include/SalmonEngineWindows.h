@@ -61,3 +61,8 @@ public:
 int MainLoop(TApplication& application);
 
 } //namespace SE
+
+//This file includes templates that call any of three singletones: Console, ResourceManager or Renderer
+
+#include "include/GUIManager/WidgetTemplatesImpl.h"
+

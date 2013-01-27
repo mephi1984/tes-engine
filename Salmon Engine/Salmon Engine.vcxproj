@@ -20,14 +20,21 @@
     <ClInclude Include="..\include\Engine.h" />
     <ClInclude Include="..\include\FrameManager\FrameManager.h" />
     <ClInclude Include="..\include\GlobalConst.h" />
+    <ClInclude Include="..\include\GUIManager\ButtonWidget.h" />
+    <ClInclude Include="..\include\GUIManager\GUIManager.h" />
+    <ClInclude Include="..\include\GUIManager\WidgetTemplatesImpl.h" />
+    <ClInclude Include="..\include\GUIManager\WidgetXmlParsers.h" />
+    <ClInclude Include="..\include\HalibutAnimation\HalibutAnimation.h" />
     <ClInclude Include="..\include\LightManager\LightManager.h" />
     <ClInclude Include="..\include\ModelManager\ModelManager.h" />
     <ClInclude Include="..\include\ModelManager\NewModelManager.h" />
     <ClInclude Include="..\include\OpenGLExt\OpenGlExt.h" />
+    <ClInclude Include="..\include\PhysicsManager\PhysicsManager.h" />
     <ClInclude Include="..\include\Render\RenderInterface.h" />
     <ClInclude Include="..\include\Render\RenderMisc.h" />
     <ClInclude Include="..\include\Render\RenderParams.h" />
     <ClInclude Include="..\include\Render\SalmonRender\BackgroundCubemap.h" />
+    <ClInclude Include="..\include\Render\SalmonRender\Cameras.h" />
     <ClInclude Include="..\include\Render\SalmonRender\SalmonRenderWindows.h" />
     <ClInclude Include="..\include\Render\SalmonRender\SalmonRenderInterface.h" />
     <ClInclude Include="..\include\SalmonEngineInterface.h" />
@@ -57,14 +64,20 @@
     <ClCompile Include="..\src\FontManager\FontManager.cpp" />
     <ClCompile Include="..\src\FrameManager\FrameManager.cpp" />
     <ClCompile Include="..\src\GlobalConst.cpp" />
+    <ClCompile Include="..\src\GUIManager\ButtonWidget.cpp" />
+    <ClCompile Include="..\src\GUIManager\GUIManager.cpp" />
+    <ClCompile Include="..\src\GUIManager\WidgetXmlParsers.cpp" />
+    <ClCompile Include="..\src\HalibutAnimation\HalibutAnimation.cpp" />
     <ClCompile Include="..\src\LightManager\LightManager.cpp" />
     <ClCompile Include="..\src\ModelManager\ModelManager.cpp" />
     <ClCompile Include="..\src\ModelManager\NewModelManager.cpp" />
     <ClCompile Include="..\src\OpenGLExt\OpenGlExt.cpp" />
+    <ClCompile Include="..\src\PhysicsManager\PhysicsManager.cpp" />
     <ClCompile Include="..\src\Render\RenderInterface.cpp" />
     <ClCompile Include="..\src\Render\RenderMisc.cpp" />
     <ClCompile Include="..\src\Render\RenderParams.cpp" />
     <ClCompile Include="..\src\Render\SalmonRender\BackgroundCubemap.cpp" />
+    <ClCompile Include="..\src\Render\SalmonRender\Cameras.cpp" />
     <ClCompile Include="..\src\Render\SalmonRender\SalmonRenderWindows.cpp" />
     <ClCompile Include="..\src\Render\SalmonRender\SalmonRenderInterface.cpp" />
     <ClCompile Include="..\src\SalmonEngineInterface.cpp" />
@@ -161,10 +174,10 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>TARGET_SALMON;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>/wd 4503</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -12,13 +12,10 @@ TApplicationInterface::TApplicationInterface()
 void TApplicationInterface::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
 	ResourceManager->ScriptManager.BindBasicFunctions();
+
+	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
+
 	InnerInit();
-#ifdef TARGET_HALIBUT
-	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
-#endif
-#ifdef TARGET_SALMON
-	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
-#endif
     
     CheckGlError();
     

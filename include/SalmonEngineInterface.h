@@ -43,7 +43,9 @@ This code combines all headers for Salmon engine into one header file
 #include "include/SmartValueManager/SmartValueManager.h"
 
 #include "include/ModelManager/NewModelManager.h"
-
+#include "include/PhysicsManager/PhysicsManager.h"
+#include "include/GUIManager/GUIManager.h"
+#include "include/HalibutAnimation/HalibutAnimation.h"
 
 namespace SE
 {
@@ -64,6 +66,8 @@ public:
 	TScriptManager ScriptManager;
 	TFontManager FontManager;
     TSmartValueManager SmartValueManager;
+	TGUIManager GUIManager;
+	THalibutAnimationManager HalibutAnimationManager;
 
 #ifdef TARGET_ANDROID
 	TSoundManagerAndroid SoundManager;
@@ -115,11 +119,15 @@ public:
 
 	virtual void OuterOnTapUp(vec2 p);
 
+	virtual void OuterOnTapUpAfterShift(vec2 p);
+
 	virtual void OuterOnMove(vec2 shift);
 	
 	virtual void InnerOnTapDown(vec2 p) { }
 	
 	virtual void InnerOnTapUp(vec2 p) { }
+
+	virtual void InnerOnTapUpAfterShift(vec2 p) { }
 	
 	virtual void InnerOnMove(vec2 shift) { }
 

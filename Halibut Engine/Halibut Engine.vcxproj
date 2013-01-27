@@ -66,6 +66,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>TARGET_HALIBUT;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -77,6 +78,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>TARGET_HALIBUT;TARGET_WIN32;NOSOUND;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -90,6 +92,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>TARGET_HALIBUT;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

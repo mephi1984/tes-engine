@@ -74,7 +74,7 @@ mat4 MultMatrixMatrix(const mat4& m1, const mat4& m2);
 
 bool IsFloatEqual(float a, float b);
 
-bool LineCouldCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr); //overall test
+bool LineCouldCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr); //overall (dimensional) test
 
 int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr);
 
