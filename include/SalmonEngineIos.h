@@ -60,4 +60,7 @@ public:
 
 } //namespace SE
 
+
+#include "include/GUIManager/WidgetTemplatesImpl.h"
+
 #endif

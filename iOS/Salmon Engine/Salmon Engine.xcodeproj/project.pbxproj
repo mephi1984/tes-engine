@@ -74,6 +74,19 @@
 		4CD18A2016727D4A00EDC335 /* BindableVar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD18A1F16727D4A00EDC335 /* BindableVar.h */; };
 		4CEE2DD215CDC55B00C4D5F5 /* SalmonRenderGLES20.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */; };
 		4CEE2DD515CDC57200C4D5F5 /* SalmonRenderGLES20.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */; };
+		4CF8747916B65210009B1214 /* ButtonWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747616B65210009B1214 /* ButtonWidget.cpp */; };
+		4CF8747A16B65210009B1214 /* GUIManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747716B65210009B1214 /* GUIManager.cpp */; };
+		4CF8747B16B65210009B1214 /* WidgetXmlParsers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747816B65210009B1214 /* WidgetXmlParsers.cpp */; };
+		4CF8747D16B6521F009B1214 /* HalibutAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747C16B6521F009B1214 /* HalibutAnimation.cpp */; };
+		4CF8747F16B6522E009B1214 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747E16B6522E009B1214 /* PhysicsManager.cpp */; };
+		4CF8748416B65263009B1214 /* PhysicsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748316B65263009B1214 /* PhysicsManager.h */; };
+		4CF8748616B65292009B1214 /* HalibutAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748516B65292009B1214 /* HalibutAnimation.h */; };
+		4CF8748B16B652A4009B1214 /* ButtonWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748716B652A4009B1214 /* ButtonWidget.h */; };
+		4CF8748C16B652A4009B1214 /* GUIManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748816B652A4009B1214 /* GUIManager.h */; };
+		4CF8748D16B652A4009B1214 /* WidgetTemplatesImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748916B652A4009B1214 /* WidgetTemplatesImpl.h */; };
+		4CF8748E16B652A4009B1214 /* WidgetXmlParsers.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748A16B652A4009B1214 /* WidgetXmlParsers.h */; };
+		4CF8749016B652C3009B1214 /* Cameras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748F16B652C3009B1214 /* Cameras.h */; };
+		4CF8749216B652ED009B1214 /* Cameras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8749116B652ED009B1214 /* Cameras.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,6 +158,19 @@
 		4CD18A1F16727D4A00EDC335 /* BindableVar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindableVar.h; path = ../../../include/Utils/BindableVar.h; sourceTree = "<group>"; };
 		4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SalmonRenderGLES20.h; path = ../../../include/Render/SalmonRender/SalmonRenderGLES20.h; sourceTree = "<group>"; };
 		4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SalmonRenderGLES20.cpp; path = ../../../src/Render/SalmonRender/SalmonRenderGLES20.cpp; sourceTree = "<group>"; };
+		4CF8747616B65210009B1214 /* ButtonWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ButtonWidget.cpp; path = ../../../src/GUIManager/ButtonWidget.cpp; sourceTree = "<group>"; };
+		4CF8747716B65210009B1214 /* GUIManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIManager.cpp; path = ../../../src/GUIManager/GUIManager.cpp; sourceTree = "<group>"; };
+		4CF8747816B65210009B1214 /* WidgetXmlParsers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WidgetXmlParsers.cpp; path = ../../../src/GUIManager/WidgetXmlParsers.cpp; sourceTree = "<group>"; };
+		4CF8747C16B6521F009B1214 /* HalibutAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HalibutAnimation.cpp; path = ../../../src/HalibutAnimation/HalibutAnimation.cpp; sourceTree = "<group>"; };
+		4CF8747E16B6522E009B1214 /* PhysicsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsManager.cpp; path = ../../../src/PhysicsManager/PhysicsManager.cpp; sourceTree = "<group>"; };
+		4CF8748316B65263009B1214 /* PhysicsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsManager.h; path = ../../../include/PhysicsManager/PhysicsManager.h; sourceTree = "<group>"; };
+		4CF8748516B65292009B1214 /* HalibutAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HalibutAnimation.h; path = ../../../include/HalibutAnimation/HalibutAnimation.h; sourceTree = "<group>"; };
+		4CF8748716B652A4009B1214 /* ButtonWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButtonWidget.h; path = ../../../include/GUIManager/ButtonWidget.h; sourceTree = "<group>"; };
+		4CF8748816B652A4009B1214 /* GUIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GUIManager.h; path = ../../../include/GUIManager/GUIManager.h; sourceTree = "<group>"; };
+		4CF8748916B652A4009B1214 /* WidgetTemplatesImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WidgetTemplatesImpl.h; path = ../../../include/GUIManager/WidgetTemplatesImpl.h; sourceTree = "<group>"; };
+		4CF8748A16B652A4009B1214 /* WidgetXmlParsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WidgetXmlParsers.h; path = ../../../include/GUIManager/WidgetXmlParsers.h; sourceTree = "<group>"; };
+		4CF8748F16B652C3009B1214 /* Cameras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cameras.h; path = ../../../include/Render/SalmonRender/Cameras.h; sourceTree = "<group>"; };
+		4CF8749116B652ED009B1214 /* Cameras.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cameras.cpp; path = ../../../src/Render/SalmonRender/Cameras.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +302,9 @@
 		4C8CE91215B0A0FB00078175 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				4CF8747416B65183009B1214 /* GUIManager */,
+				4CF8747316B65173009B1214 /* HalibutAnimation */,
+				4CF8747116B6514F009B1214 /* PhysicsManager */,
 				4CD18A1816727C3F00EDC335 /* SmartValueManager */,
 				4C902A4E15C56BEE00FBC901 /* Animation */,
 				4C902A5015C56BEE00FBC901 /* LightManager */,
@@ -300,6 +329,9 @@
 		4C8CE91315B0A0FF00078175 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				4CF8748216B65249009B1214 /* GUIManager */,
+				4CF8748116B65240009B1214 /* HalibutAnimation */,
+				4CF8748016B65236009B1214 /* PhysicsManager */,
 				4CD18A1C16727C4E00EDC335 /* SmartValueManager */,
 				4C902A5A15C56C0900FBC901 /* Animation */,
 				4C902A5C15C56C0900FBC901 /* LightManager */,
@@ -495,6 +527,7 @@
 		4C902A3A15C56A4D00FBC901 /* Salmon Render */ = {
 			isa = PBXGroup;
 			children = (
+				4CF8749116B652ED009B1214 /* Cameras.cpp */,
 				4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */,
 				4C902A3415C56A4800FBC901 /* BackgroundCubemap.cpp */,
 				4C902A3515C56A4800FBC901 /* SalmonRenderInterface.cpp */,
@@ -506,6 +539,7 @@
 		4C902A3F15C56AC700FBC901 /* Salmon Render */ = {
 			isa = PBXGroup;
 			children = (
+				4CF8748F16B652C3009B1214 /* Cameras.h */,
 				4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */,
 				4C902A4015C56AEA00FBC901 /* BackgroundCubemap.h */,
 				4C902A4115C56AEA00FBC901 /* SalmonRenderInterface.h */,
@@ -624,6 +658,59 @@
 			path = ../../../include/SmartValueManager;
 			sourceTree = "<group>";
 		};
+		4CF8747116B6514F009B1214 /* PhysicsManager */ = {
+			isa = PBXGroup;
+			children = (
+				4CF8747E16B6522E009B1214 /* PhysicsManager.cpp */,
+			);
+			name = PhysicsManager;
+			sourceTree = "<group>";
+		};
+		4CF8747316B65173009B1214 /* HalibutAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				4CF8747C16B6521F009B1214 /* HalibutAnimation.cpp */,
+			);
+			name = HalibutAnimation;
+			sourceTree = "<group>";
+		};
+		4CF8747416B65183009B1214 /* GUIManager */ = {
+			isa = PBXGroup;
+			children = (
+				4CF8747616B65210009B1214 /* ButtonWidget.cpp */,
+				4CF8747716B65210009B1214 /* GUIManager.cpp */,
+				4CF8747816B65210009B1214 /* WidgetXmlParsers.cpp */,
+			);
+			name = GUIManager;
+			sourceTree = "<group>";
+		};
+		4CF8748016B65236009B1214 /* PhysicsManager */ = {
+			isa = PBXGroup;
+			children = (
+				4CF8748316B65263009B1214 /* PhysicsManager.h */,
+			);
+			name = PhysicsManager;
+			sourceTree = "<group>";
+		};
+		4CF8748116B65240009B1214 /* HalibutAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				4CF8748516B65292009B1214 /* HalibutAnimation.h */,
+			);
+			name = HalibutAnimation;
+			sourceTree = "<group>";
+		};
+		4CF8748216B65249009B1214 /* GUIManager */ = {
+			isa = PBXGroup;
+			children = (
+				4CF8748716B652A4009B1214 /* ButtonWidget.h */,
+				4CF8748816B652A4009B1214 /* GUIManager.h */,
+				4CF8748916B652A4009B1214 /* WidgetTemplatesImpl.h */,
+				4CF8748A16B652A4009B1214 /* WidgetXmlParsers.h */,
+			);
+			name = GUIManager;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -667,6 +754,13 @@
 				4CD18A2016727D4A00EDC335 /* BindableVar.h in Headers */,
 				4CC857D2169386A300110F77 /* RenderParams.h in Headers */,
 				4CC857D4169386BD00110F77 /* NewModelManager.h in Headers */,
+				4CF8748416B65263009B1214 /* PhysicsManager.h in Headers */,
+				4CF8748616B65292009B1214 /* HalibutAnimation.h in Headers */,
+				4CF8748B16B652A4009B1214 /* ButtonWidget.h in Headers */,
+				4CF8748C16B652A4009B1214 /* GUIManager.h in Headers */,
+				4CF8748D16B652A4009B1214 /* WidgetTemplatesImpl.h in Headers */,
+				4CF8748E16B652A4009B1214 /* WidgetXmlParsers.h in Headers */,
+				4CF8749016B652C3009B1214 /* Cameras.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,6 +844,12 @@
 				4CD18A1A16727C3F00EDC335 /* SmartValueManager.cpp in Sources */,
 				4CC857CD1693865C00110F77 /* NewModelManager.cpp in Sources */,
 				4CC857D01693867D00110F77 /* RenderParams.cpp in Sources */,
+				4CF8747916B65210009B1214 /* ButtonWidget.cpp in Sources */,
+				4CF8747A16B65210009B1214 /* GUIManager.cpp in Sources */,
+				4CF8747B16B65210009B1214 /* WidgetXmlParsers.cpp in Sources */,
+				4CF8747D16B6521F009B1214 /* HalibutAnimation.cpp in Sources */,
+				4CF8747F16B6522E009B1214 /* PhysicsManager.cpp in Sources */,
+				4CF8749216B652ED009B1214 /* Cameras.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

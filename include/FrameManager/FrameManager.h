@@ -21,7 +21,11 @@ Use global variable ResourceManager to get access to light manager
 
 namespace SE
 {
-
+    
+    
+extern const int CONST_SCREEN_FRAMEBUFFER;
+    
+    
 struct TFrame
 {
 	cardinal FrameBuffer;

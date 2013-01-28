@@ -81,11 +81,11 @@ void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, flo
 	MatrixHeight = matrixHeight;
 
 	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
 	#ifdef TARGET_WIN32
 	glEnable(GL_LIGHTING);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, WhiteColor);
 	
 	glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
@@ -302,7 +302,8 @@ vec3 TSalmonRendererInterface::GetCamPos()
 
 void TSalmonRendererInterface::SwitchToScreen()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

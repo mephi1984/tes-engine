@@ -11,8 +11,8 @@ class TSalmonRendererIos : public TSalmonRendererGLES20
 protected:
 
 public:
-
-	
+ 
+    virtual void SwitchToScreen();
 };
 
 } //namespace SE

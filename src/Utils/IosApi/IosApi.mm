@@ -7,9 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <GLKit/GLKit.h>
 #include "include/Utils/Utils.h"
 
+
+GLKView* defaultView = 0; //Need to be set up by App!
 
 namespace SE
 {
@@ -45,6 +47,11 @@ std::string IosGetFilePathUserData(const std::string& filename)
     NSString* file = [docDir stringByAppendingString:[NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding]];
     
     return std::string([[NSFileManager defaultManager] fileSystemRepresentationWithPath:file]);
+}
+    
+void IosSwitchToScreen()
+{
+    [defaultView bindDrawable];
 }
 
 } //namespace SE

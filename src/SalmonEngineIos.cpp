@@ -20,9 +20,10 @@ void TApplication::OuterInit(int screenWidth, int screenHeight, float matrixWidt
 
 	ResourceManager->ScriptManager.BindBasicFunctions();
 
+    Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
+    
 	InnerInit();
 	
-	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
 	CheckGlError();
 }
 

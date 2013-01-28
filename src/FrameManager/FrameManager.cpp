@@ -5,6 +5,10 @@
 
 namespace SE
 {
+    
+
+const int CONST_SCREEN_FRAMEBUFFER = 0;
+
 
 //===================================================
 //================ FRAME MANAGER ====================
@@ -23,7 +27,7 @@ void TFrameManager::FreeFrameManager()
 	{
 		ResourceManager->TexList.DeleteTexture(i.second.TexName);
 		glDeleteRenderbuffers(1, &(i.second.DepthRenderBuffer));
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 		glDeleteFramebuffers(1, &(i.second.FrameBuffer));
 	}
 
@@ -88,7 +92,7 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
 			FrameMap[frameName].Height = height;
 			FrameMap[frameName].TexName = texName;
 
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 			
 			return FrameMap[frameName].FrameBuffer;
 
@@ -97,7 +101,7 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
 			*Console<<"FrameManager::ERROR - frame buffer can not be added correctly: "+frameName+", with error: "+tostr(status);
 			ResourceManager->TexList.DeleteTexture(texName);
 			glDeleteRenderbuffers(1, &depthRenderBuffer);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 			glDeleteFramebuffers(1, &frameBuffer);
 
 			return 0;
@@ -182,7 +186,7 @@ cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal w
 			FrameMap[frameName].Height = height;
 			FrameMap[frameName].TexName = texName;
 
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 
 			return FrameMap[frameName].FrameBuffer;
 
@@ -192,7 +196,7 @@ cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal w
 			*Console<<"FrameManager::ERROR - frame buffer can not be added correctly: "+frameName;
 			ResourceManager->TexList.DeleteTexture(texName);
 			glDeleteRenderbuffers(1, &depthRenderBuffer);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 			glDeleteFramebuffers(1, &frameBuffer);
 
 			return 0;
@@ -218,7 +222,7 @@ void TFrameManager::DeleteFrameRenderBuffer(const std::string& frameName)
 	{
 		ResourceManager->TexList.DeleteTexture(FrameMap[frameName].TexName);
 		glDeleteRenderbuffers(1, &(FrameMap[frameName].DepthRenderBuffer));
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 		glDeleteFramebuffers(1, &(FrameMap[frameName].FrameBuffer));
 
 		FrameMap.erase(frameName);
@@ -265,14 +269,14 @@ cardinal TFrameManager::AddDepthBuffer(const std::string& frameName, cardinal wi
 			FrameMap[frameName].Height = height;
 			FrameMap[frameName].TexName = texName;
 
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 
 			return FrameMap[frameName].FrameBuffer;
 			break;
 		default:
 			*Console<<"FrameManager::ERROR - frame buffer can not be added correctly: "+frameName;
 			ResourceManager->TexList.DeleteTexture(texName);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 			glDeleteFramebuffers(1, &frameBuffer);
 
 			return 0;
