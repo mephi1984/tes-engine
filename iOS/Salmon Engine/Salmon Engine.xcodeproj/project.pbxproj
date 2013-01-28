@@ -908,7 +908,6 @@
 				GCC_PREFIX_HEADER = "Salmon Engine/Salmon Engine-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					TARGET_IOS,
-					TARGET_SALMON,
 					DEBUG,
 					BOOST_NO_CXX11_NUMERIC_LIMITS,
 				);
@@ -939,7 +938,6 @@
 				GCC_PREFIX_HEADER = "Salmon Engine/Salmon Engine-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					TARGET_IOS,
-					TARGET_SALMON,
 					BOOST_NO_CXX11_NUMERIC_LIMITS,
 				);
 				HEADER_SEARCH_PATHS = (
