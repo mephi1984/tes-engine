@@ -46,9 +46,11 @@ void TMyApplication::InnerInit()
 	
     ResourceManager->SoundManager.LoadSound("shot.wav");
 	
-	Renderer->MovePhi(pi/6);
-	Renderer->MoveDist(6.f);
+    boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi/6);
+	boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(6.f);
 	
+    boost::get<TPanoramicCamera>(Renderer->Camera).CalcCamVec();
+    
 	ResourceManager->LightManager.SetLightDirection(vec3(-1,0,-1));
 	ResourceManager->LightManager.SetLightColor(vec4(1,0,0,1));
 
@@ -63,7 +65,9 @@ void TMyApplication::InnerInit()
 
 	//Uncomment to start music playing
 	//ResourceManager->SoundManager.PlayMusic("level1ogg.ogg");
-	
+
+    Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth()/Renderer->GetMatrixHeight(), 1.f, 100.f);
+    
 	*Console<<"Inner init end!\n";
 }
 

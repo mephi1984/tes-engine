@@ -9,6 +9,9 @@
 #import "ViewController.h"
 #import "ios_api.h"
 
+
+extern GLKView* defaultView;
+
 @interface ViewController () {
 }
 
@@ -39,6 +42,7 @@
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    defaultView = view;
     
     [self setupGL];
 }
