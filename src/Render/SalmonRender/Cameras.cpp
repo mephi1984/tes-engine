@@ -36,7 +36,7 @@ void TPanoramicCamera::MoveAlpha(float dAlpha)
 	}
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 	
 }
 
@@ -59,7 +59,7 @@ void TPanoramicCamera::MovePhi(float dPhi)
 	}
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 	
 }
 
@@ -74,7 +74,7 @@ void TPanoramicCamera::MoveDist(float dDist)
 
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 	
 }
 
@@ -96,7 +96,7 @@ void TPanoramicCamera::SetAlpha(float alpha)
 	}
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 }
 
 void TPanoramicCamera::MoveForward()
@@ -113,7 +113,7 @@ void TPanoramicCamera::MoveForward()
 	CamShift = CamShift + mov;
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 }
 
 void TPanoramicCamera::MoveBackward()
@@ -129,7 +129,7 @@ void TPanoramicCamera::MoveBackward()
 
 	CamShift = CamShift + mov;
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 	
 }
 
@@ -147,7 +147,7 @@ void TPanoramicCamera::MoveLeft()
 	CamShift = CamShift + mov;
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 	
 }
 
@@ -165,7 +165,7 @@ void TPanoramicCamera::MoveRight()
 	CamShift = CamShift + mov;
 	
 	//Possibly refactor???
-	Renderer->CalcCamPosVec();
+	Renderer->CalcCamPos();
 	
 }
 

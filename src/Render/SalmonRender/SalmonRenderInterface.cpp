@@ -97,13 +97,27 @@ void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, flo
 
 }
 
+vec3 TSalmonRendererInterface::GetCamShift() 
+{ 
+	return boost::apply_visitor(TGetCamShiftVisitor(), Camera);
+}
 
-void TSalmonRendererInterface::CalcCamPosVec()
+vec3 TSalmonRendererInterface::GetCamVec() 
+{ 
+	return boost::apply_visitor(TGetCamVecVisitor(), Camera);
+}
+
+vec3 TSalmonRendererInterface::GetCamPos() 
+{ 
+	return CamPos; 
+}
+
+void TSalmonRendererInterface::CalcCamPos()
 {
 	
 	TCalcCamVecVisitor v;
 
-	boost::apply_visitor(v, CameraMover);
+	boost::apply_visitor(v, Camera);
 
 	CamPos = GetCamShift() - GetCamVec();
 
@@ -181,7 +195,7 @@ void TSalmonRendererInterface::PushPerspectiveProjectionMatrix(float angle, floa
 void TSalmonRendererInterface::SetGLCamView()
 {
 	TSetCameraViewVisitor v;
-	boost::apply_visitor(v, CameraMover);
+	boost::apply_visitor(v, Camera);
 
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = InverseModelViewMatrix(CamModelViewMatrix);
@@ -291,12 +305,6 @@ void TSalmonRendererInterface::SetGlNegZView()
 
 	SetUniforms();
 
-}
-
-
-vec3 TSalmonRendererInterface::GetCamPos() 
-{ 
-	return CamPos; 
 }
 
 

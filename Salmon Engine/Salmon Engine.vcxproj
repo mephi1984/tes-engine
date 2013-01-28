@@ -148,7 +148,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>TARGET_SALMON;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>
@@ -160,7 +160,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>TARGET_SALMON;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG;NOSOUND</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG;NOSOUND</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;C:\Program Files (x86)\Microsoft DirectX SDK (February 2010)\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>/wd 4503</DisableSpecificWarnings>
     </ClCompile>
@@ -175,7 +175,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PreprocessorDefinitions>TARGET_SALMON;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;NDEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4503</DisableSpecificWarnings>
     </ClCompile>

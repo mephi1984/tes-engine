@@ -173,7 +173,7 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		BeginPaint(hWnd, &ps);
 		EndPaint(hWnd, &ps);
 
-		ProcessTickCount();
+		//ProcessTickCount();
 		break;
 	case WM_SIZE:
 		

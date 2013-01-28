@@ -27,30 +27,24 @@ protected:
 
 	float GlobalShadowAreaHalfSize;
 
+	vec3 CamPos;  //Do not change - call CalcCamPos instead
+
 	virtual void DrawQuad(const T2DQuad& quad) = 0;
 public:
 
-	TCamera CameraMover;
-
-	//vec3 CamShift;
-	vec3 CamPos;  //Do not change - call CalcCamPosVec instead
-	//vec3 CamVec;  //Do not change - call CalcCamPosVec instead
-
-	vec3 GetCamShift()
-	{
-		return boost::apply_visitor(TGetCamShiftVisitor(), CameraMover);
-	}
-
-	vec3 GetCamVec()
-	{
-		return boost::apply_visitor(TGetCamVecVisitor(), CameraMover);
-	}
+	TCamera Camera;
 
 	TSalmonRendererInterface();
 	
 	virtual void InitOpenGL(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
 
-	void CalcCamPosVec();
+	vec3 GetCamShift();
+
+	vec3 GetCamVec();
+
+	vec3 GetCamPos();
+
+	void CalcCamPos();
 
 	virtual void SetUniforms();
 
@@ -74,8 +68,6 @@ public:
 	void SetGlPosZView();
 	void SetGlNegZView();
 
-
-	vec3 GetCamPos();
 
 	virtual void SwitchToScreen();
 	virtual void SwitchToFrameBuffer(const std::string& frameName);
