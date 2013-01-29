@@ -278,7 +278,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := SalmonEngine
 
 
-LOCAL_CFLAGS := -DTARGET_ANDROID -DTARGET_SALMON -std=gnu++11 --std=c++11
+LOCAL_CFLAGS := -DTARGET_ANDROID -std=gnu++11 --std=c++11
 
 LOCAL_STATIC_LIBRARIES := boost
 LOCAL_STATIC_LIBRARIES += ogg
@@ -318,25 +318,30 @@ LOCAL_SRC_FILES += src/SoundManager/SoundManagerDataTypes.cpp
 LOCAL_SRC_FILES += src/FontManager/FontManager.cpp
 LOCAL_SRC_FILES += src/ScriptManager/ScriptManager.cpp
 LOCAL_SRC_FILES += src/SmartValueManager/SmartValueManager.cpp
-#LOCAL_SRC_FILES += src/GUIManager/GUIManager.cpp
-#LOCAL_SRC_FILES += src/GUIManager/ButtonWidget.cpp
+
+LOCAL_SRC_FILES += src/GUIManager/GUIManager.cpp
+LOCAL_SRC_FILES += src/GUIManager/ButtonWidget.cpp
+LOCAL_SRC_FILES += src/GUIManager/WidgetXmlParsers.cpp
+
+LOCAL_SRC_FILES += src/HalibutAnimation/HalibutAnimation.cpp
 
 LOCAL_SRC_FILES += src/ModelManager/ModelManager.cpp
 LOCAL_SRC_FILES += src/ModelManager/NewModelManager.cpp
 LOCAL_SRC_FILES += src/SimpleLand/SimpleLand.cpp
 LOCAL_SRC_FILES += src/PhysicsManager/PhysicsManager.cpp
 
-
+LOCAL_SRC_FILES += src/Render/RenderInterface.cpp
 LOCAL_SRC_FILES += src/Render/RenderMisc.cpp
 LOCAL_SRC_FILES += src/Render/RenderParams.cpp
-LOCAL_SRC_FILES += src/Render/SalmonRender/BackgroundCubemap.cpp
 
-LOCAL_SRC_FILES += src/Animation/SalmonAnimation.cpp
-LOCAL_SRC_FILES += src/Render/RenderInterface.cpp
-LOCAL_SRC_FILES += src/ApplicationInterface.cpp
+LOCAL_SRC_FILES += src/Render/SalmonRender/BackgroundCubemap.cpp
 LOCAL_SRC_FILES += src/Render/SalmonRender/SalmonRenderInterface.cpp
 LOCAL_SRC_FILES += src/Render/SalmonRender/SalmonRenderGLES20.cpp
 LOCAL_SRC_FILES += src/Render/SalmonRender/SalmonRenderAndroid.cpp
+LOCAL_SRC_FILES += src/Render/SalmonRender/Cameras.cpp
+
+LOCAL_SRC_FILES += src/Animation/SalmonAnimation.cpp
+LOCAL_SRC_FILES += src/ApplicationInterface.cpp
 LOCAL_SRC_FILES += src/SalmonEngineAndroid.cpp
 LOCAL_SRC_FILES += src/SalmonEngineInterface.cpp
 LOCAL_LDLIBS    := -lGLESv2

@@ -31,33 +31,16 @@ public:
 	virtual void InnerDeinit() = 0;
 	//To do on deinit
 
-	virtual void OuterDraw();
-
 	virtual void InnerDraw() = 0;
 	//What to draw
 
-	virtual void OuterUpdate(cardinal timer);
-
 	virtual void InnerUpdate(cardinal timer) = 0;
 	//To do on update
-
-	virtual void UpdateQuick() { };
-	//To process input - this method is called more frequently than Update()  
-
-	virtual void OnMouseMove(TMouseState& mouseState) { }
-	//To do on mouse move (with or without pressed buttons)
-
-	virtual void OnMouseDown(TMouseState& mouseState) { }
-	//To do on mouse up (with or without pressed buttons)
-
-	virtual void OnMouseUp(TMouseState& mouseState) { }
-	//To do on mouse down (with or without pressed buttons)
-	//Be careful - even when user "upped" button, in mouseState this button appears as pressed
-
-	virtual void OnMouseWheel(short int delta) { }
-	//To do on mouse wheel move
+	
 };
 
 } //namespace SE
+
+#include "include/GUIManager/WidgetTemplatesImpl.h"
 
 #endif

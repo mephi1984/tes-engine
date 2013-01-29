@@ -19,9 +19,10 @@ void TApplication::OuterInit(int screenWidth, int screenHeight, float matrixWidt
 
 	ResourceManager->ScriptManager.BindBasicFunctions();
 
+	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
+	
 	InnerInit();
 	
-	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
 	CheckGlError();
 }
 
@@ -66,17 +67,5 @@ void TApplication::OuterDeinit()
     }
 	
 }
-
-
-void TApplication::OuterDraw()
-{
-	InnerDraw();
-}
-
-void TApplication::OuterUpdate(cardinal timer)
-{
-	InnerUpdate(timer);
-}
-
 
 } //namespace SE
