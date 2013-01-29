@@ -12,4 +12,5 @@ void AppUpdate(int dt);
 void AppDraw();
 void AppOnTapDown(int posx, int posy);
 void AppOnTapUp(int posx, int posy);
+void AppOnTapUpAfterScroll(int posx, int posy);
 void AppOnScroll(int shiftx, int shifty);

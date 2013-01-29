@@ -32,16 +32,21 @@ extern "C" void AppDraw()
 
 extern "C" void AppOnTapDown(int posx, int posy)
 {
-    //App.OuterOnTapDown(vec2(posx, posy));
+    App.OuterOnTapDown(vec2(posx, posy));
 }
 
 extern "C" void AppOnTapUp(int posx, int posy)
 {
-    //App.OuterOnTapUp(vec2(posx, posy));
+    App.OuterOnTapUp(vec2(posx, posy));
+}
+
+extern "C" void AppOnTapUpAfterScroll(int posx, int posy)
+{
+    App.OuterOnTapUpAfterShift(vec2(posx, posy));
 }
 
 extern "C" void AppOnScroll(int shiftx, int shifty)
 {
-    //App.OuterOnMove(vec2(shiftx, shifty));
+    App.OuterOnMove(vec2(shiftx, shifty));
 }
 

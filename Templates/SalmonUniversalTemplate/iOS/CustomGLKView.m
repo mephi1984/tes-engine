@@ -49,17 +49,22 @@ CGPoint prev_loc;
         touchMoved = true;
     }
     
-    AppOnScroll(prevLocation.x - location.x, prevLocation.y - location.y);
+    AppOnScroll(prevLocation.x - location.x, -(prevLocation.y - location.y));
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     CGPoint location = [[[touches allObjects] objectAtIndex:0] locationInView:self];
     
-    if (!touchMoved)
+    if (touchMoved)
+    {
+        AppOnTapUpAfterScroll(location.x, self.bounds.size.height - location.y);
+    }
+    else
     {
         AppOnTapUp(location.x, self.bounds.size.height - location.y);
     }
+    
 }
 
 
