@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C5E512116B6E602005521AC /* SimpleTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5E512016B6E601005521AC /* SimpleTimer.h */; };
+		4C5E512416B6E620005521AC /* SimpleTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E512316B6E620005521AC /* SimpleTimer.cpp */; };
 		4C77831B15BABFA6003D5142 /* SoundManagerInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C77831A15BABFA6003D5142 /* SoundManagerInterface.h */; };
 		4C77832215BAC035003D5142 /* SoundManagerIos.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C77832115BAC035003D5142 /* SoundManagerIos.mm */; };
 		4C77832415BAC070003D5142 /* SoundManagerIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C77832315BAC070003D5142 /* SoundManagerIos.h */; };
@@ -90,6 +92,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C5E512016B6E601005521AC /* SimpleTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleTimer.h; path = ../../../include/Utils/SimpleTimer.h; sourceTree = "<group>"; };
+		4C5E512316B6E620005521AC /* SimpleTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleTimer.cpp; path = ../../../src/Utils/SimpleTimer.cpp; sourceTree = "<group>"; };
 		4C77831A15BABFA6003D5142 /* SoundManagerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManagerInterface.h; path = ../../../include/SoundManager/SoundManagerInterface.h; sourceTree = "<group>"; };
 		4C77832115BAC035003D5142 /* SoundManagerIos.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SoundManagerIos.mm; path = ../../../src/SoundManager/SoundManagerIos.mm; sourceTree = "<group>"; };
 		4C77832315BAC070003D5142 /* SoundManagerIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManagerIos.h; path = ../../../include/SoundManager/SoundManagerIos.h; sourceTree = "<group>"; };
@@ -377,6 +381,7 @@
 		4C8CE93715B0A50200078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4C5E512016B6E601005521AC /* SimpleTimer.h */,
 				4CD18A1F16727D4A00EDC335 /* BindableVar.h */,
 				4CC1FC3B15B20E440025C6F7 /* IosApi */,
 				4C8CE96B15B0B31F00078175 /* PngHelper.h */,
@@ -393,6 +398,7 @@
 		4C8CE93915B0A50F00078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4C5E512316B6E620005521AC /* SimpleTimer.cpp */,
 				4CC1FC3E15B20E5D0025C6F7 /* IosApi */,
 				4C8CE96915B0B2FD00078175 /* PngHelper.cpp */,
 				4C8CE95015B0AAA900078175 /* SerializeInterface */,
@@ -761,6 +767,7 @@
 				4CF8748D16B652A4009B1214 /* WidgetTemplatesImpl.h in Headers */,
 				4CF8748E16B652A4009B1214 /* WidgetXmlParsers.h in Headers */,
 				4CF8749016B652C3009B1214 /* Cameras.h in Headers */,
+				4C5E512116B6E602005521AC /* SimpleTimer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -850,6 +857,7 @@
 				4CF8747D16B6521F009B1214 /* HalibutAnimation.cpp in Sources */,
 				4CF8747F16B6522E009B1214 /* PhysicsManager.cpp in Sources */,
 				4CF8749216B652ED009B1214 /* Cameras.cpp in Sources */,
+				4C5E512416B6E620005521AC /* SimpleTimer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

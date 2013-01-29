@@ -69,7 +69,7 @@ void TApplication::OuterDeinit()
 	
 }
 
-
+/*
 void TApplication::OuterDraw()
 {
 	InnerDraw();
@@ -78,7 +78,7 @@ void TApplication::OuterDraw()
 void TApplication::OuterUpdate(cardinal timer)
 {
 	InnerUpdate(timer);
-}
+}*/
 
 
 } //namespace SE

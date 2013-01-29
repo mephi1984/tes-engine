@@ -31,12 +31,12 @@ public:
 	virtual void InnerDeinit() = 0;
 	//To do on deinit
 
-	virtual void OuterDraw();
+	//virtual void OuterDraw();
 
 	virtual void InnerDraw() = 0;
 	//What to draw
 
-	virtual void OuterUpdate(cardinal timer);
+	//virtual void OuterUpdate(cardinal timer);
 
 	virtual void InnerUpdate(cardinal timer) = 0;
 	//To do on update
