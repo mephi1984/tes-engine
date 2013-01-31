@@ -30,6 +30,11 @@ public:
 	virtual void PlayMusicLooped(const std::string& musicName);
 	virtual void StopMusic(const std::string& musicName);
     
+    virtual void StopAllMusic();
+    
+	virtual void TryStopAndPlayMusicLooped(const std::string& musicName);
+
+    
 };
 
 

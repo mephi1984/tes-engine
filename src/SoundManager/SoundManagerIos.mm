@@ -104,6 +104,8 @@ void TSoundManagerIos::PlayMusic(const std::string& musicName)
     AudioSourceMap[musicName].looped = false;
     
     [AudioSourceMap[musicName] playAtListenerPosition];
+    
+    //AudioSourceMap[musicName].isPlaying = true;
 }
 
 void TSoundManagerIos::PlayMusicLooped(const std::string& musicName)
@@ -116,6 +118,8 @@ void TSoundManagerIos::PlayMusicLooped(const std::string& musicName)
     AudioSourceMap[musicName].looped = true;
     
     [AudioSourceMap[musicName] playAtListenerPosition];
+    
+    //AudioSourceMap[musicName].isPlaying = true;
 }
 
 void TSoundManagerIos::StopMusic(const std::string& musicName)
@@ -126,7 +130,52 @@ void TSoundManagerIos::StopMusic(const std::string& musicName)
     }
     
     [AudioSourceMap[musicName] stop];
+    //AudioSourceMap[musicName].isPlaying = false;
 }
 
+void TSoundManagerIos::StopAllMusic()
+{
+    for (auto i = AudioSourceMap.begin(); i != AudioSourceMap.end(); ++i)
+    {
+        PASoundSource* s = i->second;
+        if (s.isPlaying)
+        {
+            [s stop];
+            //s.isPlaying = false;
+        }
+    }
+}
+    
+void TSoundManagerIos::TryStopAndPlayMusicLooped(const std::string& musicName)
+{
+    if (AudioSourceMap.count(musicName) == 0)
+    {
+        throw ErrorToLog("Sound or music not exists: "+musicName);
+    }
+    
+    for (auto i = AudioSourceMap.begin(); i != AudioSourceMap.end(); ++i)
+    {
+        if (i->first != musicName)
+        {
+            PASoundSource* s = i->second;
+            if (s.isPlaying)
+            {
+                [s stop];
+                //s.isPlaying = false;
+            }
+        }
+    }
+    
+    PASoundSource* s = AudioSourceMap[musicName];
+    
+    if (!s.isPlaying)
+    {
+        AudioSourceMap[musicName].looped = true;
+        
+        //AudioSourceMap[musicName].isPlaying = true;
+        
+        [AudioSourceMap[musicName] playAtListenerPosition];
+    }
+}
 
 } //namespace SE
