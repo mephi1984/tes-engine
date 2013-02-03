@@ -58,11 +58,13 @@ protected:
 	bool CreateTexDataFromBmp32(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromTga(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromPng(const std::string& filename, TTextureData& texData);
+	
 	cardinal AddTextureBmp24Data(const TTextureData& texData);
 	cardinal AddTextureBmp32Data(const TTextureData& texData);
-
 	cardinal AddCubemapTextureBmp24Data(TTextureData* texData);
 	//cardinal AddCubemapTextureBmp32Data(TTextureData* texData); Not implemented yet
+
+	void InnerClear();
 
 public:
 	TTextureListClass();
@@ -84,7 +86,8 @@ public:
 	cardinal GetTextureWidth(const std::string& texName);
 
 	cardinal AddTextureDirectly(const std::string& filename, std::string texName = ""); //Loads texture directly from this file or fails
-	cardinal AddTexture(const std::string& fileName, std::string texName = ""); //Adds path to resources to the filename then call previous one
+	cardinal AddTexture(const std::string& fileName);
+	cardinal AddTexture(const std::string& fileName, std::string texName); //Adds path to resources to the filename then call previous one
 	cardinal AddTextureFromUserdata(const std::string& fileName, std::string texName = ""); //Same as above but checks if file is created in user data
 
 	cardinal AddCubemapTexture(std::string filename[6]); // "posx.bmp","negx.bmp","posy.bmp","negy.bmp","posz.bmp","negz.bmp"

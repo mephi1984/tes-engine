@@ -56,6 +56,13 @@ protected:
 public:
 	std::string PathToResources;
 
+	boost::thread::id MainThreadId;
+
+	std::vector<boost::function<void()>> MainThreadAsyncFunctionArr;
+
+	boost::mutex FuncListMutex;
+	std::list<TFuncToPerform> MainThreadSyncFunctionList;
+
 	TTextureListClass TexList;
 	TModelManager ModelManager;
 	TFlexModelManager FlexModelManager;
@@ -79,7 +86,9 @@ public:
 	TSoundManagerIos SoundManager;
 #endif
 
-	~TResourceManager() { }
+	void Update(cardinal timer);
+
+	~TResourceManager();
 };
 
 

@@ -65,4 +65,6 @@ int MainLoop(TApplication& application);
 //This file includes templates that call any of three singletones: Console, ResourceManager or Renderer
 
 #include "include/GUIManager/WidgetTemplatesImpl.h"
+#include "include/Utils/ThreadUtilsImpl.h"
+
 

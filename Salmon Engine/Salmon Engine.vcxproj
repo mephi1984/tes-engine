@@ -55,6 +55,8 @@
     <ClInclude Include="..\include\Utils\FileUtils\FileUtils.h" />
     <ClInclude Include="..\include\Utils\PngHelper.h" />
     <ClInclude Include="..\include\Utils\SerializeInterface\SerializeInterface.h" />
+    <ClInclude Include="..\include\Utils\ThreadUtils.h" />
+    <ClInclude Include="..\include\Utils\ThreadUtilsImpl.h" />
     <ClInclude Include="..\include\Utils\Utils.h" />
     <ClInclude Include="..\include\Utils\WinApi\WinApi.h" />
   </ItemGroup>
@@ -96,6 +98,7 @@
     <ClCompile Include="..\src\Utils\PngHelper.cpp" />
     <ClCompile Include="..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
     <ClCompile Include="..\src\Utils\SimpleTimer.cpp" />
+    <ClCompile Include="..\src\Utils\ThreadUtils.cpp" />
     <ClCompile Include="..\src\Utils\WinApi\WinApi.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

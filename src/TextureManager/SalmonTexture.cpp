@@ -37,6 +37,13 @@ TTextureListClass::~TTextureListClass()
 
 void TTextureListClass::Clear()
 {
+	PerformInMainThreadAsync(boost::bind(&TTextureListClass::InnerClear, this));
+}
+
+void TTextureListClass::InnerClear()
+{
+
+	AssertIfInMainThread();
 
 	if (TexMap.size() != 0)
 	{
@@ -50,7 +57,6 @@ void TTextureListClass::Clear()
 
 		*Console<<"ResourceManager::TexList cleared";
 	}
-	
 }
 
 void TTextureListClass::Serialize(boost::property_tree::ptree& propertyTree)
@@ -397,7 +403,7 @@ bool TTextureListClass::CreateTexDataFromPng(const std::string& filename, TTextu
 
 cardinal TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
 {
-
+	AssertIfInMainThread();
 
 	cardinal TexID = 0;
 
@@ -424,6 +430,8 @@ cardinal TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
 
 cardinal TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
 {
+	AssertIfInMainThread();
+
 	cardinal TexID;
 	glGenTextures(1, &TexID);
 	if (TexID == 0)
@@ -448,6 +456,8 @@ cardinal TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
 
 cardinal TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
 {
+	AssertIfInMainThread();
+
 	cardinal TexID;
 	glGenTextures(1, &TexID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, TexID);
@@ -492,6 +502,7 @@ cardinal TTextureListClass::GetTextureWidth(const std::string& texName)
 
 cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std::string texName)
 {
+	AssertIfInMainThread();
 
 	cardinal TexID;
 
@@ -545,12 +556,18 @@ cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std:
 
 }
 
+cardinal TTextureListClass::AddTexture(const std::string& fileName)
+{
+	return AddTexture(fileName, "");
+}
+
 cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
 {
-
     std::string fullFileName = ResourceManager->PathToResources + fileName;
-	return AddTextureDirectly(fullFileName, texName);
-    
+
+	boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureDirectly, this, fullFileName, texName);
+
+	return PerformInMainThread<cardinal>(f);
 }
 
 
@@ -565,13 +582,16 @@ cardinal TTextureListClass::AddTextureFromUserdata(const std::string& fileName, 
 
 	std::string fullFileName = GetFilePathUserData(fileName);
 
-	return AddTextureDirectly(fullFileName.c_str(), texName);
+
+	boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureDirectly, this, fullFileName, texName);
+
+	return PerformInMainThread<cardinal>(f);
 }
 
 
 cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 {
-
+	AssertIfInMainThread();
 	
 	filename[0] = ResourceManager->PathToResources + filename[0];
 	filename[1] = ResourceManager->PathToResources + filename[1];
@@ -643,6 +663,8 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 cardinal TTextureListClass::AddEmptyTexture(const std::string& texName,cardinal width,cardinal height)
 {
+	AssertIfInMainThread();
+
 	cardinal texID;
 
 	if (TexMap.count(texName) == 0)
@@ -680,6 +702,8 @@ cardinal TTextureListClass::AddEmptyTexture(const std::string& texName,cardinal 
 
 cardinal TTextureListClass::AddEmptyCubemapTexture(const std::string& texName,cardinal width,cardinal height)
 {
+	AssertIfInMainThread();
+
 	cardinal texID;
 
 	if (TexMap.count(texName) == 0)
@@ -734,6 +758,8 @@ cardinal TTextureListClass::AddEmptyCubemapTexture(const std::string& texName,ca
 
 cardinal TTextureListClass::AddDepthTexture(const std::string& texName,cardinal width,cardinal height)
 {
+	AssertIfInMainThread();
+
 	#ifdef TARGET_WIN32
 	cardinal texID;
 
@@ -783,6 +809,8 @@ cardinal TTextureListClass::AddDepthTexture(const std::string& texName,cardinal 
 
 void TTextureListClass::DeleteTexture(const std::string& texName)
 {
+	AssertIfInMainThread();
+
 	if (TexMap.count(texName) != 0)
 	{
 		--TexMap[texName].RefCount;
@@ -801,6 +829,8 @@ void TTextureListClass::DeleteTexture(const std::string& texName)
 
 void TTextureListClass::DeleteTexture(cardinal texID)
 {
+	AssertIfInMainThread();
+
 	TTextureMap::iterator i = TexMap.begin();
 
 	while (i != TexMap.end())

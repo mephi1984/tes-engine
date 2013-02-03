@@ -21,6 +21,46 @@ TSalmonRendererIos* Renderer;
 TResourceManager* ResourceManager;
 
 
+
+void TResourceManager::Update(cardinal timer)
+{
+
+	FuncListMutex.lock();
+
+	SoundManager.Update(timer);
+
+	GUIManager.Update(timer);
+
+	if (MainThreadAsyncFunctionArr.size() != 0)
+	{
+		MainThreadAsyncFunctionArr[0]();
+
+		MainThreadAsyncFunctionArr.erase(MainThreadAsyncFunctionArr.begin());
+	}
+
+	auto itr = MainThreadSyncFunctionList.begin();
+
+	while (itr != MainThreadSyncFunctionList.end() && itr->Executed)
+	{
+		itr++;
+	}
+
+	if (itr != MainThreadSyncFunctionList.end())
+	{
+		itr->Func();
+		itr->Executed = true;
+		itr->LockerPtr->unlock();
+	}
+	
+	FuncListMutex.unlock();
+}
+
+TResourceManager::~TResourceManager()
+{
+
+}
+
+
 TApplicationAncestor::TApplicationAncestor()
 {
 
@@ -63,9 +103,7 @@ void TApplicationAncestor::OuterDraw()
 
 void TApplicationAncestor::OuterUpdate(cardinal timer)
 {
-	ResourceManager->SoundManager.Update(timer);
-
-	ResourceManager->GUIManager.Update(timer);
+	ResourceManager->Update(timer);
 
 	InnerUpdate(timer);
 

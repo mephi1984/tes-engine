@@ -11,6 +11,8 @@ TApplicationInterface::TApplicationInterface()
 
 void TApplicationInterface::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
+	ResourceManager->MainThreadId = boost::this_thread::get_id();
+
 	ResourceManager->ScriptManager.BindBasicFunctions();
 
 	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
