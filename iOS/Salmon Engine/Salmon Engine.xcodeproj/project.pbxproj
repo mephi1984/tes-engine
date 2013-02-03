@@ -65,6 +65,9 @@
 		4C902A6315C56C0900FBC901 /* LightManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A5D15C56C0900FBC901 /* LightManager.h */; };
 		4C902A6415C56C0900FBC901 /* ModelManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A5F15C56C0900FBC901 /* ModelManager.h */; };
 		4C902A6515C56C0900FBC901 /* SimpleLand.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A6115C56C0900FBC901 /* SimpleLand.h */; };
+		4CBC58AC16BE9D8200B30DB2 /* ThreadUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC58AA16BE9D8200B30DB2 /* ThreadUtils.h */; };
+		4CBC58AD16BE9D8200B30DB2 /* ThreadUtilsImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CBC58AB16BE9D8200B30DB2 /* ThreadUtilsImpl.h */; };
+		4CBC58B016BE9D9B00B30DB2 /* ThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */; };
 		4CC1FC3D15B20E440025C6F7 /* IosApi.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC1FC3C15B20E440025C6F7 /* IosApi.h */; };
 		4CC1FC4015B20E5D0025C6F7 /* IosApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */; };
 		4CC857CD1693865C00110F77 /* NewModelManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CC857CC1693865C00110F77 /* NewModelManager.cpp */; };
@@ -151,6 +154,9 @@
 		4C902A5D15C56C0900FBC901 /* LightManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightManager.h; sourceTree = "<group>"; };
 		4C902A5F15C56C0900FBC901 /* ModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelManager.h; sourceTree = "<group>"; };
 		4C902A6115C56C0900FBC901 /* SimpleLand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLand.h; sourceTree = "<group>"; };
+		4CBC58AA16BE9D8200B30DB2 /* ThreadUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadUtils.h; path = ../../../include/Utils/ThreadUtils.h; sourceTree = "<group>"; };
+		4CBC58AB16BE9D8200B30DB2 /* ThreadUtilsImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadUtilsImpl.h; path = ../../../include/Utils/ThreadUtilsImpl.h; sourceTree = "<group>"; };
+		4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThreadUtils.cpp; path = ../../../src/Utils/ThreadUtils.cpp; sourceTree = "<group>"; };
 		4CC1FC3C15B20E440025C6F7 /* IosApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosApi.h; sourceTree = "<group>"; };
 		4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IosApi.mm; sourceTree = "<group>"; };
 		4CC857CC1693865C00110F77 /* NewModelManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NewModelManager.cpp; sourceTree = "<group>"; };
@@ -382,6 +388,8 @@
 		4C8CE93715B0A50200078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4CBC58AA16BE9D8200B30DB2 /* ThreadUtils.h */,
+				4CBC58AB16BE9D8200B30DB2 /* ThreadUtilsImpl.h */,
 				4C5E512016B6E601005521AC /* SimpleTimer.h */,
 				4CD18A1F16727D4A00EDC335 /* BindableVar.h */,
 				4CC1FC3B15B20E440025C6F7 /* IosApi */,
@@ -398,6 +406,7 @@
 		4C8CE93915B0A50F00078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */,
 				4C5E512316B6E620005521AC /* SimpleTimer.cpp */,
 				4CC1FC3E15B20E5D0025C6F7 /* IosApi */,
 				4C8CE96915B0B2FD00078175 /* PngHelper.cpp */,
@@ -768,6 +777,8 @@
 				4CF8748E16B652A4009B1214 /* WidgetXmlParsers.h in Headers */,
 				4CF8749016B652C3009B1214 /* Cameras.h in Headers */,
 				4C5E512116B6E602005521AC /* SimpleTimer.h in Headers */,
+				4CBC58AC16BE9D8200B30DB2 /* ThreadUtils.h in Headers */,
+				4CBC58AD16BE9D8200B30DB2 /* ThreadUtilsImpl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,6 +869,7 @@
 				4CF8747F16B6522E009B1214 /* PhysicsManager.cpp in Sources */,
 				4CF8749216B652ED009B1214 /* Cameras.cpp in Sources */,
 				4C5E512416B6E620005521AC /* SimpleTimer.cpp in Sources */,
+				4CBC58B016BE9D9B00B30DB2 /* ThreadUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
