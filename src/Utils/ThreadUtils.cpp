@@ -7,7 +7,15 @@ namespace SE
 	{
 		if (boost::this_thread::get_id() != ResourceManager->MainThreadId)
 		{
-			throw ErrorToLog("ERROR! AssertIfInMainThread failed!");
+			throw ErrorToLog("ERROR! AssertIfInMainThread - assert failed!");
+		}
+	}
+
+	void TryUpdateMainThreadId()
+	{
+		if (boost::this_thread::get_id() != ResourceManager->MainThreadId)
+		{
+			ResourceManager->MainThreadId = boost::this_thread::get_id();
 		}
 	}
 

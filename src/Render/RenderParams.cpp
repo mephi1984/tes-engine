@@ -7,6 +7,8 @@ namespace SE
 TRenderParamsSetter::TRenderParamsSetter(const TRenderParams& renderParams)
 	: RenderParams(renderParams)
 {
+	AssertIfInMainThread();
+
 	if (RenderParams.ShaderName != "")
 	{
 		Renderer->PushShader(RenderParams.ShaderName);
@@ -59,13 +61,7 @@ TRenderParamsSetter::~TRenderParamsSetter()
 	}
 }
 
-/*
-	std::string ShaderName;
 
-	mutable std::map<std::string, std::string> SamplerMap;
-	mutable std::map<std::string, float> FloatMap;
-	mutable std::map<std::string, vec4> Vec4Map;
-	*/
 void TRenderParams::Serialize(boost::property_tree::ptree& propertyTree)
 {
 	if (propertyTree.count("Shader") != 0)

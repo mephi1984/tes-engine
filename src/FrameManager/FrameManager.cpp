@@ -23,6 +23,7 @@ TFrameManager::~TFrameManager()
 
 void TFrameManager::FreeFrameManager()
 {
+	AssertIfInMainThread();
     BOOST_FOREACH(auto& i, FrameMap)
 	{
 		ResourceManager->TexList.DeleteTexture(i.second.TexName);
@@ -37,6 +38,8 @@ void TFrameManager::FreeFrameManager()
 
 cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardinal width,cardinal height)
 {
+	AssertIfInMainThread();
+
 	#ifdef TARGET_ANDROID
 	#define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE
 	#endif
@@ -122,6 +125,7 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
 
 cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal width,cardinal height)
 {
+	AssertIfInMainThread();
 
 	#ifdef TARGET_ANDROID
 	#define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE
@@ -218,6 +222,8 @@ cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal w
 
 void TFrameManager::DeleteFrameRenderBuffer(const std::string& frameName)
 {
+	AssertIfInMainThread();
+
 	if (FrameMap.count(frameName) > 0)
 	{
 		ResourceManager->TexList.DeleteTexture(FrameMap[frameName].TexName);
@@ -231,6 +237,7 @@ void TFrameManager::DeleteFrameRenderBuffer(const std::string& frameName)
 
 cardinal TFrameManager::AddDepthBuffer(const std::string& frameName, cardinal width, cardinal height)
 {
+	AssertIfInMainThread();
 
 	#ifdef TARGET_ANDROID
 	#define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE

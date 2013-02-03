@@ -113,7 +113,6 @@ protected:
 	float DrawChar(vec2 pos, cardinal character);
 	float DrawCharToVBO(vec2 pos, cardinal character, TTriangleList& triangleList);
 
-	vec2 FitStringToBox(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string& str);
 	vec2 FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string& str);
 public:
 	TFontManager() { }

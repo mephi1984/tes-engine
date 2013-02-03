@@ -74,6 +74,8 @@ void TApplicationAncestor::OuterDeinit()
 
 void TApplicationAncestor::OuterDraw()
 {
+	TryUpdateMainThreadId();
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -103,6 +105,8 @@ void TApplicationAncestor::OuterDraw()
 
 void TApplicationAncestor::OuterUpdate(cardinal timer)
 {
+	TryUpdateMainThreadId();
+
 	ResourceManager->Update(timer);
 
 	InnerUpdate(timer);

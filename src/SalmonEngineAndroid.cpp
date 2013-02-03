@@ -14,6 +14,8 @@ void TApplication::OuterInit(int screenWidth, int screenHeight, float matrixWidt
 	*Console<<std::string("Console successfully started!!!");
 	
     ResourceManager = new TResourceManager;
+	
+	ResourceManager->MainThreadId = boost::this_thread::get_id();
 
 	Renderer = new TSalmonRendererAndroid;
 

@@ -7,6 +7,8 @@ namespace SE
 
 VBOObject::VBOObject()
 {
+	AssertIfInMainThread();
+
 	glGenBuffers(1, &Buffer);
 }
 
@@ -15,14 +17,16 @@ VBOObject::VBOObject(const VBOObject& c)
 	throw ErrorToLog("Copy constructor for VBOObject called\n");
 }
 
-	VBOObject& VBOObject::operator=(const VBOObject& c)
+VBOObject& VBOObject::operator=(const VBOObject& c)
 {
 	throw ErrorToLog("operator= for VBOObject called\n");
 	return *this;
 }
 
-	VBOObject::~VBOObject()
+VBOObject::~VBOObject()
 {
+	AssertIfInMainThread();
+
 	glDeleteBuffers(1, &Buffer);
 }
 
@@ -111,7 +115,7 @@ TTriangleList::~TTriangleList()
 
 void TTriangleList::RefreshBuffer()
 {
-	//VertBuffer
+	AssertIfInMainThread();
 
 
 	if (NeedPrepareBufferObjects && Data.Vec2CoordArr.size() > 0 && Data.Vec3CoordArr.size() > 0)
@@ -303,7 +307,6 @@ void ScaleDataTriangleList(TDataTriangleList& triangleList, vec3 scaleVec)
 
 TDataTriangleList& ClearDataTriangleList(TDataTriangleList& triangleList)
 {
-	//throw ErrorToLog("Seems that here are some problems with this func. Do not use it!");
 
 	BOOST_FOREACH(auto& i, triangleList.Vec2CoordArr)
 	{
@@ -349,6 +352,8 @@ void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, vec2
 
 void CheckGlError(const std::string& msg)
 {
+	AssertIfInMainThread();
+
 	cardinal error = glGetError();
 	
 	if (error != GL_NO_ERROR)

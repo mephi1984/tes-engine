@@ -12,6 +12,8 @@ TRendererInterface::TRendererInterface()
 
 void TRendererInterface::TryEnableVertexAttribArrays()
 {
+	AssertIfInMainThread();
+
 	EnableVertexAttribArray(CONST_STRING_POSITION_ATTRIB);
 	EnableVertexAttribArray(CONST_STRING_NORMAL_ATTRIB);
 	EnableVertexAttribArray(CONST_STRING_TEXCOORD_ATTRIB);
@@ -21,6 +23,8 @@ void TRendererInterface::TryEnableVertexAttribArrays()
 
 void TRendererInterface::TryDisableVertexAttribArrays()
 {
+	AssertIfInMainThread();
+
 	DisableVertexAttribArray(CONST_STRING_BINORMAL_ATTRIB);
 	DisableVertexAttribArray(CONST_STRING_TANGENT_ATTRIB);	
 	DisableVertexAttribArray(CONST_STRING_TEXCOORD_ATTRIB);
@@ -232,12 +236,16 @@ void TRendererInterface::SetProjectionMatrix(float width, float height)
 
 void TRendererInterface::SetFrameViewport(const std::string& frameName)
 {
+	AssertIfInMainThread();
+
 	ivec2 frameWidthHeight = ResourceManager->FrameManager.GetFrameWidthHeight(frameName);
 	glViewport(0, 0, frameWidthHeight.v[0], frameWidthHeight.v[1]);
 }
 
 void TRendererInterface::SetFullScreenViewport()
 {
+	AssertIfInMainThread();
+
 	glViewport(0, 0, ScreenWidth, ScreenHeight);
 }
 
@@ -261,6 +269,7 @@ void TRendererInterface::PopShader()
 
 void TRendererInterface::DrawRect(const vec2& p1, const vec2& p2)
 {
+
 	T2DQuad quad;
 	
 	quad.VertexCoord[0] = vec3(p1.v[0], p1.v[1], 0.0f);
@@ -278,6 +287,7 @@ void TRendererInterface::DrawRect(const vec2& p1, const vec2& p2)
 
 void TRendererInterface::DrawRect(const vec2& p1, const vec2& p2, const vec2& t1, const vec2& t2)
 {
+
 	T2DQuad quad;
 	
 	quad.VertexCoord[0] = vec3(p1.v[0], p1.v[1], 0.0f);
@@ -302,6 +312,7 @@ void TRendererInterface::DrawFrameFullScreen(const std::string& frameName)
 
 void TRendererInterface::DrawFramePartScreen(const std::string& frameName, vec2 posFrom, vec2 posTo)
 {
+	AssertIfInMainThread();
 
 	cardinal texID = ResourceManager->FrameManager.GetFrameTexture(frameName.c_str());
 

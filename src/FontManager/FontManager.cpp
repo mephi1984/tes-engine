@@ -184,83 +184,9 @@ float TFontManager::DrawCharToVBO(vec2 pos, cardinal character, TTriangleList& t
 	vec2 t2 = vec2(fontParams.ShiftX + fontParams.BitmapWidth, 
 		1 - fontParams.ShiftY - fontParams.InternalShiftY);
 
-	/*
-	vec2 p12 = vec2(p1.v[0], p2.v[1]);
-	vec2 p21 = vec2(p2.v[0], p1.v[1]);
-
-	vec2 t12 = vec2(t1.v[0], t2.v[1]);
-	vec2 t21 = vec2(t2.v[0], t1.v[1]);
-	
-	
-	triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(vec3(p1, 0));
-	triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(vec3(p12, 0));
-	triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(vec3(p2, 0));
-
-	triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(vec3(p2, 0));
-	triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(vec3(p21, 0));
-	triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(vec3(p1, 0));
-
-	triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].push_back(t1);
-	triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].push_back(t12);
-	triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].push_back(t2);
-
-	triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].push_back(t2);
-	triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].push_back(t21);
-	triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].push_back(t1);
-	*/
 	triangleList.Data += MakeDataTriangleList(p1, p2, t1, t2);
 	
 	return fontParams.Advance*scale_x;
-}
-
-vec2 TFontManager::FitStringToBox(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string& str)
-{
-	//Need to make this deprecated!
-    
-    throw ErrorToLog("Call to deprecated TFontManager::FitStringToBox");
-    
-	std::string fontName = GetCurrentFontName();
-
-	float intervalY = CONST_HEIGHT_COEF * params.Height;
-
-	size_t rows = 1;
-
-	float maxWidth = posTo.v[0] - posFrom.v[0];
-
-	cardinal p = 0;
-	vec2 cursor;
-
-	while (p<str.size())
-	{
-		char c = str[p];
-		
-		if (c == '\n')
-		{
-			cursor.v[0] = 0;
-		}
-		else
-		{
-			cursor.v[0] += GetCharAdvance(c);
-		}
-		if (cursor.v[0] > maxWidth)
-		{
-			str.insert(p, 1, '\n');
-			cursor.v[0] = 0;
-		}
-
-		p++;
-	}
-
-	size_t found = str.find_first_of('\n');
-	
-	while (found != std::string::npos)
-	{
-		rows++;
-		found = str.find_first_of('\n', found + 1);
-	}
-
-	return vec2(posFrom.v[0], posFrom.v[1] + intervalY*rows);
-
 }
 
 
@@ -455,7 +381,8 @@ void TFontManager::DrawTextInBox(vec2 posFrom, vec2 posTo, TTextBasicAreaParams 
 	}
 	else
 	{
-		realPosFrom = FitStringToBox(posFrom, posTo, params, str);
+		//realPosFrom = FitStringToBox(posFrom, posTo, params, str);
+		throw ErrorToLog("Word wrap not supported!");
 	}
 
 	DrawString(realPosFrom, params, str);
@@ -471,7 +398,8 @@ TTriangleList TFontManager::DrawTextInBoxToVBO(vec2 posFrom, vec2 posTo, TTextBa
 	}
 	else
 	{
-		realPosFrom = FitStringToBox(posFrom, posTo, params, str);
+		throw ErrorToLog("Word wrap not supported!");
+		//realPosFrom = FitStringToBox(posFrom, posTo, params, str);
 	}
 	return DrawStringToVBO(realPosFrom, params, str);
 }

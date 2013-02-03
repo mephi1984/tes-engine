@@ -8,6 +8,8 @@ namespace SE
 
 void TSalmonRendererGLES20::DrawQuad(const T2DQuad& quad)
 {
+	AssertIfInMainThread();
+	
 	//EnableVertexAttribArray("vPosition");
 	//EnableVertexAttribArray("vTexCoord");
 	
@@ -24,6 +26,8 @@ void TSalmonRendererGLES20::DrawQuad(const T2DQuad& quad)
 
 void TSalmonRendererGLES20::DrawTriangleList(const TTriangleList& triangleList)
 {
+	AssertIfInMainThread();
+	
 	for (std::map<std::string, std::vector<vec2> >::iterator i = triangleList.Data.Vec2CoordArr.begin(); i != triangleList.Data.Vec2CoordArr.end(); ++i )
 	{
 		VertexAttribPointer2fv(i->first, 0, reinterpret_cast<const char*>(&triangleList.Data.Vec2CoordArr[i->first][0]));

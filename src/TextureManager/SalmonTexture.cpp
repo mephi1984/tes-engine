@@ -23,8 +23,26 @@ TTextureListClass::TTextureListClass()
 	CreateFunctionMap[".png"] = boost::bind(&TTextureListClass::CreateTexDataFromPng, this, _1, _2);
 	CreateFunctionMap[".tga"] = boost::bind(&TTextureListClass::CreateTexDataFromTga, this, _1, _2);
     
+	/*
 	AddFunctionMap["bmp24"] = boost::bind(&TTextureListClass::AddTextureBmp24Data, this, _1);
 	AddFunctionMap["bmp32"] = boost::bind(&TTextureListClass::AddTextureBmp32Data, this, _1);
+	
+	Let's use inner functions!
+	*/
+
+	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> cardinal
+	{
+		boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
+		return PerformInMainThread<cardinal>(f);
+	};
+
+
+	AddFunctionMap["bmp32"] = [this](TTextureData& texData) -> cardinal
+	{
+		boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
+		return PerformInMainThread<cardinal>(f);
+	};
+	
     
 }
 
@@ -39,6 +57,171 @@ void TTextureListClass::Clear()
 {
 	PerformInMainThreadAsync(boost::bind(&TTextureListClass::InnerClear, this));
 }
+
+cardinal TTextureListClass::InnerAddEmptyTexture(const std::string& texName, cardinal width, cardinal height)
+{
+	AssertIfInMainThread();
+
+	cardinal texID;
+
+	if (TexMap.count(texName) == 0)
+	{
+
+		glGenTextures(1, &texID);
+		glBindTexture(GL_TEXTURE_2D, texID);
+		
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		#ifdef TARGET_WIN32
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		#endif
+		
+		#ifndef TARGET_WIN32 //TARGET_ANDROID or TARGET_IOS
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		#endif
+	
+		
+	}
+	else
+	{
+		TexMap[texName].RefCount++;
+		texID = TexMap[texName].TexID;
+	}
+
+	return texID;
+
+
+}
+cardinal TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height)
+{
+	AssertIfInMainThread();
+	
+	cardinal texID;
+
+	if (TexMap.count(texName) == 0)
+	{
+
+		glGenTextures(1, &texID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
+
+		#ifdef TARGET_WIN32
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+ 
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+0, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+1, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+2, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+3, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+4, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+5, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+		#endif
+		
+		#ifndef TARGET_WIN32 //TARGET_IOS or TARGET_ANDROID
+	
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+0, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+1, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+2, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+3, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+4, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+5, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		
+		#endif
+	}
+	else
+	{
+		TexMap[texName].RefCount++;
+		texID = TexMap[texName].TexID;
+	}
+
+	return texID;
+}
+
+cardinal TTextureListClass::InnerAddDepthTexture(const std::string& texName, cardinal width, cardinal height)
+{
+	AssertIfInMainThread();
+
+	
+	#ifdef TARGET_WIN32
+	cardinal texID;
+
+	if (TexMap.count(texName) == 0)
+	{
+
+		glGenTextures(1, &texID);
+		glBindTexture(GL_TEXTURE_2D, texID);
+
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+
+	}
+	else
+	{
+		TexMap[texName].RefCount++;
+		texID = TexMap[texName].TexID;
+	}
+
+	return texID;
+	#endif
+	
+	#ifdef TARGET_ANDROID
+	
+	throw ErrorToLog("Trying to create depth texture on Android!!!");
+	
+	return 0;
+	
+	#endif
+#ifdef TARGET_IOS
+	
+	throw ErrorToLog("Trying to create depth texture on iOS!!!");
+	
+	return 0;
+	
+#endif
+
+}
+
+void TTextureListClass::InnerDeleteTexture(TTextureMap::iterator itr)
+{
+	AssertIfInMainThread();
+
+	(itr->second.RefCount)--;
+
+	if (itr->second.RefCount == 0)
+	{
+		glDeleteTextures(1, &(itr->second.TexID));
+
+		*Console << "ResourceManager::TexList texture " + (itr->first) + " deleted";
+
+		TexMap.erase(itr);
+	}
+	else
+		*Console<<"ResourceManager::TexList texture "+(itr->first)+" reference deleted";
+
+}
+
 
 void TTextureListClass::InnerClear()
 {
@@ -64,12 +247,10 @@ void TTextureListClass::Serialize(boost::property_tree::ptree& propertyTree)
 	
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, propertyTree.get_child("Textures"))
 	{
-
 		std::string fileName = v.second.get<std::string>("FileName");
 		std::string texName = v.second.get<std::string>("TexName", "");
 
 		AddTexture(fileName, texName);
-
 	}
 }
 
@@ -209,8 +390,6 @@ bool TTextureListClass::CreateTexDataFromBmp32(const std::string& filename, TTex
 			texData.Data[x + 0] = fileArr[pos++];
             texData.Data[x + 3] = fileArr[pos++];
 		}
-
-	//delete [] fileArr;
 
 	return true;
 }
@@ -415,7 +594,6 @@ cardinal TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
 
     glBindTexture(GL_TEXTURE_2D, TexID);
 
-	
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
@@ -502,8 +680,6 @@ cardinal TTextureListClass::GetTextureWidth(const std::string& texName)
 
 cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std::string texName)
 {
-	AssertIfInMainThread();
-
 	cardinal TexID;
 
 	if (texName == "")
@@ -520,22 +696,18 @@ cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std:
 		std::string texext = GetFileExt(filename);
         
         TTextureData texData;
-        if (CreateFunctionMap[texext](filename,texData))
+        if (CreateFunctionMap[texext](filename, texData))
         {
             
             NormalizeTexData(texData);
             TexID = AddFunctionMap[std::string(texData.Format)](texData);
+           
+            *Console<<"ResourceManager::TexList Texture added: "+texName+" with id = "+tostr(TexID);
+            TexMap[texName].RefCount = 1;
+            TexMap[texName].TexID = TexID;
+            TexMap[texName].Width = texData.Width;
+            TexMap[texName].Height = texData.Height;
             
-            if (TexID != 0)
-            {
-                *Console<<"ResourceManager::TexList Texture added: "+texName+" with id = "+tostr(TexID);
-                TexMap[texName].RefCount = 1;
-                TexMap[texName].TexID = TexID;
-                TexMap[texName].Width = texData.Width;
-                TexMap[texName].Height = texData.Height;
-            }
-            else
-                *Console<<"ResourceManager::TexList ERROR - TEXTURE ADD TO OPENGL FAILED: "+texName;
         }
         else
         {
@@ -565,16 +737,13 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string 
 {
     std::string fullFileName = ResourceManager->PathToResources + fileName;
 
-	boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureDirectly, this, fullFileName, texName);
-
-	return PerformInMainThread<cardinal>(f);
+	return AddTextureDirectly(fullFileName, texName);
 }
 
 
 cardinal TTextureListClass::AddTextureFromUserdata(const std::string& fileName, std::string texName)
 {
 	
-
 	if (!IsFileExistsInUserData(fileName))
 	{
 		throw ErrorToLog("File not found in userdata: "+fileName);
@@ -582,17 +751,13 @@ cardinal TTextureListClass::AddTextureFromUserdata(const std::string& fileName, 
 
 	std::string fullFileName = GetFilePathUserData(fileName);
 
-
-	boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureDirectly, this, fullFileName, texName);
-
-	return PerformInMainThread<cardinal>(f);
+	return AddTextureDirectly(fullFileName, texName);
 }
 
 
 cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 {
-	AssertIfInMainThread();
-	
+
 	filename[0] = ResourceManager->PathToResources + filename[0];
 	filename[1] = ResourceManager->PathToResources + filename[1];
 	filename[2] = ResourceManager->PathToResources + filename[2];
@@ -620,11 +785,9 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 					*Console<<"ResourceManager::TexList ERROR - TEXTURE LOAD FAILED: "+texname;
 					return 0;
 				}
-	
 			}
 			else
 			{
-
 				*Console<<"ResourceManager::TexList ERROR - FORMAT NOT SUPPORTED: "+texext;
 				return 0;
 			}
@@ -633,9 +796,9 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 		//All textures have been inserted into texData[6], lets add them
 
-		TexID = AddCubemapTextureBmp24Data(texData);
+		boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
 
-		//for (int j = 0; j < 6; j++) delete [] texData[j].Data;
+		TexID = PerformInMainThread<cardinal>(f);
 
 		if (TexID != 0)
 		{
@@ -661,197 +824,48 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 }
 
-cardinal TTextureListClass::AddEmptyTexture(const std::string& texName,cardinal width,cardinal height)
+cardinal TTextureListClass::AddEmptyTexture(const std::string& texName, cardinal width, cardinal height)
 {
-	AssertIfInMainThread();
+	boost::function<cardinal()> f = boost::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
 
-	cardinal texID;
-
-	if (TexMap.count(texName) == 0)
-	{
-
-		glGenTextures(1, &texID);
-		glBindTexture(GL_TEXTURE_2D, texID);
-		
-		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		#ifdef TARGET_WIN32
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		#endif
-		
-		#ifndef TARGET_WIN32 //TARGET_ANDROID or TARGET_IOS
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		#endif
-	
-		
-	}
-	else
-	{
-		TexMap[texName].RefCount++;
-		texID = TexMap[texName].TexID;
-	}
-
-	return texID;
-
+	return PerformInMainThread<cardinal>(f);
 }
 
 
-cardinal TTextureListClass::AddEmptyCubemapTexture(const std::string& texName,cardinal width,cardinal height)
+cardinal TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height)
 {
-	AssertIfInMainThread();
+	boost::function<cardinal()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
-	cardinal texID;
-
-	if (TexMap.count(texName) == 0)
-	{
-
-		glGenTextures(1, &texID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
-
-		#ifdef TARGET_WIN32
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
- 
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+0, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+1, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+2, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+3, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+4, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+5, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-		#endif
-		
-		#ifndef TARGET_WIN32 //TARGET_IOS or TARGET_ANDROID
-	
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+0, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+1, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+2, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+3, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+4, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+5, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-		
-		#endif
-	}
-	else
-	{
-		TexMap[texName].RefCount++;
-		texID = TexMap[texName].TexID;
-	}
-
-	return texID;
+	return PerformInMainThread<cardinal>(f);
 }
 
 
-cardinal TTextureListClass::AddDepthTexture(const std::string& texName,cardinal width,cardinal height)
+cardinal TTextureListClass::AddDepthTexture(const std::string& texName, cardinal width, cardinal height)
 {
-	AssertIfInMainThread();
+	boost::function<cardinal()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
-	#ifdef TARGET_WIN32
-	cardinal texID;
-
-	if (TexMap.count(texName) == 0)
-	{
-
-		glGenTextures(1, &texID);
-		glBindTexture(GL_TEXTURE_2D, texID);
-
-		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
-
-	}
-	else
-	{
-		TexMap[texName].RefCount++;
-		texID = TexMap[texName].TexID;
-	}
-
-	return texID;
-	#endif
-	
-	#ifdef TARGET_ANDROID
-	
-	throw ErrorToLog("Trying to create depth texture on Android!!!");
-	
-	return 0;
-	
-	#endif
-#ifdef TARGET_IOS
-	
-	throw ErrorToLog("Trying to create depth texture on iOS!!!");
-	
-	return 0;
-	
-#endif
-
+	return PerformInMainThread<cardinal>(f);
 }
 
 void TTextureListClass::DeleteTexture(const std::string& texName)
 {
-	AssertIfInMainThread();
-
 	if (TexMap.count(texName) != 0)
 	{
-		--TexMap[texName].RefCount;
-		
-		if (TexMap[texName].RefCount == 0)
-		{
-			glDeleteTextures(1,&(TexMap[texName].TexID));
-			TexMap.erase(texName);
-			*Console<<"ResourceManager::TexList texture "+texName+" deleted";
-		}
-		else
-			*Console<<"ResourceManager::TexList texture "+texName+" reference deleted";
+		InnerDeleteTexture(TexMap.find(texName));
 	}
 }
 
-
 void TTextureListClass::DeleteTexture(cardinal texID)
 {
-	AssertIfInMainThread();
-
 	TTextureMap::iterator i = TexMap.begin();
 
 	while (i != TexMap.end())
 	{
 		if (i->second.TexID == texID)
 		{
-			(i->second.RefCount)--;
-		
-			if (i->second.RefCount == 0)
-			{
-				glDeleteTextures(1,&(i->second.TexID));
-				
-				*Console << "ResourceManager::TexList texture " + (i->first) + " deleted";
-				
-				TexMap.erase(i);
-			}
-			else
-				*Console<<"ResourceManager::TexList texture "+(i->first)+" reference deleted";
+			InnerDeleteTexture(i);
 
 			i = TexMap.end(); //to go out of loop
-
 		}
 		else
 		{

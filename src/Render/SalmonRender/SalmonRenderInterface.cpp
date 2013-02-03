@@ -22,7 +22,7 @@ TSalmonRendererInterface::TSalmonRendererInterface()
 
 void TSalmonRendererInterface::SetUniforms()
 {
-
+	AssertIfInMainThread();
 	//Refactoring!
 	
 
@@ -70,6 +70,7 @@ void TSalmonRendererInterface::SetUniforms()
 
 void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
+	AssertIfInMainThread();
 	
 	ModelviewMatrixStack.push(IdentityMatrix4);
 	ProjectionMatrixStack.push(IdentityMatrix4);
@@ -126,6 +127,7 @@ void TSalmonRendererInterface::CalcCamPos()
 
 void TSalmonRendererInterface::SetPerspectiveFullScreenViewport()
 {
+	throw ErrorToLog("SetPerspectiveFullScreenViewport is deprecated");
 
 	glViewport(0, 0, ScreenWidth, ScreenHeight);
 
@@ -140,6 +142,8 @@ void TSalmonRendererInterface::SetPerspectiveProjection(float angle, float zNear
 
 void TSalmonRendererInterface::SetOrthoFullScreenViewport()
 {
+	throw ErrorToLog("SetOrthoFullScreenViewport is deprecated");
+
 	glViewport(0, 0, ScreenWidth, ScreenHeight);
 
 	SetProjectionMatrix(static_cast<float>(MatrixWidth), static_cast<float>(MatrixHeight));
@@ -310,6 +314,7 @@ void TSalmonRendererInterface::SetGlNegZView()
 
 void TSalmonRendererInterface::SwitchToScreen()
 {
+	AssertIfInMainThread();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, CONST_SCREEN_FRAMEBUFFER);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -317,6 +322,7 @@ void TSalmonRendererInterface::SwitchToScreen()
 
 void TSalmonRendererInterface::SwitchToFrameBuffer(const std::string& frameName)
 {
+	AssertIfInMainThread();
 	
 	if (ResourceManager->FrameManager.FrameMap.count(frameName) > 0)
 	{
@@ -332,7 +338,7 @@ void TSalmonRendererInterface::SwitchToFrameBuffer(const std::string& frameName)
 
 void TSalmonRendererInterface::SwitchToCubemapBuffer(const std::string& frameName,cardinal cubeSide)
 {
-
+	AssertIfInMainThread();
 	
 	if (ResourceManager->FrameManager.FrameMap.count(frameName) > 0)
 	{

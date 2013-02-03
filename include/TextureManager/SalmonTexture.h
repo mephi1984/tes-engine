@@ -59,12 +59,19 @@ protected:
 	bool CreateTexDataFromTga(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromPng(const std::string& filename, TTextureData& texData);
 	
-	cardinal AddTextureBmp24Data(const TTextureData& texData);
-	cardinal AddTextureBmp32Data(const TTextureData& texData);
-	cardinal AddCubemapTextureBmp24Data(TTextureData* texData);
+	cardinal AddTextureBmp24Data(const TTextureData& texData); //MAIN THREAD ONLY
+	cardinal AddTextureBmp32Data(const TTextureData& texData); //MAIN THREAD ONLY
+	cardinal AddCubemapTextureBmp24Data(TTextureData* texData); //MAIN THREAD ONLY
 	//cardinal AddCubemapTextureBmp32Data(TTextureData* texData); Not implemented yet
 
-	void InnerClear();
+
+	cardinal InnerAddEmptyTexture(const std::string& texName, cardinal width, cardinal height);  //MAIN THREAD ONLY
+	cardinal InnerAddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height);  //MAIN THREAD ONLY
+	cardinal InnerAddDepthTexture(const std::string& texName, cardinal width, cardinal height);  //MAIN THREAD ONLY
+	void InnerDeleteTexture(TTextureMap::iterator itr);  //MAIN THREAD ONLY //MAIN THREAD ONLY
+	
+
+	void InnerClear(); //MAIN THREAD ONLY
 
 public:
 	TTextureListClass();

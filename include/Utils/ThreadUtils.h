@@ -26,6 +26,9 @@ namespace SE
 	};
 	
 	void AssertIfInMainThread();
+
+	void TryUpdateMainThreadId();
+
 	void PerformInMainThreadAsync(boost::function<void()> f);
 
 	template<typename RETURNTYPE>

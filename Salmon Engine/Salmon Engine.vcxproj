@@ -18,6 +18,7 @@
     <ClInclude Include="..\include\Animation\SalmonAnimation.h" />
     <ClInclude Include="..\include\ApplicationInterface.h" />
     <ClInclude Include="..\include\Engine.h" />
+    <ClInclude Include="..\include\FontManager\FontManager.h" />
     <ClInclude Include="..\include\FrameManager\FrameManager.h" />
     <ClInclude Include="..\include\GlobalConst.h" />
     <ClInclude Include="..\include\GUIManager\ButtonWidget.h" />

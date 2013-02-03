@@ -30,6 +30,8 @@ TSalmonRenderer::~TSalmonRenderer()
 
 bool TSalmonRenderer::BindOpenGLFunctions()
 {
+	//AssertIfInMainThread();
+
 	char* extensionList = (char*)glGetString(GL_EXTENSIONS);
 	char* glVersion = (char*)glGetString(GL_VERSION);
 	bool ok = true;
@@ -250,6 +252,8 @@ bool TSalmonRenderer::BindOpenGLFunctions()
 
 void TSalmonRenderer::DrawQuad(const T2DQuad& quad)
 {
+	AssertIfInMainThread();
+
 	const float CONST_DEFAULT_NORM_VEC[3] = { 0.0f, 0.0f, 1.0f};
 
 	glBegin(GL_QUADS);
@@ -313,6 +317,8 @@ vec4 TSalmonRenderer::GetFogColor()
 
 void TSalmonRenderer::DrawTriangleList(const TTriangleList& triangleList)
 {
+	AssertIfInMainThread();
+
 	BOOST_FOREACH(auto& i, triangleList.Data.Vec2CoordArr)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, triangleList.VertBufferArr[i.first]->Buffer);
