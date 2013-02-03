@@ -309,6 +309,7 @@ LOCAL_SRC_FILES += src/Utils/Console/Console.cpp
 LOCAL_SRC_FILES += src/Utils/SerializeInterface/SerializeInterface.cpp
 LOCAL_SRC_FILES += src/Utils/PngHelper.cpp
 LOCAL_SRC_FILES += src/Utils/SimpleTimer.cpp
+LOCAL_SRC_FILES += src/Utils/ThreadUtils.cpp
 LOCAL_SRC_FILES += src/TextureManager/SalmonTexture.cpp
 LOCAL_SRC_FILES += src/ShaderManager/ShaderManager.cpp
 LOCAL_SRC_FILES += src/FrameManager/FrameManager.cpp

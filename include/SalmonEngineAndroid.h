@@ -42,5 +42,6 @@ public:
 } //namespace SE
 
 #include "include/GUIManager/WidgetTemplatesImpl.h"
+#include "include/Utils/ThreadUtilsImpl.h"
 
 #endif
