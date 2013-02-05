@@ -15,7 +15,7 @@ public:
 
 	TApplicationInterface();
 
-	virtual ~TApplicationInterface() { }
+	virtual ~TApplicationInterface();
 
 	virtual void OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
 

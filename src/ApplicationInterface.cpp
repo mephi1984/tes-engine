@@ -9,6 +9,10 @@ TApplicationInterface::TApplicationInterface()
 {
 }
 
+TApplicationInterface::~TApplicationInterface() 
+{
+}
+
 void TApplicationInterface::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
 	ResourceManager->MainThreadId = boost::this_thread::get_id();

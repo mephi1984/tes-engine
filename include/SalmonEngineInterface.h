@@ -109,12 +109,6 @@ protected:
 	
 public:
 
-	TApplicationAncestor();
-
-
-	virtual void OuterDeinit();
-	//To do on deinit
-
 	virtual void OuterDraw();
 	//What to draw
 

@@ -17,27 +17,10 @@ class TApplication : public TApplicationAncestor
 {
 protected:
 public:
-	int X, Y, Width, Height; //Window position and size
-
-	TApplication() : X(0), Y(0), Width(4), Height(4) { }
-
-	virtual void OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
-
-	virtual void InnerInit() = 0;
-	//To do on init
-
-	virtual void OuterDeinit();
-
-	virtual void InnerDeinit() = 0;
-	//To do on deinit
-
-	virtual void InnerDraw() = 0;
-	//What to draw
-
-	virtual void InnerUpdate(cardinal timer) = 0;
-	//To do on update
-	
 };
+
+void CreateEngine();
+void DestroyEngine();
 
 } //namespace SE
 

@@ -40,8 +40,6 @@ public:
 
 	TDataTriangleList Data;
 
-	bool NeedRefreshBuffer;//Dummy for Android, but you need this for PC
-
 	virtual void RefreshBuffer() { } //Dummy for Android, but you need this for PC
 
 	TTriangleListAncestor();
@@ -78,11 +76,15 @@ public:
 
 class TTriangleList : public TTriangleListAncestor //Implementation differs for Windows and Android
 {
-public:
-
-	mutable std::map<std::string, std::shared_ptr<VBOObject> > VertBufferArr;
+protected:
+	virtual void InnerRefreshBuffer();
 
 	bool NeedPrepareBufferObjects;
+
+	bool NeedRefreshBuffer; //Dummy for Android, but you need this for PC
+public:
+
+	mutable std::map<std::string, std::shared_ptr<VBOObject>> VertBufferArr;
 
 	TTriangleList();
 

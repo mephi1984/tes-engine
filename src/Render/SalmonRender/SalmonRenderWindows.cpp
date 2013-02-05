@@ -36,7 +36,7 @@ bool TSalmonRenderer::BindOpenGLFunctions()
 	char* glVersion = (char*)glGetString(GL_VERSION);
 	bool ok = true;
 
-	*Console<<std::string("Render::OpenGL glVersion = ")+glVersion;
+	*Console<<std::string("Render::OpenGL glVersion = ") + glVersion;
 	
 	//Requires OpenGL 2.0 or above
 	if (glVersion[0]>='2')

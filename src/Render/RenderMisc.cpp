@@ -64,12 +64,10 @@ TDataTriangleList& TDataTriangleList::operator+=(const TDataTriangleList& dataTr
 
 
 TTriangleListAncestor::TTriangleListAncestor()
-	: NeedRefreshBuffer(false)
 {
 }
 
 TTriangleListAncestor::TTriangleListAncestor(const TTriangleListAncestor& c)
-	: NeedRefreshBuffer(false)
 {
 	Data = c.Data;
 }
@@ -77,13 +75,11 @@ TTriangleListAncestor::TTriangleListAncestor(const TTriangleListAncestor& c)
 TTriangleListAncestor& TTriangleListAncestor::operator=(const TTriangleListAncestor& c)
 {
 	Data = c.Data;
-	NeedRefreshBuffer = c.NeedRefreshBuffer;
-
+	RefreshBuffer();
 	return *this;
 }
 
 TTriangleListAncestor::TTriangleListAncestor(const TDataTriangleList& dataTriangleList)
-	: NeedRefreshBuffer(false)
 {
 	Data = dataTriangleList;
 }
@@ -91,7 +87,7 @@ TTriangleListAncestor::TTriangleListAncestor(const TDataTriangleList& dataTriang
 TTriangleListAncestor& TTriangleListAncestor::operator=(const TDataTriangleList& dataTriangleList)
 {
 	Data = dataTriangleList;
-	NeedRefreshBuffer = true;
+	RefreshBuffer();
 
 	return *this;
 }
@@ -106,6 +102,7 @@ TTriangleListAncestor::~TTriangleListAncestor()
 TTriangleList::TTriangleList()
 	: TTriangleListAncestor()
 	, NeedPrepareBufferObjects(true)
+	, NeedRefreshBuffer(false)
 {
 }
 
@@ -113,10 +110,9 @@ TTriangleList::~TTriangleList()
 {
 }
 
-void TTriangleList::RefreshBuffer()
+void TTriangleList::InnerRefreshBuffer()
 {
 	AssertIfInMainThread();
-
 
 	if (NeedPrepareBufferObjects && Data.Vec2CoordArr.size() > 0 && Data.Vec3CoordArr.size() > 0)
 	{
@@ -161,13 +157,10 @@ void TTriangleList::RefreshBuffer()
 					glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STATIC_DRAW);
 				}
 			}
-
-		
 		}
 
 	}
 
-	
 	BOOST_FOREACH(auto& i, Data.Vec2CoordArr)
     {
 		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
@@ -180,7 +173,17 @@ void TTriangleList::RefreshBuffer()
 		RefreshAttribBuffer3fv(i.first, Data.Vec3CoordArr);
 	}
 
+	NeedRefreshBuffer = false;
+}
 
+
+void TTriangleList::RefreshBuffer()
+{
+	if (!NeedRefreshBuffer)
+	{
+		NeedRefreshBuffer = true;
+		PerformInMainThreadAsync(boost::bind(&TTriangleList::InnerRefreshBuffer, this));
+	}
 }
 
 #endif

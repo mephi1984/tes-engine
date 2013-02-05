@@ -94,15 +94,6 @@ void TGUIManager::Update(cardinal dt)
 			(*(i->SignalMap[CONST_HOLD_SIGNAL_NAME]))(TSignalParam(dt));
 
 		}
-		
-		for (TRenderPairList::iterator itr = i->Widget->TriangleListVector.begin(); itr != i->Widget->TriangleListVector.end(); ++itr)
-		{
-			if (itr->second.NeedRefreshBuffer)
-			{
-				itr->second.RefreshBuffer();
-				itr->second.NeedRefreshBuffer = false;
-			}
-		}
 	}
 
 	for (TWidgetTrasfromTaskList::iterator i = WidgetTrasfromTaskList.begin(); i != WidgetTrasfromTaskList.end(); )
@@ -225,7 +216,7 @@ void TGUIManager::MoveWidgetByIterator(TWidgetArr::iterator widget, vec2 shift)
 			*i += vec3(shift, 0);
 		}
 
-		itr->second.NeedRefreshBuffer = true;
+		itr->second.RefreshBuffer();
 	}
 }
 

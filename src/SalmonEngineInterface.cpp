@@ -61,17 +61,6 @@ TResourceManager::~TResourceManager()
 }
 
 
-TApplicationAncestor::TApplicationAncestor()
-{
-
-}
-
-void TApplicationAncestor::OuterDeinit()
-{
-    InnerDeinit();
-}
-
-
 void TApplicationAncestor::OuterDraw()
 {
 	TryUpdateMainThreadId();

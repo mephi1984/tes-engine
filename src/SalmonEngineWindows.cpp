@@ -35,6 +35,15 @@ vec2 MouseTotalShift;
 bool MouseButtonPressed = false;
 bool MouseMoved = false;
 
+
+TApplication::TApplication() 
+{
+}
+
+TApplication::~TApplication()
+{
+}
+
 void TApplication::OnKeyPress(cardinal key)
 {
 	if (IsConsoleOut)
@@ -207,7 +216,7 @@ case WM_MOUSEMOVE:
 
 		if (MouseButtonPressed)
 		{
-			vec2 currentMousePos(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y));
+			vec2 currentMousePos(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
 			vec2 shift = (MouseButtonPos - currentMousePos);
 			//shift.v[1] = - shift.v[1];
 			App->OuterOnMove(shift);
@@ -232,7 +241,7 @@ case WM_MOUSEMOVE:
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.RightButtonPressed = (wParam & MK_RBUTTON);
 
-		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y));
+		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
 
 		if (mouseState.LeftButtonPressed)
 		{
@@ -259,11 +268,11 @@ case WM_MOUSEMOVE:
 
 		if (MouseMoved)
 		{
-			App->OuterOnTapUpAfterShift(vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y)));
+			App->OuterOnTapUpAfterShift(vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y)));
 		}
 		else
 		{
-			App->OuterOnTapUp(vec2(static_cast<float>(mouseState.X), static_cast<float>(App->Height - mouseState.Y)));
+			App->OuterOnTapUp(vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y)));
 		}
 
 		MouseButtonPressed = false;
@@ -346,95 +355,60 @@ bool CreateOpenGLWindow(const char* title, int x, int y, int width, int height,H
 	wglMakeCurrent( hDC, hRC );
 
     return true;
-}    
+}
 
-int MainLoop(TApplication& application)
+bool CreateEngine(int width, int height, int x, int y, std::string windowName, std::string logFileName)
 {
-    MSG msg;
-
+	
 	//Here console log is not created so we can not use ErrorCommon
 	try
 	{
-		Console = new TFileConsole(application.GetLogFilename());
+		Console = new TFileConsole(logFileName);
 	}
 	catch(...)
 	{
-		exit(1);
+		return false;
 	}
 
 	//Here console log is already created
-	try
-	{
 
 	*Console<<"Log started";
     
-	if (!CreateOpenGLWindow(application.WindowName.c_str(), application.X, application.Y, application.Width, application.Height,Hwnd,hDC,hRC))
+	if (!CreateOpenGLWindow(windowName.c_str(), x, y, width, height, Hwnd, hDC, hRC))
 	{
 		*Console<<"Unable to create OpenGL Window!";
-		exit(1);
+		return false;
 	}
 
-	*Console<<"OpenGL Window created";
-
-	
-		if (App != NULL)
-			throw ErrorCommon();
-
-		App = &application;
+	try
+	{
 
 		Renderer = new TSalmonRenderer;
 		ResourceManager = new TResourceManager;
 
-		int width;
-		int height;
 
-		GetWindowWidthHeight(width, height);
+		return Renderer->BindOpenGLFunctions();
 
+	}
+	catch (...)
+	{
+		return false;
+	}
+}
 
-		if (Renderer->BindOpenGLFunctions())
-		{
-
-			App->OuterInit(width, height, static_cast<float>(width), static_cast<float>(height));
-	
-			ShowWindow(Hwnd, SW_SHOW);
-			UpdateWindow(Hwnd);
-
-			NewTickCount = GetTickCount();
-			LastTickCount = NewTickCount;
-
-			bool StayIn = true;
-
-			while (StayIn) 
-			{
-				while(PeekMessage(&msg, Hwnd, 0, 0, PM_NOREMOVE)) 
-				{
-					if(GetMessage(&msg, Hwnd, 0, 0)) 
-					{
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					} 
-					else
-					{
-						StayIn = false;
-					}
-				}
-				DrawScene();
-
-				ProcessTickCount();
-			}
-
-		}
+void DestroyEngine()
+{
+	try
+	{
 
 		*Console<<"Program prepares to quit";
-
-		App->OuterDeinit();
 
 		delete ResourceManager;
 		delete Renderer;
 
 
 		wglMakeCurrent(NULL, NULL);
-		ReleaseDC(Hwnd,hDC);
+		ReleaseDC(Hwnd, hDC);
 		wglDeleteContext(hRC);
 		DestroyWindow(Hwnd);
 
@@ -447,8 +421,40 @@ int MainLoop(TApplication& application)
 
 	delete Console;
 
-	
-    return 0;
+}
+
+void MainLoop(TApplication* app)
+{
+	App = app;
+
+	MSG msg;
+
+	ShowWindow(Hwnd, SW_SHOW);
+	UpdateWindow(Hwnd);
+
+	NewTickCount = GetTickCount();
+	LastTickCount = NewTickCount;
+
+	bool StayIn = true;
+
+	while (StayIn) 
+	{
+		while(PeekMessage(&msg, Hwnd, 0, 0, PM_NOREMOVE)) 
+		{
+			if(GetMessage(&msg, Hwnd, 0, 0)) 
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			} 
+			else
+			{
+				StayIn = false;
+			}
+		}
+		DrawScene();
+
+		ProcessTickCount();
+	}
 }
 
 

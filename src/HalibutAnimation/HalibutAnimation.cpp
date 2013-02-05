@@ -235,7 +235,7 @@ void THalibutExternalAnimObject::RefreshTriangleListVector()
 		RenderPairIter->second.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB][i*6+5] = tex1;
 	}
 
-	RenderPairIter->second.NeedRefreshBuffer = true;
+	RenderPairIter->second.RefreshBuffer();
 
 }
 

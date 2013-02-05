@@ -5,40 +5,22 @@
 namespace SE
 {
 
-void TApplication::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
+
+void CreateEngine()
 {
-	OuterDeinit();
-    
-    Console = new TJavaConsole;
+	DestroyEngine();
+	
+	Console = new TJavaConsole;
 	
 	*Console<<std::string("Console successfully started!!!");
 	
     ResourceManager = new TResourceManager;
 	
-	ResourceManager->MainThreadId = boost::this_thread::get_id();
-
 	Renderer = new TSalmonRendererAndroid;
-
-	ResourceManager->ScriptManager.BindBasicFunctions();
-
-	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
-	
-	InnerInit();
-	
-	CheckGlError();
 }
 
-
-void TApplication::OuterDeinit()
+void DestroyEngine()
 {
-
-	if (Console != NULL)
-	{
-	*Console<<"OuterDeinit";
-    }
-	
-	InnerDeinit();
-
 	if (ResourceManager != NULL)
     {
 	   delete ResourceManager;
@@ -47,7 +29,7 @@ void TApplication::OuterDeinit()
 	
 	if (Console != NULL)
 	{
-	*Console<<"Resource manager deleted, deleting salmon render";
+		*Console<<"Resource manager deleted, deleting salmon render";
 	}
 	
     if (Renderer != NULL)
@@ -57,17 +39,14 @@ void TApplication::OuterDeinit()
     }
 	if (Console != NULL)
 	{
-	*Console<<"salmon render deleted";
+		*Console<<"salmon render deleted";
 	}
-    
-    
-    
+        
     if (Console != NULL)
     {
 	   delete Console;
 	   Console = NULL;
     }
-	
 }
 
 } //namespace SE
