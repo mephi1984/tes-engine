@@ -5,12 +5,26 @@
 int APIENTRY WinMain(HINSTANCE hCurrentInst, HINSTANCE hPreviousInst,
 	LPSTR lpszCmdLine, int nCmdShow)
 {
-	//Create application
-	TMyApplication Application;
 
-	Application.Width = 480;
-	Application.Height = 320;
+	int width = 480;
+	int height = 320;
 
-	//Start application
-	return MainLoop(Application);
+	if (CreateEngine(width, height))
+	{
+		
+		//MyApplication scope
+		{
+			TMyApplication Application;
+
+			Application.OuterInit(width, height, width, height);
+
+			MainLoop(&Application);
+			
+			Application.OuterDeinit();
+		}
+
+		DestroyEngine();
+	}
+
+	return 0;
 }
