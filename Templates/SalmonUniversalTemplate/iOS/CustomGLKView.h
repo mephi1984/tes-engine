@@ -6,12 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <GLKit/GLKit.h>
+#import "include/Utils/IosApi/ObjC/GLKViewTemplate.h"
 
-@interface CustomGLKView : GLKView
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+@interface CustomGLKView : GLKViewTemplate
 
 @end

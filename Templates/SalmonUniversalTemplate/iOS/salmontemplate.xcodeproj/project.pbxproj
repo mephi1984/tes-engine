@@ -15,7 +15,7 @@
 		4C49B2CC15B0991B003512CD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C49B2CA15B0991B003512CD /* InfoPlist.strings */; };
 		4C49B2CE15B0991B003512CD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2CD15B0991B003512CD /* main.m */; };
 		4C49B2D215B0991B003512CD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2D115B0991B003512CD /* AppDelegate.m */; };
-		4C49B2D915B0991B003512CD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2D815B0991B003512CD /* ViewController.m */; };
+		4C49B2D915B0991B003512CD /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C49B2D815B0991B003512CD /* ViewController.mm */; };
 		4C49B2DC15B0991B003512CD /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C49B2DA15B0991B003512CD /* ViewController_iPhone.xib */; };
 		4C49B2DF15B0991B003512CD /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C49B2DD15B0991B003512CD /* ViewController_iPad.xib */; };
 		4C4C807515BA8F460037C6CE /* libsquirrel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4C807415BA8F460037C6CE /* libsquirrel.a */; };
@@ -31,7 +31,7 @@
 		4C7AD44C15B1D77700A599F6 /* ios_api.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD44B15B1D77700A599F6 /* ios_api.cpp */; };
 		4C7C584B15C31E6500CAE4F4 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7C584A15C31E6500CAE4F4 /* libboost.a */; };
 		4CC971AC15C57DCE00359A2B /* libSalmon Engine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C902A7815C5735700FBC901 /* libSalmon Engine.a */; };
-		4CCC0ECC15B30D6B005432FB /* CustomGLKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC0ECB15B30D6B005432FB /* CustomGLKView.m */; };
+		4CCC0ECC15B30D6B005432FB /* CustomGLKView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC0ECB15B30D6B005432FB /* CustomGLKView.mm */; };
 		4CE6A9D215B2F979006A3965 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 4CE6A9D115B2F979006A3965 /* assets */; };
 /* End PBXBuildFile section */
 
@@ -59,7 +59,7 @@
 		4C49B2D015B0991B003512CD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C49B2D115B0991B003512CD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4C49B2D715B0991B003512CD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		4C49B2D815B0991B003512CD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4C49B2D815B0991B003512CD /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		4C49B2DB15B0991B003512CD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		4C49B2DE15B0991B003512CD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
 		4C4C807415BA8F460037C6CE /* libsquirrel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsquirrel.a; path = "../../libs/SQUIRREL2_1_1_sqplus/build-ios/ios-device/libsquirrel.a"; sourceTree = "<group>"; };
@@ -77,7 +77,7 @@
 		4C7C584A15C31E6500CAE4F4 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = "../../libs/boost_1_47_0/build-ios/ios-simulator/libboost.a"; sourceTree = "<group>"; };
 		4C902A7015C5735500FBC901 /* Salmon Engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Salmon Engine.xcodeproj"; path = "../../Engine/iOS/Salmon Engine/Salmon Engine.xcodeproj"; sourceTree = "<group>"; };
 		4CCC0ECA15B30D6A005432FB /* CustomGLKView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomGLKView.h; sourceTree = "<group>"; };
-		4CCC0ECB15B30D6B005432FB /* CustomGLKView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomGLKView.m; sourceTree = "<group>"; };
+		4CCC0ECB15B30D6B005432FB /* CustomGLKView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CustomGLKView.mm; sourceTree = "<group>"; };
 		4CCC0ECD15B310FB005432FB /* ios_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ios_api.h; sourceTree = "<group>"; };
 		4CE6A9D115B2F979006A3965 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../assets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,12 +149,12 @@
 				4C49B2D015B0991B003512CD /* AppDelegate.h */,
 				4C49B2D115B0991B003512CD /* AppDelegate.m */,
 				4C49B2D715B0991B003512CD /* ViewController.h */,
-				4C49B2D815B0991B003512CD /* ViewController.m */,
+				4C49B2D815B0991B003512CD /* ViewController.mm */,
 				4C49B2DA15B0991B003512CD /* ViewController_iPhone.xib */,
 				4C49B2DD15B0991B003512CD /* ViewController_iPad.xib */,
 				4C49B2C815B0991B003512CD /* Supporting Files */,
 				4CCC0ECA15B30D6A005432FB /* CustomGLKView.h */,
-				4CCC0ECB15B30D6B005432FB /* CustomGLKView.m */,
+				4CCC0ECB15B30D6B005432FB /* CustomGLKView.mm */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -295,9 +295,9 @@
 			files = (
 				4C49B2CE15B0991B003512CD /* main.m in Sources */,
 				4C49B2D215B0991B003512CD /* AppDelegate.m in Sources */,
-				4C49B2D915B0991B003512CD /* ViewController.m in Sources */,
+				4C49B2D915B0991B003512CD /* ViewController.mm in Sources */,
 				4C7AD44C15B1D77700A599F6 /* ios_api.cpp in Sources */,
-				4CCC0ECC15B30D6B005432FB /* CustomGLKView.m in Sources */,
+				4CCC0ECC15B30D6B005432FB /* CustomGLKView.mm in Sources */,
 				4C74849815C5AF7C0056EC44 /* main_code.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
