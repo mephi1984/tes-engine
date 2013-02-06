@@ -342,7 +342,6 @@ LOCAL_SRC_FILES += src/Render/SalmonRender/SalmonRenderAndroid.cpp
 LOCAL_SRC_FILES += src/Render/SalmonRender/Cameras.cpp
 
 LOCAL_SRC_FILES += src/Animation/SalmonAnimation.cpp
-LOCAL_SRC_FILES += src/ApplicationInterface.cpp
 LOCAL_SRC_FILES += src/SalmonEngineAndroid.cpp
 LOCAL_SRC_FILES += src/SalmonEngineInterface.cpp
 LOCAL_LDLIBS    := -lGLESv2

@@ -60,6 +60,41 @@ TResourceManager::~TResourceManager()
 
 }
 
+//==================================================
+//============ TApplicationAncestor ================
+//==================================================
+
+TApplicationAncestor::TApplicationAncestor()
+	: IsConsoleOut(false) 
+{
+}
+
+TApplicationAncestor::~TApplicationAncestor()
+{
+}
+
+void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
+{
+	ResourceManager->MainThreadId = boost::this_thread::get_id();
+
+	ResourceManager->ScriptManager.BindBasicFunctions();
+
+	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
+
+	InnerInit();
+    
+    CheckGlError();
+    
+    srand(static_cast<unsigned int>(time(0)));
+}
+
+	
+void TApplicationAncestor::OuterDeinit()
+{
+	CheckGlError("OuterDeinit");
+	InnerDeinit();
+}
+
 
 void TApplicationAncestor::OuterDraw()
 {

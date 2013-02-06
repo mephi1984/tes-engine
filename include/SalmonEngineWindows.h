@@ -44,6 +44,27 @@ bool CreateEngine(int width, int height, int x = 0, int y = 0, std::string windo
 void MainLoop(TApplication* app);
 void DestroyEngine();
 
+
+//APPTYPE must be inherited from TApplication
+template<typename APPTYPE>
+void OuterMainLoop(int width, int height)
+{
+	
+	if (CreateEngine(width, height))
+	{
+		TApplication* app = new APPTYPE;		
+		
+		app->OuterInit(width, height, static_cast<float>(width), static_cast<float>(height));
+
+		MainLoop(app);
+			
+		app->OuterDeinit();
+
+		DestroyEngine();
+	}
+}
+
+
 } //namespace SE
 
 //This file includes templates that call any of three singletones: Console, ResourceManager or Renderer

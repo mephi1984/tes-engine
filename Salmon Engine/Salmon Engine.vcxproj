@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Animation\SalmonAnimation.h" />
-    <ClInclude Include="..\include\ApplicationInterface.h" />
     <ClInclude Include="..\include\Engine.h" />
     <ClInclude Include="..\include\FontManager\FontManager.h" />
     <ClInclude Include="..\include\FrameManager\FrameManager.h" />
@@ -63,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Animation\SalmonAnimation.cpp" />
-    <ClCompile Include="..\src\ApplicationInterface.cpp" />
     <ClCompile Include="..\src\FontManager\FontManager.cpp" />
     <ClCompile Include="..\src\FrameManager\FrameManager.cpp" />
     <ClCompile Include="..\src\GlobalConst.cpp" />

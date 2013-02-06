@@ -5,9 +5,6 @@
 This code combines all headers for Salmon engine into one header file
 */
 
-
-#include "include/ApplicationInterface.h"
-
 #include "include/Render/SalmonRender/SalmonRenderInterface.h"
 
 #ifdef TARGET_ANDROID
@@ -103,11 +100,21 @@ struct TMouseState
 
 
 
-class TApplicationAncestor : public TApplicationInterface
+class TApplicationAncestor
 {
 protected:
-	
+	bool IsConsoleOut;
 public:
+
+	TApplicationAncestor();
+
+	virtual ~TApplicationAncestor();
+
+	virtual void OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
+
+	
+	virtual void OuterDeinit();
+
 
 	virtual void OuterDraw();
 	//What to draw
@@ -125,7 +132,18 @@ public:
 	virtual void OuterOnTapUpAfterMove(vec2 p);
 
 	virtual void OuterOnMove(vec2 shift);
+
+
+	virtual void InnerInit() { }
+
+	virtual void InnerDeinit() { }
+
+	virtual void InnerDraw() { }
 	
+	virtual void InnerUpdate(cardinal timer) { }
+	
+
+
 	virtual void InnerOnTapDown(vec2 p) { }
 	
 	virtual void InnerOnTapUp(vec2 p) { }
@@ -133,6 +151,8 @@ public:
 	virtual void InnerOnTapUpAfterMove(vec2 p) { }
 	
 	virtual void InnerOnMove(vec2 shift) { }
+
+
 
 	virtual void OnMouseMove(TMouseState& mouseState) { } //Windows only
 

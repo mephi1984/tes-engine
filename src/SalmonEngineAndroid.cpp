@@ -8,7 +8,6 @@ namespace SE
 
 void CreateEngine()
 {
-	DestroyEngine();
 	
 	Console = new TJavaConsole;
 	
