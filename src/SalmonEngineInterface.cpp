@@ -116,9 +116,9 @@ void TApplicationAncestor::OuterOnTapUp(vec2 p)
 	InnerOnTapUp(p);
 }
 
-void TApplicationAncestor::OuterOnTapUpAfterShift(vec2 p)
+void TApplicationAncestor::OuterOnTapUpAfterMove(vec2 p)
 {
-	InnerOnTapUpAfterShift(p);
+	InnerOnTapUpAfterMove(p);
 }
 
 void TApplicationAncestor::OuterOnMove(vec2 shift)

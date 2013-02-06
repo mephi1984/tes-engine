@@ -22,6 +22,7 @@
 		4C7AD45715B1E3D000A599F6 /* GlobalConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */; };
 		4C7AD45B15B1E3E300A599F6 /* ApplicationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7AD45915B1E3E200A599F6 /* ApplicationInterface.h */; };
 		4C7AD45C15B1E3E300A599F6 /* GlobalConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */; };
+		4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7BD6E616C28D3100BB8788 /* IosWrapper.h */; };
 		4C8CE90615B0A0F400078175 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CE90515B0A0F400078175 /* Foundation.framework */; };
 		4C8CE91715B0A11A00078175 /* DataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE91515B0A11A00078175 /* DataTypes.h */; };
 		4C8CE91815B0A11A00078175 /* NewDataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE91615B0A11A00078175 /* NewDataTypes.h */; };
@@ -77,6 +78,10 @@
 		4CD18A1A16727C3F00EDC335 /* SmartValueManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CD18A1916727C3F00EDC335 /* SmartValueManager.cpp */; };
 		4CD18A1E16727C4E00EDC335 /* SmartValueManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD18A1D16727C4E00EDC335 /* SmartValueManager.h */; };
 		4CD18A2016727D4A00EDC335 /* BindableVar.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD18A1F16727D4A00EDC335 /* BindableVar.h */; };
+		4CD41A2916C2D23C0071E598 /* GLKViewTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD41A2616C2D23C0071E598 /* GLKViewTemplate.h */; };
+		4CD41A2A16C2D23C0071E598 /* ViewControllerTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD41A2716C2D23C0071E598 /* ViewControllerTemplate.h */; };
+		4CD41A3116C2D2490071E598 /* GLKViewTemplate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CD41A2E16C2D2490071E598 /* GLKViewTemplate.mm */; };
+		4CD41A3216C2D2490071E598 /* ViewControllerTemplate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CD41A2F16C2D2490071E598 /* ViewControllerTemplate.mm */; };
 		4CEE2DD215CDC55B00C4D5F5 /* SalmonRenderGLES20.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */; };
 		4CEE2DD515CDC57200C4D5F5 /* SalmonRenderGLES20.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */; };
 		4CF8747916B65210009B1214 /* ButtonWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747616B65210009B1214 /* ButtonWidget.cpp */; };
@@ -110,6 +115,7 @@
 		4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlobalConst.cpp; path = ../../../src/GlobalConst.cpp; sourceTree = "<group>"; };
 		4C7AD45915B1E3E200A599F6 /* ApplicationInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationInterface.h; path = ../../../include/ApplicationInterface.h; sourceTree = "<group>"; };
 		4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalConst.h; path = ../../../include/GlobalConst.h; sourceTree = "<group>"; };
+		4C7BD6E616C28D3100BB8788 /* IosWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosWrapper.h; sourceTree = "<group>"; };
 		4C8CE90215B0A0F400078175 /* libSalmon Engine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSalmon Engine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CE90515B0A0F400078175 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C8CE91515B0A11A00078175 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
@@ -158,7 +164,7 @@
 		4CBC58AB16BE9D8200B30DB2 /* ThreadUtilsImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadUtilsImpl.h; path = ../../../include/Utils/ThreadUtilsImpl.h; sourceTree = "<group>"; };
 		4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThreadUtils.cpp; path = ../../../src/Utils/ThreadUtils.cpp; sourceTree = "<group>"; };
 		4CC1FC3C15B20E440025C6F7 /* IosApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosApi.h; sourceTree = "<group>"; };
-		4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IosApi.mm; sourceTree = "<group>"; };
+		4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IosApi.mm; path = ../IosApi.mm; sourceTree = "<group>"; };
 		4CC857CC1693865C00110F77 /* NewModelManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NewModelManager.cpp; sourceTree = "<group>"; };
 		4CC857CF1693867D00110F77 /* RenderParams.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderParams.cpp; path = ../../../src/Render/RenderParams.cpp; sourceTree = "<group>"; };
 		4CC857D1169386A300110F77 /* RenderParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderParams.h; path = ../../../include/Render/RenderParams.h; sourceTree = "<group>"; };
@@ -166,6 +172,10 @@
 		4CD18A1916727C3F00EDC335 /* SmartValueManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SmartValueManager.cpp; sourceTree = "<group>"; };
 		4CD18A1D16727C4E00EDC335 /* SmartValueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartValueManager.h; sourceTree = "<group>"; };
 		4CD18A1F16727D4A00EDC335 /* BindableVar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindableVar.h; path = ../../../include/Utils/BindableVar.h; sourceTree = "<group>"; };
+		4CD41A2616C2D23C0071E598 /* GLKViewTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLKViewTemplate.h; sourceTree = "<group>"; };
+		4CD41A2716C2D23C0071E598 /* ViewControllerTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewControllerTemplate.h; sourceTree = "<group>"; };
+		4CD41A2E16C2D2490071E598 /* GLKViewTemplate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLKViewTemplate.mm; sourceTree = "<group>"; };
+		4CD41A2F16C2D2490071E598 /* ViewControllerTemplate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewControllerTemplate.mm; sourceTree = "<group>"; };
 		4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SalmonRenderGLES20.h; path = ../../../include/Render/SalmonRender/SalmonRenderGLES20.h; sourceTree = "<group>"; };
 		4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SalmonRenderGLES20.cpp; path = ../../../src/Render/SalmonRender/SalmonRenderGLES20.cpp; sourceTree = "<group>"; };
 		4CF8747616B65210009B1214 /* ButtonWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ButtonWidget.cpp; path = ../../../src/GUIManager/ButtonWidget.cpp; sourceTree = "<group>"; };
@@ -640,6 +650,8 @@
 		4CC1FC3B15B20E440025C6F7 /* IosApi */ = {
 			isa = PBXGroup;
 			children = (
+				4CD41A2416C2D23C0071E598 /* ObjC */,
+				4C7BD6E616C28D3100BB8788 /* IosWrapper.h */,
 				4CC1FC3C15B20E440025C6F7 /* IosApi.h */,
 			);
 			name = IosApi;
@@ -649,7 +661,7 @@
 		4CC1FC3E15B20E5D0025C6F7 /* IosApi */ = {
 			isa = PBXGroup;
 			children = (
-				4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */,
+				4CD41A2C16C2D2490071E598 /* ObjC */,
 			);
 			name = IosApi;
 			path = ../../../src/Utils/IosApi;
@@ -671,6 +683,25 @@
 			);
 			name = SmartValueManager;
 			path = ../../../include/SmartValueManager;
+			sourceTree = "<group>";
+		};
+		4CD41A2416C2D23C0071E598 /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				4CD41A2616C2D23C0071E598 /* GLKViewTemplate.h */,
+				4CD41A2716C2D23C0071E598 /* ViewControllerTemplate.h */,
+			);
+			path = ObjC;
+			sourceTree = "<group>";
+		};
+		4CD41A2C16C2D2490071E598 /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				4CD41A2E16C2D2490071E598 /* GLKViewTemplate.mm */,
+				4CD41A2F16C2D2490071E598 /* ViewControllerTemplate.mm */,
+				4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */,
+			);
+			path = ObjC;
 			sourceTree = "<group>";
 		};
 		4CF8747116B6514F009B1214 /* PhysicsManager */ = {
@@ -779,6 +810,9 @@
 				4C5E512116B6E602005521AC /* SimpleTimer.h in Headers */,
 				4CBC58AC16BE9D8200B30DB2 /* ThreadUtils.h in Headers */,
 				4CBC58AD16BE9D8200B30DB2 /* ThreadUtilsImpl.h in Headers */,
+				4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */,
+				4CD41A2916C2D23C0071E598 /* GLKViewTemplate.h in Headers */,
+				4CD41A2A16C2D23C0071E598 /* ViewControllerTemplate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,6 +904,8 @@
 				4CF8749216B652ED009B1214 /* Cameras.cpp in Sources */,
 				4C5E512416B6E620005521AC /* SimpleTimer.cpp in Sources */,
 				4CBC58B016BE9D9B00B30DB2 /* ThreadUtils.cpp in Sources */,
+				4CD41A3116C2D2490071E598 /* GLKViewTemplate.mm in Sources */,
+				4CD41A3216C2D2490071E598 /* ViewControllerTemplate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

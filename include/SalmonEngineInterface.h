@@ -122,7 +122,7 @@ public:
 
 	virtual void OuterOnTapUp(vec2 p);
 
-	virtual void OuterOnTapUpAfterShift(vec2 p);
+	virtual void OuterOnTapUpAfterMove(vec2 p);
 
 	virtual void OuterOnMove(vec2 shift);
 	
@@ -130,7 +130,7 @@ public:
 	
 	virtual void InnerOnTapUp(vec2 p) { }
 
-	virtual void InnerOnTapUpAfterShift(vec2 p) { }
+	virtual void InnerOnTapUpAfterMove(vec2 p) { }
 	
 	virtual void InnerOnMove(vec2 shift) { }
 
@@ -140,6 +140,8 @@ public:
 	//To do on mouse wheel move
 
 	virtual void OnKeyPress(cardinal key) { } //Try not to override this. But if you need to override, call ancestor!
+    
+    virtual void OnScale(float scale) { }
 };
 
 

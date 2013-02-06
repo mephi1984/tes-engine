@@ -48,7 +48,62 @@ void DestroyEngine()
 	   Console = NULL;
     }
 }
-
-
+    
+    
+    TApplication* App = NULL;
+ 
+    void AppDeinit()
+    {
+        App->OuterDeinit();
+        delete App;
+        App = NULL;
+        DestroyEngine();
+    }
+    
+    
+    void AppUpdate(int dt)
+    {
+        App->OuterUpdate(dt);
+    }
+    
+    
+    void AppDraw()
+    {
+        App->OuterDraw();
+    }
+    
+    
+    void AppOnTapDown(int posx, int posy)
+    {
+        App->OuterOnTapDown(vec2(posx, posy));
+    }
+    
+    
+    void AppOnTapUp(int posx, int posy)
+    {
+        App->OuterOnTapUp(vec2(posx, posy));
+    }
+    
+    
+    void AppOnTapUpAfterMove(int posx, int posy)
+    {
+        App->OuterOnTapUpAfterMove(vec2(posx, posy));
+    }
+    
+    
+    void AppOnScroll(int shiftx, int shifty)
+    {
+        App->OuterOnMove(vec2(shiftx, shifty));
+    }
+    
+    
+    void AppOnScale(float scale)
+    {
+        App->OnScale(scale);
+    }
+    
+    
 
 } //namespace SE
+    
+   
