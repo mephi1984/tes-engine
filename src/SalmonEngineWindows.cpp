@@ -268,7 +268,7 @@ case WM_MOUSEMOVE:
 
 		if (MouseMoved)
 		{
-			App->OuterOnTapUpAfterShift(vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y)));
+			App->OuterOnTapUpAfterMove(vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y)));
 		}
 		else
 		{
