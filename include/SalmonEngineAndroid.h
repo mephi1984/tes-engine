@@ -27,4 +27,6 @@ void DestroyEngine();
 #include "include/GUIManager/WidgetTemplatesImpl.h"
 #include "include/Utils/ThreadUtilsImpl.h"
 
+#include "include/Utils/JniApi/JniApplication.h"
+
 #endif

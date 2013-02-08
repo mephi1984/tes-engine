@@ -305,6 +305,7 @@ LOCAL_SRC_FILES := src/Utils/DataTypes/DataTypes.cpp
 LOCAL_SRC_FILES += src/Utils/DataTypes/NewDataTypes.cpp
 LOCAL_SRC_FILES += src/Utils/FileUtils/FileUtils.cpp
 LOCAL_SRC_FILES += src/Utils/JniApi/JniApi.cpp
+LOCAL_SRC_FILES += src/Utils/JniApi/JniApplication.cpp
 LOCAL_SRC_FILES += src/Utils/Console/Console.cpp
 LOCAL_SRC_FILES += src/Utils/SerializeInterface/SerializeInterface.cpp
 LOCAL_SRC_FILES += src/Utils/PngHelper.cpp
