@@ -18,9 +18,7 @@
 		4C79A5B215B18A97003F59D1 /* FrameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C79A5B115B18A97003F59D1 /* FrameManager.cpp */; };
 		4C79A5B515B18B0F003F59D1 /* FontManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C79A5B415B18B0F003F59D1 /* FontManager.h */; };
 		4C79A5B815B18B1C003F59D1 /* FontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C79A5B715B18B1C003F59D1 /* FontManager.cpp */; };
-		4C7AD45615B1E3D000A599F6 /* ApplicationInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD45415B1E3D000A599F6 /* ApplicationInterface.cpp */; };
 		4C7AD45715B1E3D000A599F6 /* GlobalConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */; };
-		4C7AD45B15B1E3E300A599F6 /* ApplicationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7AD45915B1E3E200A599F6 /* ApplicationInterface.h */; };
 		4C7AD45C15B1E3E300A599F6 /* GlobalConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */; };
 		4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7BD6E616C28D3100BB8788 /* IosWrapper.h */; };
 		4C8CE90615B0A0F400078175 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CE90515B0A0F400078175 /* Foundation.framework */; };
@@ -111,9 +109,7 @@
 		4C79A5B115B18A97003F59D1 /* FrameManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameManager.cpp; sourceTree = "<group>"; };
 		4C79A5B415B18B0F003F59D1 /* FontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontManager.h; sourceTree = "<group>"; };
 		4C79A5B715B18B1C003F59D1 /* FontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FontManager.cpp; sourceTree = "<group>"; };
-		4C7AD45415B1E3D000A599F6 /* ApplicationInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ApplicationInterface.cpp; path = ../../../src/ApplicationInterface.cpp; sourceTree = "<group>"; };
 		4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlobalConst.cpp; path = ../../../src/GlobalConst.cpp; sourceTree = "<group>"; };
-		4C7AD45915B1E3E200A599F6 /* ApplicationInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApplicationInterface.h; path = ../../../include/ApplicationInterface.h; sourceTree = "<group>"; };
 		4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalConst.h; path = ../../../include/GlobalConst.h; sourceTree = "<group>"; };
 		4C7BD6E616C28D3100BB8788 /* IosWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosWrapper.h; sourceTree = "<group>"; };
 		4C8CE90215B0A0F400078175 /* libSalmon Engine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSalmon Engine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -334,7 +330,6 @@
 				4C902A3B15C56A7300FBC901 /* SalmonEngineInterface.cpp */,
 				4C902A3C15C56A7300FBC901 /* SalmonEngineIos.cpp */,
 				4C77831E15BABFC9003D5142 /* SoundManager */,
-				4C7AD45415B1E3D000A599F6 /* ApplicationInterface.cpp */,
 				4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */,
 				4C79A5B615B18B1C003F59D1 /* FontManager */,
 				4C79A5B015B18A97003F59D1 /* FrameManager */,
@@ -361,7 +356,6 @@
 				4C902A4A15C56B3700FBC901 /* SalmonEngineInterface.h */,
 				4C902A4B15C56B3700FBC901 /* SalmonEngineIos.h */,
 				4C77831D15BABFAB003D5142 /* SoundManager */,
-				4C7AD45915B1E3E200A599F6 /* ApplicationInterface.h */,
 				4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */,
 				4C79A5B315B18B0F003F59D1 /* FontManager */,
 				4C79A5AD15B18A8B003F59D1 /* FrameManager */,
@@ -780,7 +774,6 @@
 				4C79A5A215B1896F003F59D1 /* ScriptManager.h in Headers */,
 				4C79A5AF15B18A8B003F59D1 /* FrameManager.h in Headers */,
 				4C79A5B515B18B0F003F59D1 /* FontManager.h in Headers */,
-				4C7AD45B15B1E3E300A599F6 /* ApplicationInterface.h in Headers */,
 				4C7AD45C15B1E3E300A599F6 /* GlobalConst.h in Headers */,
 				4CC1FC3D15B20E440025C6F7 /* IosApi.h in Headers */,
 				4C77831B15BABFA6003D5142 /* SoundManagerInterface.h in Headers */,
@@ -877,7 +870,6 @@
 				4C79A59F15B1895B003F59D1 /* ScriptManager.cpp in Sources */,
 				4C79A5B215B18A97003F59D1 /* FrameManager.cpp in Sources */,
 				4C79A5B815B18B1C003F59D1 /* FontManager.cpp in Sources */,
-				4C7AD45615B1E3D000A599F6 /* ApplicationInterface.cpp in Sources */,
 				4C7AD45715B1E3D000A599F6 /* GlobalConst.cpp in Sources */,
 				4CC1FC4015B20E5D0025C6F7 /* IosApi.mm in Sources */,
 				4C77832215BAC035003D5142 /* SoundManagerIos.mm in Sources */,
