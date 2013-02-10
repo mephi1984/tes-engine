@@ -36,13 +36,13 @@ extern int FileSize;
 extern std::string ApkFilePath;
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_SetupEnviroment(JNIEnv* env, jobject thiz);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s);
+    JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupEnviroment(JNIEnv* env, jobject thiz);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s);
 	
 	//All 2 deprecated
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize);
 	
 	
 };

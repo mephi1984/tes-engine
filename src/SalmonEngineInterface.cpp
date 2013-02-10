@@ -91,6 +91,8 @@ void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float ma
 	
 void TApplicationAncestor::OuterDeinit()
 {
+	TryUpdateMainThreadId();
+	*Console<<"Outer Deinit";
 	CheckGlError("OuterDeinit");
 	InnerDeinit();
 }

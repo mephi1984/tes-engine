@@ -7,7 +7,7 @@ namespace SE
 
 JavaVM* JavaVirtualMachine = 0;
 
-const std::string CONST_JAVA_FILESYSTEM_CLASS_NAME = "fishrungames/engine/FileWrapper";
+const std::string CONST_JAVA_FILESYSTEM_CLASS_NAME = "fishrungames/engine/EngineWrapper";
 
 //Private data
 
@@ -32,7 +32,7 @@ void JniCallOpenFile(const std::string& fileName);
 //==================================================
 
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_SetupEnviroment(JNIEnv* env, jobject thiz)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupEnviroment(JNIEnv* env, jobject thiz)
 {
     int JVMResult;
     JVMResult = env->GetJavaVM(&JavaVirtualMachine);
@@ -40,7 +40,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_SetupEnviroment(JNIE
     //TODO: Check if jmvresult != 0
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s)
 {
 
 	const char *nativeString = env->GetStringUTFChars(s, 0);
@@ -51,7 +51,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_SetupApkFilePath(JNI
 
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s)
 {
 	const char *nativeString = env->GetStringUTFChars(s, 0);
 
@@ -63,7 +63,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_ConsoleOut(JNIEnv* e
 
 
 //Deprecated
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize)
 {
 	FileSize = fileSize;
 	FileArr =  new cardinal [fileSize % 4 == 0 ? fileSize/4 : fileSize/4 + 1];
@@ -72,7 +72,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_CreateFile(JNIEnv* e
 	
 	
 //Deprecated
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize)
 {
     JNIEnv* jenv;
     JavaVirtualMachine->GetEnv((void**)&jenv, JNI_VERSION_1_4);

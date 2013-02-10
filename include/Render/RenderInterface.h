@@ -38,6 +38,9 @@ public:
 	virtual float GetMatrixWidth();
 	virtual float GetMatrixHeight();
 
+	virtual void SetMatrixWidth(float matrixWidth);
+	virtual void SetMatrixHeight(float matrixHeight);
+
 	virtual void SetScreenWidthHeight(int screenWidth, int screenHeight);
 
 	virtual void SetUniforms() = 0;

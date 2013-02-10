@@ -11,7 +11,7 @@ boost::mutex InitLock;
 bool Inited = false;
 
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_Update(JNIEnv * env, jobject obj, long dt)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Update(JNIEnv * env, jobject obj, long dt)
 {
 	InitLock.lock();
 	try
@@ -32,7 +32,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_Update(JNIEnv * env,
 
 }
 
-JNIEXPORT int JNICALL Java_fishrungames_engine_FileWrapper_IsInited(JNIEnv * env, jobject obj)
+JNIEXPORT int JNICALL Java_fishrungames_engine_EngineWrapper_IsInited(JNIEnv * env, jobject obj)
 {   
 	if (Inited)
 	{
@@ -46,7 +46,7 @@ JNIEXPORT int JNICALL Java_fishrungames_engine_FileWrapper_IsInited(JNIEnv * env
 }
 
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_Destroy(JNIEnv * env, jobject obj)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Destroy(JNIEnv * env, jobject obj)
 {
 	InitLock.lock();
 	try
@@ -77,7 +77,7 @@ void DestroyThreaded()
 	
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapDown(JNIEnv * env, jobject obj, float x, float y, long time)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapDown(JNIEnv * env, jobject obj, float x, float y, long time)
 {
 	InitLock.lock();
 	try
@@ -95,7 +95,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapDown(JNIEnv * e
 }
 
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapUp(JNIEnv * env, jobject obj, float x, float y, long time)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapUp(JNIEnv * env, jobject obj, float x, float y, long time)
 {
 	InitLock.lock();
 	try
@@ -112,7 +112,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapUp(JNIEnv * env
 	InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapUpAfterMove(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapUpAfterMove(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time)
 {
 	InitLock.lock();
 	try
@@ -129,7 +129,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapUpAfterMove(JNI
 	InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time)
 {
 	InitLock.lock();
 	try
@@ -146,12 +146,12 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapMove(JNIEnv * e
 	InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnFling(JNIEnv * env, jobject obj, jfloat velocityX, jfloat velocityY, long time)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnFling(JNIEnv * env, jobject obj, jfloat velocityX, jfloat velocityY, long time)
 {
     
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time)
 {
 	InitLock.lock();
 	try
@@ -168,7 +168,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnScroll(JNIEnv * en
 	InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnKeyPress(JNIEnv * env, jobject obj, jint keyCode)
+JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnKeyPress(JNIEnv * env, jobject obj, jint keyCode)
 {
 	InitLock.lock();
 	try

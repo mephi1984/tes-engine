@@ -54,6 +54,15 @@ float TRendererInterface::GetMatrixHeight()
 	return MatrixHeight;
 }
 
+void TRendererInterface::SetMatrixWidth(float matrixWidth)
+{
+	MatrixWidth = matrixWidth;
+}
+
+void TRendererInterface::SetMatrixHeight(float matrixHeight)
+{
+	MatrixHeight = matrixHeight;
+}
 
 
 

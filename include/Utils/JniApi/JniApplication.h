@@ -23,9 +23,11 @@ extern bool Inited;
 
 
 template<typename APPTYPE>
-void JniInitApp(int width, int height, float matrixWidth, float matrixHeight)
+APPTYPE* JniInitApp(int width, int height, float matrixWidth, float matrixHeight)
 {
 	InitLock.lock();
+	
+	APPTYPE* result = NULL;
 	
 	try
 	{
@@ -41,8 +43,12 @@ void JniInitApp(int width, int height, float matrixWidth, float matrixHeight)
 		}
 	
 		CreateEngine();
-	
-		App = new APPTYPE;
+		
+		*Console<<std::string("Console successfully started!!!");
+		
+		result = new APPTYPE;
+		
+		App = result;
 	
 		App->OuterInit(width, height, matrixWidth, matrixHeight);
 	
@@ -53,21 +59,23 @@ void JniInitApp(int width, int height, float matrixWidth, float matrixHeight)
 		throw;
 	}
 	InitLock.unlock();
+	
+	return result;
 }
 
 extern "C" {
     //JNIEXPORT void JNICALL Java_fishrungames_salmonjnitemplate_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height);
  
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_Update(JNIEnv * env, jobject obj, long dt);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_Destroy(JNIEnv * env, jobject obj);
-	JNIEXPORT int JNICALL Java_fishrungames_engine_FileWrapper_IsInited(JNIEnv * env, jobject obj);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapDown(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapUp(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapUpAfterMove(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnFling(JNIEnv * env, jobject obj, jfloat velocityX, jfloat velocityY, long time);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_FileWrapper_OnKeyPress(JNIEnv * env, jobject obj, jint keyCode);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Update(JNIEnv * env, jobject obj, long dt);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Destroy(JNIEnv * env, jobject obj);
+	JNIEXPORT int JNICALL Java_fishrungames_engine_EngineWrapper_IsInited(JNIEnv * env, jobject obj);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapDown(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapUp(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapUpAfterMove(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnFling(JNIEnv * env, jobject obj, jfloat velocityX, jfloat velocityY, long time);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time);
+	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnKeyPress(JNIEnv * env, jobject obj, jint keyCode);
 };
 
 
