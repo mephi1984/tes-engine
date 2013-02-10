@@ -332,7 +332,6 @@ LOCAL_SRC_FILES += src/ModelManager/NewModelManager.cpp
 LOCAL_SRC_FILES += src/SimpleLand/SimpleLand.cpp
 LOCAL_SRC_FILES += src/PhysicsManager/PhysicsManager.cpp
 
-LOCAL_SRC_FILES += src/Render/RenderInterface.cpp
 LOCAL_SRC_FILES += src/Render/RenderMisc.cpp
 LOCAL_SRC_FILES += src/Render/RenderParams.cpp
 
