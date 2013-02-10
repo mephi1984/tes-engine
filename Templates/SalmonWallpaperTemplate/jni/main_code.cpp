@@ -75,12 +75,18 @@ void TAndroidApplication::DrawAllScene()
 
 	Renderer->PopProjectionMatrix();
 
+	Renderer->PushPerspectiveProjectionMatrix(pi/6, Renderer->GetMatrixWidth() / Renderer->GetMatrixHeight(), 1.f, 4500.f);
+
+
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	Renderer->SetGLCamView();
 
 	//LiteModel->DrawVBO();
 	FlexModel.Draw();
+
+	Renderer->PopProjectionMatrix();
+
 		
 }
 
