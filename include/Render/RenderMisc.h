@@ -115,29 +115,46 @@ class TTriangleList : public TTriangleListAncestor
 
 #endif
 
-    
-void FillVertexCoordVec(std::vector<vec3>& coordVec, int pos, vec2 posFrom, vec2 posTo);
-    
-void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+   
 
+void FillVertexCoordVec(std::vector<vec3>& coordVec, int pos, vec2 posFrom, vec2 posTo);
+//Adds rect points (6 vertices) into coordVec
+
+void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+//Adds rect points (6 tex coords) into coordVec
 
 std::vector<vec3> MakeVertexCoordVec(vec2 posFrom, vec2 posTo);
+//Creates array of rect (6 vertices)
 
 std::vector<vec2> MakeTexCoordVec(vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
-
+//Creates array of rect (6 tex coords)
 
 TDataTriangleList MakeDataTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+//Creates a DataTriangleList just containing rect
+
 void MoveDataTriangleList(TDataTriangleList& triangleList, vec3 shift);
+//Translates all points in DataTriangleList with shift vector
+
 void RotateDataTriangleList(TDataTriangleList& triangleList, const mat3& m);
+//Rotates all points in triangleList with rotation matrix
+
 void ScaleDataTriangleList(TDataTriangleList& triangleList, float scale);
+//Scales all points in triangleList by scale value
+
 void ScaleDataTriangleList(TDataTriangleList& triangleList, vec3 scaleVec);
+//Scales all points in triangleList by scaleVec vector
+
 TDataTriangleList& ClearDataTriangleList(TDataTriangleList& triangleList);
+//Clears triangle list, returning itself
+
 TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<vec3>& vertexArr, const std::vector<vec2>& texCoordArr);
+//Inserts additional points and their tex coords into triangle list
 
 void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
-
+//Replaces one rect in triangleList at position pos by new rect. pos is position in array for first vertex of a rectangle
 
 TTriangleList MakeTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+//Creates triangle list containing rect
 
 void CheckGlError(const std::string& msg = "");
 

@@ -130,7 +130,7 @@ public:
 
 	void Clear();
 
-	friend class TRendererInterface;
+	friend class TSalmonRendererInterface;
 
 };
 

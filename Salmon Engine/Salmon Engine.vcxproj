@@ -30,7 +30,6 @@
     <ClInclude Include="..\include\ModelManager\NewModelManager.h" />
     <ClInclude Include="..\include\OpenGLExt\OpenGlExt.h" />
     <ClInclude Include="..\include\PhysicsManager\PhysicsManager.h" />
-    <ClInclude Include="..\include\Render\RenderInterface.h" />
     <ClInclude Include="..\include\Render\RenderMisc.h" />
     <ClInclude Include="..\include\Render\RenderParams.h" />
     <ClInclude Include="..\include\Render\SalmonRender\BackgroundCubemap.h" />
@@ -74,7 +73,6 @@
     <ClCompile Include="..\src\ModelManager\NewModelManager.cpp" />
     <ClCompile Include="..\src\OpenGLExt\OpenGlExt.cpp" />
     <ClCompile Include="..\src\PhysicsManager\PhysicsManager.cpp" />
-    <ClCompile Include="..\src\Render\RenderInterface.cpp" />
     <ClCompile Include="..\src\Render\RenderMisc.cpp" />
     <ClCompile Include="..\src\Render\RenderParams.cpp" />
     <ClCompile Include="..\src\Render\SalmonRender\BackgroundCubemap.cpp" />
