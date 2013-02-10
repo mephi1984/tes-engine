@@ -10,6 +10,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import fishrungames.engine.GLViewAncestor;
+import fishrungames.engine.EngineWrapper;
 
 class GLView extends GLViewAncestor
 {
@@ -49,7 +50,7 @@ class GLView extends GLViewAncestor
 
 				long currentTimeStamp = c.getTimeInMillis();
 		
-				JniWrapper.Update(currentTimeStamp - lastTimeStamp);
+				EngineWrapper.Update(currentTimeStamp - lastTimeStamp);
 			
 				lastTimeStamp = currentTimeStamp;
 			}
