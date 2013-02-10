@@ -19,7 +19,7 @@ import android.view.SurfaceHolder;
 
 //import com.seb.SLWP.SLWP.GlEngine.DownloadTask;
 
-import fishrungames.engine.FileWrapper;
+import fishrungames.engine.EngineWrapper;
 
 public class MainWallpaperService extends GLWallpaperService implements
 		OnSharedPreferenceChangeListener {
@@ -30,7 +30,7 @@ public class MainWallpaperService extends GLWallpaperService implements
 	 */
 	static
 	{
-		FileWrapper.LoadSalmonEngineLibrary();
+		EngineWrapper.LoadSalmonEngineLibrary();
 		JniWrapper.LoadLibrary();
 	}
 
@@ -81,8 +81,8 @@ public class MainWallpaperService extends GLWallpaperService implements
 		
 		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
-		FileWrapper.SetActivityInstance(this);
-		FileWrapper.SetupEnviroment();
+		EngineWrapper.SetActivityInstance(this);
+		EngineWrapper.SetupEnviroment();
 		
 		String apkFilePath = null;
 		ApplicationInfo appInfo = null;
@@ -98,7 +98,7 @@ public class MainWallpaperService extends GLWallpaperService implements
 		    }
 		apkFilePath = appInfo.sourceDir;
 		
-		FileWrapper.SetupApkFilePath(apkFilePath);
+		EngineWrapper.SetupApkFilePath(apkFilePath);
 		
 		Init();
 	}

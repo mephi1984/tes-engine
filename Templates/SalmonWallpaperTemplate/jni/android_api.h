@@ -16,13 +16,7 @@ extern "C" {
 
 	JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height);
     
-	JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_Update(JNIEnv * env, jobject obj, long dt);
-	
-	JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_OnTapMove(JNIEnv * env, jobject obj, jfloat x, jfloat y);
-	
 	JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY);
-
-	JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetOrientation(JNIEnv * env, jobject obj, int isLandscape);
 
 	JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetRedBkgPref(JNIEnv * env, jobject obj, jboolean r);
 	};

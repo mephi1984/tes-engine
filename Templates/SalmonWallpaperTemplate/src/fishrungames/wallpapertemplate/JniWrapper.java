@@ -18,12 +18,6 @@ public class JniWrapper
 	
 	public static native void Init(int width, int height);
 	
-	public static native void Update(long dt);
-	
-	public static native void OnTapMove(float x, float y);
-	
 	public static native void SetOffset(float offsetX, float offsetY);
-	
-	public static native void SetOrientation(int isLandscape);
 	
 }

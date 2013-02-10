@@ -18,6 +18,9 @@ import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import fishrungames.engine.EngineWrapper;
+
+
 
 public class GLWallpaperService extends WallpaperService {
 	private static final String TAG = "GLWallpaperService";
@@ -654,7 +657,7 @@ class GLThread extends Thread {
 	
 						long currentTimeStamp = c.getTimeInMillis();
 				
-						JniWrapper.Update(currentTimeStamp - lastTimeStamp);
+						EngineWrapper.Update(currentTimeStamp - lastTimeStamp);
 					
 						lastTimeStamp = currentTimeStamp;
 

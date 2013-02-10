@@ -4,12 +4,25 @@
 int APIENTRY WinMain(HINSTANCE hCurrentInst, HINSTANCE hPreviousInst,
 	LPSTR lpszCmdLine, int nCmdShow)
 {
-	//Create application
-	TAndroidApplication Application;
+	int width = 800;
+	int height = 480;
 
-	Application.Width = 800;
-	Application.Height = 480;
+	if (CreateEngine(width, height))
+	{
+		
+		//MyApplication scope
+		{
+			TAndroidApplication Application;
 
-	//Start application
-	return MainLoop(Application);
+			Application.OuterInit(width, height, width, height);
+
+			MainLoop(&Application);
+			
+			Application.OuterDeinit();
+		}
+
+		DestroyEngine();
+	}
+
+	return 0;
 }

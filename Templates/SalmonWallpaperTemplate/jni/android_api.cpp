@@ -1,11 +1,9 @@
 #include "android_api.h"
 
 #include "main_code.h"
-#include "boost\thread.hpp"
+#include "boost/thread.hpp"
 
-std::shared_ptr<TAndroidApplication> App(new TAndroidApplication);
-
-boost::mutex RenderMutex;
+TAndroidApplication* Application = NULL;
 
 float lastOffsetX = 0.5f;
 
@@ -16,13 +14,17 @@ bool RedBkgPref = false;
 JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_Init(JNIEnv * env, jobject obj,  jint width, jint height)
 {
 
+	Application = JniInitApp<TAndroidApplication>(width, height, 800.f, 480.f);
 	
+	boost::get<TPanoramicCamera>(Renderer->Camera).SetAlpha((lastOffsetX) * pi / 180.f);
+	
+	/*
 	RenderMutex.lock();
 	
 	try
 	{
 	
-		if (App->IsInited())
+		if (Application->IsInited())
 		{
 			App->OuterDeinit(); //Clean up what is left at previous launch (if applicable)
 		}
@@ -48,55 +50,9 @@ JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_Init(JNIEn
 		throw;
 	}
 	
-	RenderMutex.unlock();
+	RenderMutex.unlock();*/
 }
 
-
-
-JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_Update(JNIEnv * env, jobject obj, long dt)
-{
-	RenderMutex.unlock();
-	
-	try
-	{
-		if (App->IsInited())
-		{
-			App->OuterDraw();
-			App->OuterUpdate(dt);
-			
-			if (OffsetChanged)
-			{
-				Renderer->SetAlpha((lastOffsetX) * pi / 180.f);
-			}
-		}
-	}
-	catch (...)
-	{
-		throw;
-	}
-	
-	RenderMutex.unlock();
-}
-
-
-JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_OnTapMove(JNIEnv * env, jobject obj, jfloat x, jfloat y)
-{
-	try
-	{
-		if (App->IsInited())
-		{
-		
-			vec2 offset = vec2(x*Renderer->GetMatrixWidth()/static_cast<float>(App->Width), y*Renderer->GetMatrixHeight()/static_cast<float>(App->Height));
-			
-			App->OuterOnMove(offset);
-
-		}
-	}
-	catch (...)
-	{
-		throw;
-	}
-}
 
 
 JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetOffset(JNIEnv * env, jobject obj, jfloat offsetX, jfloat offsetY)
@@ -107,10 +63,6 @@ JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetOffset(
 		OffsetChanged = true;
 		lastOffsetX = offsetX;
 	}
-}
-
-JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetOrientation(JNIEnv * env, jobject obj, int isLandscape)
-{
 }
 
 JNIEXPORT void JNICALL Java_fishrungames_wallpapertemplate_JniWrapper_SetRedBkgPref(JNIEnv * env, jobject obj, jboolean r)

@@ -108,7 +108,7 @@ void TAndroidApplication::InnerInit()
 
 	CheckGlError();
 
-	Renderer->MovePhi(pi/32);
+	boost::get<TPanoramicCamera>(Renderer->Camera).MovePhi(pi/32);
 
 	//ResourceManager->ModelManager.AddLiteModel("bt_box_yellow.lm1");
 
@@ -119,19 +119,21 @@ void TAndroidApplication::InnerInit()
 
 	LoadModels();
 
-	if (Width > Height)
+	if (Renderer->GetScreenWidth() > Renderer->GetScreenHeight())
 	{
-		Renderer->MoveDist(30.f);
+		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(30.f);
 	}
 
 	else
 	{
-		Renderer->MoveDist(45.f);
+		boost::get<TPanoramicCamera>(Renderer->Camera).MoveDist(45.f);
 	}
 
 	CheckGlError();
 
-	Renderer->SetPerspectiveFullScreenViewport();
+	glViewport(0, 0, Renderer->GetScreenWidth(), Renderer->GetScreenHeight());
+
+	Renderer->SetPerspectiveProjection(pi / 6.f, 1.0f, 100.0f);
 
 	*Console<<"Inner init end!\n";
 
@@ -174,7 +176,7 @@ void TAndroidApplication::InnerUpdate(cardinal dt)
 
 void TAndroidApplication::InnerOnMove(vec2 shift)
 {
-	Renderer->MoveAlpha(-pi*shift.v[0]*0.1f);
+	boost::get<TPanoramicCamera>(Renderer->Camera).MoveAlpha(-pi*shift.v[0]*0.1f);
 }
 
 void TAndroidApplication::OnMouseDown(TMouseState& mouseState)
