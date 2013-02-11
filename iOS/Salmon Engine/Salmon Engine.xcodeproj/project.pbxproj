@@ -33,9 +33,7 @@
 		4C8CE94C15B0AA8000078175 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE94B15B0AA8000078175 /* Utils.h */; };
 		4C8CE94F15B0AA9600078175 /* SerializeInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE94E15B0AA9600078175 /* SerializeInterface.h */; };
 		4C8CE95215B0AAA900078175 /* SerializeInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CE95115B0AAA900078175 /* SerializeInterface.cpp */; };
-		4C8CE95515B0AC2100078175 /* RenderInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CE95315B0AC2100078175 /* RenderInterface.cpp */; };
 		4C8CE95615B0AC2100078175 /* RenderMisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CE95415B0AC2100078175 /* RenderMisc.cpp */; };
-		4C8CE95B15B0AC4B00078175 /* RenderInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE95915B0AC4B00078175 /* RenderInterface.h */; };
 		4C8CE95C15B0AC4B00078175 /* RenderMisc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE95A15B0AC4B00078175 /* RenderMisc.h */; };
 		4C8CE96515B0B1A600078175 /* SalmonTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE96415B0B1A600078175 /* SalmonTexture.h */; };
 		4C8CE96815B0B1B700078175 /* SalmonTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CE96715B0B1B700078175 /* SalmonTexture.cpp */; };
@@ -125,9 +123,7 @@
 		4C8CE94B15B0AA8000078175 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../../../include/Utils/Utils.h; sourceTree = "<group>"; };
 		4C8CE94E15B0AA9600078175 /* SerializeInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerializeInterface.h; sourceTree = "<group>"; };
 		4C8CE95115B0AAA900078175 /* SerializeInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SerializeInterface.cpp; sourceTree = "<group>"; };
-		4C8CE95315B0AC2100078175 /* RenderInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderInterface.cpp; path = ../../../src/Render/RenderInterface.cpp; sourceTree = "<group>"; };
 		4C8CE95415B0AC2100078175 /* RenderMisc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderMisc.cpp; path = ../../../src/Render/RenderMisc.cpp; sourceTree = "<group>"; };
-		4C8CE95915B0AC4B00078175 /* RenderInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderInterface.h; path = ../../../include/Render/RenderInterface.h; sourceTree = "<group>"; };
 		4C8CE95A15B0AC4B00078175 /* RenderMisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderMisc.h; path = ../../../include/Render/RenderMisc.h; sourceTree = "<group>"; };
 		4C8CE96415B0B1A600078175 /* SalmonTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SalmonTexture.h; sourceTree = "<group>"; };
 		4C8CE96715B0B1B700078175 /* SalmonTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SalmonTexture.cpp; sourceTree = "<group>"; };
@@ -489,7 +485,6 @@
 			isa = PBXGroup;
 			children = (
 				4C902A3A15C56A4D00FBC901 /* Salmon Render */,
-				4C8CE95315B0AC2100078175 /* RenderInterface.cpp */,
 				4C8CE95415B0AC2100078175 /* RenderMisc.cpp */,
 				4CC857CF1693867D00110F77 /* RenderParams.cpp */,
 			);
@@ -500,7 +495,6 @@
 			isa = PBXGroup;
 			children = (
 				4C902A3F15C56AC700FBC901 /* Salmon Render */,
-				4C8CE95915B0AC4B00078175 /* RenderInterface.h */,
 				4C8CE95A15B0AC4B00078175 /* RenderMisc.h */,
 				4CC857D1169386A300110F77 /* RenderParams.h */,
 			);
@@ -766,7 +760,6 @@
 				4C8CE94A15B0A9DA00078175 /* Engine.h in Headers */,
 				4C8CE94C15B0AA8000078175 /* Utils.h in Headers */,
 				4C8CE94F15B0AA9600078175 /* SerializeInterface.h in Headers */,
-				4C8CE95B15B0AC4B00078175 /* RenderInterface.h in Headers */,
 				4C8CE95C15B0AC4B00078175 /* RenderMisc.h in Headers */,
 				4C8CE96515B0B1A600078175 /* SalmonTexture.h in Headers */,
 				4C8CE96C15B0B31F00078175 /* PngHelper.h in Headers */,
@@ -862,7 +855,6 @@
 				4C8CE93E15B0A56200078175 /* Console.cpp in Sources */,
 				4C8CE93F15B0A56200078175 /* FileUtils.cpp in Sources */,
 				4C8CE95215B0AAA900078175 /* SerializeInterface.cpp in Sources */,
-				4C8CE95515B0AC2100078175 /* RenderInterface.cpp in Sources */,
 				4C8CE95615B0AC2100078175 /* RenderMisc.cpp in Sources */,
 				4C8CE96815B0B1B700078175 /* SalmonTexture.cpp in Sources */,
 				4C8CE96A15B0B2FD00078175 /* PngHelper.cpp in Sources */,
