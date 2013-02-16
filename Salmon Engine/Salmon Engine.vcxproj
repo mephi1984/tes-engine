@@ -52,6 +52,8 @@
     <ClInclude Include="..\include\Utils\DataTypes\NewDataTypes.h" />
     <ClInclude Include="..\include\Utils\ErrorTypes\ErrorTypes.h" />
     <ClInclude Include="..\include\Utils\FileUtils\FileUtils.h" />
+    <ClInclude Include="..\include\Utils\Network\Network.h" />
+    <ClInclude Include="..\include\Utils\Network\SignalSender.h" />
     <ClInclude Include="..\include\Utils\PngHelper.h" />
     <ClInclude Include="..\include\Utils\SerializeInterface\SerializeInterface.h" />
     <ClInclude Include="..\include\Utils\ThreadUtils.h" />
@@ -92,6 +94,7 @@
     <ClCompile Include="..\src\Utils\DataTypes\DataTypes.cpp" />
     <ClCompile Include="..\src\Utils\DataTypes\NewDataTypes.cpp" />
     <ClCompile Include="..\src\Utils\FileUtils\FileUtils.cpp" />
+    <ClCompile Include="..\src\Utils\Network\Network.cpp" />
     <ClCompile Include="..\src\Utils\PngHelper.cpp" />
     <ClCompile Include="..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
     <ClCompile Include="..\src\Utils\SimpleTimer.cpp" />

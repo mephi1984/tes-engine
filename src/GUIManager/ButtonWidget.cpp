@@ -501,9 +501,11 @@ TEdit* TEdit::CreateEditWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost:
 
 void TEdit::EditFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TTextParams textParams, TEdit* edit)
 {
-	TRenderParams renderParams = textParams.RenderParams;
+
+	TRenderParams renderParams;
 
 	renderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = texName;
+	renderParams.FloatMap[CONST_STRING_TRANSPARENCY_UNIFORM] = 1.f;
 	
 	TTriangleList triangleList = MakeTriangleList(posFrom, posTo);
 
@@ -512,6 +514,8 @@ void TEdit::EditFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TTe
 	edit->TriangleListVector.insert(edit->TriangleListVector.end(), TRenderPair(renderParams, triangleList));
 
 
+	renderParams = textParams.RenderParams;
+
 	if (textParams.FontName == "")
 	{
 		textParams.FontName = ResourceManager->FontManager.GetCurrentFontName();
@@ -519,16 +523,18 @@ void TEdit::EditFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TTe
 
 	ResourceManager->FontManager.PushFont(textParams.FontName);
 
-	triangleList = CreateTriangleListForText(posFrom, posTo, textParams);
+	TTriangleList textTriangleList = CreateTriangleListForText(posFrom, posTo, textParams);
+
+	textTriangleList.RefreshBuffer();
 
 	renderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = ResourceManager->FontManager.GetCurrentFontTextureName();
 
-	edit->TextIterator = (edit->TriangleListVector.insert(edit->TriangleListVector.end(),TRenderPair(renderParams, triangleList)));
-	triangleList.RefreshBuffer();
+	edit->TextIterator = (edit->TriangleListVector.insert(edit->TriangleListVector.end(),TRenderPair(renderParams, textTriangleList)));
+	
 	ResourceManager->FontManager.PopFont();
 
-
 	edit->TextParams = textParams;
+
 
 }
 

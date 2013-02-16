@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C29A7BA8-207A-46B8-AAAF-368AED22EC2A}</ProjectGuid>
+    <RootNamespace>UtilsEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UTILS_ENGINE;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UTILS_ENGINE;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Utils\Console\Console.cpp" />
+    <ClCompile Include="..\src\Utils\DataTypes\DataTypes.cpp" />
+    <ClCompile Include="..\src\Utils\DataTypes\NewDataTypes.cpp" />
+    <ClCompile Include="..\src\Utils\FileUtils\FileUtils.cpp" />
+    <ClCompile Include="..\src\Utils\Network\Network.cpp" />
+    <ClCompile Include="..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
+    <ClCompile Include="..\src\Utils\SimpleTimer.cpp" />
+    <ClCompile Include="..\src\Utils\ThreadUtils.cpp" />
+    <ClCompile Include="..\src\Utils\WinApi\WinApi.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Utils\BindableVar.h" />
+    <ClInclude Include="..\include\Utils\Console\console.h" />
+    <ClInclude Include="..\include\Utils\DataTypes\DataTypes.h" />
+    <ClInclude Include="..\include\Utils\DataTypes\NewDataTypes.h" />
+    <ClInclude Include="..\include\Utils\ErrorTypes\ErrorTypes.h" />
+    <ClInclude Include="..\include\Utils\FileUtils\FileUtils.h" />
+    <ClInclude Include="..\include\Utils\Network\Network.h" />
+    <ClInclude Include="..\include\Utils\Network\SignalSender.h" />
+    <ClInclude Include="..\include\Utils\SerializeInterface\SerializeInterface.h" />
+    <ClInclude Include="..\include\Utils\SimpleTimer.h" />
+    <ClInclude Include="..\include\Utils\ThreadUtils.h" />
+    <ClInclude Include="..\include\Utils\Utils.h" />
+    <ClInclude Include="..\include\Utils\WinApi\WinApi.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

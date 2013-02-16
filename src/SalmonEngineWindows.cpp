@@ -129,6 +129,10 @@ void TApplication::OnKeyPress(cardinal key)
 			Console->ConsoleInput = "";
 			Console->ConsoleCursor = Console->ConsoleInput.size();
 		}
+		else
+		{
+			ResourceManager->GUIManager.KeyPressedSignal(static_cast<int>(key));
+		}
 	}
 }
 
