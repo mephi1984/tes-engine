@@ -7,7 +7,7 @@
 
 namespace SE
 {
-
+	#ifndef UTILS_ENGINE
 	struct TFuncToPerform
 	{
 	private:
@@ -33,6 +33,8 @@ namespace SE
 
 	template<typename RETURNTYPE>
 	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f);
+
+#endif
 
 } //namespace SE
 

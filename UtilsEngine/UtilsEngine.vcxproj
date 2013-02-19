@@ -41,7 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UTILS_ENGINE;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501;DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -54,7 +54,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\openal\OpenAL11_windows_sdk;$(LibsPath)\libogg-1.3.0\include;$(LibsPath)\libvorbis-1.3.2\include;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include;$(LibsPath)\DirectXsdk\Include;$(LibsPath)\lpng1510</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SalmonEnginePath);$(LibsPath)\boost_1_52_0;$(LibsPath)\sqplus\sqplus;$(LibsPath)\sqplus\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UTILS_ENGINE;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -75,6 +75,7 @@
     <ClCompile Include="..\src\Utils\WinApi\WinApi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Engine.h" />
     <ClInclude Include="..\include\Utils\BindableVar.h" />
     <ClInclude Include="..\include\Utils\Console\console.h" />
     <ClInclude Include="..\include\Utils\DataTypes\DataTypes.h" />

@@ -60,7 +60,9 @@ public:
 
 	virtual std::string GetHistory();
 
+#ifndef UTILS_ENGINE
 	virtual void Draw();
+#endif
 };
 
 

@@ -53,7 +53,11 @@ boost::property_tree::ptree::iterator ReplaceIncludeFile(boost::property_tree::p
 		}
 	}
 
+#ifdef UTILS_ENGINE
+	xmlFileArr = CreateMemFromFile<char>(fileName, xmlFileSize);
+#else
 	xmlFileArr = CreateMemFromFile<char>(ResourceManager->PathToResources + fileName, xmlFileSize);
+#endif
 
 	std::string xmlString = std::string(&xmlFileArr[0], &xmlFileArr[xmlFileSize]);
 
@@ -143,7 +147,11 @@ std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(const std::strin
 {
 	cardinal byteCount;
 
+#ifdef UTILS_ENGINE
+	boost::shared_array<char> file = CreateMemFromFile<char>(fileName, byteCount);
+#else
 	boost::shared_array<char> file = CreateMemFromFile<char>(ResourceManager->PathToResources + fileName, byteCount);
+#endif
 	
 	return FileToPropertyTree(file, byteCount, replaceMap);
 }

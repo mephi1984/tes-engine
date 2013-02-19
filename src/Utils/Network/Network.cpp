@@ -93,7 +93,7 @@ TSimpleAuthorization::TSimpleAuthorization(boost::asio::io_service& ioService, b
 
 void TSimpleAuthorization::Authorize()
 {
-	std::shared_ptr<TDataReader> dataReader(new TDataReader(Socket));
+	boost::shared_ptr<TDataReader> dataReader(new TDataReader(Socket));
 
 	dataReader->DataReadSignal.connect(boost::bind(&TSimpleAuthorization::HandleGetData, this, _1));
 	
@@ -115,8 +115,8 @@ void TSimpleAuthorization::HandleGetData(boost::property_tree::ptree pTree)
 {
 	if (pTree.find("OnHello") != pTree.not_found())
 	{
-		Login = p.get<std::string>("OnHello.Login");
-		Password = p.get<std::string>("OnHello.Password");
+		Login = pTree.get<std::string>("OnHello.Login");
+		Password = pTree.get<std::string>("OnHello.Password");
 
 		SaveLoginPasswordSignal(Login, Password);
 		AuthorizedSignal();
@@ -172,7 +172,7 @@ void TClientSocket::Open(const std::string address, const std::string& port)
         return;
     }
     
-	boost::asio::async_connect(Socket, iterator, boost::bind(&TClientSocket::HandleConnect, shared_from_this(), boost::asio::placeholders::error));
+	boost::asio::async_connect(Socket, iterator, boost::bind(&TClientSocket::HandleConnect, this, boost::asio::placeholders::error));
     
     ConnectionTimeoutTimer = boost::shared_ptr<boost::asio::deadline_timer>(new boost::asio::deadline_timer(IoService, boost::posix_time::seconds(CONST_CONNECTION_TIMEOUT_SECONDS)));
     

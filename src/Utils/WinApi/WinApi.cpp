@@ -8,27 +8,27 @@ Here goes all functions that are platform-specific
 When I make iOS/Mac/Linux port, I will make same API pair h/cpp 
  */
 
-void GetWindowWidthHeight(int& width, int& height)
+void GetWindowWidthHeight(HWND hwnd, int& width, int& height)
 {
 	RECT rc;
-	GetClientRect(Hwnd, &rc);
+	GetClientRect(hwnd, &rc);
 
 	width = rc.right;
 	height = rc.bottom;
 }
 
-int GetWindowWidth()
+int GetWindowWidth(HWND hwnd)
 {
 	RECT rc;
-	GetClientRect(Hwnd, &rc);
+	GetClientRect(hwnd, &rc);
 
 	return rc.right;
 }
 
-int GetWindowHeight()
+int GetWindowHeight(HWND hwnd)
 {
 	RECT rc;
-	GetClientRect(Hwnd, &rc);
+	GetClientRect(hwnd, &rc);
 
 	return rc.bottom;
 }

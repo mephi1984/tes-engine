@@ -81,6 +81,7 @@ public:
 
 typedef boost::variant<std::shared_ptr<TSimpleAuthorization>> TAuthorizationVariant;
 
+
 class TClientSocket : public boost::enable_shared_from_this<TClientSocket>
 {
 protected:

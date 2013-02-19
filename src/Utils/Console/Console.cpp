@@ -12,6 +12,8 @@ const int CONST_ROW_WIDTH = 14;
 
 const std::string CONST_CONSOLE_TEX_NAME = "console_bkg.bmp";
 
+#ifndef UTILS_ENGINE
+
 void TSimpleConsole::Draw()
 {
 
@@ -59,6 +61,7 @@ void TSimpleConsole::Draw()
 
 }
 
+#endif
 
 void TSimpleConsole::CutHistory()
 {

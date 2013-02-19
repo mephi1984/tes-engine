@@ -3,6 +3,7 @@
 namespace SE
 {
 
+#ifndef UTILS_ENGINE
 	void AssertIfInMainThread()
 	{
 		if (boost::this_thread::get_id() != ResourceManager->MainThreadId)
@@ -30,5 +31,6 @@ namespace SE
 			ResourceManager->MainThreadAsyncFunctionArr.push_back(f);
 		}
 	}
+#endif
 
 } //namespace SE
