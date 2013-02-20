@@ -1,13 +1,18 @@
 #ifndef THREAD_UTILS_H_INCLUDED
 #define THREAD_UTILS_H_INCLUDED
 
+#include "boost/asio.hpp"
 #include "boost/signal.hpp"
 #include "boost/thread.hpp"
 
 
 namespace SE
 {
+
+	extern boost::asio::io_service MainThreadIoService;
+
 	#ifndef UTILS_ENGINE
+	/*
 	struct TFuncToPerform
 	{
 	private:
@@ -23,7 +28,7 @@ namespace SE
 		std::shared_ptr<boost::mutex> LockerPtr;
 
 		boost::function<void()> Func;
-	};
+	};*/
 	
 	void AssertIfInMainThread();
 

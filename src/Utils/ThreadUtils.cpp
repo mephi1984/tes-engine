@@ -3,6 +3,8 @@
 namespace SE
 {
 
+	boost::asio::io_service MainThreadIoService;
+
 #ifndef UTILS_ENGINE
 	void AssertIfInMainThread()
 	{
@@ -22,6 +24,7 @@ namespace SE
 
 	void PerformInMainThreadAsync(boost::function<void()> f)
 	{
+		/*
 		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
 		{
 			f();
@@ -29,7 +32,17 @@ namespace SE
 		else
 		{
 			ResourceManager->MainThreadAsyncFunctionArr.push_back(f);
+		}*/
+		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
+		{
+			f();
 		}
+		else
+		{
+			MainThreadIoService.dispatch(f);
+		}
+
+
 	}
 #endif
 

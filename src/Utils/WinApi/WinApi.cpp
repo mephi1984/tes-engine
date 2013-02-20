@@ -8,6 +8,8 @@ Here goes all functions that are platform-specific
 When I make iOS/Mac/Linux port, I will make same API pair h/cpp 
  */
 
+	//Not in use, wow
+	/*
 void GetWindowWidthHeight(HWND hwnd, int& width, int& height)
 {
 	RECT rc;
@@ -32,5 +34,5 @@ int GetWindowHeight(HWND hwnd)
 
 	return rc.bottom;
 }
-
+*/
 } //namespace SE

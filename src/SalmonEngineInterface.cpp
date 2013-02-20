@@ -25,12 +25,12 @@ TResourceManager* ResourceManager;
 void TResourceManager::Update(cardinal timer)
 {
 
-	FuncListMutex.lock();
+	//FuncListMutex.lock();
 
 	SoundManager.Update(timer);
 
 	GUIManager.Update(timer);
-
+	/*
 	if (MainThreadAsyncFunctionArr.size() != 0)
 	{
 		MainThreadAsyncFunctionArr[0]();
@@ -52,7 +52,9 @@ void TResourceManager::Update(cardinal timer)
 		itr->LockerPtr->unlock();
 	}
 	
-	FuncListMutex.unlock();
+	FuncListMutex.unlock();*/
+	MainThreadIoService.run();
+	MainThreadIoService.reset();
 }
 
 TResourceManager::~TResourceManager()

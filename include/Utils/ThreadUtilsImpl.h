@@ -24,7 +24,21 @@ namespace SE
 	template<typename RETURNTYPE>
 	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f)
 	{
+		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
+		{
+			return f();
+		}
+		else
+		{
+			RETURNTYPE result;
 
+			boost::function<void()> cover_f = [&result, f]() { result = f(); };
+
+			MainThreadIoService.post(cover_f);
+
+			return result;
+		}
+		/*
 		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
 		{
 			return f();
@@ -57,7 +71,7 @@ namespace SE
 
 			return result;
 
-		}
+		}*/
 	}
 
 } //namespace SE
