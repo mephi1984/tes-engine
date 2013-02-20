@@ -31,11 +31,22 @@ namespace SE
 		else
 		{
 			RETURNTYPE result;
+            
+            boost::mutex ServiceLock;
 
-			boost::function<void()> cover_f = [&result, f]() { result = f(); };
+            ServiceLock.lock();
+            
+			boost::function<void()> cover_f = [&result, &ServiceLock, f]()
+            {
+                result = f();
+                ServiceLock.unlock();
+            };
 
 			MainThreadIoService.post(cover_f);
-
+            
+            ServiceLock.lock();
+            ServiceLock.unlock();
+            
 			return result;
 		}
 		/*

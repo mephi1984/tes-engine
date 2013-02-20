@@ -39,7 +39,7 @@ namespace SE
 		}
 		else
 		{
-			MainThreadIoService.dispatch(f);
+			MainThreadIoService.post(f);
 		}
 
 

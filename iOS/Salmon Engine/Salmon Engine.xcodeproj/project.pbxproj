@@ -21,6 +21,9 @@
 		4C7AD45715B1E3D000A599F6 /* GlobalConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */; };
 		4C7AD45C15B1E3E300A599F6 /* GlobalConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */; };
 		4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7BD6E616C28D3100BB8788 /* IosWrapper.h */; };
+		4C8024B516D4BD9F001A4521 /* Network.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8024B316D4BD9F001A4521 /* Network.h */; };
+		4C8024B616D4BD9F001A4521 /* SignalSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8024B416D4BD9F001A4521 /* SignalSender.h */; };
+		4C8024BA16D4BDBC001A4521 /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8024B916D4BDBC001A4521 /* Network.cpp */; };
 		4C8CE90615B0A0F400078175 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CE90515B0A0F400078175 /* Foundation.framework */; };
 		4C8CE91715B0A11A00078175 /* DataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE91515B0A11A00078175 /* DataTypes.h */; };
 		4C8CE91815B0A11A00078175 /* NewDataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE91615B0A11A00078175 /* NewDataTypes.h */; };
@@ -110,6 +113,9 @@
 		4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GlobalConst.cpp; path = ../../../src/GlobalConst.cpp; sourceTree = "<group>"; };
 		4C7AD45A15B1E3E300A599F6 /* GlobalConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalConst.h; path = ../../../include/GlobalConst.h; sourceTree = "<group>"; };
 		4C7BD6E616C28D3100BB8788 /* IosWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosWrapper.h; sourceTree = "<group>"; };
+		4C8024B316D4BD9F001A4521 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
+		4C8024B416D4BD9F001A4521 /* SignalSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalSender.h; sourceTree = "<group>"; };
+		4C8024B916D4BDBC001A4521 /* Network.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Network.cpp; sourceTree = "<group>"; };
 		4C8CE90215B0A0F400078175 /* libSalmon Engine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSalmon Engine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CE90515B0A0F400078175 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C8CE91515B0A11A00078175 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
@@ -268,6 +274,25 @@
 			path = ../../../src/FontManager;
 			sourceTree = "<group>";
 		};
+		4C8024B216D4BD9F001A4521 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				4C8024B316D4BD9F001A4521 /* Network.h */,
+				4C8024B416D4BD9F001A4521 /* SignalSender.h */,
+			);
+			name = Network;
+			path = ../../../include/Utils/Network;
+			sourceTree = "<group>";
+		};
+		4C8024B816D4BDBC001A4521 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				4C8024B916D4BDBC001A4521 /* Network.cpp */,
+			);
+			name = Network;
+			path = ../../../src/Utils/Network;
+			sourceTree = "<group>";
+		};
 		4C8CE8F715B0A0F400078175 = {
 			isa = PBXGroup;
 			children = (
@@ -388,6 +413,7 @@
 		4C8CE93715B0A50200078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4C8024B216D4BD9F001A4521 /* Network */,
 				4CBC58AA16BE9D8200B30DB2 /* ThreadUtils.h */,
 				4CBC58AB16BE9D8200B30DB2 /* ThreadUtilsImpl.h */,
 				4C5E512016B6E601005521AC /* SimpleTimer.h */,
@@ -406,6 +432,7 @@
 		4C8CE93915B0A50F00078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4C8024B816D4BDBC001A4521 /* Network */,
 				4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */,
 				4C5E512316B6E620005521AC /* SimpleTimer.cpp */,
 				4CC1FC3E15B20E5D0025C6F7 /* IosApi */,
@@ -799,6 +826,8 @@
 				4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */,
 				4CD41A2916C2D23C0071E598 /* GLKViewTemplate.h in Headers */,
 				4CD41A2A16C2D23C0071E598 /* ViewControllerTemplate.h in Headers */,
+				4C8024B516D4BD9F001A4521 /* Network.h in Headers */,
+				4C8024B616D4BD9F001A4521 /* SignalSender.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +919,7 @@
 				4CBC58B016BE9D9B00B30DB2 /* ThreadUtils.cpp in Sources */,
 				4CD41A3116C2D2490071E598 /* GLKViewTemplate.mm in Sources */,
 				4CD41A3216C2D2490071E598 /* ViewControllerTemplate.mm in Sources */,
+				4C8024BA16D4BDBC001A4521 /* Network.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
