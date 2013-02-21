@@ -20,17 +20,17 @@ void TMyApplication::InnerInit()
 	*Console<<"Inner init go!\n";
 
 #ifdef TARGET_ANDROID
-	ResourceManager->PathToResources = "";
+    ST::PathToResources = "";
 #endif
 #ifdef TARGET_WIN32
 #ifdef NDEBUG
-	ResourceManager->PathToResources = "resources/";
+	ST::PathToResources = "resources/";
 #else
-	ResourceManager->PathToResources = "../../../assets/";
+	ST::PathToResources = "../../../assets/";
 #endif
 #endif
 #ifdef TARGET_IOS
-	ResourceManager->PathToResources = "assets/";
+	ST::PathToResources = "assets/";
 #endif
 
 	ResourceManager->TexList.AddTexture(CONST_CONSOLE_TEX_NAME);
