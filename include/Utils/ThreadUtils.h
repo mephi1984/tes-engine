@@ -12,7 +12,7 @@ namespace SE
 	extern boost::asio::io_service MainThreadIoService;
 
 	#ifndef UTILS_ENGINE
-	/*
+	
 	struct TFuncToPerform
 	{
 	private:
@@ -23,13 +23,10 @@ namespace SE
 		{
 		}
 
-		bool Executed;
-
 		std::shared_ptr<boost::mutex> LockerPtr;
 
 		boost::function<void()> Func;
-	};*/
-	
+	};	
 	void AssertIfInMainThread();
 
 	void TryUpdateMainThreadId();

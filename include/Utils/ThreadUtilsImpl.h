@@ -6,24 +6,11 @@
 
 namespace SE
 {
-
-	template<typename RETURNTYPE>
-	struct TCoverFunc
-	{
-	public:
-		typedef void result_type;
-
-		boost::function<RETURNTYPE()> Func;
-
-		void operator()(RETURNTYPE& rx)
-		{
-			rx = Func();
-		}
-	};
 	
 	template<typename RETURNTYPE>
 	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f)
 	{
+		/*
 		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
 		{
 			return f();
@@ -48,8 +35,8 @@ namespace SE
             ServiceLock.unlock();
             
 			return result;
-		}
-		/*
+		}*/
+		
 		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
 		{
 			return f();
@@ -58,31 +45,25 @@ namespace SE
 		{
 			RETURNTYPE result;
 
-			TCoverFunc<RETURNTYPE> cover_f;
+			boost::mutex serviceLock;
 
-			cover_f.Func = f;
+			boost::function<void()> func = 
+				[&result, &f, &serviceLock] ()
+				{
+					result = f();
+					serviceLock.unlock();
+				};
 
-			TFuncToPerform funcToPerform;
+			serviceLock.lock();
 
-			funcToPerform.Executed = false;
-			funcToPerform.Func = boost::bind(cover_f, boost::ref(result));
-			funcToPerform.LockerPtr->lock();
+			MainThreadIoService.post(func);
 
-			ResourceManager->FuncListMutex.lock();
-			auto itr = ResourceManager->MainThreadSyncFunctionList.insert(ResourceManager->MainThreadSyncFunctionList.end(), funcToPerform);
-			ResourceManager->FuncListMutex.unlock();
-
-			itr->LockerPtr->lock(); //wait until lock will be released
-			itr->LockerPtr->unlock();
-
-			ResourceManager->FuncListMutex.lock();
-			ResourceManager->MainThreadSyncFunctionList.erase(itr);
-			ResourceManager->FuncListMutex.unlock();
-
-
+			serviceLock.lock();
+            serviceLock.unlock();
+            
 			return result;
 
-		}*/
+		}
 	}
 
 } //namespace SE

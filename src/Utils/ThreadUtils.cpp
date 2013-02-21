@@ -24,23 +24,31 @@ namespace SE
 
 	void PerformInMainThreadAsync(boost::function<void()> f)
 	{
-		/*
+		
 		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
 		{
 			f();
 		}
 		else
 		{
-			ResourceManager->MainThreadAsyncFunctionArr.push_back(f);
-		}*/
-		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
-		{
-			f();
+	
+		boost::mutex serviceLock;
+
+		boost::function<void()> func = 
+			[&f, &serviceLock] ()
+			{
+				f();
+				serviceLock.unlock();
+			};
+
+		
+		serviceLock.lock();
+		MainThreadIoService.post(func);
+
+		serviceLock.lock();
+		serviceLock.unlock();
 		}
-		else
-		{
-			MainThreadIoService.post(f);
-		}
+		
 
 
 	}
