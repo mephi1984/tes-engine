@@ -10,34 +10,7 @@ namespace SE
 	template<typename RETURNTYPE>
 	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f)
 	{
-		/*
-		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
-		{
-			return f();
-		}
-		else
-		{
-			RETURNTYPE result;
-            
-            boost::mutex ServiceLock;
-
-            ServiceLock.lock();
-            
-			boost::function<void()> cover_f = [&result, &ServiceLock, f]()
-            {
-                result = f();
-                ServiceLock.unlock();
-            };
-
-			MainThreadIoService.post(cover_f);
-            
-            ServiceLock.lock();
-            ServiceLock.unlock();
-            
-			return result;
-		}*/
-		
-		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
+		if (boost::this_thread::get_id() == ST::MainThreadId)
 		{
 			return f();
 		}
@@ -56,7 +29,7 @@ namespace SE
 
 			serviceLock.lock();
 
-			MainThreadIoService.post(func);
+            ST::MainThreadIoService.post(func);
 
 			serviceLock.lock();
             serviceLock.unlock();

@@ -8,8 +8,13 @@
 
 namespace SE
 {
-
-	extern boost::asio::io_service MainThreadIoService;
+    
+    namespace ST
+    {
+        extern boost::asio::io_service MainThreadIoService;
+    
+        extern boost::thread::id MainThreadId;
+    }
 
 	#ifndef UTILS_ENGINE
 	

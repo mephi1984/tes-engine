@@ -2,13 +2,17 @@
 
 namespace SE
 {
-
-	boost::asio::io_service MainThreadIoService;
-
+    
+    namespace ST
+    {
+        boost::asio::io_service MainThreadIoService;
+        
+        boost::thread::id MainThreadId;
+    }
 #ifndef UTILS_ENGINE
 	void AssertIfInMainThread()
 	{
-		if (boost::this_thread::get_id() != ResourceManager->MainThreadId)
+		if (boost::this_thread::get_id() != ST::MainThreadId)
 		{
 			throw ErrorToLog("ERROR! AssertIfInMainThread - assert failed!");
 		}
@@ -16,16 +20,16 @@ namespace SE
 
 	void TryUpdateMainThreadId()
 	{
-		if (boost::this_thread::get_id() != ResourceManager->MainThreadId)
+		if (boost::this_thread::get_id() != ST::MainThreadId)
 		{
-			ResourceManager->MainThreadId = boost::this_thread::get_id();
+			ST::MainThreadId = boost::this_thread::get_id();
 		}
 	}
 
 	void PerformInMainThreadAsync(boost::function<void()> f)
 	{
 		
-		if (boost::this_thread::get_id() == ResourceManager->MainThreadId)
+		if (boost::this_thread::get_id() == ST::MainThreadId)
 		{
 			f();
 		}
@@ -43,7 +47,7 @@ namespace SE
 
 		
 		serviceLock.lock();
-		MainThreadIoService.post(func);
+        ST::MainThreadIoService.post(func);
 
 		serviceLock.lock();
 		serviceLock.unlock();

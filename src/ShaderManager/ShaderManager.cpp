@@ -202,7 +202,7 @@ void TShaderManager::Serialize(boost::property_tree::ptree& propertyTree)
 bool TShaderManager::AddShader(const std::string& shaderName, const std::string& vertexFileName, const std::string& fragmentFileName)
 {
 
-	std::string pathToResources = ResourceManager->PathToResources;
+	std::string pathToResources = ST::PathToResources;
 
 	if (ShaderList.count(shaderName) > 0)
 	{

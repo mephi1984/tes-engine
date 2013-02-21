@@ -8,6 +8,13 @@
 
 namespace SE
 {
+    
+    namespace ST
+    {
+        
+        std::string PathToResources;
+        
+    }
 
 bool findString(char* in, char* list)
 {
@@ -82,7 +89,7 @@ std::string GetFilePathUserData(const std::string& filename)
 //Special for IOS -> Foundation.h conflicts with sq_plus.h
 std::string GetPathToResources()
 {
-    return ResourceManager->PathToResources;
+    return ST::PathToResources;
 }
 #endif
 

@@ -238,7 +238,7 @@ bool TSimpleLandClass::LoadFromFile(const std::string& filename)
 {
 
 	cardinal dwordCount;
-	boost::shared_array<cardinal> fileArr = CreateMemFromFile<cardinal>((ResourceManager->PathToResources + filename).c_str(), dwordCount);
+	boost::shared_array<cardinal> fileArr = CreateMemFromFile<cardinal>((ST::PathToResources + filename).c_str(), dwordCount);
 
 	if ((((char*)&fileArr[0])[0]!='L')||
 		(((char*)&fileArr[0])[1]!='S')||

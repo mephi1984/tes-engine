@@ -735,7 +735,7 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName)
 
 cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
 {
-    std::string fullFileName = ResourceManager->PathToResources + fileName;
+    std::string fullFileName = ST::PathToResources + fileName;
 
 	return AddTextureDirectly(fullFileName, texName);
 }
@@ -758,12 +758,12 @@ cardinal TTextureListClass::AddTextureFromUserdata(const std::string& fileName, 
 cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 {
 
-	filename[0] = ResourceManager->PathToResources + filename[0];
-	filename[1] = ResourceManager->PathToResources + filename[1];
-	filename[2] = ResourceManager->PathToResources + filename[2];
-	filename[3] = ResourceManager->PathToResources + filename[3];
-	filename[4] = ResourceManager->PathToResources + filename[4];
-	filename[5] = ResourceManager->PathToResources + filename[5];
+	filename[0] = ST::PathToResources + filename[0];
+	filename[1] = ST::PathToResources + filename[1];
+	filename[2] = ST::PathToResources + filename[2];
+	filename[3] = ST::PathToResources + filename[3];
+	filename[4] = ST::PathToResources + filename[4];
+	filename[5] = ST::PathToResources + filename[5];
 
 	std::string texname = GetFileName(filename[0]);
 	std::string texext;

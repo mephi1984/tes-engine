@@ -52,7 +52,7 @@ void TFontManager::AddFont(const std::string& fontName, const std::string& bitma
 
 	cardinal byteCount;
 
-	boost::shared_array<char> charmapFileArr = boost::shared_array<char>(CreateMemFromFile<char>(ResourceManager->PathToResources+charmapFile, byteCount));
+	boost::shared_array<char> charmapFileArr = boost::shared_array<char>(CreateMemFromFile<char>(ST::PathToResources+charmapFile, byteCount));
 
 	//Need to rewrite this code :(
 

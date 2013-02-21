@@ -25,6 +25,13 @@ WINDOWS AND ANDROID
 
 namespace SE
 {
+    
+namespace ST
+{
+    
+	extern std::string PathToResources;
+
+}
 
 bool findString(char* in, char* list);
 //utility for opengl extensions parsing. Not safe
@@ -243,7 +250,7 @@ std::string GetFilePath(const std::string& filename);
 
 //Special for IOS, because Foundation.h conflicts with sq_plus.h
 
-// Obviously, this returns ResourceManager->PathToResources
+// Obviously, this returns ST::PathToResources
 
 std::string GetPathToResources();
 #endif

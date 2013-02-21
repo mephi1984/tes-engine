@@ -155,7 +155,7 @@ bool TAnimList::LoadBoneSystemFromFileBn1(const std::string& fileName)
 	int i;
 
 	cardinal fSize;
-	boost::shared_array<cardinal> fileData = CreateMemFromFile<cardinal>(ResourceManager->PathToResources+fileName,fSize);
+	boost::shared_array<cardinal> fileData = CreateMemFromFile<cardinal>(ST::PathToResources+fileName,fSize);
 
 
 
@@ -238,7 +238,7 @@ bool TAnimList::LoadBoneSystemFromFileBn2(const std::string& fileName)
 	int i;
 
 	cardinal fSize;
-	boost::shared_array<cardinal> fileData = CreateMemFromFile<cardinal>(ResourceManager->PathToResources+fileName,fSize);
+	boost::shared_array<cardinal> fileData = CreateMemFromFile<cardinal>(ST::PathToResources+fileName,fSize);
 
 	if (fileData == NULL)
 		throw ErrorFileNotLoaded(fileName);
@@ -330,7 +330,7 @@ bool TAnimList::LoadAnimSequenceFromFileAn1(const std::string& fileName)
 	if (AnimSequenceMap.count(shortFileName) == 0)
 	{
 		TAnimSequence animSeqience;
-		if (animSeqience.LoadFromFileAn1(ResourceManager->PathToResources+fileName))
+		if (animSeqience.LoadFromFileAn1(ST::PathToResources+fileName))
 		{
 			AnimSequenceMap[shortFileName] = animSeqience;
 			return true;
