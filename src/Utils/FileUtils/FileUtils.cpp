@@ -8,7 +8,12 @@
 
 namespace SE
 {
-    
+   
+	//Xperimental HACK!!!
+	#ifdef UTILS_ENGINE
+TFileConsole* Console;
+#endif
+
     namespace ST
     {
         

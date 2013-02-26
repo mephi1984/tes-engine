@@ -36,7 +36,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SalmonEnginePath)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SalmonEnginePath)$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -69,6 +74,7 @@
     <ClCompile Include="..\src\Utils\DataTypes\NewDataTypes.cpp" />
     <ClCompile Include="..\src\Utils\FileUtils\FileUtils.cpp" />
     <ClCompile Include="..\src\Utils\Network\Network.cpp" />
+    <ClCompile Include="..\src\Utils\Network\Server.cpp" />
     <ClCompile Include="..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
     <ClCompile Include="..\src\Utils\SimpleTimer.cpp" />
     <ClCompile Include="..\src\Utils\ThreadUtils.cpp" />
@@ -83,6 +89,7 @@
     <ClInclude Include="..\include\Utils\ErrorTypes\ErrorTypes.h" />
     <ClInclude Include="..\include\Utils\FileUtils\FileUtils.h" />
     <ClInclude Include="..\include\Utils\Network\Network.h" />
+    <ClInclude Include="..\include\Utils\Network\Server.h" />
     <ClInclude Include="..\include\Utils\Network\SignalSender.h" />
     <ClInclude Include="..\include\Utils\SerializeInterface\SerializeInterface.h" />
     <ClInclude Include="..\include\Utils\SimpleTimer.h" />

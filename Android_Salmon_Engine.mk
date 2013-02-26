@@ -308,6 +308,7 @@ LOCAL_SRC_FILES += src/Utils/JniApi/JniApi.cpp
 LOCAL_SRC_FILES += src/Utils/JniApi/JniApplication.cpp
 LOCAL_SRC_FILES += src/Utils/Console/Console.cpp
 LOCAL_SRC_FILES += src/Utils/SerializeInterface/SerializeInterface.cpp
+LOCAL_SRC_FILES += src/Utils/Network/Network.cpp
 LOCAL_SRC_FILES += src/Utils/PngHelper.cpp
 LOCAL_SRC_FILES += src/Utils/SimpleTimer.cpp
 LOCAL_SRC_FILES += src/Utils/ThreadUtils.cpp

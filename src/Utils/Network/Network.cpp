@@ -18,17 +18,72 @@ void SendPropertyTree(boost::asio::io_service& ioService, boost::asio::ip::tcp::
 
 	boost::shared_ptr<TSignalSender> signalSender(new TSignalSender(socket, len, data));
 
-	ioService.post(boost::bind(&TSignalSender::Send, signalSender));
+	signalSender->Send();
+	//ioService.post(boost::bind(&TSignalSender::Send, signalSender));
 }
+
+
+
+void TDataReadSignalMap::AddSlot(const std::string& nodeName, boost::function<void(boost::property_tree::ptree)> f)
+{
+	if (SignalMap.count(nodeName) == 0)
+	{
+		SignalMap[nodeName] = std::shared_ptr<boost::signal<void(boost::property_tree::ptree)>>(new boost::signal<void(boost::property_tree::ptree)>);
+		SignalMap[nodeName]->connect(f);
+	}
+	else
+	{
+		SignalMap[nodeName]->connect(f);
+	}
+}
+
+bool TDataReadSignalMap::SignalExists(const std::string& signalName)
+{
+	return SignalMap.count(signalName) != 0;
+}
+
+void TDataReadSignalMap::EmitSignal(const std::string& signalName, const boost::property_tree::ptree& pt)
+{
+	if (SignalMap.count(signalName) == 0)
+	{
+		throw ErrorToLog("Signal " + signalName + " does not exist!");
+	}
+
+	(*SignalMap[signalName])(pt);
+}
+
+
+
+void TDataReadSignalMap::Clear()
+{
+	SignalMap.clear();
+}
+
+
+
+
 
 TDataReader::TDataReader(boost::asio::ip::tcp::socket& socket)
 	: Socket(socket)
 {
 }
 
-void TDataReader::StartRead()
+void TDataReader::InnerStartRead()
 {
 	boost::asio::async_read(Socket, boost::asio::buffer(&DataSize, 4), boost::bind(&TDataReader::HandleReadDataSize, shared_from_this(), boost::asio::placeholders::error));
+	
+}
+
+void TDataReader::StartReadOnce()
+{
+	InnerStartRead();
+	Nonstop = false;
+}
+
+void TDataReader::StartReadNonstop()
+{
+	InnerStartRead();
+	Nonstop = true;
 }
 
 void TDataReader::HandleReadDataSize(const boost::system::error_code& error)
@@ -73,7 +128,19 @@ void TDataReader::HandleReadData(const boost::system::error_code& error)
 
 		boost::property_tree::read_xml(stream, propertyTree);
 
-		DataReadSignal(propertyTree);
+		BOOST_FOREACH(auto i, propertyTree)
+		{
+			if (DataReadSignalMap.SignalExists(i.first))
+			{
+				DataReadSignalMap.EmitSignal(i.first, i.second);
+			}
+		}
+
+		if (Nonstop)
+		{
+			InnerStartRead();
+		}
+
 
 	}
 	catch(boost::property_tree::ptree_error)
@@ -81,7 +148,6 @@ void TDataReader::HandleReadData(const boost::system::error_code& error)
 		ErrorSignal();
 	}
 }
-
 
 TSimpleAuthorization::TSimpleAuthorization(boost::asio::io_service& ioService, boost::asio::ip::tcp::socket& socket)
 	: Socket(socket)
@@ -95,8 +161,8 @@ void TSimpleAuthorization::Authorize()
 {
 	boost::shared_ptr<TDataReader> dataReader(new TDataReader(Socket));
 
-	dataReader->DataReadSignal.connect(boost::bind(&TSimpleAuthorization::HandleGetData, this, _1));
-	
+	dataReader->DataReadSignalMap.AddSlot("OnHello", boost::bind(&TSimpleAuthorization::HandleGetData, this, _1));
+
 	dataReader->ErrorSignal.connect(ErrorSignal);
 
 	boost::property_tree::ptree pt;
@@ -105,7 +171,7 @@ void TSimpleAuthorization::Authorize()
 
 	SendPropertyTree(IoService, Socket, pt);
 
-	dataReader->StartRead();
+	dataReader->StartReadOnce();
 
 
 }
@@ -113,18 +179,12 @@ void TSimpleAuthorization::Authorize()
 
 void TSimpleAuthorization::HandleGetData(boost::property_tree::ptree pTree)
 {
-	if (pTree.find("OnHello") != pTree.not_found())
-	{
-		Login = pTree.get<std::string>("OnHello.Login");
-		Password = pTree.get<std::string>("OnHello.Password");
+	Login = pTree.get<std::string>("Login");
+	Password = pTree.get<std::string>("Password");
 
-		SaveLoginPasswordSignal(Login, Password);
-		AuthorizedSignal();
-		
-		return;
-	}
+	SaveLoginPasswordSignal(Login, Password);
 
-	ErrorSignal();
+	AuthorizedSignal();
 }
 
 TClientSocket::TClientSocket()
@@ -192,6 +252,8 @@ void TClientSocket::Close()
 
 		Socket.close();
 
+		ClientDataReader->DataReadSignalMap.Clear();
+
 		OnDisconnectedSignal();
 	}
 }
@@ -231,12 +293,19 @@ void TClientSocket::HandleConnect(const boost::system::error_code& error)
 
 void TClientSocket::HandleAuthorized()
 {
+	ClientDataReader = boost::shared_ptr<TDataReader>(new TDataReader(Socket));
 	OnAutorizedSignal();
+	ClientDataReader->StartReadNonstop();
 }
 
 void TClientSocket::HandleAuthorizationError()
 {
 
+}
+
+void TClientSocket::SendPropertyTree(boost::property_tree::ptree pTree)
+{
+	SE::SendPropertyTree(IoService, Socket, pTree);
 }
 
 } //namspace SE

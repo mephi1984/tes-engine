@@ -633,7 +633,7 @@ void TSoundManagerWindows::LoadSound(const std::string& soundFileName)
 
 	HRESULT result;
 
-	std::string fileName = ResourceManager->PathToResources + soundFileName;
+	std::string fileName = ST::PathToResources + soundFileName;
 
 
 	TWaveFile waveFile;
@@ -748,7 +748,7 @@ void TSoundManagerWindows::LoadMusic(const std::string& musicFileName)
 		
 		StreamMap[musicName] = ptr;
 
-		StreamMap[musicName]->Load(ResourceManager->PathToResources + musicFileName);
+		StreamMap[musicName]->Load(ST::PathToResources + musicFileName);
 	}
 }
 

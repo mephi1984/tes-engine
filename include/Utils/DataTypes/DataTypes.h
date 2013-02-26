@@ -18,7 +18,7 @@ namespace SE
 
 typedef unsigned int cardinal;
 typedef unsigned short int word;
-typedef unsigned char byte;
+//typedef unsigned char byte;
 
 typedef cardinal* pcardinal;
 

@@ -29,9 +29,10 @@ void TResourceManager::Update(cardinal timer)
 
 	GUIManager.Update(timer);
     
-    ST::MainThreadIoService.run();
+    //ST::MainThreadIoService.run();
+	ST::MainThreadIoService.run_one();
 	
-    ST::MainThreadIoService.reset();
+    //ST::MainThreadIoService.reset();
 }
 
 TResourceManager::~TResourceManager()

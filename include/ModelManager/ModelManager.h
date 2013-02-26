@@ -37,7 +37,7 @@ public:
 	TLiteModelResource() : TriangleCount(0), PathToResource("") { }
 	~TLiteModelResource();
 
-	bool LoadModel(boost::shared_array<byte> filePointer, cardinal fileSize);
+	bool LoadModel(boost::shared_array<unsigned char> filePointer, cardinal fileSize);
 
 	void FreeModel();
 

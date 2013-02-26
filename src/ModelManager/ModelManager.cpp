@@ -16,7 +16,7 @@ TLiteModelResource::~TLiteModelResource()
 	*Console<<"ResourceManager::ModelManager::LiteModelResource deleting";
 }
 
-bool TLiteModelResource::LoadModel(boost::shared_array<byte> filePointer, cardinal fileSize)
+bool TLiteModelResource::LoadModel(boost::shared_array<unsigned char> filePointer, cardinal fileSize)
 {
 
 	FreeModel();
