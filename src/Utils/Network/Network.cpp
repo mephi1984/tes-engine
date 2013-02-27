@@ -254,7 +254,20 @@ void TClientSocket::Close()
 
 		ClientDataReader->DataReadSignalMap.Clear();
 
+		std::shared_ptr<TSimpleAuthorization> authorization = boost::get<std::shared_ptr<TSimpleAuthorization>>(Authorization);
+
+		authorization->AuthorizedSignal.disconnect_all_slots();
+		authorization->SaveLoginPasswordSignal.disconnect_all_slots();
+		authorization->ErrorSignal.disconnect_all_slots();
+
+
 		OnDisconnectedSignal();
+
+		OnAddressNotResolvedSignal.disconnect_all_slots();
+		OnConnectedSignal.disconnect_all_slots();
+		OnAutorizedSignal.disconnect_all_slots();
+		OnDisconnectedSignal.disconnect_all_slots();
+
 	}
 }
 

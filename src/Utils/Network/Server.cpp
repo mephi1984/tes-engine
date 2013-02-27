@@ -60,11 +60,14 @@ namespace SE
 
 	TConnectedUser::~TConnectedUser()
 	{
+		
 	}
 
 	void TConnectedUser::HandleAllowed(std::string login)
 	{
 		UserDataReader = boost::shared_ptr<TDataReader>(new TDataReader(Socket));
+
+		UserDataReader->ErrorSignal.connect(boost::bind(&TServerSocket::DeleteUser, &Server, shared_from_this()));
 		
 		Login = login;
 
@@ -76,6 +79,19 @@ namespace SE
 	void TConnectedUser::SendPropertyTree(boost::property_tree::ptree pTree)
 	{
 		SE::SendPropertyTree(Server.IoService, Socket, pTree);
+	}
+
+	void TConnectedUser::DisconnectSlots()
+	{
+		UserDataReader->DataReadSignalMap.Clear();
+		UserDataReader->ErrorSignal.disconnect_all_slots();
+
+		std::shared_ptr<TSimpleAutorizator> authorizator = boost::get<std::shared_ptr<TSimpleAutorizator>>(Autorizator);
+
+		authorizator->ErrorSignal.disconnect_all_slots();
+		authorizator->AllowedSignal.disconnect_all_slots();
+		authorizator->DeniedSignal.disconnect_all_slots();
+
 	}
 
 
@@ -131,13 +147,27 @@ namespace SE
 		
 			UserArr.push_back(user);
 			
-			boost::get<std::shared_ptr<TSimpleAutorizator>>(user->Autorizator)->AllowedSignal.connect(boost::bind(&TConnectedUser::HandleAllowed, user, _1));
-						
+			std::shared_ptr<TSimpleAutorizator> authorizator = boost::get<std::shared_ptr<TSimpleAutorizator>>(user->Autorizator);
+			
+			authorizator->AllowedSignal.connect(boost::bind(&TConnectedUser::HandleAllowed, user, _1));
+			authorizator->ErrorSignal.connect(boost::bind(&TServerSocket::DeleteUser, this, user));
+
 			boost::get<std::shared_ptr<TSimpleAutorizator>>(user->Autorizator)->StartListen();
 
 		}
 
 		StartAccept();
+	}
+
+	void TServerSocket::DeleteUser(boost::shared_ptr<TConnectedUser> user)
+	{
+		std::vector<boost::shared_ptr<TConnectedUser>>::iterator i = std::find(UserArr.begin(), UserArr.end(), user);
+
+		user->DisconnectSlots();
+
+		OnUserDisconnectedSignal(user);
+
+		UserArr.erase(i);
 	}
 
 

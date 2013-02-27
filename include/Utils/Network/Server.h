@@ -82,6 +82,8 @@ public:
 
 	void SendPropertyTree(boost::property_tree::ptree pTree);
 
+	void DisconnectSlots();
+
 };
 
 
@@ -111,10 +113,11 @@ public:
 	
 	void StartAccept();
 	void HandleAccept(boost::shared_ptr<TConnectedUser> user, const boost::system::error_code& error);
+	void DeleteUser(boost::shared_ptr<TConnectedUser> user);
 
 	//Need to generalize this
 	boost::signal<void(boost::shared_ptr<TConnectedUser>)> OnUserAuthorizedSignal;
-	//boost::signal<void(std::string)> OnUserDisconnectedSignal;
+	boost::signal<void(boost::shared_ptr<TConnectedUser>)> OnUserDisconnectedSignal;
 	
 };
 
