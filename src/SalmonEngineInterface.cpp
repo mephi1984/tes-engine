@@ -28,11 +28,10 @@ void TResourceManager::Update(cardinal timer)
 	SoundManager.Update(timer);
 
 	GUIManager.Update(timer);
-    
-    //ST::MainThreadIoService.run();
-	ST::MainThreadIoService.run_one();
-	
-    //ST::MainThreadIoService.reset();
+
+	ST::MainThreadIoService.poll_one();
+    ST::MainThreadIoService.reset();
+
 }
 
 TResourceManager::~TResourceManager()

@@ -32,23 +32,22 @@ namespace SE
 				[&] ()
 				{
 					result = f();
-
+                    
 					{   
-						boost::mutex::scoped_lock lock(FunctionMutex);
+						boost::mutex::scoped_lock lock(ST::FunctionMutex);
 						functionCalled = true;
 					}
-					FunctionFinishedCondition.notify_one();
+					ST::FunctionFinishedCondition.notify_one();
 				};
 
 
-			
             ST::MainThreadIoService.post(func);
 
-			boost::mutex::scoped_lock lock(FunctionMutex);
+			boost::mutex::scoped_lock lock(ST::FunctionMutex);
 
 			while (!functionCalled)
 			{
-				FunctionFinishedCondition.wait(lock);
+				ST::FunctionFinishedCondition.wait(lock);
 			}
             
 			return result;

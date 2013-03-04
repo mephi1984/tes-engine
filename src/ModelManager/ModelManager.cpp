@@ -333,7 +333,7 @@ bool TModelManager::AddLiteModel(const std::string& filename, const std::string&
 	if (LiteModelMap.count(modelName) != 0)
 		return true;
 
-	boost::shared_array<byte> fileArr = CreateMemFromFile<byte>((ST::PathToResources + filename), fileSize);
+	boost::shared_array<unsigned char> fileArr = CreateMemFromFile<unsigned char>((ST::PathToResources + filename), fileSize);
 
 	if (!(fileArr[0] == 'L' && fileArr[1] == 'M' && fileArr[2] == 0 && fileArr[3] == 1))
 		throw ErrorFileNotCorrect(filename);

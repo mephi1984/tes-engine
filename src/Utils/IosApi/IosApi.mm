@@ -18,7 +18,8 @@ namespace SE
 
 std::string IosGetFileReadPath(const std::string& filename)
 {
-    
+    @autoreleasepool
+    {
     NSString* nsFullFileName = [NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding];
     
     NSString* nsFileShortName = [nsFullFileName lastPathComponent];
@@ -32,11 +33,14 @@ std::string IosGetFileReadPath(const std::string& filename)
     NSString *filePath = [[NSBundle mainBundle] pathForResource:nsFileShortNameWithoutExt ofType:nsFileExt inDirectory:nsFilePath];
     
     return std::string([filePath UTF8String]);
+    }
 }
 
 
 std::string IosGetFilePathUserData(const std::string& filename)
 {
+    @autoreleasepool
+    {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, 
                                                          NSUserDomainMask, YES);
     
@@ -47,6 +51,7 @@ std::string IosGetFilePathUserData(const std::string& filename)
     NSString* file = [docDir stringByAppendingString:[NSString stringWithCString:filename.c_str() encoding:NSUTF8StringEncoding]];
     
     return std::string([[NSFileManager defaultManager] fileSystemRepresentationWithPath:file]);
+    }
 }
     
 void IosSwitchToScreen()
