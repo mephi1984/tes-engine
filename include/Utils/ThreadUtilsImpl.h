@@ -6,6 +6,14 @@
 
 namespace SE
 {
+
+	namespace ST
+	{
+		extern boost::condition_variable FunctionFinishedCondition;
+			
+		extern boost::mutex FunctionMutex;
+	}
+
 	
 	template<typename RETURNTYPE>
 	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f)
@@ -18,21 +26,30 @@ namespace SE
 		{
 			RETURNTYPE result;
 
-			boost::mutex serviceLock;
-
+			bool functionCalled = false;
+			
 			boost::function<void()> func = 
-				[&result, &f, &serviceLock] ()
+				[&] ()
 				{
 					result = f();
-					serviceLock.unlock();
+
+					{   
+						boost::mutex::scoped_lock lock(FunctionMutex);
+						functionCalled = true;
+					}
+					FunctionFinishedCondition.notify_one();
 				};
 
-			serviceLock.lock();
 
+			
             ST::MainThreadIoService.post(func);
 
-			serviceLock.lock();
-            serviceLock.unlock();
+			boost::mutex::scoped_lock lock(FunctionMutex);
+
+			while (!functionCalled)
+			{
+				FunctionFinishedCondition.wait(lock);
+			}
             
 			return result;
 

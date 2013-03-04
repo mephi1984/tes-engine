@@ -2,13 +2,19 @@
 
 namespace SE
 {
-    
+
     namespace ST
     {
         boost::asio::io_service MainThreadIoService;
         
         boost::thread::id MainThreadId;
+
+		boost::condition_variable FunctionFinishedCondition;
+			
+		boost::mutex FunctionMutex;
     }
+
+
 #ifndef UTILS_ENGINE
 	void AssertIfInMainThread()
 	{
