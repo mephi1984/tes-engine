@@ -42,21 +42,8 @@ namespace SE
 		else
 		{
 	
-		boost::mutex serviceLock;
+        ST::MainThreadIoService.post(f);
 
-		boost::function<void()> func = 
-			[&f, &serviceLock] ()
-			{
-				f();
-				serviceLock.unlock();
-			};
-
-		
-		serviceLock.lock();
-        ST::MainThreadIoService.post(func);
-
-		serviceLock.lock();
-		serviceLock.unlock();
 		}
 		
 
