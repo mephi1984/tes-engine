@@ -43,6 +43,8 @@ std::string GetFilePathUserData(const std::string& filename);
 
 #ifdef TARGET_WIN32
 
+void GetFileList(const std::string& searchkey, std::vector<std::string> &list);
+
 template<typename TYPENAME>
 boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
 {
@@ -242,6 +244,18 @@ inline std::string GetFileExt(const std::string& filename)
 
 	return std::string(i, filename.end());
 
+}
+
+inline std::string GetFileNameWithoutExt(const std::string& filename)
+{
+	std::string result = GetFileName(filename);
+
+	std::string::const_iterator i = result.end() - 1;
+
+	while (*i != '.') 
+		--i;
+
+	return std::string(result.begin(), i);
 }
 
 std::string GetFilePath(const std::string& filename);

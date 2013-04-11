@@ -93,12 +93,22 @@ void TVolumeBody::Rotate(const mat3& r)
 
 void TVolumeBody::Scale(float s)
 {
-	throw ErrorToLog("TVolumeBody::Scale not implemented yet!");
+	BOOST_FOREACH(TSmpTriangle& smpTriangle, SmpTriangleArr)
+	{
+		smpTriangle.p[0] *= s;
+		smpTriangle.p[1] *= s;
+		smpTriangle.p[2] *= s;
+	}
 }
 
 void TVolumeBody::Scale(const vec3& s)
 {
-	throw ErrorToLog("TVolumeBody::Scale not implemented yet!");
+	BOOST_FOREACH(TSmpTriangle& smpTriangle, SmpTriangleArr)
+	{
+		smpTriangle.p[0] *= s.v[0];
+		smpTriangle.p[1] *= s.v[1];
+		smpTriangle.p[2] *= s.v[2];
+	}
 }
 
 

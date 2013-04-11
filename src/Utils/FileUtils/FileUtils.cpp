@@ -90,6 +90,29 @@ std::string GetFilePathUserData(const std::string& filename)
 	return realFileName;
 }
 
+
+#ifdef TARGET_WIN32
+void GetFileList(const std::string& searchkey, std::vector<std::string> &list)
+{
+    WIN32_FIND_DATA fd;
+    HANDLE h = FindFirstFile(searchkey.c_str(), &fd);
+
+    if(h == INVALID_HANDLE_VALUE)
+    {
+        return;
+    }
+
+    while(1)
+    {
+
+        list.push_back(fd.cFileName);
+
+        if(FindNextFile(h, &fd) == FALSE)
+            break;
+    }
+}
+#endif
+
 #ifdef TARGET_IOS
 //Special for IOS -> Foundation.h conflicts with sq_plus.h
 std::string GetPathToResources()

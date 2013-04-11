@@ -39,7 +39,9 @@ void TFlexModelResource::Serialize(boost::property_tree::ptree& propertyTree)
 		}
 	}
 
-	BOOST_FOREACH(auto& ptree, propertyTree.get_child("Model.SamplerMap"))
+	if (propertyTree.find("Model")->second.find("SamplerMap") != propertyTree.not_found())
+	{
+	BOOST_FOREACH(auto& ptree, propertyTree.get_child("Model.SamplerMap")) //Xperimental - fix it!
 	{
 		if (ptree.first == "Sampler")
 		{
@@ -49,6 +51,7 @@ void TFlexModelResource::Serialize(boost::property_tree::ptree& propertyTree)
 			SamplerMap[name] = value;
 
 		}
+	}
 	}
 
 }

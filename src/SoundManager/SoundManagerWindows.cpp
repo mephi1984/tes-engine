@@ -825,6 +825,7 @@ void FillMemoryWithZero(char* bufferPtr, cardinal bufferSize)
 
 void TSoundManagerWindows::Update(cardinal dt)
 {
+	//Xperimental need mutex here
 	std::map<std::string, boost::shared_ptr<TMusicStreamAncestor> >::iterator i;
 
 	for (i = StreamMap.begin(); i != StreamMap.end(); ++i)
