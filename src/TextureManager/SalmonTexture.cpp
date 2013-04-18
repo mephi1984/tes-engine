@@ -9,6 +9,9 @@
 
 #include "boost/assign.hpp"
 
+#include "jpeglib.h"
+#include <setjmp.h>
+
 namespace SE
 {
 
@@ -22,13 +25,9 @@ TTextureListClass::TTextureListClass()
 	CreateFunctionMap[".bmp32"] = boost::bind(&TTextureListClass::CreateTexDataFromBmp32, this, _1, _2);
 	CreateFunctionMap[".png"] = boost::bind(&TTextureListClass::CreateTexDataFromPng, this, _1, _2);
 	CreateFunctionMap[".tga"] = boost::bind(&TTextureListClass::CreateTexDataFromTga, this, _1, _2);
-    
-	/*
-	AddFunctionMap["bmp24"] = boost::bind(&TTextureListClass::AddTextureBmp24Data, this, _1);
-	AddFunctionMap["bmp32"] = boost::bind(&TTextureListClass::AddTextureBmp32Data, this, _1);
-	
-	Let's use inner functions!
-	*/
+    CreateFunctionMap[".jpg"] = boost::bind(&TTextureListClass::CreateTexDataFromJpg, this, _1, _2);
+	CreateFunctionMap[".jpeg"] = boost::bind(&TTextureListClass::CreateTexDataFromJpg, this, _1, _2);
+   
 
 	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> cardinal
 	{
@@ -396,121 +395,22 @@ bool TTextureListClass::CreateTexDataFromBmp32(const std::string& filename, TTex
 
 bool TTextureListClass::CreateTexDataFromTga(const std::string& filename, TTextureData& texData)
 {
+	
+	bool result = LoadTGA(filename, texData);
 
-	cardinal fileSize;
-	boost::shared_array<char> fileArr = CreateMemFromFile<char>(filename, fileSize);
-
-	if (fileSize < 22)
+	if (!result)
+	{
 		throw ErrorFileNotCorrect(filename);
-
-	texData.Width = *reinterpret_cast<unsigned short int*>(&fileArr[12]);
-	texData.Height = *reinterpret_cast<unsigned short int*>(&fileArr[14]);
-
-	char textLength = fileArr[0];
-
-	char dataType = fileArr[2];
-
-	char bitsPerPixel = fileArr[16];
-
-
-	if (bitsPerPixel == 24)
-	{
-		texData.DataSize = texData.Height * texData.Width * 3;
-		texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
-		strcpy(texData.Format, "bmp24");
 	}
-	else
-	if (bitsPerPixel == 32)
-	{
-		texData.DataSize = texData.Height * texData.Width * 4;
-		texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
-		strcpy(texData.Format, "bmp32");
-	}
-	else
-		throw ErrorFileNotCorrect(filename);
 
-	int bytesPerPixel = bitsPerPixel / 8;
+	return result;
 
-	unsigned char blockInfo;
-	char whatItIs;
-	unsigned int numPixels;
+}
 
-	cardinal n = 0;
-	int filePos = textLength + 18;
 
-	if (dataType == 2)
-	{
-		
-		for(cardinal n = 0; n < texData.Height * texData.Width; n++)
-		{
-			texData.Data[n*bytesPerPixel + 2] = fileArr[filePos++];
-			texData.Data[n*bytesPerPixel + 1] = fileArr[filePos++];
-			texData.Data[n*bytesPerPixel + 0] = fileArr[filePos++];
-			if (bitsPerPixel == 32)
-			{
-				texData.Data[n*bytesPerPixel + 3] = fileArr[filePos++];
-			}
-		}
-
-	}
-	else if (dataType == 10)
-	{
-		throw ErrorToLog("RLE-compressed TGA is not supported yet: "+filename);
-
-		while (n < texData.Height * texData.Width)
-		{
-			blockInfo = fileArr[filePos++];
-			whatItIs = blockInfo & 128;
-			numPixels = blockInfo & 127;
-			
-			if (whatItIs)
-			{
-				
-				for (cardinal i=0; i<numPixels; i++)
-				{
-					texData.Data[n*bytesPerPixel + 0] = fileArr[filePos + 0];
-					texData.Data[n*bytesPerPixel + 1] = fileArr[filePos + 1];
-					texData.Data[n*bytesPerPixel + 2] = fileArr[filePos + 2];
-					if (bitsPerPixel == 32)
-					{
-						texData.Data[n*bytesPerPixel + 3] = fileArr[filePos + 3];
-					}
-					n++;
-				}
-
-				if (bitsPerPixel == 32)
-				{
-					filePos += 4;
-				}
-				else
-				{
-					filePos += 3;
-				}
-
-				
-			}
-			else
-			{
-				
-				for (cardinal i=0; i<numPixels; i++)
-				{
-					texData.Data[n*bytesPerPixel + 0] = fileArr[filePos++];
-					texData.Data[n*bytesPerPixel + 1] = fileArr[filePos++];
-					texData.Data[n*bytesPerPixel + 2] = fileArr[filePos++];
-					if (bitsPerPixel == 32)
-					{
-						texData.Data[n*bytesPerPixel + 3] = fileArr[filePos++];
-					}
-					n++;
-				}
-			}
-
-		}
-	}
-	else
-		throw ErrorFileNotCorrect(filename);
-
-	return true;
+bool TTextureListClass::CreateTexDataFromJpg(const std::string& filename, TTextureData& texData)
+{
+	return LoadJpg(filename, texData);
 }
 
 
@@ -682,11 +582,6 @@ cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std:
 {
 	cardinal TexID;
 
-	if (texName == "")
-	{
-		texName = GetFileName(filename);
-	}
-
 	//Basically:
 	if (filename == "")
 		return 0;
@@ -730,14 +625,29 @@ cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std:
 
 cardinal TTextureListClass::AddTexture(const std::string& fileName)
 {
-	return AddTexture(fileName, "");
+	return AddTexture(fileName, GetFileName(fileName));
 }
 
 cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
 {
-    std::string fullFileName = ST::PathToResources + fileName;
+   
+	std::string fullFileName = ST::PathToResources + fileName;
 
-	return AddTextureDirectly(fullFileName, texName);
+	std::string realFileName;
+
+	if (GetFileName(fileName).find('.') == std::string::npos)
+	{
+		realFileName = AutocompleteExtension(fullFileName); //AutocompleteExtension works for Windows only
+	}
+	else
+	{
+		realFileName = fullFileName; //AutocompleteExtension works for Windows only
+	}
+
+
+
+
+	return AddTextureDirectly(realFileName, texName);
 }
 
 

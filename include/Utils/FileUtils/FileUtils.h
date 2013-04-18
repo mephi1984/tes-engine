@@ -38,12 +38,82 @@ bool findString(char* in, char* list);
 
 
 bool IsFileExistsInUserData(const std::string& filename);
+
 std::string GetFilePathUserData(const std::string& filename);
+
+
+
+//utitily to process texture uploading
+inline char* GetFileName(const char* filename)
+{
+	char* fname = (char*)filename + strlen(filename);
+
+	while ((*fname != '\\')&&(*fname != '/')&&(fname >= filename )) 
+		--fname;
+
+	++fname;
+
+	return fname;
+}
+
+inline std::string GetFileName(const std::string& filename)
+{
+	std::string::const_iterator i = filename.end() - 1;
+
+	while ((i > filename.begin() )&&(*i != '\\')&&(*i != '/')) 
+		--i;
+	
+	if (*i == '\\' || *i == '/')
+	{
+		i++;
+	}
+
+	return std::string(i, filename.end());
+}
+
+//utitily to process texture uploading
+inline char* GetFileExt(const char* filename)
+{
+	char* fext = (char*)filename + strlen(filename);
+
+	while (*fext != '.') 
+		--fext;
+
+	return fext;
+}
+
+inline std::string GetFileExt(const std::string& filename)
+{
+	std::string::const_iterator i = filename.end() - 1;
+
+	while (*i != '.') 
+		--i;
+
+	return std::string(i, filename.end());
+
+}
+
+inline std::string GetFileNameWithoutExt(const std::string& filename)
+{
+	std::string result = GetFileName(filename);
+
+	std::string::const_iterator i = result.end() - 1;
+
+	while (*i != '.') 
+		--i;
+
+	return std::string(result.begin(), i);
+}
+
+std::string GetFilePath(const std::string& filename);
+
 
 
 #ifdef TARGET_WIN32
 
 void GetFileList(const std::string& searchkey, std::vector<std::string> &list);
+
+std::string AutocompleteExtension(const std::string& fileName);
 
 template<typename TYPENAME>
 boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
@@ -57,11 +127,9 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
     size_t result;
     
     TYPENAME* fileData;
+
     
-    std::string realFileName = fileName;
-    
-    
-    if (fopen_s(&pFile, realFileName.c_str(), "rb" ) != 0) 
+    if (fopen_s(&pFile, fileName.c_str(), "rb" ) != 0) 
     {
         throw ErrorToLog("File not loaded: " + fileName);
     }
@@ -195,70 +263,6 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
 
 
 #endif
-
-//utitily to process texture uploading
-inline char* GetFileName(const char* filename)
-{
-	char* fname = (char*)filename + strlen(filename);
-
-	while ((*fname != '\\')&&(*fname != '/')&&(fname >= filename )) 
-		--fname;
-
-	++fname;
-
-	return fname;
-}
-
-inline std::string GetFileName(const std::string& filename)
-{
-	std::string::const_iterator i = filename.end() - 1;
-
-	while ((i > filename.begin() )&&(*i != '\\')&&(*i != '/')) 
-		--i;
-	
-	if (*i == '\\' || *i == '/')
-	{
-		i++;
-	}
-
-	return std::string(i, filename.end());
-}
-
-//utitily to process texture uploading
-inline char* GetFileExt(const char* filename)
-{
-	char* fext = (char*)filename + strlen(filename);
-
-	while (*fext != '.') 
-		--fext;
-
-	return fext;
-}
-
-inline std::string GetFileExt(const std::string& filename)
-{
-	std::string::const_iterator i = filename.end() - 1;
-
-	while (*i != '.') 
-		--i;
-
-	return std::string(i, filename.end());
-
-}
-
-inline std::string GetFileNameWithoutExt(const std::string& filename)
-{
-	std::string result = GetFileName(filename);
-
-	std::string::const_iterator i = result.end() - 1;
-
-	while (*i != '.') 
-		--i;
-
-	return std::string(result.begin(), i);
-}
-
-std::string GetFilePath(const std::string& filename);
 
 #ifdef TARGET_IOS
 

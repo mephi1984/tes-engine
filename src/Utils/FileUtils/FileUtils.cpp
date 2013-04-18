@@ -111,6 +111,30 @@ void GetFileList(const std::string& searchkey, std::vector<std::string> &list)
             break;
     }
 }
+
+
+std::string AutocompleteExtension(const std::string& fileName)
+{
+	std::string filePath = GetFilePath(fileName);
+
+	std::vector<std::string> list;
+
+	GetFileList(fileName+".bmp", list);
+	GetFileList(fileName+".bmp32", list);
+	GetFileList(fileName+".tga", list);
+	GetFileList(fileName+".png", list);
+	GetFileList(fileName+".jpg", list);
+
+
+	if (list.size() == 0)
+	{
+		throw ErrorToLog("AutocompleteExtension - file not found!");
+	}
+	
+	return filePath+list[0];
+
+}
+
 #endif
 
 #ifdef TARGET_IOS

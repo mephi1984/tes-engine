@@ -43,6 +43,8 @@ struct TPanoramicCamera : public TCameraInterface
 	void CalcCamVec();
 
 	void SetCamView();
+
+	void SetCamShift(const vec3& camShift);
 };
 
 struct TPitCamera : public TCameraInterface

@@ -16,6 +16,8 @@ This code contains texture manager
 
 #include "include/Utils/Utils.h"
 #include "include/Utils/PngHelper.h"
+#include "include/Utils/JpegHelper.h"
+#include "include/Utils/TgaLoader.h"
 #include "include/ScriptManager/ScriptManager.h"
 
 namespace SE
@@ -40,7 +42,7 @@ struct TTextureData
 	boost::shared_array<char> Data;
 };
 
-typedef std::map<std::string, TTextureInfo, std::less<std::string> > TTextureMap;
+typedef std::map<std::string, TTextureInfo, std::less<std::string>> TTextureMap;
 
 
 class TTextureListClass : public TSerializeInterface, public TFunctionBinderInterface
@@ -58,6 +60,7 @@ protected:
 	bool CreateTexDataFromBmp32(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromTga(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromPng(const std::string& filename, TTextureData& texData);
+	bool CreateTexDataFromJpg(const std::string& filename, TTextureData& texData);
 	
 	cardinal AddTextureBmp24Data(const TTextureData& texData); //MAIN THREAD ONLY
 	cardinal AddTextureBmp32Data(const TTextureData& texData); //MAIN THREAD ONLY

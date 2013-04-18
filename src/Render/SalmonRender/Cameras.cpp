@@ -197,6 +197,14 @@ void TPanoramicCamera::SetCamView()
 }
 
 
+void TPanoramicCamera::SetCamShift(const vec3& camShift)
+{
+	CamShift = camShift;
+
+	Renderer->CalcCamPos();
+}
+
+
 void TPitCamera::SetCamView()
 {
 	Renderer->LoadIdentity();
