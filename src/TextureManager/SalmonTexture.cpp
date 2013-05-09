@@ -630,7 +630,11 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName)
 
 cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
 {
-   
+	if (texName == "")
+	{
+		texName = GetFileName(fileName);
+	}
+	   
 	std::string fullFileName = ST::PathToResources + fileName;
 
 	std::string realFileName;
@@ -643,8 +647,6 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string 
 	{
 		realFileName = fullFileName; //AutocompleteExtension works for Windows only
 	}
-
-
 
 
 	return AddTextureDirectly(realFileName, texName);
