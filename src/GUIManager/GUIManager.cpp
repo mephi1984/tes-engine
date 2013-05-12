@@ -1,5 +1,6 @@
 #include "include/Engine.h"
 
+
 namespace SE
 {
 
@@ -65,12 +66,14 @@ void TGUIManager::DeleteWidgetGroup(std::string groupName)
 
 void TGUIManager::DeleteWidgetOnUpdate(const std::string& name)
 {
-	PostUpdateSignal.connect(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	//PostUpdateSignal.connect(boost::bind(&TGUIManager::DeleteWidget, this, name));
 }
 
 void TGUIManager::DeleteWidgetGroupOnUpdate(const std::string& groupName)
 {
-	PostUpdateSignal.connect(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	//PostUpdateSignal.connect(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
 }
 
 
@@ -82,8 +85,9 @@ void TGUIManager::AddWidgetTransformTask(TWidgetTransformTask widgetTransformTas
 
 void TGUIManager::Update(cardinal dt)
 {
-
-	WidgetListMutex.lock();
+	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+	
+	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
 
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
@@ -91,9 +95,14 @@ void TGUIManager::Update(cardinal dt)
 
 		if (i->IsMouseDown)
 		{
-			(*(i->SignalMap[CONST_HOLD_SIGNAL_NAME]))(TSignalParam(dt));
-
+			signalMap.push_back((i->SignalMap[CONST_HOLD_SIGNAL_NAME]));
 		}
+	}
+
+	//Keep this outside since signal may affect WidgetArr
+	BOOST_FOREACH(auto signalPtr, signalMap)
+	{
+		(*signalPtr)(TSignalParam(dt));
 	}
 
 	for (TWidgetTrasfromTaskList::iterator i = WidgetTrasfromTaskList.begin(); i != WidgetTrasfromTaskList.end(); )
@@ -150,11 +159,9 @@ void TGUIManager::Update(cardinal dt)
 		}
 	}
 
-	WidgetListMutex.unlock();
+	//PostUpdateSignal();
 
-	PostUpdateSignal();
-
-	PostUpdateSignal.disconnect_all_slots();
+	//PostUpdateSignal.disconnect_all_slots();
 }
 
 void TGUIManager::Draw()
@@ -242,8 +249,8 @@ void TGUIManager::OnMouseDown(vec2 pos)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
 
-	WidgetListMutex.lock();
-
+	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+	
 	TWidgetArr::reverse_iterator i;
 
 	LastTapPos = pos;
@@ -260,22 +267,22 @@ void TGUIManager::OnMouseDown(vec2 pos)
 			
 			if (! isTransparentForInput)
 			{
-				WidgetListMutex.unlock();
 				return;
 			}
 		}
 	}
 
-	WidgetListMutex.unlock();
 }
 
 void TGUIManager::OnMouseUp(vec2 pos)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
 
-	WidgetListMutex.lock();
-
+	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+	
 	TWidgetArr::reverse_iterator i;
+
+	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
@@ -284,17 +291,23 @@ void TGUIManager::OnMouseUp(vec2 pos)
 			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 			i->Widget->OnTapUp(pos);
 			i->IsMouseDown = false;
-			(*(i->SignalMap[CONST_CLICK_SIGNAL_NAME]))(TSignalParam(pos));
+
+			signalMap.push_back((i->SignalMap[CONST_CLICK_SIGNAL_NAME]));
 			
 			if (! isTransparentForInput)
 			{
-				WidgetListMutex.unlock();
-				return;
+				break;
 			}
 		}
 	}
 
-	WidgetListMutex.unlock();
+
+	//Keep this outside since signal may affect WidgetArr
+	BOOST_FOREACH(auto signalPtr, signalMap)
+	{
+		(*signalPtr)(TSignalParam(pos));
+	}
+
 }
 
 void TGUIManager::OnMove(vec2 shift)
@@ -309,6 +322,8 @@ void TGUIManager::OnMove(vec2 shift)
 
 	TotalShift += shift;
 
+	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
+
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
 		if (!moveIsProcessed && i->Widget->CheckClick(LastTapPos-TotalShift))
@@ -316,14 +331,22 @@ void TGUIManager::OnMove(vec2 shift)
 			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 
 			i->Widget->OnMove(shift);
-			(*(i->SignalMap[CONST_DRAG_SIGNAL_NAME]))(TSignalParam(shift));
-
+			
+			signalMap.push_back((i->SignalMap[CONST_DRAG_SIGNAL_NAME]));
+		
 			if (! isTransparentForInput)
 			{
 				moveIsProcessed = true;
 			}
 		}
 	}
+
+	//Keep this outside since signal may affect WidgetArr
+	BOOST_FOREACH(auto signalPtr, signalMap)
+	{
+		(*signalPtr)(TSignalParam(shift));
+	}
+
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{

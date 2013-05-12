@@ -140,7 +140,7 @@ protected:
 public:
 
 	boost::signal<void(int)> KeyPressedSignal;
-	boost::signal<void()> PostUpdateSignal;
+	//boost::signal<void()> PostUpdateSignal;
 
 	~TGUIManager();
 	
