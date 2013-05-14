@@ -175,7 +175,13 @@ void TDynamicText::UpdateText(std::string text)
 		vec2 posFrom = LeftBottomPos;
 		vec2 posTo = LeftBottomPos + vec2(Width, Height);
 
-		TextRenderPairItr->second = CreateTriangleListForText(posFrom, posTo, LastTextParams);
+		
+		PerformInMainThreadAsync(
+		[this, posFrom, posTo]()
+		{
+			this->TextRenderPairItr->second = CreateTriangleListForText(posFrom, posTo, this->LastTextParams);
+		}
+		);
 	}
 }
 
