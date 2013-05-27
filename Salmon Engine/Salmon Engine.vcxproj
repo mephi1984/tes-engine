@@ -57,6 +57,7 @@
     <ClInclude Include="..\include\Utils\Network\SignalSender.h" />
     <ClInclude Include="..\include\Utils\PngHelper.h" />
     <ClInclude Include="..\include\Utils\SerializeInterface\SerializeInterface.h" />
+    <ClInclude Include="..\include\Utils\SimpleTimer.h" />
     <ClInclude Include="..\include\Utils\TgaLoader.h" />
     <ClInclude Include="..\include\Utils\ThreadUtils.h" />
     <ClInclude Include="..\include\Utils\ThreadUtilsImpl.h" />

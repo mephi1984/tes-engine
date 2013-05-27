@@ -168,6 +168,8 @@ typedef tmat3<float> mat3;
 mat3 TransposeMatrix(const mat3& m);
 mat3 InverseMatrix(const mat3& m);
 
+mat3 CreateZRotationMatrix(float angle);
+
 //Outside:
 inline vec2 operator*(const vec2& a, float c)
 {

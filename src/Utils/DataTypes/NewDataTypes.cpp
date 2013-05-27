@@ -53,5 +53,17 @@ mat3 InverseMatrix(const mat3& m)
 	return r;
 }
 
+mat3 CreateZRotationMatrix(float angle)
+{
+	mat3 result = IdentityMatrix;
+
+	result.m[0] = cosf(angle);
+	result.m[1] = -sinf(angle);
+	result.m[3] = sinf(angle);
+	result.m[4] = cosf(angle);
+
+	return result;
+}
+
 
 } //namespace SE
