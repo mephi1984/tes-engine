@@ -165,14 +165,28 @@ void TSimpleAuthorization::Authorize()
 
 	dataReader->ErrorSignal.connect(ErrorSignal);
 
-	boost::property_tree::ptree pt;
+	if (Login == "")
+	{
+		boost::property_tree::ptree pt;
 
-	pt.put("Hello", "");
+		pt.put("Hello", "");
 
-	SendPropertyTree(IoService, Socket, pt);
+		SendPropertyTree(IoService, Socket, pt);
 
-	dataReader->StartReadOnce();
+		dataReader->StartReadOnce();
 
+	}
+	else
+	{
+		boost::property_tree::ptree pt;
+
+		pt.put("HelloAgain.Login", Login);
+		pt.put("HelloAgain.Password", Password);
+
+		SendPropertyTree(IoService, Socket, pt);
+
+		dataReader->StartReadOnce();
+	}
 
 }
 

@@ -19,6 +19,7 @@
 namespace SE
 {
 
+
 class TAutorizatorInterface
 {
 protected:
@@ -37,6 +38,8 @@ protected:
 	static std::vector<std::string> UserPasswords;
 	static boost::mutex UserPasswordsMutex;
 
+	static std::string GenerateRandomPassword();
+
 public:
 
 	boost::asio::io_service& IoService;
@@ -47,11 +50,14 @@ public:
 
 	virtual void StartListen();
 
-	void HandleGetData(boost::property_tree::ptree pTree);
+	void HandleGetRegisterRequest(boost::property_tree::ptree pTree);
+	void HandleGetLoginRequest(boost::property_tree::ptree pTree);
+
+	void CreateNewUser();
 	
 	boost::signal<void()> ErrorSignal;
 	boost::signal<void(std::string)> AllowedSignal;
-	boost::signal<void()> DeniedSignal;
+	//boost::signal<void()> DeniedSignal; //Simple autorizator does not deny
 };
 
 typedef boost::variant<std::shared_ptr<TSimpleAutorizator>> TAuthorizatorVariant;

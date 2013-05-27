@@ -1,4 +1,5 @@
 #include "include/Utils/Utils.h"
+#include "boost/random.hpp"
 
 
 namespace SE
@@ -6,6 +7,29 @@ namespace SE
 	std::vector<std::string> TSimpleAutorizator::UserPasswords;
 	
 	boost::mutex TSimpleAutorizator::UserPasswordsMutex;
+
+
+	std::string TSimpleAutorizator::GenerateRandomPassword()
+	{
+		boost::random::mt19937 RandomGenerator;
+
+		RandomGenerator.seed(static_cast<unsigned int>(std::time(0)));
+
+		static const int passwordLength = 18;
+		static const std::string symbols = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!()-=_+[]{};:,.?";
+
+		std::string result;
+
+		boost::random::uniform_int_distribution<> symbolRandom(0, symbols.size()-1);
+
+		for (size_t i = 0; i < passwordLength; i++)
+		{
+			result += symbols[symbolRandom(RandomGenerator)];
+		}
+
+		return result;
+
+	}
 
 
 	TSimpleAutorizator::TSimpleAutorizator(boost::asio::io_service& ioService, boost::asio::ip::tcp::socket& socket)
@@ -20,8 +44,9 @@ namespace SE
 	{
 		boost::shared_ptr<TDataReader> dataReader(new TDataReader(Socket));
 
-		dataReader->DataReadSignalMap.AddSlot("Hello", boost::bind(&TSimpleAutorizator::HandleGetData, this, _1));
-
+		dataReader->DataReadSignalMap.AddSlot("Hello", boost::bind(&TSimpleAutorizator::HandleGetRegisterRequest, this, _1));
+		dataReader->DataReadSignalMap.AddSlot("HelloAgain", boost::bind(&TSimpleAutorizator::HandleGetLoginRequest, this, _1));
+	
 		dataReader->ErrorSignal.connect(ErrorSignal);
 
 		dataReader->StartReadOnce();
@@ -29,26 +54,68 @@ namespace SE
 	}
 
 
-	void TSimpleAutorizator::HandleGetData(boost::property_tree::ptree pTree)
+	void TSimpleAutorizator::HandleGetRegisterRequest(boost::property_tree::ptree pTree)
 	{
 
-		std::string Login = boost::lexical_cast<std::string>(UserPasswords.size());
-		std::string Password = "12345";
+		CreateNewUser();
+	}
+
+	void TSimpleAutorizator::HandleGetLoginRequest(boost::property_tree::ptree pTree)
+	{
+		std::string login = pTree.get<std::string>("Login");
+		std::string password = pTree.get<std::string>("Password");
+
+		int loginNum = boost::lexical_cast<int>(login);
+
+		bool loginIsValid = loginNum < UserPasswords.size();
+
+		if (!loginIsValid)
+		{
+			CreateNewUser();
+			return;
+		}
+		
+		bool passwordIsValid = UserPasswords[loginNum] == password;
+
+		if (!passwordIsValid)
+		{
+			CreateNewUser();
+			return;
+		}
+
+		//Login and password are ok
+		boost::property_tree::ptree pt;
+
+		pt.put("OnHello.Login", login);
+		pt.put("OnHello.Password", password);
+
+		SendPropertyTree(IoService, Socket, pt);
+
+		AllowedSignal(login);
+		
+	}
+
+	void TSimpleAutorizator::CreateNewUser()
+	{
+
+		std::string login = boost::lexical_cast<std::string>(UserPasswords.size());
+		std::string password = GenerateRandomPassword();
 
 		UserPasswordsMutex.lock();
-		UserPasswords.push_back(Password);
+		UserPasswords.push_back(password);
 		UserPasswordsMutex.unlock();
 
 		boost::property_tree::ptree pt;
 
-		pt.put("OnHello.Login", Login);
-		pt.put("OnHello.Password", Password);
+		pt.put("OnHello.Login", login);
+		pt.put("OnHello.Password", password);
 
 		SendPropertyTree(IoService, Socket, pt);
 
-		AllowedSignal(Login);
-
+		AllowedSignal(login);
 	}
+
+	//================================
 
 
 	TConnectedUser::TConnectedUser(TServerSocket& server)
@@ -90,7 +157,7 @@ namespace SE
 
 		authorizator->ErrorSignal.disconnect_all_slots();
 		authorizator->AllowedSignal.disconnect_all_slots();
-		authorizator->DeniedSignal.disconnect_all_slots();
+		//authorizator->DeniedSignal.disconnect_all_slots();
 
 	}
 
