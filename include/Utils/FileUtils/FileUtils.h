@@ -68,7 +68,7 @@ inline std::string GetFileName(const std::string& filename)
 		i++;
 	}
 
-	return std::string(i, filename.end());
+	return std::string(i, filename.cend());
 }
 
 //utitily to process texture uploading
@@ -89,7 +89,7 @@ inline std::string GetFileExt(const std::string& filename)
 	while (*i != '.') 
 		--i;
 
-	return std::string(i, filename.end());
+	return std::string(i, filename.cend());
 
 }
 
@@ -102,7 +102,7 @@ inline std::string GetFileNameWithoutExt(const std::string& filename)
 	while (*i != '.') 
 		--i;
 
-	return std::string(result.begin(), i);
+	return std::string(result.cbegin(), i);
 }
 
 std::string GetFilePath(const std::string& filename);
