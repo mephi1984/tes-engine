@@ -28,6 +28,7 @@
 		4C77831315BABD68003D5142 /* libvorbis-tremor-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C77831215BABD68003D5142 /* libvorbis-tremor-ios.a */; };
 		4C77831815BABE26003D5142 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C77831415BABD8B003D5142 /* AudioToolbox.framework */; };
 		4C77831915BABE26003D5142 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C77831515BABD8B003D5142 /* OpenAL.framework */; };
+		4C7804CA1754E71100566CB0 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7804C91754E71100566CB0 /* libjpeg.a */; };
 		4C7AD44C15B1D77700A599F6 /* ios_api.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AD44B15B1D77700A599F6 /* ios_api.cpp */; };
 		4C7C584B15C31E6500CAE4F4 /* libboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7C584A15C31E6500CAE4F4 /* libboost.a */; };
 		4CC971AC15C57DCE00359A2B /* libSalmon Engine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C902A7815C5735700FBC901 /* libSalmon Engine.a */; };
@@ -73,6 +74,7 @@
 		4C77831215BABD68003D5142 /* libvorbis-tremor-ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libvorbis-tremor-ios.a"; path = "../../libs/vorbis-tremor-ios/build-ios/ios-device/libvorbis-tremor-ios.a"; sourceTree = "<group>"; };
 		4C77831415BABD8B003D5142 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4C77831515BABD8B003D5142 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		4C7804C91754E71100566CB0 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = "../../../libs/jpeg-9/build-ios/ios-device/libjpeg.a"; sourceTree = "<group>"; };
 		4C7AD44B15B1D77700A599F6 /* ios_api.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ios_api.cpp; sourceTree = "<group>"; };
 		4C7C584A15C31E6500CAE4F4 /* libboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost.a; path = "../../libs/boost_1_47_0/build-ios/ios-simulator/libboost.a"; sourceTree = "<group>"; };
 		4C902A7015C5735500FBC901 /* Salmon Engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Salmon Engine.xcodeproj"; path = "../../Engine/iOS/Salmon Engine/Salmon Engine.xcodeproj"; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C7804CA1754E71100566CB0 /* libjpeg.a in Frameworks */,
 				4CC971AC15C57DCE00359A2B /* libSalmon Engine.a in Frameworks */,
 				4C77831815BABE26003D5142 /* AudioToolbox.framework in Frameworks */,
 				4C77831915BABE26003D5142 /* OpenAL.framework in Frameworks */,
@@ -109,6 +112,7 @@
 		4C49B2AE15B0991B003512CD = {
 			isa = PBXGroup;
 			children = (
+				4C7804C91754E71100566CB0 /* libjpeg.a */,
 				4C902A7015C5735500FBC901 /* Salmon Engine.xcodeproj */,
 				4C7B819515C40F770024D61A /* Libs */,
 				4CC1FC3415B200130025C6F7 /* Resources */,
@@ -218,8 +222,8 @@
 			buildConfigurationList = 4C49B2E215B0991B003512CD /* Build configuration list for PBXNativeTarget "salmontemplate" */;
 			buildPhases = (
 				4C49B2B515B0991B003512CD /* Sources */,
-				4C49B2B615B0991B003512CD /* Frameworks */,
 				4C49B2B715B0991B003512CD /* Resources */,
+				4C49B2B615B0991B003512CD /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -403,15 +407,21 @@
 					"$(LibsPath)/boost_1_52_0",
 					../jni,
 					"$(LibsPath)/vorbis-tremor-ios/vorbis",
+					"$(LibsPath)/jpeg-9",
+					"$(LibsPath)/jpeg-9/vc10",
 				);
 				INFOPLIST_FILE = "template-Info.plist";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../libs/jpeg-9/build-ios/ios-device\"",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"$(LibsPath)/lpng1510/build-ios/ios-device",
 					"$(LibsPath)/boost_1_52_0/build-ios/ios-device",
 					"$(LibsPath)/sqplus/build-ios/ios-device",
 					"$(LibsPath)/zlib-1.2.6/build-ios/ios-device",
 					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-device",
+					"$(LibsPath)/jpeg-9/build-ios/ios-device",
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"$(LibsPath)/lpng1510/build-ios/ios-simulator",
@@ -419,6 +429,7 @@
 					"$(LibsPath)/boost_1_52_0/build-ios/ios-simulator",
 					"$(LibsPath)/zlib-1.2.6/build-ios/ios-simulator",
 					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-simulator",
+					"$(LibsPath)/jpeg-9/build-ios/ios-simulator",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SYMROOT = build;
@@ -450,15 +461,21 @@
 					"$(LibsPath)/boost_1_52_0",
 					../jni,
 					"$(LibsPath)/vorbis-tremor-ios/vorbis",
+					"$(LibsPath)/jpeg-9",
+					"$(LibsPath)/jpeg-9/vc10",
 				);
 				INFOPLIST_FILE = "template-Info.plist";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../libs/jpeg-9/build-ios/ios-device\"",
+				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"$(LibsPath)/lpng1510/build-ios/ios-device",
 					"$(LibsPath)/boost_1_52_0/build-ios/ios-device",
 					"$(LibsPath)/sqplus/build-ios/ios-device",
 					"$(LibsPath)/zlib-1.2.6/build-ios/ios-device",
 					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-device",
+					"$(LibsPath)/jpeg-9/build-ios/ios-device",
 				);
 				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"$(LibsPath)/lpng1510/build-ios/ios-simulator",
@@ -466,6 +483,7 @@
 					"$(LibsPath)/boost_1_52_0/build-ios/ios-simulator",
 					"$(LibsPath)/zlib-1.2.6/build-ios/ios-simulator",
 					"$(LibsPath)/vorbis-tremor-ios/build-ios/ios-simulator",
+					"$(LibsPath)/jpeg-9/build-ios/ios-simulator",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
