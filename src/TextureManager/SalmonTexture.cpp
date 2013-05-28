@@ -639,6 +639,7 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string 
 
 	std::string realFileName;
 
+#ifdef TARGET_WIN32
 	if (GetFileName(fileName).find('.') == std::string::npos)
 	{
 		realFileName = AutocompleteExtension(fullFileName); //AutocompleteExtension works for Windows only
@@ -647,6 +648,9 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string 
 	{
 		realFileName = fullFileName; //AutocompleteExtension works for Windows only
 	}
+#else
+    realFileName = fullFileName;
+#endif
 
 
 	return AddTextureDirectly(realFileName, texName);
