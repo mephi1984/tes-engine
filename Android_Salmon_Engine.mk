@@ -13,6 +13,8 @@ SQUIRREL_PATH = $(LibsPathCygwin)/sqplus
 
 LIBPNG_PATH = $(LibsPathCygwin)/libpng_1.4.1_android
 
+LIBJPEG_PATH = $(LibsPathCygwin)/jpeg-9
+
 ZIP_PATH = $(LibsPathCygwin)/julienr-libzip-android/jni
 
 #ENGINE_PATH = $(SalmonEnginePath)
@@ -126,6 +128,73 @@ LOCAL_SRC_FILES :=\
 	pngwutil.c 
 	
 LOCAL_LDLIBS := -lz
+
+#debug
+#LOCAL_CFLAGS := -g -ggdb -O0
+#LOCAL_LDLIBS    +=  -g -ggdb
+
+include $(BUILD_STATIC_LIBRARY)
+
+
+#=============== JPEG =============
+
+LOCAL_PATH := $(LIBJPEG_PATH)
+include $(CLEAR_VARS)
+
+LOCAL_C_INCLUDES := $(LIBJPEG_PATH)
+LOCAL_C_INCLUDES += $(LIBJPEG_PATH)/vc10
+
+
+LOCAL_MODULE    := jpeg
+LOCAL_SRC_FILES :=\
+	jaricom.c\
+	jcapimin.c\
+	jcapistd.c\
+	jcarith.c\
+	jccoefct.c\
+	jccolor.c\
+	jcdctmgr.c\
+	jchuff.c\
+	jcinit.c\
+	jcmainct.c\
+	jcmarker.c\
+	jcmaster.c\
+	jcomapi.c\
+	jcparam.c\
+	jcprepct.c\
+	jcsample.c\
+	jctrans.c\
+	jdapimin.c\
+	jdapistd.c\
+	jdarith.c\
+	jdatadst.c\
+	jdatasrc.c\
+	jdcoefct.c\
+	jdcolor.c\
+	jddctmgr.c\
+	jdhuff.c\
+	jdinput.c\
+	jdmainct.c\
+	jdmarker.c\
+	jdmaster.c\
+	jdmerge.c\
+	jdpostct.c\
+	jdsample.c\
+	jdtrans.c\
+	jerror.c\
+	jfdctflt.c\
+	jfdctfst.c\
+	jfdctint.c\
+	jidctflt.c\
+	jidctfst.c\
+	jidctint.c\
+	jmemmgr.c\
+	jmemnobs.c\
+	jquant1.c\
+	jquant2.c\
+	jutils.c
+	
+LOCAL_LDLIBS := 
 
 #debug
 #LOCAL_CFLAGS := -g -ggdb -O0
@@ -285,6 +354,7 @@ LOCAL_STATIC_LIBRARIES += ogg
 LOCAL_STATIC_LIBRARIES += vorbis
 LOCAL_STATIC_LIBRARIES += squirrel
 LOCAL_STATIC_LIBRARIES += png_lib
+LOCAL_STATIC_LIBRARIES += jpeg
 LOCAL_STATIC_LIBRARIES += zip
 LOCAL_SHARED_LIBRARIES := gnustl_shared
 LOCAL_C_INCLUDES := $(BOOST_PATH)
@@ -300,6 +370,8 @@ LOCAL_C_INCLUDES += $(SQUIRREL_PATH)/sqplus
 LOCAL_C_INCLUDES += $(SQUIRREL_PATH)/sqstdlib
 LOCAL_C_INCLUDES += $(SQUIRREL_PATH)/squirrel
 LOCAL_C_INCLUDES += $(LIBPNG_PATH)
+LOCAL_C_INCLUDES += $(LIBJPEG_PATH)
+LOCAL_C_INCLUDES += $(LIBJPEG_PATH)/vc10
 LOCAL_C_INCLUDES += $(ZIP_PATH)
 LOCAL_SRC_FILES := src/Utils/DataTypes/DataTypes.cpp
 LOCAL_SRC_FILES += src/Utils/DataTypes/NewDataTypes.cpp
@@ -310,6 +382,8 @@ LOCAL_SRC_FILES += src/Utils/Console/Console.cpp
 LOCAL_SRC_FILES += src/Utils/SerializeInterface/SerializeInterface.cpp
 LOCAL_SRC_FILES += src/Utils/Network/Network.cpp
 LOCAL_SRC_FILES += src/Utils/PngHelper.cpp
+LOCAL_SRC_FILES += src/Utils/JpegHelper.cpp
+LOCAL_SRC_FILES += src/Utils/TgaLoader.cpp
 LOCAL_SRC_FILES += src/Utils/SimpleTimer.cpp
 LOCAL_SRC_FILES += src/Utils/ThreadUtils.cpp
 LOCAL_SRC_FILES += src/TextureManager/SalmonTexture.cpp

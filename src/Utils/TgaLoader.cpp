@@ -9,8 +9,8 @@ namespace SE
 
 
 	
-GLubyte uTGAcompare[12] = {0,0,2, 0,0,0,0,0,0,0,0,0};	// Uncompressed TGA Header
-GLubyte cTGAcompare[12] = {0,0,10,0,0,0,0,0,0,0,0,0};	// Compressed TGA Header
+ unsigned char uTGAcompare[12] = {0,0,2, 0,0,0,0,0,0,0,0,0};	// Uncompressed TGA Header
+ unsigned char cTGAcompare[12] = {0,0,10,0,0,0,0,0,0,0,0,0};	// Compressed TGA Header
 
 
 
@@ -97,7 +97,7 @@ bool LoadUncompressedTGA(TTextureData& texture, boost::shared_array<char> fTGA)	
 
 
 	// Byte Swapping Optimized By Steve Thomas
-	for(GLuint cswap = 0; cswap < (int)tga.imageSize; cswap += tga.bytesPerPixel)
+	for(unsigned int cswap = 0; cswap < (int)tga.imageSize; cswap += tga.bytesPerPixel)
 	{
 		texture.Data[cswap] ^= texture.Data[cswap+2] ^=
 		texture.Data[cswap] ^= texture.Data[cswap+2];
@@ -162,21 +162,21 @@ bool LoadCompressedTGA(TTextureData& texture, boost::shared_array<char> fTGA)		/
 	texture.DataSize = tga.imageSize;
 	texture.Data = boost::shared_array<char>(new char [texture.DataSize]);
 
-	GLuint pixelcount	= tga.Height * tga.Width;							// Nuber of pixels in the image
-	GLuint currentpixel	= 0;												// Current pixel being read
-	GLuint currentbyte	= 0;												// Current byte 
+	unsigned int pixelcount	= tga.Height * tga.Width;							// Nuber of pixels in the image
+	unsigned int currentpixel	= 0;												// Current pixel being read
+	unsigned int currentbyte	= 0;												// Current byte 
 	
 	//GLubyte* colorbuffer = (GLubyte *)malloc(tga.bytesPerPixel);			// Storage for 1 pixel
 
-	boost::shared_array<GLubyte> colorbuffer(new GLubyte[tga.bytesPerPixel]);
+	boost::shared_array<unsigned char> colorbuffer(new unsigned char[tga.bytesPerPixel]);
 
 	do
 	{
-		GLubyte chunkheader = 0;											// Storage for "chunk" header
+		unsigned char chunkheader = 0;											// Storage for "chunk" header
 
 
-		chunkheader = static_cast<GLubyte>(fTGA[shift]);
-		shift += sizeof(GLubyte);
+		chunkheader = static_cast<unsigned char>(fTGA[shift]);
+		shift += sizeof(unsigned char);
 
 		if(chunkheader < 128)												// If the ehader is < 128, it means the that is the number of RAW color packets minus 1
 		{																	// that follow the header

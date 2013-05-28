@@ -13,21 +13,21 @@ const int CONST_TGA_OUTER_HEADER_SIZE = 12;
 
 typedef struct
 {
-	GLubyte Header[CONST_TGA_OUTER_HEADER_SIZE];		// TGA File Header
+	unsigned char Header[CONST_TGA_OUTER_HEADER_SIZE];		// TGA File Header
 } TGAHeader;
 
 const int CONST_TGA_INNER_HEADER_SIZE = 6;
 
 typedef struct
 {
-	GLubyte		header[CONST_TGA_INNER_HEADER_SIZE];								// First 6 Useful Bytes From The Header
-	GLuint		bytesPerPixel;							// Holds Number Of Bytes Per Pixel Used In The TGA File
-	GLuint		imageSize;								// Used To Store The Image Size When Setting Aside Ram
-	GLuint		temp;									// Temporary Variable
-	GLuint		type;	
-	GLuint		Height;									//Height of Image
-	GLuint		Width;									//Width ofImage
-	GLuint		Bpp;									// Bits Per Pixel
+	unsigned char		header[CONST_TGA_INNER_HEADER_SIZE];								// First 6 Useful Bytes From The Header
+	unsigned int		bytesPerPixel;							// Holds Number Of Bytes Per Pixel Used In The TGA File
+	unsigned int		imageSize;								// Used To Store The Image Size When Setting Aside Ram
+	unsigned int		temp;									// Temporary Variable
+	unsigned int		type;	
+	unsigned int		Height;									//Height of Image
+	unsigned int		Width;									//Width ofImage
+	unsigned int		Bpp;									// Bits Per Pixel
 } TGA;
 
 
@@ -36,8 +36,8 @@ typedef struct
 
 
 
-extern GLubyte uTGAcompare[12];	// Uncompressed TGA Header
-extern GLubyte cTGAcompare[12];	// Compressed TGA Header
+extern unsigned char uTGAcompare[12];	// Uncompressed TGA Header
+extern unsigned char cTGAcompare[12];	// Compressed TGA Header
 
 
 struct TTextureData; // Find it in SalmonTexture.h 
