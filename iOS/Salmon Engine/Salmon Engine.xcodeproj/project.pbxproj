@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C470853175405220069C707 /* JpegHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C470851175405210069C707 /* JpegHelper.cpp */; };
+		4C470854175405220069C707 /* TgaLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C470852175405220069C707 /* TgaLoader.cpp */; };
 		4C5E512116B6E602005521AC /* SimpleTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5E512016B6E601005521AC /* SimpleTimer.h */; };
 		4C5E512416B6E620005521AC /* SimpleTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E512316B6E620005521AC /* SimpleTimer.cpp */; };
 		4C77831B15BABFA6003D5142 /* SoundManagerInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C77831A15BABFA6003D5142 /* SoundManagerInterface.h */; };
@@ -99,6 +101,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C470851175405210069C707 /* JpegHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JpegHelper.cpp; path = ../../../src/Utils/JpegHelper.cpp; sourceTree = "<group>"; };
+		4C470852175405220069C707 /* TgaLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TgaLoader.cpp; path = ../../../src/Utils/TgaLoader.cpp; sourceTree = "<group>"; };
 		4C5E512016B6E601005521AC /* SimpleTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleTimer.h; path = ../../../include/Utils/SimpleTimer.h; sourceTree = "<group>"; };
 		4C5E512316B6E620005521AC /* SimpleTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleTimer.cpp; path = ../../../src/Utils/SimpleTimer.cpp; sourceTree = "<group>"; };
 		4C77831A15BABFA6003D5142 /* SoundManagerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManagerInterface.h; path = ../../../include/SoundManager/SoundManagerInterface.h; sourceTree = "<group>"; };
@@ -432,6 +436,8 @@
 		4C8CE93915B0A50F00078175 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				4C470851175405210069C707 /* JpegHelper.cpp */,
+				4C470852175405220069C707 /* TgaLoader.cpp */,
 				4C8024B816D4BDBC001A4521 /* Network */,
 				4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */,
 				4C5E512316B6E620005521AC /* SimpleTimer.cpp */,
@@ -920,6 +926,8 @@
 				4CD41A3116C2D2490071E598 /* GLKViewTemplate.mm in Sources */,
 				4CD41A3216C2D2490071E598 /* ViewControllerTemplate.mm in Sources */,
 				4C8024BA16D4BDBC001A4521 /* Network.cpp in Sources */,
+				4C470853175405220069C707 /* JpegHelper.cpp in Sources */,
+				4C470854175405220069C707 /* TgaLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -988,6 +996,8 @@
 					"$(LibsPath)/sqplus/sqplus",
 					"$(LibsPath)/sqplus/include",
 					"$(LibsPath)/vorbis-tremor-ios/vorbis",
+					"$(LibsPath)/jpeg-9/vc10",
+					"$(LibsPath)/jpeg-9",
 				);
 				INSTALL_PATH = ./debug;
 				OTHER_LDFLAGS = "-ObjC";
@@ -1017,6 +1027,8 @@
 					"$(LibsPath)/sqplus/sqplus",
 					"$(LibsPath)/sqplus/include",
 					"$(LibsPath)/vorbis-tremor-ios/vorbis",
+					"$(LibsPath)/jpeg-9/vc10",
+					"$(LibsPath)/jpeg-9",
 				);
 				INSTALL_PATH = ./release;
 				OTHER_LDFLAGS = "-ObjC";
