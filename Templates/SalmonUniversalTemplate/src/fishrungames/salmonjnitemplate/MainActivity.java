@@ -52,6 +52,9 @@ public class MainActivity extends Activity
 		
 		setContentView(mView);
 		
+
+		EngineWrapper.SetView(mView);
+		
 	}
 
 	@Override

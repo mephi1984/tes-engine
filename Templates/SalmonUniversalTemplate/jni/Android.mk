@@ -28,6 +28,9 @@ SQUIRREL_PATH = $(LibsPathCygwin)/sqplus
 
 LIBPNG_PATH = $(LibsPathCygwin)/libpng_1.4.1_android
 
+LIBJPEG_PATH = $(LibsPathCygwin)/jpeg-9
+
+
 ZIP_PATH = $(LibsPathCygwin)/julienr-libzip-android/jni
 
 #====== ENGINE AND LIBS =====================
@@ -45,6 +48,7 @@ LOCAL_CFLAGS := -DTARGET_ANDROID -DNOSOUND -std=gnu++11 --std=c++11
 LOCAL_STATIC_LIBRARIES := boost
 LOCAL_STATIC_LIBRARIES += squirrel
 LOCAL_STATIC_LIBRARIES += png_lib
+LOCAL_STATIC_LIBRARIES += jpeg
 LOCAL_STATIC_LIBRARIES += zip
 LOCAL_SHARED_LIBRARIES := SalmonEngine
 LOCAL_SHARED_LIBRARIES += gnustl_shared
@@ -62,7 +66,10 @@ LOCAL_C_INCLUDES += $(SQUIRREL_PATH)/sqplus
 LOCAL_C_INCLUDES += $(SQUIRREL_PATH)/squirrel
 LOCAL_C_INCLUDES += $(SQUIRREL_PATH)/sqstdlib
 LOCAL_C_INCLUDES += $(LIBPNG_PATH)
+LOCAL_C_INCLUDES += $(LIBJPEG_PATH)
+LOCAL_C_INCLUDES += $(LIBJPEG_PATH)/vc10
 LOCAL_C_INCLUDES += $(ZIP_PATH)
+
 LOCAL_MODULE    := SalmonJniTemplate
 LOCAL_SRC_FILES := main_code.cpp
 LOCAL_SRC_FILES += android_api.cpp
