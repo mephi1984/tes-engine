@@ -158,6 +158,51 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
 }
 #endif
 
+#ifdef TARGET_LINUX
+
+template<typename TYPENAME>
+boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
+{
+	cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+    
+    FILE * pFile;
+    
+    long fSize;
+    
+    size_t result;
+    
+    TYPENAME* fileData;
+
+    
+    if (fopen(&pFile, fileName.c_str(), "rb" ) != 0) 
+    {
+        throw ErrorToLog("File not loaded: " + fileName);
+    }
+        
+        // obtain file size:
+    fseek (pFile , 0 , SEEK_END);
+    fSize = ftell (pFile);
+    rewind (pFile);
+        
+    fileData = new TYPENAME [fSize % SIZEOF_TYPENAME == 0 ? fSize/SIZEOF_TYPENAME : fSize/SIZEOF_TYPENAME + 1];
+       
+    result = fread (&fileData[0], 1, fSize, pFile);
+    
+    if (result != fSize)
+    {
+        throw ErrorToLog("File not loaded: " + fileName);
+    }
+    
+    // terminate
+    fclose (pFile);
+    
+    intCount = fSize;
+    
+    return boost::shared_array<TYPENAME>(fileData);
+	
+}
+#endif
+
 #ifdef TARGET_ANDROID
 
 template<typename TYPENAME>

@@ -15,6 +15,10 @@ namespace SE
 extern TFileConsole* Console;
 #endif
 
+#ifdef TARGET_LINUX
+extern TFileConsole* Console;
+#endif
+
 #ifdef TARGET_ANDROID
 extern TJavaConsole* Console;
 #endif

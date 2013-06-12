@@ -9,6 +9,11 @@ const std::string CONST_CLICK_SIGNAL_NAME = "OnClick";
 const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
 
 
+TGUIManager::TGUIManager()
+{
+	
+}
+
 TGUIManager::~TGUIManager()
 {
 

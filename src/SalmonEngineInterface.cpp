@@ -17,7 +17,6 @@ TSalmonRenderer* Renderer;
 TIosConsole* Console;
 TSalmonRendererIos* Renderer;
 #endif
-
 TResourceManager* ResourceManager;
 
 

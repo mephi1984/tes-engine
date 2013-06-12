@@ -15,6 +15,9 @@ Use global variable Console like that:
 #ifdef TARGET_WIN32
 #include <fstream>
 #endif
+#ifdef TARGET_LINUX
+#include <fstream>
+#endif
 #ifdef TARGET_ANDROID
 #include <asm/page.h>
 #include <limits.h>
@@ -67,6 +70,28 @@ public:
 
 
 #ifdef TARGET_WIN32
+
+class TFileConsole : public TSimpleConsole
+{
+protected:
+	std::string filename;
+	std::ofstream f;
+public:
+	TFileConsole();
+	
+	TFileConsole(const std::string& Afilename);
+	
+	~TFileConsole();
+	
+	TFileConsole& operator<<(const std::string& s);
+    
+    void PrintImmediate(const std::string& s);
+};
+
+#endif
+
+
+#ifdef TARGET_LINUX
 
 class TFileConsole : public TSimpleConsole
 {

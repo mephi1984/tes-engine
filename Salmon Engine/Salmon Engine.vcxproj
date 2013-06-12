@@ -22,6 +22,7 @@
     <ClInclude Include="..\include\GlobalConst.h" />
     <ClInclude Include="..\include\GUIManager\ButtonWidget.h" />
     <ClInclude Include="..\include\GUIManager\GUIManager.h" />
+    <ClInclude Include="..\include\GUIManager\KeyboardWidget.h" />
     <ClInclude Include="..\include\GUIManager\WidgetTemplatesImpl.h" />
     <ClInclude Include="..\include\GUIManager\WidgetXmlParsers.h" />
     <ClInclude Include="..\include\HalibutAnimation\HalibutAnimation.h" />
@@ -71,6 +72,7 @@
     <ClCompile Include="..\src\GlobalConst.cpp" />
     <ClCompile Include="..\src\GUIManager\ButtonWidget.cpp" />
     <ClCompile Include="..\src\GUIManager\GUIManager.cpp" />
+    <ClCompile Include="..\src\GUIManager\KeyboardWidget.cpp" />
     <ClCompile Include="..\src\GUIManager\WidgetXmlParsers.cpp" />
     <ClCompile Include="..\src\HalibutAnimation\HalibutAnimation.cpp" />
     <ClCompile Include="..\src\LightManager\LightManager.cpp" />

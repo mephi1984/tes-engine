@@ -3,6 +3,7 @@
 
 #include "include/Render/RenderMisc.h"
 #include "include/GUIManager/ButtonWidget.h"
+#include "include/GUIManager/KeyboardWidget.h"
 #include "include/GUIManager/WidgetXmlParsers.h"
 #include "include/Utils/Utils.h"
 #include "include/ScriptManager/ScriptManager.h"
@@ -141,6 +142,8 @@ public:
 
 	boost::signal<void(int)> KeyPressedSignal;
 	//boost::signal<void()> PostUpdateSignal;
+
+	TGUIManager();
 
 	~TGUIManager();
 	
