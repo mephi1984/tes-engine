@@ -9,6 +9,7 @@
 
 #include "boost/foreach.hpp"
 #include <string>
+#include <map>
 
 namespace SE
 {

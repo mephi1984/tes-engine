@@ -25,9 +25,11 @@ Use global variable Console like that:
 #include "boost/thread.hpp"
 #endif
 
+#include "include/Utils/DataTypes/DataTypes.h"
 
+#ifndef UTILS_ENGINE
 #include "include/Render/RenderMisc.h"
-
+#endif
 
 namespace SE
 {
@@ -43,8 +45,9 @@ protected:
 
 	std::string TextSavedInTriangleList;
 
+#ifndef UTILS_ENGINE
 	std::shared_ptr<TTriangleList> HistoryTriangeList;
-
+#endif
 	
 
 public:

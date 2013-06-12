@@ -8,6 +8,7 @@ WINDOWS AND ANDROID
 */
 
 #include "include/Utils/DataTypes/DataTypes.h"
+#include "include/Utils/ErrorTypes/ErrorTypes.h"
 #include "include/Utils/Console/Console.h"
 #include "boost/shared_array.hpp"
 
@@ -173,8 +174,9 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
     
     TYPENAME* fileData;
 
-    
-    if (fopen(&pFile, fileName.c_str(), "rb" ) != 0) 
+    pFile = fopen(fileName.c_str(), "rb" );
+
+    if (!pFile) 
     {
         throw ErrorToLog("File not loaded: " + fileName);
     }
