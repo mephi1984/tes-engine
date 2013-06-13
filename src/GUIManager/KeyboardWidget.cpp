@@ -4,19 +4,6 @@ namespace SE
 {
 
 
-	/*
-struct TKeyboardWidget : public TInstancingWidgetAncestor
-{
-	
-
-	TKeyboardWidget();
-
-	virtual bool CheckClick(vec2 mousePos);
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
-
-};*/
-
 	TKeyboardWidget::TKeyboardWidget()
 		: Shifted(false)
 	{
@@ -159,6 +146,12 @@ struct TKeyboardWidget : public TInstancingWidgetAncestor
 			{
 				ResourceManager->GUIManager.KeyPressedSignal(std::get<1>(visualKeyElement));
 			}
+		}
+
+		if (pos.v[0] >= 280 - 74/2 && pos.v[0] <= 280 + 74/2 &&
+			pos.v[1] >= 23 - 38/2 && pos.v[1] <= 23 + 38/2)
+		{
+			ResourceManager->GUIManager.HideKeyboard();
 		}
 	}
 

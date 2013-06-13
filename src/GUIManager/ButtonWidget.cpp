@@ -640,7 +640,10 @@ void TEdit::OnTapDown(vec2 pos)
 	{
 		ResourceManager->GUIManager.KeyPressedSignal.disconnect_all_slots();
 		InputConnection = ResourceManager->GUIManager.KeyPressedSignal.connect(boost::bind(&TEdit::OnKeyPress, this, _1));
+
 	}
+
+	ResourceManager->GUIManager.ShowKeyboard();
 }
 
 void TEdit::OnKeyPress(int key)

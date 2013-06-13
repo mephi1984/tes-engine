@@ -10,6 +10,7 @@ const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
 
 
 TGUIManager::TGUIManager()
+	: KeyboardIsOnScreen(false)
 {
 	
 }
@@ -366,6 +367,26 @@ void TGUIManager::OnMove(vec2 shift)
 				moveOutIsProcessed = true;
 			}
 		}
+	}
+}
+
+
+void TGUIManager::ShowKeyboard()
+{
+	if (!KeyboardIsOnScreen)
+	{
+		MoveWidget("Keyboard", vec2(0, 216));
+		KeyboardIsOnScreen = true;
+	}
+}
+
+
+void TGUIManager::HideKeyboard()
+{
+	if (KeyboardIsOnScreen)
+	{
+		MoveWidget("Keyboard", vec2(0, -216));
+		KeyboardIsOnScreen = false;
 	}
 }
 

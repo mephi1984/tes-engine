@@ -138,6 +138,7 @@ protected:
 
 	boost::mutex WidgetListMutex;
 
+	bool KeyboardIsOnScreen;
 public:
 
 	boost::signal<void(int)> KeyPressedSignal;
@@ -168,6 +169,10 @@ public:
 	void OnMouseUp(vec2 pos);
 
 	void OnMove(vec2 shift);
+
+	void ShowKeyboard();
+	void HideKeyboard();
+
 
 	void PrintWidgetList();
 
