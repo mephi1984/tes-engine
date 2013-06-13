@@ -11,6 +11,7 @@ Use global variable Console like that:
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #ifdef TARGET_WIN32
 #include <fstream>

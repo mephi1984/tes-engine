@@ -131,6 +131,8 @@ namespace SE
 
 	bool TKeyboardWidget::CheckClick(vec2 mousePos)
 	{
+		mousePos -= LeftBottomPos;
+
 		return (mousePos.v[0] >= 0.f && mousePos.v[1] >= 0.f && mousePos.v[0] <= 320.f && mousePos.v[1] <= 216.f);
 	}
 
@@ -140,6 +142,8 @@ namespace SE
 
 	void TKeyboardWidget::OnTapUp(vec2 pos)
 	{
+		pos -= LeftBottomPos;
+
 		BOOST_FOREACH(auto& visualKeyElement, VisualKeyArr)
 		{
 			if (std::get<0>(visualKeyElement).CheckClicked(ivec2(pos.v[0], pos.v[1])))
