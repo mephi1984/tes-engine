@@ -8,10 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
+#import <UIKit/UIKit.h>
 #include "include/Utils/Utils.h"
 
 
 GLKView* defaultView = 0; //Need to be set up by App!
+
+UITextField* extKeyboardTextView = 0;
+
 
 namespace SE
 {
@@ -57,6 +61,25 @@ std::string IosGetFilePathUserData(const std::string& filename)
 void IosSwitchToScreen()
 {
     [defaultView bindDrawable];
+}
+    
+void ShowKeyboard(std::string text)
+{
+    extKeyboardTextView.text = [NSString stringWithCString:text.c_str() encoding:NSUTF8StringEncoding];
+    [extKeyboardTextView becomeFirstResponder];
+}
+    
+void HideKeyboard()
+{
+    [extKeyboardTextView resignFirstResponder];
+}
+    
+void GuiManagerSetKeyboardText(std::string newText); //Find it in GUIManager.cpp
+    
+void SetKeyboardText(const char* newText)
+{
+    GuiManagerSetKeyboardText(newText);
+    NSLog(@"text: %s", newText);
 }
 
 } //namespace SE

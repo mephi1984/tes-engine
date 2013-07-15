@@ -9,6 +9,13 @@
 #import "include/Utils/IosApi/ObjC/GLKViewTemplate.h"
 #include "include/Utils/IosApi/IosWrapper.h"
 
+
+#include <string>
+namespace SE
+{
+void ShowKeyboard(std::string text);
+}
+
 @implementation GLKViewTemplate
 
 - (id)initWithFrame:(CGRect)frame
@@ -16,7 +23,6 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        
         touchMoved = false;
         
     }
@@ -64,8 +70,6 @@
         SE::AppOnTapUp(location.x, self.bounds.size.height - location.y);
     }
 }
-
-
 
 
 @end

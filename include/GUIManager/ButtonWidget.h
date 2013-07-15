@@ -208,6 +208,8 @@ public:
 	virtual void OnTapDown(vec2 pos);
 
 	void SetText(const std::string& newText);
+    void OnSetAllText(std::string newText); //For iOS only
+    std::string GetText();
 
 	static TEdit* CreateEdit(vec2 posFrom, vec2 posTo);
 	static TEdit* CreateEditWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TEdit*)> fillerFunc);

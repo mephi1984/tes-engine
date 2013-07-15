@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
-@interface ViewControllerTemplate : GLKViewController
+@interface ViewControllerTemplate : GLKViewController<UITextFieldDelegate>
+{
+}
 
+@property (nonatomic, readonly) UITextField* hiddenTextField; //for keyboard
 
 - (void) appInitCaller;
 

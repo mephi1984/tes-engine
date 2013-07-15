@@ -142,6 +142,7 @@ protected:
 public:
 
 	boost::signal<void(int)> KeyPressedSignal;
+    boost::signal<void(std::string)> SetTextSignal;
 	//boost::signal<void()> PostUpdateSignal;
 
 	TGUIManager();
@@ -170,7 +171,7 @@ public:
 
 	void OnMove(vec2 shift);
 
-	void ShowKeyboard();
+	void ShowKeyboard(const std::string text = "");
 	void HideKeyboard();
 
 

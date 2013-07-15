@@ -7,6 +7,13 @@ namespace SE
 const std::string CONST_HOLD_SIGNAL_NAME = "OnHold";
 const std::string CONST_CLICK_SIGNAL_NAME = "OnClick";
 const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
+    
+    
+void GuiManagerSetKeyboardText(std::string newText)
+{
+    ResourceManager->GUIManager.SetTextSignal(newText);
+}
+    
 
 
 TGUIManager::TGUIManager()
@@ -371,23 +378,27 @@ void TGUIManager::OnMove(vec2 shift)
 }
 
 
-void TGUIManager::ShowKeyboard()
+void TGUIManager::ShowKeyboard(const std::string text)
 {
+    SE::ShowKeyboard(text);
+    /*
 	if (!KeyboardIsOnScreen)
 	{
 		MoveWidget("Keyboard", vec2(0, 216));
 		KeyboardIsOnScreen = true;
-	}
+	}*/
 }
 
 
 void TGUIManager::HideKeyboard()
 {
+    ResourceManager->GUIManager.SetTextSignal.disconnect_all_slots();
+    /*
 	if (KeyboardIsOnScreen)
 	{
 		MoveWidget("Keyboard", vec2(0, -216));
 		KeyboardIsOnScreen = false;
-	}
+	}*/
 }
 
 void TGUIManager::PrintWidgetList()

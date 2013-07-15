@@ -83,6 +83,8 @@
 		4CD41A2A16C2D23C0071E598 /* ViewControllerTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CD41A2716C2D23C0071E598 /* ViewControllerTemplate.h */; };
 		4CD41A3116C2D2490071E598 /* GLKViewTemplate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CD41A2E16C2D2490071E598 /* GLKViewTemplate.mm */; };
 		4CD41A3216C2D2490071E598 /* ViewControllerTemplate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CD41A2F16C2D2490071E598 /* ViewControllerTemplate.mm */; };
+		4CDAB6F8176A60620075FC65 /* KeyboardWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CDAB6F7176A60620075FC65 /* KeyboardWidget.cpp */; };
+		4CDAB6FA176A60750075FC65 /* KeyboardWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDAB6F9176A60750075FC65 /* KeyboardWidget.h */; };
 		4CEE2DD215CDC55B00C4D5F5 /* SalmonRenderGLES20.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */; };
 		4CEE2DD515CDC57200C4D5F5 /* SalmonRenderGLES20.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */; };
 		4CF8747916B65210009B1214 /* ButtonWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747616B65210009B1214 /* ButtonWidget.cpp */; };
@@ -178,6 +180,8 @@
 		4CD41A2716C2D23C0071E598 /* ViewControllerTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewControllerTemplate.h; sourceTree = "<group>"; };
 		4CD41A2E16C2D2490071E598 /* GLKViewTemplate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLKViewTemplate.mm; sourceTree = "<group>"; };
 		4CD41A2F16C2D2490071E598 /* ViewControllerTemplate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewControllerTemplate.mm; sourceTree = "<group>"; };
+		4CDAB6F7176A60620075FC65 /* KeyboardWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KeyboardWidget.cpp; path = ../../../src/GUIManager/KeyboardWidget.cpp; sourceTree = "<group>"; };
+		4CDAB6F9176A60750075FC65 /* KeyboardWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeyboardWidget.h; path = ../../../include/GUIManager/KeyboardWidget.h; sourceTree = "<group>"; };
 		4CEE2DD115CDC55B00C4D5F5 /* SalmonRenderGLES20.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SalmonRenderGLES20.h; path = ../../../include/Render/SalmonRender/SalmonRenderGLES20.h; sourceTree = "<group>"; };
 		4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SalmonRenderGLES20.cpp; path = ../../../src/Render/SalmonRender/SalmonRenderGLES20.cpp; sourceTree = "<group>"; };
 		4CF8747616B65210009B1214 /* ButtonWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ButtonWidget.cpp; path = ../../../src/GUIManager/ButtonWidget.cpp; sourceTree = "<group>"; };
@@ -744,6 +748,7 @@
 		4CF8747416B65183009B1214 /* GUIManager */ = {
 			isa = PBXGroup;
 			children = (
+				4CDAB6F7176A60620075FC65 /* KeyboardWidget.cpp */,
 				4CF8747616B65210009B1214 /* ButtonWidget.cpp */,
 				4CF8747716B65210009B1214 /* GUIManager.cpp */,
 				4CF8747816B65210009B1214 /* WidgetXmlParsers.cpp */,
@@ -770,6 +775,7 @@
 		4CF8748216B65249009B1214 /* GUIManager */ = {
 			isa = PBXGroup;
 			children = (
+				4CDAB6F9176A60750075FC65 /* KeyboardWidget.h */,
 				4CF8748716B652A4009B1214 /* ButtonWidget.h */,
 				4CF8748816B652A4009B1214 /* GUIManager.h */,
 				4CF8748916B652A4009B1214 /* WidgetTemplatesImpl.h */,
@@ -834,6 +840,7 @@
 				4CD41A2A16C2D23C0071E598 /* ViewControllerTemplate.h in Headers */,
 				4C8024B516D4BD9F001A4521 /* Network.h in Headers */,
 				4C8024B616D4BD9F001A4521 /* SignalSender.h in Headers */,
+				4CDAB6FA176A60750075FC65 /* KeyboardWidget.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -928,6 +935,7 @@
 				4C8024BA16D4BDBC001A4521 /* Network.cpp in Sources */,
 				4C470853175405220069C707 /* JpegHelper.cpp in Sources */,
 				4C470854175405220069C707 /* TgaLoader.cpp in Sources */,
+				4CDAB6F8176A60620075FC65 /* KeyboardWidget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

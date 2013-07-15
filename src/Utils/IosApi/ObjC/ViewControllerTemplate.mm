@@ -12,6 +12,15 @@
 
 extern GLKView* defaultView; //Find this in IosApi.mm
 
+extern UITextField* extKeyboardTextView; //Find this in IosApi.mm
+
+namespace SE
+{
+
+void SetKeyboardText(const char* newText);
+    
+
+}
 
 @interface ViewControllerTemplate () {
 }
@@ -28,6 +37,8 @@ extern GLKView* defaultView; //Find this in IosApi.mm
 
 @synthesize context = _context;
 @synthesize effect = _effect;
+@synthesize hiddenTextField = _hiddenTextField;
+
 
 - (void)viewDidLoad
 {
@@ -55,6 +66,19 @@ extern GLKView* defaultView; //Find this in IosApi.mm
                                             initWithTarget:self action:@selector(respondToPinch:)];
     
     [self.view addGestureRecognizer:recognizer];
+    
+    //Keyboard
+    
+    _hiddenTextField = [[UITextField alloc] initWithFrame:CGRectMake(-200,-200,0,0)];
+    
+    [self.view addSubview:_hiddenTextField];
+    
+    extKeyboardTextView = _hiddenTextField;
+    
+    _hiddenTextField.delegate = self;
+    
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onReceiveKeyboardNotification:) name:UITextFieldTextDidChangeNotification object:nil];
+    
 }
 
 - (void)viewDidUnload
@@ -67,6 +91,8 @@ extern GLKView* defaultView; //Find this in IosApi.mm
         [EAGLContext setCurrentContext:nil];
     }
 	self.context = nil;
+    
+    _hiddenTextField = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -99,6 +125,26 @@ extern GLKView* defaultView; //Find this in IosApi.mm
     SE::AppOnScale(gestureRecognizer.scale);
 }
 
+- (void) onReceiveKeyboardNotification:(NSNotification*) notification
+{
+    if (notification.name == UITextFieldTextDidChangeNotification)
+    {
+        UITextField* textField = notification.object;
+        const char* text = [[textField text] UTF8String];
+        SE::SetKeyboardText(text);
+    }
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"Begin");
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"End");
+}
+
 
 #pragma mark - GLKView and GLKViewController delegate methods
 
@@ -115,5 +161,5 @@ extern GLKView* defaultView; //Find this in IosApi.mm
     
 }
 
-
 @end
+

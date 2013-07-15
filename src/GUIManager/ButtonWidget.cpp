@@ -643,7 +643,8 @@ void TEdit::OnTapDown(vec2 pos)
 
 	}
 
-	ResourceManager->GUIManager.ShowKeyboard();
+	ResourceManager->GUIManager.ShowKeyboard(GetText());
+    ResourceManager->GUIManager.SetTextSignal.connect(boost::bind(&TEdit::OnSetAllText, this, _1));
 }
 
 void TEdit::OnKeyPress(int key)
@@ -675,6 +676,22 @@ void TEdit::SetText(const std::string& newText)
 
 		RefreshTextTriangleList();
 	}
+}
+    
+void TEdit::OnSetAllText(std::string newText)
+{
+    if (newText != TextParams.Text)
+    {
+        TextParams.Text = newText;
+            
+        RefreshTextTriangleList();
+    }
+}
+    
+    
+std::string TEdit::GetText()
+{
+    return TextParams.Text;
 }
 
 

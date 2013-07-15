@@ -21,6 +21,9 @@ std::string IosGetFileReadPath(const std::string& filename);
 std::string IosGetFilePathUserData(const std::string& filename);
 
 void IosSwitchToScreen();
+    
+void ShowKeyboard(std::string text);
 
+void HideKeyboard();
 
 } //namespace SE
