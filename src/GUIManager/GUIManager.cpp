@@ -9,9 +9,12 @@ const std::string CONST_CLICK_SIGNAL_NAME = "OnClick";
 const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
     
     
+    boost::mutex KeyMutex;
 void GuiManagerSetKeyboardText(std::string newText)
 {
+    KeyMutex.lock();
     ResourceManager->GUIManager.SetTextSignal(newText);
+    KeyMutex.unlock();
 }
     
 

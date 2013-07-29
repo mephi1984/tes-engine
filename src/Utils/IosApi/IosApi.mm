@@ -78,8 +78,9 @@ void GuiManagerSetKeyboardText(std::string newText); //Find it in GUIManager.cpp
     
 void SetKeyboardText(const char* newText)
 {
-    GuiManagerSetKeyboardText(newText);
-    NSLog(@"text: %s", newText);
+    SE::PerformInMainThreadAsync(boost::bind(&GuiManagerSetKeyboardText, newText));
+    //GuiManagerSetKeyboardText(newText);
+    //NSLog(@"text: %s", newText);
 }
 
 } //namespace SE

@@ -71,6 +71,10 @@ void SetKeyboardText(const char* newText);
     
     _hiddenTextField = [[UITextField alloc] initWithFrame:CGRectMake(-200,-200,0,0)];
     
+    //[_hiddenTextField setReturnKeyType: UIReturnKeyDone];
+    
+    _hiddenTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    
     [self.view addSubview:_hiddenTextField];
     
     extKeyboardTextView = _hiddenTextField;
@@ -145,6 +149,12 @@ void SetKeyboardText(const char* newText);
     NSLog(@"End");
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if([string isEqualToString:@"\n"])
+        [textField resignFirstResponder];
+    return YES;
+}
 
 #pragma mark - GLKView and GLKViewController delegate methods
 
