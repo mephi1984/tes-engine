@@ -383,7 +383,9 @@ void TGUIManager::OnMove(vec2 shift)
 
 void TGUIManager::ShowKeyboard(const std::string text)
 {
+#ifdef TARGET_IOS
     SE::ShowKeyboard(text);
+#endif
     /*
 	if (!KeyboardIsOnScreen)
 	{
@@ -396,6 +398,9 @@ void TGUIManager::ShowKeyboard(const std::string text)
 void TGUIManager::HideKeyboard()
 {
     ResourceManager->GUIManager.SetTextSignal.disconnect_all_slots();
+#ifdef TARGET_IOS
+    SE::HideKeyboard();
+#endif
     /*
 	if (KeyboardIsOnScreen)
 	{
