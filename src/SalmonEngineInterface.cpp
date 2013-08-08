@@ -133,6 +133,7 @@ void TApplicationAncestor::OuterOnTapUp(vec2 p)
 
 void TApplicationAncestor::OuterOnTapUpAfterMove(vec2 p)
 {
+    ResourceManager->GUIManager.OnMouseUpAfterMove(p);
 	InnerOnTapUpAfterMove(p);
 }
 

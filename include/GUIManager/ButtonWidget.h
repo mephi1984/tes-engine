@@ -24,6 +24,7 @@ public:
 
 	virtual void OnTapDown(vec2 pos) { }
 	virtual void OnTapUp(vec2 pos) { }
+    virtual void OnTapUpAfterMove(vec2 pos) { }
 	virtual void OnMove(vec2 shift) { }
 	virtual void OnMoveOut() { }
 	virtual void OnKeyPress(int key) { }
@@ -164,6 +165,7 @@ public:
 
 	virtual void OnTapDown(vec2 pos);
 	virtual void OnTapUp(vec2 pos);
+    virtual void OnTapUpAfterMove(vec2 pos);
 	virtual void OnMoveOut();
 
 	static TUniversalButton* CreateButton(vec2 posFrom, vec2 posTo);

@@ -330,6 +330,11 @@ void TUniversalButton::OnTapUp(vec2 pos)
 	}
 
 }
+    
+void TUniversalButton::OnTapUpAfterMove(vec2 pos)
+{
+    OnTapUp(pos);
+}
 
 void TUniversalButton::OnMoveOut()
 {

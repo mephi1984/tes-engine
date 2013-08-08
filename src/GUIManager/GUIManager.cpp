@@ -325,6 +325,44 @@ void TGUIManager::OnMouseUp(vec2 pos)
 	}
 
 }
+    
+    void TGUIManager::OnMouseUpAfterMove(vec2 pos)
+    {
+        //Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
+        
+        boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+        
+        TWidgetArr::reverse_iterator i;
+        
+        std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap;
+        
+        for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
+        {
+            if (i->Widget->CheckClick(pos))
+            {
+                bool isTransparentForInput = i->Widget->IsTransparentForInput();
+                i->Widget->OnTapUpAfterMove(pos);
+                i->IsMouseDown = false;
+                
+                //signalMap.push_back((i->SignalMap[CONST_CLICK_SIGNAL_NAME]));
+                //Do not call signals here
+                
+                if (! isTransparentForInput)
+                {
+                    break;
+                }
+            }
+        }
+        
+        
+        //Keep this outside since signal may affect WidgetArr
+        BOOST_FOREACH(auto signalPtr, signalMap)
+        {
+            (*signalPtr)(TSignalParam(pos));
+        }
+        
+    }
+
 
 void TGUIManager::OnMove(vec2 shift)
 {

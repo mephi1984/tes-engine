@@ -168,6 +168,8 @@ public:
 	void OnMouseDown(vec2 pos);
 
 	void OnMouseUp(vec2 pos);
+    
+    void OnMouseUpAfterMove(vec2 pos);
 
 	void OnMove(vec2 shift);
 
