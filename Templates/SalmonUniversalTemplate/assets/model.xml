@@ -1,6 +1,6 @@
 <Model>
 <SamplerMap>
-<Sampler name="Texture" value="bt_box_yellow_.bmp"/>
+<Sampler name="Texture" value="bt_box_yellow.jpg"/>
 </SamplerMap>
 <Vec3ArrMap>
 <Vec3Arr name="vPosition">

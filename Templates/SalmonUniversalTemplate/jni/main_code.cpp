@@ -54,7 +54,7 @@ void TMyApplication::InnerInit()
 	ResourceManager->LightManager.SetLightDirection(vec3(-1,0,-1));
 	ResourceManager->LightManager.SetLightColor(vec4(1,0,0,1));
 
-	ResourceManager->TexList.AddTexture("bt_box_yellow.bmp");
+	ResourceManager->TexList.AddTexture("bt_box_yellow.jpg");
 	ResourceManager->FlexModelManager.LoadModelFromXml("model.xml");
 
 	FlexModel = ResourceManager->FlexModelManager.InstanciateModel("model.xml");
