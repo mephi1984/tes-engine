@@ -352,6 +352,21 @@ void TGUIManager::OnMouseUp(vec2 pos)
                     break;
                 }
             }
+
+			if (i->Widget->CheckClick(LastTapPos) && !i->Widget->CheckClick(pos))
+            {
+                bool isTransparentForInput = i->Widget->IsTransparentForInput();
+                i->Widget->OnTapUpAfterMoveOut(pos);
+                i->IsMouseDown = false;
+                
+                //signalMap.push_back((i->SignalMap[CONST_CLICK_SIGNAL_NAME]));
+                //Do not call signals here
+                
+                if (! isTransparentForInput)
+                {
+                    break;
+                }
+            }
         }
         
         
@@ -375,6 +390,8 @@ void TGUIManager::OnMove(vec2 shift)
 	bool moveOutIsProcessed = false;
 
 	TotalShift += shift;
+
+	//LastTapPos += shift;
 
 	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
 

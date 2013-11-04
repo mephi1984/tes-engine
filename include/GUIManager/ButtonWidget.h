@@ -25,6 +25,7 @@ public:
 	virtual void OnTapDown(vec2 pos) { }
 	virtual void OnTapUp(vec2 pos) { }
     virtual void OnTapUpAfterMove(vec2 pos) { }
+	virtual void OnTapUpAfterMoveOut(vec2 pos) { }
 	virtual void OnMove(vec2 shift) { }
 	virtual void OnMoveOut() { }
 	virtual void OnKeyPress(int key) { }
