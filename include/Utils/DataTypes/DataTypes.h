@@ -82,6 +82,7 @@ int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr, vec3
 
 int PointInTriangle(const vec3& q, const TSmpTriangle& tr);
 
+int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& b2, vec2& r);
 
 template<typename T>
 inline std::string tostr(T i)

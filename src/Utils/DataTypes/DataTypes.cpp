@@ -307,6 +307,56 @@ int PointInTriangle(const vec3& q, const TSmpTriangle& tr)
 }
 
 
+int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& b2, vec2& r)
+{
+	vec2 v = (a2 - a1);
+
+	mat2 m;
+
+	m.m[0] = v.v[0];
+	m.m[1] = b1.v[0] - b2.v[0];
+	m.m[2] = v.v[1];
+	m.m[3] = b1.v[1] - b2.v[1];
+
+	float detm = m.m[0] * m.m[3] - m.m[1] * m.m[2];
+
+	if (fabs(detm) <= 0.00005f)
+	{
+		return -1;
+	}
+
+	mat2 ad_m;
+	ad_m.m[0] = m.m[3];
+	ad_m.m[1] = -m.m[2];
+
+	ad_m.m[2] = -m.m[1];
+	ad_m.m[3] = m.m[0];
+
+	mat2 rev_m;
+
+	rev_m.m[0] = ad_m.m[0]/detm;
+	rev_m.m[1] = ad_m.m[2]/detm;
+
+	rev_m.m[2] = ad_m.m[1]/detm;
+	rev_m.m[3] = ad_m.m[3]/detm;
+
+	vec2 t;
+	vec2 vx = (b1 - a1);
+	t.v[0] =  vx.v[0] * rev_m.m[0] + vx.v[1] * rev_m.m[1];
+	t.v[1] =  vx.v[0] * rev_m.m[2] + vx.v[1] * rev_m.m[3]; 
+
+	if (t.v[0] < 0 || t.v[0] > 1 || t.v[1] < 0 || t.v[1] > 1)
+	{
+		return 0;
+	}
+
+	r = a1 + v * t.v[0];
+
+	return 1;
+
+}
+
+
 float roundf(float r)
 {
 	return (r > 0.0f) ? floorf(r + 0.5f) : ceilf(r - 0.5f); 
