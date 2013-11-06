@@ -1204,4 +1204,262 @@ TMover* TMover::CreateMover(vec2 posFrom, vec2 posTo, std::string groupName, std
 	return mover;
 }
 
+
+THorizontalJoystick::THorizontalJoystick()
+	: ButtonState(BS_NORMAL)
+	, ButtonStateTimer(0.f)
+	, SelectorWidth(0)
+	, SelectorPos(0)
+	, SelectorTouched(false)
+{
+}
+
+
+void THorizontalJoystick::ReturnSelectorBack()
+{
+	SelectorPos = 0;
+
+	float selectorCenterPos = LeftBottomPos.v[0] + 0.5f * Width;
+
+	vec2 selectorPosFrom = vec2(selectorCenterPos - SelectorWidth * 0.5f, LeftBottomPos.v[1]);
+	vec2 selectorPosTo = vec2(selectorCenterPos + SelectorWidth * 0.5f, LeftBottomPos.v[1] + Height);
+
+
+	for (std::vector<TRenderPairList::iterator>::iterator i = PressedTextureIteratorArr.begin(); i != PressedTextureIteratorArr.end(); ++i)
+	{
+		Replace6PointsInTriangleList((*i)->second.Data, 0, selectorPosFrom, selectorPosTo);
+		(*i)->second.RefreshBuffer();
+	}
+
+	for (std::vector<TRenderPairList::iterator>::iterator i = NormalTextureIteratorArr.begin(); i != NormalTextureIteratorArr.end(); ++i)
+	{
+		Replace6PointsInTriangleList((*i)->second.Data, 0, selectorPosFrom, selectorPosTo);
+		(*i)->second.RefreshBuffer();
+	}
+}
+
+void THorizontalJoystick::Update(cardinal dt)
+{
+	if (ButtonState == BS_GO_PRESSED)
+	{
+		ButtonStateTimer += dt;
+		if (ButtonStateTimer >= CONST_BUTTON_HIGHLIGHT_TIME)
+		{
+			ButtonStateTimer = CONST_BUTTON_HIGHLIGHT_TIME;
+			ButtonState = BS_PRESSED;
+		}
+	}
+	else if (ButtonState == BS_GO_NORMAL)
+	{
+		ButtonStateTimer -= dt;
+		if (ButtonStateTimer <= 0)
+		{
+			ButtonStateTimer = 0;
+			ButtonState = BS_NORMAL;
+		}
+	}
+
+	for (std::vector<TRenderPairList::iterator>::iterator i = PressedTextureIteratorArr.begin(); i != PressedTextureIteratorArr.end(); ++i)
+	{
+		(*i)->first.FloatMap[CONST_STRING_TRANSPARENCY_UNIFORM] = (ButtonStateTimer+0.f) / CONST_BUTTON_HIGHLIGHT_TIME;
+	}
+
+
+}
+
+
+bool THorizontalJoystick::CheckClick(vec2 mousePos)
+{
+	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
+		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
+		mousePos.v[1] >= LeftBottomPos.v[1] &&
+		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool THorizontalJoystick::CheckSelectorClicked(vec2 mousePos)
+{
+	float selectorCenterPos = LeftBottomPos.v[0] + (SelectorPos + 1) * 0.5f * Width;
+	float selectorLeftPos = selectorCenterPos - SelectorWidth * 0.5f;
+	float selectorRightPos = selectorCenterPos + SelectorWidth * 0.5f;
+
+	if (mousePos.v[0] >= selectorLeftPos &&
+		mousePos.v[0] <= selectorRightPos &&
+		mousePos.v[1] >= LeftBottomPos.v[1] &&
+		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+void THorizontalJoystick::OnTapDown(vec2 pos)
+{
+	if (ButtonState == BS_NORMAL || ButtonState == BS_GO_NORMAL)
+	{
+		ButtonState = BS_GO_PRESSED;
+	}
+
+	if (CheckSelectorClicked(pos))
+	{
+		SelectorTouched = true;
+	}
+}
+
+void THorizontalJoystick::OnTapUp(vec2 pos)
+{
+	if (ButtonState == BS_PRESSED || ButtonState == BS_GO_PRESSED)
+	{
+		ButtonState = BS_GO_NORMAL;
+	}
+
+	SelectorTouched = false;
+	ReturnSelectorBack();
+}
+    
+void THorizontalJoystick::OnTapUpAfterMove(vec2 pos)
+{
+    OnTapUp(pos);
+	SelectorPos = 0.f;
+}
+
+void THorizontalJoystick::OnTapUpAfterMoveOut(vec2 pos)
+{
+    OnTapUp(pos);
+	SelectorPos = 0.f;
+}
+
+void THorizontalJoystick::OnMove(vec2 shift)
+{
+	if (SelectorTouched)
+	{
+		SelectorPos = SE::clamp(SelectorPos - 2.f * shift.v[0] / (Width - SelectorWidth), -1.f, 1.f);
+		
+		float selectorCenterPos = LeftBottomPos.v[0] + SelectorWidth * 0.5f + (SelectorPos + 1) * 0.5f * (Width - SelectorWidth);
+
+		vec2 selectorPosFrom = vec2(selectorCenterPos - SelectorWidth * 0.5f, LeftBottomPos.v[1]);
+		vec2 selectorPosTo = vec2(selectorCenterPos + SelectorWidth * 0.5f, LeftBottomPos.v[1] + Height);
+
+
+		for (std::vector<TRenderPairList::iterator>::iterator i = PressedTextureIteratorArr.begin(); i != PressedTextureIteratorArr.end(); ++i)
+		{
+			Replace6PointsInTriangleList((*i)->second.Data, 0, selectorPosFrom, selectorPosTo);
+			(*i)->second.RefreshBuffer();
+		}
+
+		for (std::vector<TRenderPairList::iterator>::iterator i = NormalTextureIteratorArr.begin(); i != NormalTextureIteratorArr.end(); ++i)
+		{
+			Replace6PointsInTriangleList((*i)->second.Data, 0, selectorPosFrom, selectorPosTo);
+			(*i)->second.RefreshBuffer();
+		}
+	}
+}
+
+void THorizontalJoystick::OnMoveOut()
+{
+	if (ButtonState == BS_PRESSED || ButtonState == BS_GO_PRESSED)
+	{
+		
+		ButtonState = BS_GO_NORMAL;
+	}
+}
+
+float THorizontalJoystick::GetSelectorPos()
+{
+	return SelectorPos;
+}
+
+THorizontalJoystick* THorizontalJoystick::CreateJoystick(vec2 posFrom, vec2 posTo, float selectorWidth)
+{
+	
+	THorizontalJoystick* widget = new THorizontalJoystick();
+
+	widget->LeftBottomPos = posFrom;
+
+	widget->Width = posTo.v[0] - posFrom.v[0];
+
+	widget->Height = posTo.v[1] - posFrom.v[1];
+
+	widget->SelectorWidth = selectorWidth;
+
+	return widget;
+}
+
+THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFiller(vec2 posFrom, vec2 posTo, float selectorWidth, boost::function<void(THorizontalJoystick*)> fillerFunc)
+{
+	
+	THorizontalJoystick* joystick = THorizontalJoystick::CreateJoystick(posFrom, posTo, selectorWidth);
+
+	fillerFunc(joystick);
+
+	return joystick;
+}
+
+THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFillers(vec2 posFrom, vec2 posTo, float selectorWidth, std::vector<boost::function<void(THorizontalJoystick*)> > fillerFuncArr)
+{
+	THorizontalJoystick* joystick = THorizontalJoystick::CreateJoystick(posFrom, posTo, selectorWidth);
+
+	for (std::vector<boost::function<void(THorizontalJoystick*)> >::iterator funcItr = fillerFuncArr.begin(); funcItr != fillerFuncArr.end(); ++funcItr)
+	{
+		(*funcItr)(joystick);
+	}
+
+	return joystick;
+}
+
+
+void THorizontalJoystick::SquareJoystickFiller(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed, THorizontalJoystick* joystickToFill)
+{
+	
+	float selectorCenterPos = 0.5f * (posFrom.v[0] + posTo.v[0]);
+
+	vec2 selectorPosFrom = vec2(selectorCenterPos - selectorWidth * 0.5f, posFrom.v[1]);
+	vec2 selectorPosTo = vec2(selectorCenterPos + selectorWidth * 0.5f, posTo.v[1]);
+
+	TRenderParams renderParams;
+
+	renderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = texName;
+	renderParams.FloatMap[CONST_STRING_TRANSPARENCY_UNIFORM] = 1.f;
+
+	TTriangleList triangleList = MakeTriangleList(selectorPosFrom, selectorPosTo);
+		
+	triangleList.RefreshBuffer();
+
+	joystickToFill->NormalTextureIteratorArr.push_back(joystickToFill->TriangleListVector.insert(joystickToFill->TriangleListVector.end(), TRenderPair(renderParams, triangleList)));
+
+	TTriangleList triangleList2 = MakeTriangleList(selectorPosFrom, selectorPosTo);
+	triangleList2.RefreshBuffer();
+
+	renderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = texNamePressed;
+	renderParams.FloatMap[CONST_STRING_TRANSPARENCY_UNIFORM] = 0.f;
+
+	joystickToFill->PressedTextureIteratorArr.push_back(joystickToFill->TriangleListVector.insert(joystickToFill->TriangleListVector.end(),TRenderPair(renderParams, triangleList2)));
+	
+
+	renderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = texNameField;
+	renderParams.FloatMap[CONST_STRING_TRANSPARENCY_UNIFORM] = 1.f;
+
+	TTriangleList fieldTriangleList = MakeTriangleList(posFrom, posTo);
+		
+	fieldTriangleList.RefreshBuffer();
+
+	joystickToFill->FieldTextureIteratorArr.push_back(joystickToFill->TriangleListVector.insert(joystickToFill->TriangleListVector.end(), TRenderPair(renderParams, fieldTriangleList)));
+
+}
+
+THorizontalJoystick* THorizontalJoystick::CreateSquareJoystick(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed)
+{
+	return CreateJoystickWithFiller(posFrom, posTo, selectorWidth, boost::bind(THorizontalJoystick::SquareJoystickFiller, posFrom, posTo, selectorWidth, texNameField, texName, texNamePressed, _1));
+}
+
 } //namespace SE

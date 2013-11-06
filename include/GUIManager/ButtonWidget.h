@@ -344,6 +344,62 @@ public:
 	static TMover* CreateMover(vec2 posFrom, vec2 posTo, std::string groupName, std::string selfName, float maxHeight);
 };
 
+
+class THorizontalJoystick : public TInstancingWidgetAncestor
+{
+protected:
+	
+	enum 
+	{
+		BS_NORMAL,
+		BS_GO_PRESSED,
+		BS_PRESSED,
+		BS_GO_NORMAL
+	} ButtonState;
+
+	float ButtonStateTimer;
+
+	float SelectorWidth;
+	float SelectorPos; //from -1 to 1
+
+	bool SelectorTouched;
+
+	void ReturnSelectorBack();
+
+public:
+	std::vector<TRenderPairList::iterator> FieldTextureIteratorArr;
+	std::vector<TRenderPairList::iterator> NormalTextureIteratorArr;
+	std::vector<TRenderPairList::iterator> PressedTextureIteratorArr;
+
+	float Width;
+
+	float Height;
+
+	THorizontalJoystick();
+
+	virtual void Update(cardinal dt);
+
+	virtual bool CheckClick(vec2 mousePos);
+
+	virtual void OnTapDown(vec2 pos);
+	virtual void OnTapUp(vec2 pos);
+    virtual void OnTapUpAfterMove(vec2 pos);
+	virtual void OnTapUpAfterMoveOut(vec2 pos);
+	virtual void OnMoveOut();
+	virtual void OnMove(vec2 shift);
+
+	float GetSelectorPos();
+	bool CheckSelectorClicked(vec2 mousePos);
+
+	static THorizontalJoystick* CreateJoystick(vec2 posFrom, vec2 posTo, float selectorWidth);
+	static THorizontalJoystick* CreateJoystickWithFiller(vec2 posFrom, vec2 posTo, float selectorWidth, boost::function<void(THorizontalJoystick*)> fillerFunc);
+	static THorizontalJoystick* CreateJoystickWithFillers(vec2 posFrom, vec2 posTo, float selectorWidth, std::vector<boost::function<void(THorizontalJoystick*)> > fillerFuncArr);
+
+	static void SquareJoystickFiller(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed, THorizontalJoystick* joystickToFill);
+	
+	static THorizontalJoystick* CreateSquareJoystick(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed);
+};
+
 } //namespace SE
 
 #endif
