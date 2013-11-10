@@ -119,27 +119,27 @@ void TApplicationAncestor::OuterUpdate(cardinal timer)
 }
 
 
-void TApplicationAncestor::OuterOnTapDown(vec2 p)
+void TApplicationAncestor::OuterOnTapDown(vec2 p, int touchNumber)
 {
-	ResourceManager->GUIManager.OnMouseDown(p);
+	ResourceManager->GUIManager.OnMouseDown(p, touchNumber);
 	InnerOnTapDown(p);
 }
 
-void TApplicationAncestor::OuterOnTapUp(vec2 p)
+void TApplicationAncestor::OuterOnTapUp(vec2 p, int touchNumber)
 {
-	ResourceManager->GUIManager.OnMouseUp(p);
+	ResourceManager->GUIManager.OnMouseUp(p, touchNumber);
 	InnerOnTapUp(p);
 }
 
-void TApplicationAncestor::OuterOnTapUpAfterMove(vec2 p)
+void TApplicationAncestor::OuterOnTapUpAfterMove(vec2 p, int touchNumber)
 {
-    ResourceManager->GUIManager.OnMouseUpAfterMove(p);
+    ResourceManager->GUIManager.OnMouseUpAfterMove(p, touchNumber);
 	InnerOnTapUpAfterMove(p);
 }
 
-void TApplicationAncestor::OuterOnMove(vec2 shift)
+void TApplicationAncestor::OuterOnMove(vec2 shift, int touchNumber)
 {
-	ResourceManager->GUIManager.OnMove(shift);
+	ResourceManager->GUIManager.OnMove(shift, touchNumber);
 	InnerOnMove(shift);
 }
 

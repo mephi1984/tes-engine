@@ -15,11 +15,11 @@ namespace SE
 void AppDeinit();
 void AppUpdate(int dt);
 void AppDraw();
-void AppOnTapDown(int posx, int posy);
-void AppOnTapUp(int posx, int posy);
-void AppOnScroll(int shiftx, int shifty);
+void AppOnTapDown(int posx, int posy, int touchNumber);
+void AppOnTapUp(int posx, int posy, int touchNumber);
+void AppOnScroll(int shiftx, int shifty, int touchNumber);
 void AppOnScale(float scale);
-void AppOnTapUpAfterMove(int posx, int posy);
+void AppOnTapUpAfterMove(int posx, int posy, int touchNumber);
 
 
 }

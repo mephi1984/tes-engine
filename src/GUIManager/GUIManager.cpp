@@ -7,6 +7,7 @@ namespace SE
 const std::string CONST_HOLD_SIGNAL_NAME = "OnHold";
 const std::string CONST_CLICK_SIGNAL_NAME = "OnClick";
 const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
+const std::string CONST_TAPDOWN_SIGNAL_NAME = "OnTapDown";
     
     
     boost::mutex KeyMutex;
@@ -261,16 +262,20 @@ void TGUIManager::MoveWidgetGroup(const std::string& widgetGroupName, const std:
 	}
 }
 
-void TGUIManager::OnMouseDown(vec2 pos)
+void TGUIManager::OnMouseDown(vec2 pos, int touchNumber)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
+    
+    //*Console<<"OnMouseDown touchNumber == "+tostr(touchNumber)+"\n";
 
 	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
 	
 	TWidgetArr::reverse_iterator i;
 
-	LastTapPos = pos;
-	TotalShift = vec2(0,0);
+	LastTapPos[touchNumber] = pos;
+	TotalShift[touchNumber] = vec2(0,0);
+    
+    std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap;
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
@@ -280,19 +285,29 @@ void TGUIManager::OnMouseDown(vec2 pos)
 
 			i->Widget->OnTapDown(pos);
 			i->IsMouseDown = true;
+            
+            signalMap.push_back((i->SignalMap[CONST_TAPDOWN_SIGNAL_NAME]));
 			
 			if (! isTransparentForInput)
 			{
-				return;
+				break;
 			}
 		}
+	}
+    
+    //Keep this outside since signal may affect WidgetArr
+	BOOST_FOREACH(auto signalPtr, signalMap)
+	{
+		(*signalPtr)(TSignalParam(pos));
 	}
 
 }
 
-void TGUIManager::OnMouseUp(vec2 pos)
+void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
+    
+    //*Console<<"OnMouseUp touchNumber == "+tostr(touchNumber)+"\n";
 
 	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
 	
@@ -326,9 +341,11 @@ void TGUIManager::OnMouseUp(vec2 pos)
 
 }
     
-    void TGUIManager::OnMouseUpAfterMove(vec2 pos)
+    void TGUIManager::OnMouseUpAfterMove(vec2 pos, int touchNumber)
     {
         //Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
+        
+        //*Console<<"OnMouseUpAfterMove touchNumber == "+tostr(touchNumber)+"\n";
         
         boost::lock_guard<boost::mutex> guard(WidgetListMutex);
         
@@ -353,7 +370,7 @@ void TGUIManager::OnMouseUp(vec2 pos)
                 }
             }
 
-			if (i->Widget->CheckClick(LastTapPos) && !i->Widget->CheckClick(pos))
+			if (i->Widget->CheckClick(LastTapPos[touchNumber]) && !i->Widget->CheckClick(pos))
             {
                 bool isTransparentForInput = i->Widget->IsTransparentForInput();
                 i->Widget->OnTapUpAfterMoveOut(pos);
@@ -379,17 +396,18 @@ void TGUIManager::OnMouseUp(vec2 pos)
     }
 
 
-void TGUIManager::OnMove(vec2 shift)
+void TGUIManager::OnMove(vec2 shift, int touchNumber)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
 
+    
 
 	TWidgetArr::reverse_iterator i;
 
 	bool moveIsProcessed = false;
 	bool moveOutIsProcessed = false;
 
-	TotalShift += shift;
+	TotalShift[touchNumber] += shift;
 
 	//LastTapPos += shift;
 
@@ -397,7 +415,7 @@ void TGUIManager::OnMove(vec2 shift)
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
-		if (!moveIsProcessed && i->Widget->CheckClick(LastTapPos-TotalShift))
+		if (!moveIsProcessed && i->Widget->CheckClick(LastTapPos[touchNumber]-TotalShift[touchNumber]))
 		{
 			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 
@@ -421,7 +439,7 @@ void TGUIManager::OnMove(vec2 shift)
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
-		if (!moveOutIsProcessed && i->Widget->CheckClick(LastTapPos) && !i->Widget->CheckClick(LastTapPos-TotalShift))
+		if (!moveOutIsProcessed && i->Widget->CheckClick(LastTapPos[touchNumber]) && !i->Widget->CheckClick(LastTapPos[touchNumber]-TotalShift[touchNumber]))
 		{
 			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 
@@ -492,6 +510,15 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnHoldSignal
 	
 	return i->SignalMap[CONST_HOLD_SIGNAL_NAME];
 	
+}
+
+std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnTapDownSignal(const std::string& widgetName)
+{
+        
+    TWidgetArr::iterator i = FindWidgetInArr(widgetName);
+        
+    return i->SignalMap[CONST_TAPDOWN_SIGNAL_NAME];
+        
 }
 
 std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetSignal(const std::string& signalName, const std::string& widgetName)

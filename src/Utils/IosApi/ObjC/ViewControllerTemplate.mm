@@ -65,7 +65,12 @@ void SetKeyboardText(const char* newText);
     UIPinchGestureRecognizer *recognizer = [[UIPinchGestureRecognizer alloc]
                                             initWithTarget:self action:@selector(respondToPinch:)];
     
+    
+    recognizer.delaysTouchesEnded = NO;
+    
     [self.view addGestureRecognizer:recognizer];
+    
+    self.view.multipleTouchEnabled = YES;
     
     //Keyboard
     

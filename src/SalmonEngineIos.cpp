@@ -73,27 +73,27 @@ void DestroyEngine()
     }
     
     
-    void AppOnTapDown(int posx, int posy)
+    void AppOnTapDown(int posx, int posy, int touchNumber)
     {
-        App->OuterOnTapDown(vec2(posx, posy));
+        App->OuterOnTapDown(vec2(posx, posy), touchNumber);
     }
     
     
-    void AppOnTapUp(int posx, int posy)
+    void AppOnTapUp(int posx, int posy, int touchNumber)
     {
-        App->OuterOnTapUp(vec2(posx, posy));
+        App->OuterOnTapUp(vec2(posx, posy), touchNumber);
     }
     
     
-    void AppOnTapUpAfterMove(int posx, int posy)
+    void AppOnTapUpAfterMove(int posx, int posy, int touchNumber)
     {
-        App->OuterOnTapUpAfterMove(vec2(posx, posy));
+        App->OuterOnTapUpAfterMove(vec2(posx, posy), touchNumber);
     }
     
     
-    void AppOnScroll(int shiftx, int shifty)
+    void AppOnScroll(int shiftx, int shifty, int touchNumber)
     {
-        App->OuterOnMove(vec2(shiftx, shifty));
+        App->OuterOnMove(vec2(shiftx, shifty), touchNumber);
     }
     
     

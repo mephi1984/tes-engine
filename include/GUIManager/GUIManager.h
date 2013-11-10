@@ -17,6 +17,7 @@ namespace SE
 extern const std::string CONST_HOLD_SIGNAL_NAME;
 extern const std::string CONST_CLICK_SIGNAL_NAME;
 extern const std::string CONST_DRAG_SIGNAL_NAME;
+extern const std::string CONST_TAPDOWN_SIGNAL_NAME;
 
 
 typedef boost::variant<cardinal, vec2> TSignalParam;
@@ -42,6 +43,7 @@ struct TWidgetStruct
 	{
 		SignalMap[CONST_HOLD_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
 		SignalMap[CONST_CLICK_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
+        SignalMap[CONST_TAPDOWN_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
 		SignalMap[CONST_DRAG_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
 	}
 
@@ -133,8 +135,8 @@ protected:
 
 	TWidgetArr::iterator FindWidgetInArr(const std::string& widgetName);
 
-	vec2 LastTapPos;
-	vec2 TotalShift;
+    std::map<int, vec2> LastTapPos;
+	std::map<int, vec2> TotalShift;
 
 	boost::mutex WidgetListMutex;
 
@@ -165,13 +167,13 @@ public:
 
 	void AddWidgetTransformTask(TWidgetTransformTask widgetTransformTask);
 
-	void OnMouseDown(vec2 pos);
+	void OnMouseDown(vec2 pos, int touchNumber);
 
-	void OnMouseUp(vec2 pos);
+	void OnMouseUp(vec2 pos, int touchNumber);
     
-    void OnMouseUpAfterMove(vec2 pos);
+    void OnMouseUpAfterMove(vec2 pos, int touchNumber);
 
-	void OnMove(vec2 shift);
+	void OnMove(vec2 shift, int touchNumber);
 
 	void ShowKeyboard(const std::string text = "");
 	void HideKeyboard();
@@ -182,6 +184,7 @@ public:
 	std::shared_ptr<boost::signal<void (TSignalParam)>> GetOnClickSignal(const std::string& widgetName);
 	std::shared_ptr<boost::signal<void (TSignalParam)>> GetOnHoldSignal(const std::string& widgetName);
 	std::shared_ptr<boost::signal<void (TSignalParam)>> GetSignal(const std::string& signalName, const std::string& widgetName);
+    std::shared_ptr<boost::signal<void (TSignalParam)>> GetOnTapDownSignal(const std::string& widgetName);
 
 	//TFunctionBinderInterface implementation:
 	void SQ_MoveWidget(const SQChar *widgetName, float x, float y);

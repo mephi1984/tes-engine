@@ -116,13 +116,13 @@ public:
 	virtual void UpdateQuick() { }
 	//To process input - this method is called more frequently than Update()  
 
-	virtual void OuterOnTapDown(vec2 p);
+	virtual void OuterOnTapDown(vec2 p, int touchNumber);
 
-	virtual void OuterOnTapUp(vec2 p);
+	virtual void OuterOnTapUp(vec2 p, int touchNumber);
 
-	virtual void OuterOnTapUpAfterMove(vec2 p);
+	virtual void OuterOnTapUpAfterMove(vec2 p, int touchNumber);
 
-	virtual void OuterOnMove(vec2 shift);
+	virtual void OuterOnMove(vec2 shift, int touchNumber);
 
 
 	virtual void InnerInit() { }

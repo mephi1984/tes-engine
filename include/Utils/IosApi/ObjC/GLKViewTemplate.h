@@ -11,9 +11,10 @@
 @interface GLKViewTemplate : GLKView
 {
     
-    CGPoint touchBeganLocation;
+    //CGPoint touchBeganLocation[255];
     
-    bool touchMoved;
+    //bool touchMoved[255];
+    
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
