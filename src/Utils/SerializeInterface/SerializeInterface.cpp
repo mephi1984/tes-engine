@@ -7,6 +7,29 @@
 namespace SE
 {
 
+
+
+template <>
+vec2 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path)
+{
+	return StringToVec2(subTree.second.get<std::string>(path));
+}
+
+template <>
+vec3 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path)
+{
+	return StringToVec3(subTree.second.get<std::string>(path));
+}
+
+template <>
+vec4 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path)
+{
+	return StringToVec4(subTree.second.get<std::string>(path));
+}
+
+
+
+
 void ReplaceText(boost::property_tree::ptree& propertyTree, std::map<std::string, std::string>& replaceMap)
 {
 	for (boost::property_tree::ptree::iterator i = propertyTree.begin(); i != propertyTree.end(); )

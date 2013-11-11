@@ -30,6 +30,21 @@ public:
 
 };
 
+template <typename TVALUE>
+TVALUE GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path)
+{
+	return subTree.second.get<TVALUE>(path);
+}
+
+template <>
+vec2 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
+
+template <>
+vec3 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
+
+template <>
+vec4 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
+
 
 template <typename TKEY, typename TVALUE>
 class TMapParser : public TSerializeInterface
@@ -43,7 +58,7 @@ public:
 		BOOST_FOREACH(boost::property_tree::ptree::value_type& subTree, propertyTree)
 		{
 			TKEY key = subTree.second.get<TKEY>("<xmlattr>.key");
-			TVALUE value = subTree.second.get<TVALUE>("<xmlattr>.value");
+			TVALUE value = GetValueFromSubtree<TVALUE>(subTree, "<xmlattr>.value");
 
 			Map[key] = value;
 		}

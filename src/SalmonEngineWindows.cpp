@@ -133,6 +133,8 @@ void TApplication::OnKeyPress(cardinal key)
 		{
 			ResourceManager->GUIManager.KeyPressedSignal(static_cast<int>(key));
 		}
+
+		App->InnerOnKeyPress(key);
 	}
 }
 
@@ -221,10 +223,14 @@ case WM_MOUSEMOVE:
 		if (MouseButtonPressed)
 		{
 			vec2 currentMousePos(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
+			
+			currentMousePos.v[0] *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
+			currentMousePos.v[1] *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
+
 			vec2 shift = (MouseButtonPos - currentMousePos);
-			//shift.v[1] = - shift.v[1];
-			App->OuterOnMove(shift);
-			//App->OuterOnMove(currentMousePos - MouseButtonPos);
+
+			App->OuterOnMove(shift, 0);
+
 			MouseButtonPos = currentMousePos;
 
 			MouseTotalShift += shift;
@@ -247,9 +253,12 @@ case WM_MOUSEMOVE:
 
 		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
 
+		MouseButtonPos.v[0] *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
+		MouseButtonPos.v[1] *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
+
 		if (mouseState.LeftButtonPressed)
 		{
-			App->OuterOnTapDown(MouseButtonPos);
+			App->OuterOnTapDown(MouseButtonPos, 0);
 
 		}
 
@@ -270,13 +279,20 @@ case WM_MOUSEMOVE:
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_RBUTTON);
 
+
+		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
+		MouseButtonPos.v[0] *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
+		MouseButtonPos.v[1] *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
+
+
+
 		if (MouseMoved)
 		{
-			App->OuterOnTapUpAfterMove(vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y)));
+			App->OuterOnTapUpAfterMove(MouseButtonPos, 0);
 		}
 		else
 		{
-			App->OuterOnTapUp(vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y)));
+			App->OuterOnTapUp(MouseButtonPos, 0);
 		}
 
 		MouseButtonPressed = false;

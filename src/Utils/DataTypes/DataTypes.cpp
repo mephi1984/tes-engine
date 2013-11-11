@@ -320,7 +320,7 @@ int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& 
 
 	float detm = m.m[0] * m.m[3] - m.m[1] * m.m[2];
 
-	if (fabs(detm) <= 0.00005f)
+	if (fabs(detm) <= 0.005f)
 	{
 		return -1;
 	}
@@ -345,7 +345,9 @@ int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& 
 	t.v[0] =  vx.v[0] * rev_m.m[0] + vx.v[1] * rev_m.m[1];
 	t.v[1] =  vx.v[0] * rev_m.m[2] + vx.v[1] * rev_m.m[3]; 
 
-	if (t.v[0] < 0 || t.v[0] > 1 || t.v[1] < 0 || t.v[1] > 1)
+	//if (t.v[0] < 0 || t.v[0] > 1 || t.v[1] < 0 || t.v[1] > 1)
+	//if (t.v[0] < 0.01f|| t.v[0] > 0.99f || t.v[1] < 0.01f || t.v[1] > 0.99f)
+	if (t.v[0] < -0.01f || t.v[0] > 1.01f || t.v[1] < -0.01f || t.v[1] > 1.01f)
 	{
 		return 0;
 	}
