@@ -59,7 +59,7 @@ inline char* GetFileName(const char* filename)
 
 inline std::string GetFileName(const std::string& filename)
 {
-	std::string::iterator i = filename.end() - 1;
+	auto i = filename.end() - 1;
 
 	while ((i > filename.begin() )&&(*i != '\\')&&(*i != '/')) 
 		--i;
@@ -85,7 +85,7 @@ inline char* GetFileExt(const char* filename)
 
 inline std::string GetFileExt(const std::string& filename)
 {
-	std::string::iterator i = filename.end() - 1;
+	auto i = filename.end() - 1;
 
 	while (*i != '.') 
 		--i;
