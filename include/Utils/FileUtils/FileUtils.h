@@ -59,9 +59,9 @@ inline char* GetFileName(const char* filename)
 
 inline std::string GetFileName(const std::string& filename)
 {
-	std::string::const_iterator i = filename.end() - 1;
+	std::string::const_iterator i = filename.cend() - 1;
 
-	while ((i > filename.begin() )&&(*i != '\\')&&(*i != '/')) 
+	while ((i > filename.cbegin() )&&(*i != '\\')&&(*i != '/')) 
 		--i;
 	
 	if (*i == '\\' || *i == '/')
@@ -85,7 +85,7 @@ inline char* GetFileExt(const char* filename)
 
 inline std::string GetFileExt(const std::string& filename)
 {
-	std::string::const_iterator i = filename.end() - 1;
+	std::string::const_iterator i = filename.cend() - 1;
 
 	while (*i != '.') 
 		--i;
@@ -98,7 +98,7 @@ inline std::string GetFileNameWithoutExt(const std::string& filename)
 {
 	std::string result = GetFileName(filename);
 
-	std::string::const_iterator i = result.end() - 1;
+	std::string::const_iterator i = result.cend() - 1;
 
 	while (*i != '.') 
 		--i;
