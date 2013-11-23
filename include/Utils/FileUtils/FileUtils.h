@@ -59,9 +59,9 @@ inline char* GetFileName(const char* filename)
 
 inline std::string GetFileName(const std::string& filename)
 {
-	std::string::const_iterator i = filename.cend() - 1;
+	std::string::const_iterator i = filename.end() - 1;
 
-	while ((i > filename.cbegin() )&&(*i != '\\')&&(*i != '/')) 
+	while ((i > filename.begin() )&&(*i != '\\')&&(*i != '/')) 
 		--i;
 	
 	if (*i == '\\' || *i == '/')
@@ -69,7 +69,7 @@ inline std::string GetFileName(const std::string& filename)
 		i++;
 	}
 
-	return std::string(i, filename.cend());
+	return std::string(i, filename.end());
 }
 
 //utitily to process texture uploading
@@ -85,12 +85,12 @@ inline char* GetFileExt(const char* filename)
 
 inline std::string GetFileExt(const std::string& filename)
 {
-	std::string::const_iterator i = filename.cend() - 1;
+	std::string::const_iterator i = filename.end() - 1;
 
 	while (*i != '.') 
 		--i;
 
-	return std::string(i, filename.cend());
+	return std::string(i, filename.end());
 
 }
 
@@ -98,12 +98,12 @@ inline std::string GetFileNameWithoutExt(const std::string& filename)
 {
 	std::string result = GetFileName(filename);
 
-	std::string::const_iterator i = result.cend() - 1;
+	std::string::const_iterator i = result.end() - 1;
 
 	while (*i != '.') 
 		--i;
 
-	return std::string(result.cbegin(), i);
+	return std::string(result.begin(), i);
 }
 
 std::string GetFilePath(const std::string& filename);
