@@ -82,6 +82,14 @@ void SetKeyboardText(const char* newText)
     //GuiManagerSetKeyboardText(newText);
     //NSLog(@"text: %s", newText);
 }
+    
+    bool IsIpad()
+{
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        return YES; /* Device is iPad */
+    }
+}
 
 } //namespace SE
 

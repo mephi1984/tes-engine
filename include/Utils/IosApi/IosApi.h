@@ -25,5 +25,7 @@ void IosSwitchToScreen();
 void ShowKeyboard(std::string text);
 
 void HideKeyboard();
+    
+    bool IsIpad();
 
 } //namespace SE
