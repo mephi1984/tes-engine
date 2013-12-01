@@ -123,6 +123,13 @@ void FillVertexCoordVec(std::vector<vec3>& coordVec, int pos, vec2 posFrom, vec2
 void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
 //Adds rect points (6 tex coords) into coordVec
 
+void FillVertexCoordVec_4Points(std::vector<vec3>& coordVec, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4);
+//Adds rect points (6 vertices) into coordVec
+
+void FillTexCoordVec_4Points(std::vector<vec2>& coordVec, int pos, vec2 texCoord1 = vec2(0,0), vec2 texCoord2 = vec2(1,0), vec2 texCoord3 = vec2(1,1), vec2 texCoord4 = vec2(0,1));
+//Adds rect points (6 tex coords) into coordVec
+
+
 std::vector<vec3> MakeVertexCoordVec(vec2 posFrom, vec2 posTo);
 //Creates array of rect (6 vertices)
 
@@ -152,6 +159,10 @@ TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, c
 
 void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
 //Replaces one rect in triangleList at position pos by new rect. pos is position in array for first vertex of a rectangle
+
+void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4, vec2 texCoord1 = vec2(0,0), vec2 texCoord2 = vec2(1,0), vec2 texCoord3 = vec2(1,1), vec2 texCoord4 = vec2(0,1));
+//Replaces one rect in triangleList at position pos by new rect. pos is position in array for first vertex of a rectangle
+
 
 TTriangleList MakeTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
 //Creates triangle list containing rect

@@ -221,6 +221,26 @@ void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom, ve
 
 }
 
+void FillVertexCoordVec_4Points(std::vector<vec3>& coordVec, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4)
+{
+	coordVec[pos] = vec3(pos1, 0);
+    coordVec[pos+1] = vec3(pos2, 0);
+    coordVec[pos+2] = vec3(pos3, 0);
+    coordVec[pos+3] = vec3(pos3, 0);
+    coordVec[pos+4] = vec3(pos4, 0);
+    coordVec[pos+5] = vec3(pos1, 0);
+}
+
+void FillTexCoordVec_4Points(std::vector<vec2>& coordVec, int pos, vec2 texCoord1, vec2 texCoord2, vec2 texCoord3, vec2 texCoord4)
+{
+	coordVec[pos] = texCoord1;
+    coordVec[pos+1] = texCoord2;
+    coordVec[pos+2] = texCoord3;
+    coordVec[pos+3] = texCoord3;
+    coordVec[pos+4] = texCoord4;
+    coordVec[pos+5] = texCoord1;
+}
+
 
 std::vector<vec3> MakeVertexCoordVec(vec2 posFrom, vec2 posTo)
 {
@@ -349,6 +369,12 @@ void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, vec2
 {
     FillVertexCoordVec(triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB], pos, posFrom, posTo);
 	FillTexCoordVec(triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB], pos, texCoordFrom, texCoordTo);
+}
+
+void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4, vec2 texCoord1, vec2 texCoord2, vec2 texCoord3, vec2 texCoord4)
+{
+	FillVertexCoordVec_4Points(triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB], pos, pos1, pos2, pos3, pos4);
+	FillTexCoordVec_4Points(triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB], pos, texCoord1, texCoord2, texCoord3, texCoord4);
 }
 
 
