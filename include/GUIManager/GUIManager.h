@@ -145,7 +145,8 @@ public:
 
 	boost::signal<void(int)> KeyPressedSignal;
     boost::signal<void(std::string)> SetTextSignal;
-	//boost::signal<void()> PostUpdateSignal;
+	boost::signal<void()> OnKeyboardShowSignal;
+	boost::signal<void()> OnKeyboardHideSignal;
 
 	TGUIManager();
 
@@ -177,6 +178,8 @@ public:
 
 	void ShowKeyboard(const std::string text = "");
 	void HideKeyboard();
+
+	bool IsKeyboardOnScreen();
 
 
 	void PrintWidgetList();

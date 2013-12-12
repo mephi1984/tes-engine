@@ -108,12 +108,15 @@ void TGUIManager::Update(cardinal dt)
 
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
-		i->Widget->Update(dt);
+		//i->Widget->Update(dt);
 
 		if (i->IsMouseDown)
 		{
 			signalMap.push_back((i->SignalMap[CONST_HOLD_SIGNAL_NAME]));
 		}
+
+		i->Widget->Update(dt);
+
 	}
 
 	//Keep this outside since signal may affect WidgetArr
@@ -456,30 +459,48 @@ void TGUIManager::OnMove(vec2 shift, int touchNumber)
 
 void TGUIManager::ShowKeyboard(const std::string text)
 {
-#ifdef TARGET_IOS
-    SE::ShowKeyboard(text);
-#endif
-    /*
 	if (!KeyboardIsOnScreen)
 	{
-		MoveWidget("Keyboard", vec2(0, 216));
+#ifdef TARGET_IOS
+		SE::ShowKeyboard(text);
+#endif
+		/*
+		if (!KeyboardIsOnScreen)
+		{
+			MoveWidget("Keyboard", vec2(0, 216));
+			KeyboardIsOnScreen = true;
+		}*/
+
+		OnKeyboardShowSignal();
 		KeyboardIsOnScreen = true;
-	}*/
+	}
 }
 
 
 void TGUIManager::HideKeyboard()
 {
-    ResourceManager->GUIManager.SetTextSignal.disconnect_all_slots();
+	if (KeyboardIsOnScreen)
+	{
+		ResourceManager->GUIManager.SetTextSignal.disconnect_all_slots();
 #ifdef TARGET_IOS
-    SE::HideKeyboard();
+		SE::HideKeyboard();
 #endif
+		OnKeyboardHideSignal();
+		OnKeyboardShowSignal.disconnect_all_slots();
+		OnKeyboardHideSignal.disconnect_all_slots();
+		KeyboardIsOnScreen = false;
+	}
     /*
 	if (KeyboardIsOnScreen)
 	{
 		MoveWidget("Keyboard", vec2(0, -216));
 		KeyboardIsOnScreen = false;
 	}*/
+}
+
+bool TGUIManager::IsKeyboardOnScreen()
+{
+	return KeyboardIsOnScreen;
 }
 
 void TGUIManager::PrintWidgetList()
