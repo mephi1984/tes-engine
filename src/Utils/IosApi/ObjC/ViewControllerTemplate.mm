@@ -18,7 +18,7 @@ namespace SE
 {
 
 void SetKeyboardText(const char* newText);
-    
+void OnKeyboardHide();
 
 }
 
@@ -157,7 +157,10 @@ void SetKeyboardText(const char* newText);
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if([string isEqualToString:@"\n"])
+    {
         [textField resignFirstResponder];
+        SE::OnKeyboardHide();
+    }
     return YES;
 }
 

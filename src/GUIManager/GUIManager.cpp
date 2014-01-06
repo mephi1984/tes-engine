@@ -10,7 +10,8 @@ const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
 const std::string CONST_TAPDOWN_SIGNAL_NAME = "OnTapDown";
     
     
-    boost::mutex KeyMutex;
+boost::mutex KeyMutex;
+    
 void GuiManagerSetKeyboardText(std::string newText)
 {
     KeyMutex.lock();
@@ -18,8 +19,14 @@ void GuiManagerSetKeyboardText(std::string newText)
     KeyMutex.unlock();
 }
     
+void GuiOnKeyboardHide()
+{
+    ResourceManager->GUIManager.KeyboardIsOnScreen = false;
+    ResourceManager->GUIManager.OnKeyboardHideSignal();
+    ResourceManager->GUIManager.OnKeyboardHideSignal.disconnect_all_slots();
+}
 
-
+    
 TGUIManager::TGUIManager()
 	: KeyboardIsOnScreen(false)
 {

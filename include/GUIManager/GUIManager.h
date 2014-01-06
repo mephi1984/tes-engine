@@ -139,9 +139,8 @@ protected:
 	std::map<int, vec2> TotalShift;
 
 	boost::mutex WidgetListMutex;
-
-	bool KeyboardIsOnScreen;
 public:
+    bool KeyboardIsOnScreen;
 
 	boost::signal<void(int)> KeyPressedSignal;
     boost::signal<void(std::string)> SetTextSignal;

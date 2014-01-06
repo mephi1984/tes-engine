@@ -74,6 +74,11 @@ void HideKeyboard()
     [extKeyboardTextView resignFirstResponder];
 }
     
+void ClearKeyboardText()
+{
+    extKeyboardTextView.text = @"";
+}
+    
 void GuiManagerSetKeyboardText(std::string newText); //Find it in GUIManager.cpp
     
 void SetKeyboardText(const char* newText)
@@ -83,12 +88,21 @@ void SetKeyboardText(const char* newText)
     //NSLog(@"text: %s", newText);
 }
     
-    bool IsIpad()
+void GuiOnKeyboardHide(); //Find it in GUIManager.cpp
+    
+    
+void OnKeyboardHide()
+{
+    SE::PerformInMainThreadAsync(&GuiOnKeyboardHide);
+}
+    
+bool IsIpad()
 {
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
         return YES; /* Device is iPad */
     }
+    return NO;
 }
 
 } //namespace SE

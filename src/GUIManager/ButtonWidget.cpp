@@ -685,12 +685,7 @@ void TEdit::SetText(const std::string& newText)
     
 void TEdit::OnSetAllText(std::string newText)
 {
-    if (newText != TextParams.Text)
-    {
-        TextParams.Text = newText;
-            
-        RefreshTextTriangleList();
-    }
+    SetText(newText);
 }
     
     
