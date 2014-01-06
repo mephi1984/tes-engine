@@ -46,8 +46,11 @@ namespace SE
 
 		}
 		
+	}
 
-
+	void PerformInMainThreadAsyncLater(boost::function<void()> f)
+	{
+        ST::MainThreadIoService.post(f);	
 	}
 #endif
 

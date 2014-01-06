@@ -37,6 +37,7 @@ namespace SE
 	void TryUpdateMainThreadId();
 
 	void PerformInMainThreadAsync(boost::function<void()> f);
+	void PerformInMainThreadAsyncLater(boost::function<void()> f);
 
 	template<typename RETURNTYPE>
 	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f);

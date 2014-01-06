@@ -90,15 +90,28 @@ void TGUIManager::DeleteWidgetGroup(std::string groupName)
 
 void TGUIManager::DeleteWidgetOnUpdate(const std::string& name)
 {
+	//PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
 	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidget, this, name));
-	//PostUpdateSignal.connect(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	
 }
 
 void TGUIManager::DeleteWidgetGroupOnUpdate(const std::string& groupName)
 {
+	//PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
 	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
-	//PostUpdateSignal.connect(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	
 }
+
+void TGUIManager::DeleteWidgetLaterOnUpdate(const std::string& name)
+{
+	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
+}
+
+void TGUIManager::DeleteWidgetGroupLaterOnUpdate(const std::string& groupName)
+{
+	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));	
+}
+
 
 
 

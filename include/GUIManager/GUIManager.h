@@ -158,6 +158,8 @@ public:
 
 	void DeleteWidgetOnUpdate(const std::string& name);
 	void DeleteWidgetGroupOnUpdate(const std::string& groupName);
+	void DeleteWidgetLaterOnUpdate(const std::string& name);
+	void DeleteWidgetGroupLaterOnUpdate(const std::string& groupName);
 
 	void Update(cardinal dt);
 	void Draw();
