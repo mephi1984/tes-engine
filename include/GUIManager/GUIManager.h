@@ -22,11 +22,10 @@ extern const std::string CONST_TAPDOWN_SIGNAL_NAME;
 
 typedef boost::variant<cardinal, vec2> TSignalParam;
 
-struct TWidgetStruct
+struct TWidgetDataStruct
 {
 	std::string Name;
 	std::string GroupName;
-	int Order;
 
 	bool IsMouseDown;
 
@@ -34,10 +33,9 @@ struct TWidgetStruct
 
 	std::map<std::string, std::shared_ptr<boost::signal<void (TSignalParam)>>> SignalMap;
 	
-	TWidgetStruct(const std::string& name, const std::string& groupName, std::shared_ptr<TInstancingWidgetAncestor> widget, int order = 0)
+	TWidgetDataStruct(const std::string& name, const std::string& groupName, std::shared_ptr<TInstancingWidgetAncestor> widget)
 		: Name(name)
 		, GroupName(groupName)
-		, Order(order)
 		, IsMouseDown(false)
 		, Widget(widget)
 	{
@@ -47,27 +45,60 @@ struct TWidgetStruct
 		SignalMap[CONST_DRAG_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
 	}
 
-	TWidgetStruct(const TWidgetStruct& widgetStruct)
+	TWidgetDataStruct(const TWidgetDataStruct& widgetStruct)
 	{
 		Name = widgetStruct.Name;
 		Widget = widgetStruct.Widget;
 		GroupName = widgetStruct.GroupName;
 		IsMouseDown = widgetStruct.IsMouseDown;
-		Order = widgetStruct.Order;
 		SignalMap = widgetStruct.SignalMap;
 	
 	}
 
-	TWidgetStruct& operator=(const TWidgetStruct& widgetStruct)
+	TWidgetDataStruct& operator=(const TWidgetDataStruct& widgetStruct)
 	{
 		//Self-assignment is ok
 		Name = widgetStruct.Name;
 		Widget = widgetStruct.Widget;
 		GroupName = widgetStruct.GroupName;
 		IsMouseDown = widgetStruct.IsMouseDown;
-		Order = widgetStruct.Order;
 		SignalMap = widgetStruct.SignalMap;
 		
+		return *this;
+	}
+
+	~TWidgetDataStruct()
+	{
+	}
+};
+
+
+struct TWidgetStruct
+{
+
+	boost::shared_ptr<TWidgetDataStruct> WidgetData;
+
+	int Order;
+
+	TWidgetStruct(const std::string& name, const std::string& groupName, std::shared_ptr<TInstancingWidgetAncestor> widget, int order = 0)
+		: WidgetData(new TWidgetDataStruct(name, groupName, widget))
+		, Order(order)
+	{
+	}
+
+	TWidgetStruct(const TWidgetStruct& widgetStruct)
+	{
+		WidgetData = widgetStruct.WidgetData;
+		Order = widgetStruct.Order;
+	}
+
+	TWidgetStruct& operator=(const TWidgetStruct& widgetStruct)
+	{
+		if (&widgetStruct != this)
+		{
+			WidgetData = widgetStruct.WidgetData;
+			Order = widgetStruct.Order;		
+		}
 		return *this;
 	}
 
@@ -158,8 +189,6 @@ public:
 
 	void DeleteWidgetOnUpdate(const std::string& name);
 	void DeleteWidgetGroupOnUpdate(const std::string& groupName);
-	void DeleteWidgetLaterOnUpdate(const std::string& name);
-	void DeleteWidgetGroupLaterOnUpdate(const std::string& groupName);
 
 	void Update(cardinal dt);
 	void Draw();
