@@ -48,7 +48,7 @@ void TGUIManager::AddWidget(std::shared_ptr<TInstancingWidgetAncestor> widgetAnc
 {
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); i++)
 	{
-		if (i->WidgetData->Name == name)
+		if (i->Name == name)
 		{
 			return;
 		}
@@ -61,7 +61,7 @@ void TGUIManager::DeleteWidget(std::string name)
 {
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); i++)
 	{
-		if (i->WidgetData->Name == name)
+		if (i->Name == name)
 		{
 			WidgetArr.erase(i);
 			return;
@@ -75,7 +75,7 @@ void TGUIManager::DeleteWidgetGroup(std::string groupName)
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end();)
 	{
 		widgetErased = false;
-		if (i->WidgetData->GroupName == groupName)
+		if (i->GroupName == groupName)
 		{
 			i = WidgetArr.erase(i);
 			widgetErased = true;
@@ -90,13 +90,30 @@ void TGUIManager::DeleteWidgetGroup(std::string groupName)
 
 void TGUIManager::DeleteWidgetOnUpdate(const std::string& name)
 {
-	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	//PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	
 }
 
 void TGUIManager::DeleteWidgetGroupOnUpdate(const std::string& groupName)
 {
-	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	//PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	
 }
+
+void TGUIManager::DeleteWidgetLaterOnUpdate(const std::string& name)
+{
+	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
+}
+
+void TGUIManager::DeleteWidgetGroupLaterOnUpdate(const std::string& groupName)
+{
+	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));	
+}
+
+
+
 
 void TGUIManager::AddWidgetTransformTask(TWidgetTransformTask widgetTransformTask)
 {
@@ -113,12 +130,12 @@ void TGUIManager::Update(cardinal dt)
 	{
 		//i->Widget->Update(dt);
 
-		if (i->WidgetData->IsMouseDown)
+		if (i->IsMouseDown)
 		{
-			signalMap.push_back((i->WidgetData->SignalMap[CONST_HOLD_SIGNAL_NAME]));
+			signalMap.push_back((i->SignalMap[CONST_HOLD_SIGNAL_NAME]));
 		}
 
-		i->WidgetData->Widget->Update(dt);
+		i->Widget->Update(dt);
 
 	}
 
@@ -165,7 +182,7 @@ void TGUIManager::Update(cardinal dt)
 
 		for (TWidgetArr::iterator j = WidgetArr.begin(); j != WidgetArr.end(); ++j)
 		{
-			if (j->WidgetData->GroupName == i->GroupName)
+			if (j->GroupName == i->GroupName)
 			{
 				MoveWidgetByIterator(j, moveDistance);
 			}
@@ -196,7 +213,7 @@ void TGUIManager::Draw()
 
 		TRenderPairList::iterator j;
 		
-		for (j = i->WidgetData->Widget->TriangleListVector.begin(); j != i->WidgetData->Widget->TriangleListVector.end(); ++j)
+		for (j = i->Widget->TriangleListVector.begin(); j != i->Widget->TriangleListVector.end(); ++j)
 		{
 
 			TRenderParamsSetter paramSetter(j->first);
@@ -215,7 +232,7 @@ TWidgetArr::iterator TGUIManager::FindWidgetInArr(const std::string& widgetName)
 
 	for (i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
-		if (i->WidgetData->Name == widgetName)
+		if (i->Name == widgetName)
 		{
 			break;
 		}
@@ -231,13 +248,13 @@ TWidgetArr::iterator TGUIManager::FindWidgetInArr(const std::string& widgetName)
 
 void TGUIManager::MoveWidgetByIterator(TWidgetArr::iterator widget, vec2 shift)
 {
-	widget->WidgetData->Widget->LeftBottomPos += shift;
+	widget->Widget->LeftBottomPos += shift;
 
 	std::vector<vec3>::iterator i;
 
 	TRenderPairList::iterator itr;
 
-	for (itr = widget->WidgetData->Widget->TriangleListVector.begin(); itr != widget->WidgetData->Widget->TriangleListVector.end(); ++itr)
+	for (itr = widget->Widget->TriangleListVector.begin(); itr != widget->Widget->TriangleListVector.end(); ++itr)
 	{
 		std::vector<vec3>& vertexCoordVec = itr->second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB];
 
@@ -261,7 +278,7 @@ void TGUIManager::MoveWidgetGroup(const std::string& widgetGroupName, const std:
 {
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
-		if (i->WidgetData->GroupName == widgetGroupName && i->WidgetData->Name != exceptWidget)
+		if (i->GroupName == widgetGroupName && i->Name != exceptWidget)
 		{
 			MoveWidgetByIterator(i, shift);
 		}
@@ -285,14 +302,14 @@ void TGUIManager::OnMouseDown(vec2 pos, int touchNumber)
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
-		if (i->WidgetData->Widget->CheckClick(pos))
+		if (i->Widget->CheckClick(pos))
 		{
-			bool isTransparentForInput = i->WidgetData->Widget->IsTransparentForInput();
+			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 
-			i->WidgetData->Widget->OnTapDown(pos);
-			i->WidgetData->IsMouseDown = true;
+			i->Widget->OnTapDown(pos);
+			i->IsMouseDown = true;
             
-            signalMap.push_back((i->WidgetData->SignalMap[CONST_TAPDOWN_SIGNAL_NAME]));
+            signalMap.push_back((i->SignalMap[CONST_TAPDOWN_SIGNAL_NAME]));
 			
 			if (! isTransparentForInput)
 			{
@@ -323,13 +340,13 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
-		if (i->WidgetData->Widget->CheckClick(pos))
+		if (i->Widget->CheckClick(pos))
 		{
-			bool isTransparentForInput = i->WidgetData->Widget->IsTransparentForInput();
-			i->WidgetData->Widget->OnTapUp(pos);
-			i->WidgetData->IsMouseDown = false;
+			bool isTransparentForInput = i->Widget->IsTransparentForInput();
+			i->Widget->OnTapUp(pos);
+			i->IsMouseDown = false;
 
-			signalMap.push_back((i->WidgetData->SignalMap[CONST_CLICK_SIGNAL_NAME]));
+			signalMap.push_back((i->SignalMap[CONST_CLICK_SIGNAL_NAME]));
 			
 			if (! isTransparentForInput)
 			{
@@ -361,11 +378,11 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
         
         for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
         {
-            if (i->WidgetData->Widget->CheckClick(pos))
+            if (i->Widget->CheckClick(pos))
             {
-                bool isTransparentForInput = i->WidgetData->Widget->IsTransparentForInput();
-                i->WidgetData->Widget->OnTapUpAfterMove(pos);
-                i->WidgetData->IsMouseDown = false;
+                bool isTransparentForInput = i->Widget->IsTransparentForInput();
+                i->Widget->OnTapUpAfterMove(pos);
+                i->IsMouseDown = false;
                 
                 //signalMap.push_back((i->SignalMap[CONST_CLICK_SIGNAL_NAME]));
                 //Do not call signals here
@@ -376,11 +393,11 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
                 }
             }
 
-			if (i->WidgetData->Widget->CheckClick(LastTapPos[touchNumber]) && !i->WidgetData->Widget->CheckClick(pos))
+			if (i->Widget->CheckClick(LastTapPos[touchNumber]) && !i->Widget->CheckClick(pos))
             {
-                bool isTransparentForInput = i->WidgetData->Widget->IsTransparentForInput();
-                i->WidgetData->Widget->OnTapUpAfterMoveOut(pos);
-                i->WidgetData->IsMouseDown = false;
+                bool isTransparentForInput = i->Widget->IsTransparentForInput();
+                i->Widget->OnTapUpAfterMoveOut(pos);
+                i->IsMouseDown = false;
                 
                 //signalMap.push_back((i->SignalMap[CONST_CLICK_SIGNAL_NAME]));
                 //Do not call signals here
@@ -421,13 +438,13 @@ void TGUIManager::OnMove(vec2 shift, int touchNumber)
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
-		if (!moveIsProcessed && i->WidgetData->Widget->CheckClick(LastTapPos[touchNumber]-TotalShift[touchNumber]))
+		if (!moveIsProcessed && i->Widget->CheckClick(LastTapPos[touchNumber]-TotalShift[touchNumber]))
 		{
-			bool isTransparentForInput = i->WidgetData->Widget->IsTransparentForInput();
+			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 
-			i->WidgetData->Widget->OnMove(shift);
+			i->Widget->OnMove(shift);
 			
-			signalMap.push_back((i->WidgetData->SignalMap[CONST_DRAG_SIGNAL_NAME]));
+			signalMap.push_back((i->SignalMap[CONST_DRAG_SIGNAL_NAME]));
 		
 			if (! isTransparentForInput)
 			{
@@ -445,12 +462,12 @@ void TGUIManager::OnMove(vec2 shift, int touchNumber)
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
-		if (!moveOutIsProcessed && i->WidgetData->Widget->CheckClick(LastTapPos[touchNumber]) && !i->WidgetData->Widget->CheckClick(LastTapPos[touchNumber]-TotalShift[touchNumber]))
+		if (!moveOutIsProcessed && i->Widget->CheckClick(LastTapPos[touchNumber]) && !i->Widget->CheckClick(LastTapPos[touchNumber]-TotalShift[touchNumber]))
 		{
-			bool isTransparentForInput = i->WidgetData->Widget->IsTransparentForInput();
+			bool isTransparentForInput = i->Widget->IsTransparentForInput();
 
-			i->WidgetData->Widget->OnMoveOut();
-			i->WidgetData->IsMouseDown = false;
+			i->Widget->OnMoveOut();
+			i->IsMouseDown = false;
 			if (! isTransparentForInput)
 			{
 				moveOutIsProcessed = true;
@@ -512,7 +529,7 @@ void TGUIManager::PrintWidgetList()
 
 	for (i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
-		std::string widgetRow = i->WidgetData->Name + " (" + tostr(i->WidgetData->Widget->LeftBottomPos.v[0]) + ", " + tostr(i->WidgetData->Widget->LeftBottomPos.v[1]) + ")";
+		std::string widgetRow = i->Name + " (" + tostr(i->Widget->LeftBottomPos.v[0]) + ", " + tostr(i->Widget->LeftBottomPos.v[1]) + ")";
 		Console->PrintImmediate(widgetRow);
 	}
 }
@@ -523,7 +540,7 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnClickSigna
 
 	TWidgetArr::iterator i = FindWidgetInArr(widgetName);
 
-	return i->WidgetData->SignalMap[CONST_CLICK_SIGNAL_NAME];
+	return i->SignalMap[CONST_CLICK_SIGNAL_NAME];
 	
 }
 
@@ -532,7 +549,7 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnHoldSignal
 
 	TWidgetArr::iterator i = FindWidgetInArr(widgetName);
 	
-	return i->WidgetData->SignalMap[CONST_HOLD_SIGNAL_NAME];
+	return i->SignalMap[CONST_HOLD_SIGNAL_NAME];
 	
 }
 
@@ -541,7 +558,7 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnTapDownSig
         
     TWidgetArr::iterator i = FindWidgetInArr(widgetName);
         
-    return i->WidgetData->SignalMap[CONST_TAPDOWN_SIGNAL_NAME];
+    return i->SignalMap[CONST_TAPDOWN_SIGNAL_NAME];
         
 }
 
@@ -550,12 +567,12 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetSignal(const
 
 	TWidgetArr::iterator i = FindWidgetInArr(widgetName);
 	
-	if (i->WidgetData->SignalMap.count(signalName) == 0)
+	if (i->SignalMap.count(signalName) == 0)
 	{
 		throw ErrorToLog("Illegal signal: "+signalName);
 	}
 
-	return i->WidgetData->SignalMap[signalName];
+	return i->SignalMap[signalName];
 }
 
 void TGUIManager::SQ_MoveWidget(const SQChar *widgetName, float x, float y)

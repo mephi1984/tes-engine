@@ -27,5 +27,6 @@ void HideKeyboard();
 void ClearKeyboardText();
     
 bool IsIpad();
+bool IsIphone5();
 
 } //namespace SE

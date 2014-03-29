@@ -104,6 +104,17 @@ bool IsIpad()
     }
     return NO;
 }
+    
+bool IsIphone5()
+{
+    if ([[UIScreen mainScreen] bounds].size.height == 568)
+    {
+        return YES; /* Device is iPhone5 */
+    }
+    return NO;
+}
+    
+
 
 } //namespace SE
 
