@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilsEngineTemplate", "src\UtilsEngineTemplate.vcxproj", "{086DBA7B-9D25-47EF-8371-0E4CE295FD3F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilsEngine", "..\..\engine\UtilsEngine\UtilsEngine.vcxproj", "{C29A7BA8-207A-46B8-AAAF-368AED22EC2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{086DBA7B-9D25-47EF-8371-0E4CE295FD3F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{086DBA7B-9D25-47EF-8371-0E4CE295FD3F}.Debug|Win32.Build.0 = Debug|Win32
+		{086DBA7B-9D25-47EF-8371-0E4CE295FD3F}.Release|Win32.ActiveCfg = Release|Win32
+		{086DBA7B-9D25-47EF-8371-0E4CE295FD3F}.Release|Win32.Build.0 = Release|Win32
+		{C29A7BA8-207A-46B8-AAAF-368AED22EC2A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C29A7BA8-207A-46B8-AAAF-368AED22EC2A}.Debug|Win32.Build.0 = Debug|Win32
+		{C29A7BA8-207A-46B8-AAAF-368AED22EC2A}.Release|Win32.ActiveCfg = Release|Win32
+		{C29A7BA8-207A-46B8-AAAF-368AED22EC2A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
