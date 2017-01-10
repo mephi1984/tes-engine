@@ -71,6 +71,7 @@ void TSimpleConsole::Draw()
 
 void TSimpleConsole::CutHistory()
 {
+	/*
 	cardinal i = 0;
 
 	cardinal pos = std::string::npos;
@@ -90,7 +91,7 @@ void TSimpleConsole::CutHistory()
 	if (pos != std::string::npos)
 	{
 		History = History.substr(pos);
-	}
+	}*/
 }
 
 std::string TSimpleConsole::GetHistory()
@@ -234,7 +235,7 @@ TJavaConsole& TJavaConsole::operator<<(const std::string& s)
 	CutHistory();
 
 
-	__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", string_with_time_mark.c_str());
+	//__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", string_with_time_mark.c_str());
 
 
 	
