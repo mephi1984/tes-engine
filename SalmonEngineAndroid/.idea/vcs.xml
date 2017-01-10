@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/../../libs/jpeg-9" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/../../libs/julienr-libzip-android/jni" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/../../libs/libogg-1.3.0/src" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/../../libs/libpng_1.4.1_android" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/../../libs/libvorbis-1.3.2/lib" vcs="svn" />
+  </component>
+</project>

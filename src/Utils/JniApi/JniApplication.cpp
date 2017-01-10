@@ -1,25 +1,25 @@
 
 #include "include/Engine.h"
 
-namespace SE
+namespace SE {
+
+	TApplication *App = NULL;
+
+	boost::mutex InitLock;
+
+	bool Inited = false;
+} // namespace SE
+
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_Update(JNIEnv * env, jobject obj, long dt)
 {
-
-TApplication* App = NULL;
-
-boost::mutex InitLock;
-
-bool Inited = false;
-
-
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Update(JNIEnv * env, jobject obj, long dt)
-{
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterDraw();
-			App->OuterUpdate(dt);
+			SE::App->OuterDraw();
+			SE::App->OuterUpdate(dt);
 		}
 	
 	
@@ -28,13 +28,14 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Update(JNIEnv * en
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 
 }
 
-JNIEXPORT int JNICALL Java_fishrungames_engine_EngineWrapper_IsInited(JNIEnv * env, jobject obj)
+extern "C"
+JNIEXPORT int JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_IsInited(JNIEnv * env, jobject obj)
 {   
-	if (Inited)
+	if (SE::Inited)
 	{
 		return 1;
 	}
@@ -45,23 +46,23 @@ JNIEXPORT int JNICALL Java_fishrungames_engine_EngineWrapper_IsInited(JNIEnv * e
 
 }
 
-
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Destroy(JNIEnv * env, jobject obj)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_Destroy(JNIEnv * env, jobject obj)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterDeinit();
+			SE::App->OuterDeinit();
 			
-			delete App;
+			delete SE::App;
 
-			App = NULL;
-		
-			DestroyEngine();
+			SE::App = NULL;
 
-			Inited = false;
+			SE::DestroyEngine();
+
+			SE::Inited = false;
 		}
 	
 	}
@@ -69,7 +70,7 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_Destroy(JNIEnv * e
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
 void DestroyThreaded()
@@ -77,112 +78,118 @@ void DestroyThreaded()
 	
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapDown(JNIEnv * env, jobject obj, float x, float y, long time)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTapDown(JNIEnv * env, jobject obj, float x, float y, long time)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterOnTapDown(vec2(x,y));
+			SE::App->OuterOnTapDown(SE::vec2(x,y), time);
 		}
 	}
 	catch (...)
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
-
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapUp(JNIEnv * env, jobject obj, float x, float y, long time)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTapUp(JNIEnv * env, jobject obj, float x, float y, long time)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterOnTapUp(vec2(x,y));
+			SE::App->OuterOnTapUp(SE::vec2(x,y), time);
 		}
 	}
 	catch (...)
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapUpAfterMove(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTapUpAfterMove(JNIEnv * env, jobject obj, jfloat x, jfloat y, long time)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterOnTapUpAfterMove(vec2(x,y));
+			SE::App->OuterOnTapUpAfterMove(SE::vec2(x,y), time);
 		}
 	}
 	catch (...)
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterOnMove(vec2(x,y));
+			SE::App->OuterOnMove(SE::vec2(x,y), time);
 		}
 	}
 	catch (...)
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnFling(JNIEnv * env, jobject obj, jfloat velocityX, jfloat velocityY, long time)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnFling(JNIEnv * env, jobject obj, jfloat velocityX, jfloat velocityY, long time)
 {
     
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OuterOnMove(vec2(distanceX,distanceY));
+			SE::App->OuterOnMove(SE::vec2(distanceX,distanceY), time);
 		}
 	}
 	catch (...)
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_OnKeyPress(JNIEnv * env, jobject obj, jint keyCode)
+extern "C"
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnKeyPress(JNIEnv * env, jobject obj, jint keyCode)
 {
-	InitLock.lock();
+	SE::InitLock.lock();
 	try
 	{
-		if (Inited)
+		if (SE::Inited)
 		{
-			App->OnKeyPress(keyCode);
+			SE::App->OnKeyPress(keyCode);
 		}
 	}
 	catch (...)
 	{
 		throw;
 	}
-	InitLock.unlock();
+	SE::InitLock.unlock();
 }
 
-} // namespace SE
+

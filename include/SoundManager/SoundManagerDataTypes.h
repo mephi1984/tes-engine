@@ -5,8 +5,8 @@
 
 
 #ifdef TARGET_ANDROID
-#include <asm/page.h>
-#include <limits.h>
+//#include <asm/page.h>
+//#include <limits.h>
 #endif
 
 #include "boost/thread.hpp"

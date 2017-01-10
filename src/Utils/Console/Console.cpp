@@ -1,6 +1,13 @@
 #include "include/Engine.h"
 #include "boost/date_time.hpp"
 
+#ifdef TARGET_ANDROID
+#include <android/log.h>
+
+#define APPNAME "SalmonEngine"
+
+#endif
+
 namespace SE
 {
 
@@ -225,6 +232,11 @@ TJavaConsole& TJavaConsole::operator<<(const std::string& s)
 
 	History += string_with_time_mark+endl;
 	CutHistory();
+
+
+	__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", string_with_time_mark.c_str());
+
+
 	
 
 	return *this; 

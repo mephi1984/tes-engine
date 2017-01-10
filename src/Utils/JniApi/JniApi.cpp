@@ -7,7 +7,7 @@ namespace SE
 
 JavaVM* JavaVirtualMachine = 0;
 
-const std::string CONST_JAVA_FILESYSTEM_CLASS_NAME = "fishrungames/engine/EngineWrapper";
+const std::string CONST_JAVA_FILESYSTEM_CLASS_NAME = "fishrungames/salmonengineandroid/EngineWrapper";
 
 //Private data
 
@@ -26,36 +26,37 @@ void CheckCommonExceptionWithMessage(const std::string& message);
 //Deprecated
 void JniCallOpenFile(const std::string& fileName);
 
+}
 
 //==================================================
 //=============== IMPLEMENTATION ===================
 //==================================================
 
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupEnviroment(JNIEnv* env, jobject thiz)
+extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_SetupEnviroment(JNIEnv* env, jobject thiz)
 {
     int JVMResult;
-    JVMResult = env->GetJavaVM(&JavaVirtualMachine);
+    JVMResult = env->GetJavaVM(&SE::JavaVirtualMachine);
     
     //TODO: Check if jmvresult != 0
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s)
+extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s)
 {
 
 	const char *nativeString = env->GetStringUTFChars(s, 0);
 	
-	ApkFilePath = std::string(nativeString);
+	SE::ApkFilePath = std::string(nativeString);
 	
    env->ReleaseStringUTFChars(s, nativeString);
 
 }
 
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s)
+extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s)
 {
 	const char *nativeString = env->GetStringUTFChars(s, 0);
 
-   *Console<<std::string("OUT OF JAVA: ")+nativeString;
+   *SE::Console<<std::string("OUT OF JAVA: ")+nativeString;
 
    env->ReleaseStringUTFChars(s, nativeString);
 
@@ -63,27 +64,31 @@ JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_ConsoleOut(JNIEnv*
 
 
 //Deprecated
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize)
+extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize)
 {
-	FileSize = fileSize;
-	FileArr =  new cardinal [fileSize % 4 == 0 ? fileSize/4 : fileSize/4 + 1];
-	filePointer = 0;
+	SE::FileSize = fileSize;
+	SE::FileArr =  new SE::cardinal [fileSize % 4 == 0 ? fileSize/4 : fileSize/4 + 1];
+	SE::filePointer = 0;
 }
 	
 	
 //Deprecated
-JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize)
+extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize)
 {
     JNIEnv* jenv;
-    JavaVirtualMachine->GetEnv((void**)&jenv, JNI_VERSION_1_4);
-	jenv->GetByteArrayRegion(buffer, 0, bufferSize, (jbyte*)((char*)FileArr + filePointer));
-	filePointer += bufferSize;
+	SE::JavaVirtualMachine->GetEnv((void**)&jenv, JNI_VERSION_1_4);
+	jenv->GetByteArrayRegion(buffer, 0, bufferSize, (jbyte*)((char*)SE::FileArr + SE::filePointer));
+	SE::filePointer += bufferSize;
 	
 }
 
 //===================================================
 //============== Private methods ====================
 //===================================================
+
+namespace SE
+{
+
 
 jclass JniTryFindClass(const std::string& className)
 {

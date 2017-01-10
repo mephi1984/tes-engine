@@ -1,9 +1,11 @@
 #ifndef SCRIPT_MANAGER_H_INCLUDED
 #define SCRIPT_MANAGER_H_INCLUDED
 
-#include "sqplus.h"
+//#include "sqplus.h"
 #include <iostream>
 #include <string>
+
+typedef char SQChar;
 
 namespace SE
 {
@@ -30,6 +32,7 @@ struct TScriptInfo
 };
 
 
+
 class TFunctionBinderInterface
 {
 public:
@@ -47,9 +50,9 @@ public:
 class TScriptManager : public TSerializeInterface
 {
 protected:	
-	HSQUIRRELVM virtualMachine;
-	std::map<std::string, TScriptInfo> FuncInfoMap;
-
+	//HSQUIRRELVM virtualMachine;
+	//std::map<std::string, TScriptInfo> FuncInfoMap;
+/*
 	template<typename T1,typename T2>
 	void RegisterFunc(T1& object, T2 method, const std::string& funcName)
 	{
@@ -60,7 +63,7 @@ protected:
 	void RegisterFunc(T globalFunc, const std::string& funcName)
 	{
 		SqPlus::RegisterGlobal(virtualMachine, globalFunc, _SC(funcName.c_str()));
-	}
+	}*/
 
 public:
 	TScriptManager();
@@ -75,20 +78,21 @@ public:
 	template<typename T1, typename T2>
 	void AddFunction(const std::string& shortName, TScriptInfo scriptInfo, T1& object, T2 method)
 	{
+		/*
 		AddFuncDescription(shortName, scriptInfo);
 		RegisterFunc(object, method, shortName);
 		RegisterFunc(object, method, scriptInfo.LongName);
-		FuncInfoMap[shortName].Registered = true;
+		FuncInfoMap[shortName].Registered = true;*/
 	}
 
 
 	template<typename T>
 	void AddFunction(const std::string& shortName, TScriptInfo scriptInfo, T globalFunc)
 	{
-		AddFuncDescription(shortName, scriptInfo);
+		/*AddFuncDescription(shortName, scriptInfo);
 		RegisterFunc(globalFunc, shortName);
 		RegisterFunc(globalFunc, scriptInfo.LongName);
-		FuncInfoMap[shortName].Registered = true;
+		FuncInfoMap[shortName].Registered = true;*/
 	}
 
 	void BindFunctionsFromObject(TFunctionBinderInterface* binderObject);
@@ -103,9 +107,9 @@ public:
 
 
 
-void SQ_Print(const SQChar *inString);
-void SQ_PrintWidgetList();
-void SQ_MoveWidget(const SQChar *widgetName, float x, float y);
+//void SQ_Print(const SQChar *inString);
+//void SQ_PrintWidgetList();
+//void SQ_MoveWidget(const SQChar *widgetName, float x, float y);
 //void SQ_PrintTextureList();
 //void SQ_PrintAnimationList();
 

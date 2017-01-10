@@ -10,9 +10,9 @@ std::vector<TFunctionBinderInterface*> TFunctionBinderInterface::BinderList;
 
 TScriptManager::TScriptManager()
 {
-	SquirrelVM::Init();
+	//SquirrelVM::Init();
 
-	virtualMachine = SquirrelVM::GetVMPtr();
+	//virtualMachine = SquirrelVM::GetVMPtr();
 
 	//SqPlus::RegisterGlobal(virtualMachine, SQ_Print, _SC("Print"));
 	//SqPlus::RegisterGlobal(virtualMachine, SQ_Print, _SC("p"));
@@ -58,11 +58,12 @@ TScriptManager::TScriptManager()
 TScriptManager::~TScriptManager()
 {
 	*Console<<"Script manager shutdown";
-	SquirrelVM::Shutdown();
+	//SquirrelVM::Shutdown();
 }
 
 void TScriptManager::RunScript(const std::string& scriptCode)
 {
+	/*
 	try
 	{
 		SquirrelObject m = SquirrelVM::CompileBuffer(_T(scriptCode.c_str()));
@@ -73,13 +74,14 @@ void TScriptManager::RunScript(const std::string& scriptCode)
 	{
 		*Console<<"Script failed to run";
 	}
-	
+	*/
 }
 
 
 void TScriptManager::BindBasicFunctions()
 {
 	//Hack =D
+	/*
 	static bool alreadyBind = false;
 	
 	if (!alreadyBind)
@@ -103,7 +105,7 @@ void TScriptManager::BindBasicFunctions()
 	alreadyBind = true;
 	}
 
-
+*/
 
 	
 }
@@ -111,13 +113,14 @@ void TScriptManager::BindBasicFunctions()
 
 void TScriptManager::AddFuncDescription(const std::string& shortName, TScriptInfo scriptInfo)
 {
+	/*
 	if (FuncInfoMap.count(shortName) > 0)
 	{
 		//If this description is already exists
 		scriptInfo.Registered = FuncInfoMap[shortName].Registered;
 	}
 	
-	FuncInfoMap[shortName] = scriptInfo;
+	FuncInfoMap[shortName] = scriptInfo;*/
 
 
 }
@@ -125,12 +128,13 @@ void TScriptManager::AddFuncDescription(const std::string& shortName, TScriptInf
 
 void TScriptManager::BindFunctionsFromObject(TFunctionBinderInterface* binderObject)
 {
-	binderObject->BindFunctions();
+	//binderObject->BindFunctions();
 }
 
 
 void TScriptManager::PrintRegisteredFunctionList()
 {
+	/*
 	std::map<std::string, TScriptInfo>::iterator i;
 
 	Console->PrintImmediate("========== Console function list ===========");
@@ -141,20 +145,21 @@ void TScriptManager::PrintRegisteredFunctionList()
 		{
 			Console->PrintImmediate(i->first + " | " + i->second.ShortDescription);
 		}
-	}
+	}*/
 }
 
 void TScriptManager::PrintFunctionInfo(const std::string& funcName)
 {
+	/*
 	if (FuncInfoMap.count(funcName) > 0 && FuncInfoMap[funcName].Registered)
 	{
 		Console->PrintImmediate( funcName + " | " + FuncInfoMap[funcName].LongName + " | " + FuncInfoMap[funcName].Description);
-	}
+	}*/
 }
 
 void TScriptManager::Serialize(boost::property_tree::ptree& propertyTree)
 {
-	
+	/*
 	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, propertyTree.get_child("FunctionInfoList"))
 	{
 		std::string shortName = v.second.get<std::string>("ShortName");
@@ -163,20 +168,19 @@ void TScriptManager::Serialize(boost::property_tree::ptree& propertyTree)
 		std::string description = v.second.get<std::string>("Description");
 		
 		AddFuncDescription(shortName, TScriptInfo(longName, shortDescription, description));
-	}
+	}*/
 }
 
 
 //=============================================
 //============= Typical commands ==============
 //=============================================
-
+/*
 void SQ_Print(const SQChar *inString)
 {
 	Console->PrintImmediate(std::string(inString));
 }
 
-/*
 void SQ_PrintWidgetList()
 {
 	ResourceManager->GUIManager.PrintWidgetList();

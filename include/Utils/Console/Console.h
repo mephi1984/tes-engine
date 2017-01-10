@@ -20,8 +20,8 @@ Use global variable Console like that:
 #include <fstream>
 #endif
 #ifdef TARGET_ANDROID
-#include <asm/page.h>
-#include <limits.h>
+//#include <asm/page.h>
+//#include <limits.h>
 
 #include "boost/thread.hpp"
 #endif

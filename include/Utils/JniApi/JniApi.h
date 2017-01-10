@@ -12,6 +12,18 @@
 #include <zlib.h>
 #include <zconf.h>
 
+extern "C" {
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_SetupEnviroment(JNIEnv* env, jobject thiz);
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s);
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s);
+
+//All 2 deprecated
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize);
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize);
+
+
+};
+
 namespace SE
 {
 
@@ -35,17 +47,7 @@ extern cardinal* FileArr;
 extern int FileSize;
 extern std::string ApkFilePath;
 
-extern "C" {
-    JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupEnviroment(JNIEnv* env, jobject thiz);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_SetupApkFilePath(JNIEnv* env, jobject thiz, jstring s);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_ConsoleOut(JNIEnv* env, jobject thiz, jstring s);
-	
-	//All 2 deprecated
-	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize);
-	JNIEXPORT void JNICALL Java_fishrungames_engine_EngineWrapper_WriteToFile(JNIEnv* env, jobject thiz, jbyteArray buffer, int bufferSize);
-	
-	
-};
+
 
 //Deprecated
 void JniCallOpenFile(const std::string& fileName);
