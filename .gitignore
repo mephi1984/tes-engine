@@ -19,6 +19,7 @@ DerivedData/
 !default.perspectivev3
 xcuserdata/
 xcshareddata/
+xcworkspace/
 ## Other
 *.moved-aside
 *.xcuserstate
