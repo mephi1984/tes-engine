@@ -1017,7 +1017,9 @@ cardinal TOggMusicStream::GetSamplesPerSec()
 }
 
 
-#endif //NOSOUND
-
 
 } //namespace SE
+
+
+#endif //NOSOUND
+

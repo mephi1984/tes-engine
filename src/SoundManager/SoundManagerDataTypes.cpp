@@ -86,7 +86,8 @@ ov_callbacks OggCallbacks = {
 };
 
 
-#endif //NOSOUND
-
 
 } //namespace SE
+
+#endif //NOSOUND
+

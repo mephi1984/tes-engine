@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{534F100C-E611-43BF-B6F3-AD9F9925F703}</ProjectGuid>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;../../../libs/libogg-1.3.0/include;../../../libs/libvorbis-1.3.2/include;../../../libs/sqplus/sqplus;../../../libs/sqplus/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;NOSOUND;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>../../../boost_1_63_0/stage/lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;../../../libs/libogg-1.3.0/include;../../../libs/libvorbis-1.3.2/include;../../../libs/sqplus/sqplus;../../../libs/sqplus/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;NOSOUND;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../../../boost_1_63_0/stage/lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Animation\SalmonAnimation.cpp" />
+    <ClCompile Include="..\..\src\FontManager\FontManager.cpp" />
+    <ClCompile Include="..\..\src\FrameManager\FrameManager.cpp" />
+    <ClCompile Include="..\..\src\GlobalConst.cpp" />
+    <ClCompile Include="..\..\src\GUIManager\ButtonWidget.cpp" />
+    <ClCompile Include="..\..\src\GUIManager\GUIManager.cpp" />
+    <ClCompile Include="..\..\src\GUIManager\KeyboardWidget.cpp" />
+    <ClCompile Include="..\..\src\GUIManager\WidgetXmlParsers.cpp" />
+    <ClCompile Include="..\..\src\HalibutAnimation\HalibutAnimation.cpp" />
+    <ClCompile Include="..\..\src\LightManager\LightManager.cpp" />
+    <ClCompile Include="..\..\src\ModelManager\ModelManager.cpp" />
+    <ClCompile Include="..\..\src\ModelManager\NewModelManager.cpp" />
+    <ClCompile Include="..\..\src\OpenGLExt\OpenGlExt.cpp" />
+    <ClCompile Include="..\..\src\PhysicsManager\PhysicsManager.cpp" />
+    <ClCompile Include="..\..\src\Render\RenderMisc.cpp" />
+    <ClCompile Include="..\..\src\Render\RenderParams.cpp" />
+    <ClCompile Include="..\..\src\Render\SalmonRender\BackgroundCubemap.cpp" />
+    <ClCompile Include="..\..\src\Render\SalmonRender\Cameras.cpp" />
+    <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderGLES20.cpp" />
+    <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderInterface.cpp" />
+    <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderWindows.cpp" />
+    <ClCompile Include="..\..\src\SalmonEngineInterface.cpp" />
+    <ClCompile Include="..\..\src\SalmonEngineWindows.cpp" />
+    <ClCompile Include="..\..\src\ScriptManager\ScriptManager.cpp" />
+    <ClCompile Include="..\..\src\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="..\..\src\SimpleLand\SimpleLand.cpp" />
+    <ClCompile Include="..\..\src\SmartValueManager\SmartValueManager.cpp" />
+    <ClCompile Include="..\..\src\SoundManager\SoundManagerDataTypes.cpp" />
+    <ClCompile Include="..\..\src\SoundManager\SoundManagerWindows.cpp" />
+    <ClCompile Include="..\..\src\TextureManager\SalmonTexture.cpp" />
+    <ClCompile Include="..\..\src\Utils\Console\Console.cpp" />
+    <ClCompile Include="..\..\src\Utils\DataTypes\DataTypes.cpp" />
+    <ClCompile Include="..\..\src\Utils\DataTypes\NewDataTypes.cpp" />
+    <ClCompile Include="..\..\src\Utils\FileUtils\FileUtils.cpp" />
+    <ClCompile Include="..\..\src\Utils\JpegHelper.cpp" />
+    <ClCompile Include="..\..\src\Utils\Network\Network.cpp" />
+    <ClCompile Include="..\..\src\Utils\Network\Server.cpp" />
+    <ClCompile Include="..\..\src\Utils\PngHelper.cpp" />
+    <ClCompile Include="..\..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
+    <ClCompile Include="..\..\src\Utils\SimpleTimer.cpp" />
+    <ClCompile Include="..\..\src\Utils\TgaLoader.cpp" />
+    <ClCompile Include="..\..\src\Utils\ThreadUtils.cpp" />
+    <ClCompile Include="..\..\src\Utils\WinApi\WinApi.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\Animation\SalmonAnimation.h" />
+    <ClInclude Include="..\..\include\Engine.h" />
+    <ClInclude Include="..\..\include\FontManager\FontManager.h" />
+    <ClInclude Include="..\..\include\FrameManager\FrameManager.h" />
+    <ClInclude Include="..\..\include\GlobalConst.h" />
+    <ClInclude Include="..\..\include\GUIManager\ButtonWidget.h" />
+    <ClInclude Include="..\..\include\GUIManager\GUIManager.h" />
+    <ClInclude Include="..\..\include\GUIManager\KeyboardWidget.h" />
+    <ClInclude Include="..\..\include\GUIManager\WidgetTemplatesImpl.h" />
+    <ClInclude Include="..\..\include\GUIManager\WidgetXmlParsers.h" />
+    <ClInclude Include="..\..\include\HalibutAnimation\HalibutAnimation.h" />
+    <ClInclude Include="..\..\include\LightManager\LightManager.h" />
+    <ClInclude Include="..\..\include\ModelManager\ModelManager.h" />
+    <ClInclude Include="..\..\include\ModelManager\NewModelManager.h" />
+    <ClInclude Include="..\..\include\OpenGLExt\OpenGlExt.h" />
+    <ClInclude Include="..\..\include\PhysicsManager\PhysicsManager.h" />
+    <ClInclude Include="..\..\include\Render\RenderMisc.h" />
+    <ClInclude Include="..\..\include\Render\RenderParams.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\BackgroundCubemap.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\Cameras.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderAndroid.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderGLES20.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderInterface.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderIos.h" />
+    <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderWindows.h" />
+    <ClInclude Include="..\..\include\SalmonEngineAndroid.h" />
+    <ClInclude Include="..\..\include\SalmonEngineInterface.h" />
+    <ClInclude Include="..\..\include\SalmonEngineIos.h" />
+    <ClInclude Include="..\..\include\SalmonEngineWindows.h" />
+    <ClInclude Include="..\..\include\ScriptManager\ScriptManager.h" />
+    <ClInclude Include="..\..\include\ShaderManager\ShaderManager.h" />
+    <ClInclude Include="..\..\include\SimpleLand\SimpleLand.h" />
+    <ClInclude Include="..\..\include\SmartValueManager\SmartValueManager.h" />
+    <ClInclude Include="..\..\include\SoundManager\SoundManagerAndroid.h" />
+    <ClInclude Include="..\..\include\SoundManager\SoundManagerDataTypes.h" />
+    <ClInclude Include="..\..\include\SoundManager\SoundManagerInterface.h" />
+    <ClInclude Include="..\..\include\SoundManager\SoundManagerIos.h" />
+    <ClInclude Include="..\..\include\SoundManager\SoundManagerWindows.h" />
+    <ClInclude Include="..\..\include\TextureManager\SalmonTexture.h" />
+    <ClInclude Include="..\..\include\Utils\BindableVar.h" />
+    <ClInclude Include="..\..\include\Utils\Console\Console.h" />
+    <ClInclude Include="..\..\include\Utils\DataTypes\DataTypes.h" />
+    <ClInclude Include="..\..\include\Utils\DataTypes\NewDataTypes.h" />
+    <ClInclude Include="..\..\include\Utils\ErrorTypes\ErrorTypes.h" />
+    <ClInclude Include="..\..\include\Utils\FileUtils\FileUtils.h" />
+    <ClInclude Include="..\..\include\Utils\IosApi\ObjC\GLKViewTemplate.h" />
+    <ClInclude Include="..\..\include\Utils\IosApi\ObjC\ViewControllerTemplate.h" />
+    <ClInclude Include="..\..\include\Utils\JpegHelper.h" />
+    <ClInclude Include="..\..\include\Utils\Network\Network.h" />
+    <ClInclude Include="..\..\include\Utils\Network\Server.h" />
+    <ClInclude Include="..\..\include\Utils\Network\SignalSender.h" />
+    <ClInclude Include="..\..\include\Utils\PngHelper.h" />
+    <ClInclude Include="..\..\include\Utils\SerializeInterface\SerializeInterface.h" />
+    <ClInclude Include="..\..\include\Utils\SimpleTimer.h" />
+    <ClInclude Include="..\..\include\Utils\TgaLoader.h" />
+    <ClInclude Include="..\..\include\Utils\ThreadUtils.h" />
+    <ClInclude Include="..\..\include\Utils\ThreadUtilsImpl.h" />
+    <ClInclude Include="..\..\include\Utils\Utils.h" />
+    <ClInclude Include="..\..\include\Utils\WinApi\WinApi.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
