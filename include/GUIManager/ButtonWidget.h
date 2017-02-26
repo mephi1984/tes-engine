@@ -106,7 +106,7 @@ struct TSquareStatic : public TInstancingWidgetAncestor
 struct TDynamicText : public TInstancingWidgetAncestor
 {
 protected:
-	boost::signals::connection SmartValueConnection;
+	boost::signals2::connection SmartValueConnection;
 
 	TTextParams LastTextParams;
 
@@ -194,16 +194,16 @@ protected:
 
 	void RefreshTextTriangleList();
 
-	boost::signals::connection InputConnection;
+	boost::signals2::connection InputConnection;
 
-	boost::signals::connection SetTextSlotConnection;
+	boost::signals2::connection SetTextSlotConnection;
 
 public:
 	~TEdit();
 	TRenderPairList::iterator TextIterator;
 
 	
-	boost::signal<void(std::string)> OnTextChanged;
+	boost::signals2::signal<void(std::string)> OnTextChanged;
 
 	virtual bool CheckClick(vec2 mousePos);
 
@@ -230,7 +230,7 @@ class TCheckBox : public TInstancingWidgetAncestor
 protected:
 	bool IsChecked; //To be set immediately on tap up
 
-	boost::signals::connection SetCheckedSlotConnection;
+	boost::signals2::connection SetCheckedSlotConnection;
 	void RefreshVisibility();
 public:
 	std::vector<TRenderPairList::iterator> StaticTextureIteratorArr;
@@ -252,7 +252,7 @@ public:
 
 	//Logic:
 	void SetChecked(bool isChecked);
-	boost::signal<void(bool)> OnSetChecked;
+	boost::signals2::signal<void(bool)> OnSetChecked;
 
 	static TCheckBox* CreateCheckBox(vec2 posFrom, vec2 posTo);
 	static TCheckBox* CreateCheckBoxWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TCheckBox*)> checkBoxFillerFunc);
@@ -274,7 +274,7 @@ class TRadioButton : public TInstancingWidgetAncestor
 protected:
 	bool IsChecked; //To be set immediately on tap up
 
-	boost::signals::connection SetCheckedSlotConnection;
+	boost::signals2::connection SetCheckedSlotConnection;
 	void RefreshVisibility();
 public:
 	std::vector<TRenderPairList::iterator> StaticTextureIteratorArr;
@@ -296,7 +296,7 @@ public:
 
 	//Logic:
 	void SetChecked(bool isChecked);
-	boost::signal<void(bool)> OnSetChecked;
+	boost::signals2::signal<void(bool)> OnSetChecked;
 
 	static TRadioButton* CreateRadioButton(vec2 posFrom, vec2 posTo);
 	static TRadioButton* CreateRadioButtonWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TRadioButton*)> radioButtonFillerFunc);

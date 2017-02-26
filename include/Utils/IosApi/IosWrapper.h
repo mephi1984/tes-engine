@@ -21,5 +21,8 @@ void AppOnScroll(int shiftx, int shifty, int touchNumber);
 void AppOnScale(float scale);
 void AppOnTapUpAfterMove(int posx, int posy, int touchNumber);
 
+    
+    void SetBindDrawableFunc(void(*funcPtr)());
+
 
 }

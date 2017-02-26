@@ -124,7 +124,7 @@ void TGUIManager::Update(cardinal dt)
 {
 	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
 	
-	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
+	std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap; 
 
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
@@ -298,7 +298,7 @@ void TGUIManager::OnMouseDown(vec2 pos, int touchNumber)
 	LastTapPos[touchNumber] = pos;
 	TotalShift[touchNumber] = vec2(0,0);
     
-    std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap;
+    std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap;
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
@@ -336,7 +336,7 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
 	
 	TWidgetArr::reverse_iterator i;
 
-	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
+	std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap; 
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
@@ -374,7 +374,7 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
         
         TWidgetArr::reverse_iterator i;
         
-        std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap;
+        std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap;
         
         for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
         {
@@ -434,7 +434,7 @@ void TGUIManager::OnMove(vec2 shift, int touchNumber)
 
 	//LastTapPos += shift;
 
-	std::vector<std::shared_ptr<boost::signal<void (TSignalParam)>>> signalMap; 
+	std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap; 
 
 	for (i = WidgetArr.rbegin(); i != WidgetArr.rend(); ++i)
 	{
@@ -535,7 +535,7 @@ void TGUIManager::PrintWidgetList()
 }
 
 
-std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnClickSignal(const std::string& widgetName)
+std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> TGUIManager::GetOnClickSignal(const std::string& widgetName)
 {
 
 	TWidgetArr::iterator i = FindWidgetInArr(widgetName);
@@ -544,7 +544,7 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnClickSigna
 	
 }
 
-std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnHoldSignal(const std::string& widgetName)
+std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> TGUIManager::GetOnHoldSignal(const std::string& widgetName)
 {
 
 	TWidgetArr::iterator i = FindWidgetInArr(widgetName);
@@ -553,7 +553,7 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnHoldSignal
 	
 }
 
-std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnTapDownSignal(const std::string& widgetName)
+std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> TGUIManager::GetOnTapDownSignal(const std::string& widgetName)
 {
         
     TWidgetArr::iterator i = FindWidgetInArr(widgetName);
@@ -562,7 +562,7 @@ std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetOnTapDownSig
         
 }
 
-std::shared_ptr<boost::signal<void (TSignalParam)>> TGUIManager::GetSignal(const std::string& signalName, const std::string& widgetName)
+std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> TGUIManager::GetSignal(const std::string& signalName, const std::string& widgetName)
 {
 
 	TWidgetArr::iterator i = FindWidgetInArr(widgetName);

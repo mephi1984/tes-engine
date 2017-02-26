@@ -59,7 +59,8 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
 		cardinal frameBuffer;
 		cardinal depthRenderBuffer;
 		cardinal status;
-
+        
+        
 
 		glGenFramebuffers(1,&frameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -77,6 +78,9 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
         #ifdef TARGET_IOS
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
         #endif
+        
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        
 		
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
 

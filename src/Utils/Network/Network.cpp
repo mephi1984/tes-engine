@@ -28,7 +28,7 @@ void TDataReadSignalMap::AddSlot(const std::string& nodeName, boost::function<vo
 {
 	if (SignalMap.count(nodeName) == 0)
 	{
-		SignalMap[nodeName] = std::shared_ptr<boost::signal<void(boost::property_tree::ptree)>>(new boost::signal<void(boost::property_tree::ptree)>);
+		SignalMap[nodeName] = std::shared_ptr<boost::signals2::signal<void(boost::property_tree::ptree)>>(new boost::signals2::signal<void(boost::property_tree::ptree)>);
 		SignalMap[nodeName]->connect(f);
 	}
 	else

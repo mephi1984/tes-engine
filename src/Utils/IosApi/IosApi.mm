@@ -12,9 +12,12 @@
 #include "include/Utils/Utils.h"
 
 
-GLKView* defaultView = 0; //Need to be set up by App!
+//GLKView* defaultView = 0; //Need to be set up by App!
 
 UITextField* extKeyboardTextView = 0;
+
+
+void(*bindDrawableFuncPtr)() = nullptr;
 
 
 namespace SE
@@ -60,7 +63,11 @@ std::string IosGetFilePathUserData(const std::string& filename)
     
 void IosSwitchToScreen()
 {
-    [defaultView bindDrawable];
+    if (bindDrawableFuncPtr != nullptr)
+    {
+        (*bindDrawableFuncPtr)();
+    }
+    //[defaultView bindDrawable];
 }
     
 void ShowKeyboard(std::string text)
@@ -113,6 +120,13 @@ bool IsIphone5()
     }
     return NO;
 }
+    
+    
+    void SetBindDrawableFunc(void(*funcPtr)())
+    {
+        bindDrawableFuncPtr = funcPtr;
+    }
+
     
 
 

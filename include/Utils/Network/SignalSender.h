@@ -6,11 +6,13 @@
 #include "boost/shared_ptr.hpp"
 #include "boost/array.hpp"
 #include "boost/enable_shared_from_this.hpp"
-#include "boost/signal.hpp"
+#include "boost/signals2.hpp"
 #include "boost/thread.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/property_tree/ptree.hpp"
 #include "boost/property_tree/xml_parser.hpp"
+
+
 
 namespace SE
 {
@@ -25,7 +27,7 @@ struct TSignalSender
 
 	std::string Data;
 
-	boost::signal<void()> ErrorSignal;
+	boost::signals2::signal<void()> ErrorSignal;
 
 	TSignalSender(boost::asio::ip::tcp::socket& socket, int length, std::string data)
 		: Socket(socket)

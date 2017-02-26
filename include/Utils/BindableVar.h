@@ -1,11 +1,13 @@
 #ifndef BINDABLE_VAR_H_INCLUDED
 #define BINDABLE_VAR_H_INCLUDED
 
-#include "boost/signal.hpp"
+#include "boost/signals2.hpp"
 #include "boost/variant.hpp"
+
 
 namespace SE
 {
+
 
 //Must be stored in shared_ptr:
 
@@ -17,7 +19,7 @@ protected:
 
 public:
 
-	boost::signal<void(const TYPENAME&)> OnVarChanged;
+    boost::signals2::signal<void(const TYPENAME&)> OnVarChanged;
 
 	TBindableVar()
 	{

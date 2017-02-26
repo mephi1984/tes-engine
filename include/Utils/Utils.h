@@ -14,7 +14,8 @@ This code combines additional routines (such as console/log, exceptions, math ut
 
 #include "boost/asio.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/signal.hpp"
+#include "boost/signals2.hpp"
+
 
 
 #include "include/Utils/Console/Console.h"

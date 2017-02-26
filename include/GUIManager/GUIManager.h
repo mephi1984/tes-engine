@@ -32,7 +32,7 @@ struct TWidgetStruct
 
 	std::shared_ptr<TInstancingWidgetAncestor> Widget;
 
-	std::map<std::string, std::shared_ptr<boost::signal<void (TSignalParam)>>> SignalMap;
+	std::map<std::string, std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> SignalMap;
 	
 	TWidgetStruct(const std::string& name, const std::string& groupName, std::shared_ptr<TInstancingWidgetAncestor> widget, int order = 0)
 		: Name(name)
@@ -41,10 +41,10 @@ struct TWidgetStruct
 		, IsMouseDown(false)
 		, Widget(widget)
 	{
-		SignalMap[CONST_HOLD_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
-		SignalMap[CONST_CLICK_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
-        SignalMap[CONST_TAPDOWN_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
-		SignalMap[CONST_DRAG_SIGNAL_NAME] = std::shared_ptr<boost::signal<void (TSignalParam)>>(new boost::signal<void (TSignalParam)>());
+		SignalMap[CONST_HOLD_SIGNAL_NAME] = std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>(new boost::signals2::signal<void (TSignalParam)>());
+		SignalMap[CONST_CLICK_SIGNAL_NAME] = std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>(new boost::signals2::signal<void (TSignalParam)>());
+        SignalMap[CONST_TAPDOWN_SIGNAL_NAME] = std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>(new boost::signals2::signal<void (TSignalParam)>());
+		SignalMap[CONST_DRAG_SIGNAL_NAME] = std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>(new boost::signals2::signal<void (TSignalParam)>());
 	}
 
 	TWidgetStruct(const TWidgetStruct& widgetStruct)
@@ -142,10 +142,10 @@ protected:
 public:
     bool KeyboardIsOnScreen;
 
-	boost::signal<void(int)> KeyPressedSignal;
-    boost::signal<void(std::string)> SetTextSignal;
-	boost::signal<void()> OnKeyboardShowSignal;
-	boost::signal<void()> OnKeyboardHideSignal;
+	boost::signals2::signal<void(int)> KeyPressedSignal;
+    boost::signals2::signal<void(std::string)> SetTextSignal;
+	boost::signals2::signal<void()> OnKeyboardShowSignal;
+	boost::signals2::signal<void()> OnKeyboardHideSignal;
 
 	TGUIManager();
 
@@ -185,10 +185,10 @@ public:
 
 	void PrintWidgetList();
 
-	std::shared_ptr<boost::signal<void (TSignalParam)>> GetOnClickSignal(const std::string& widgetName);
-	std::shared_ptr<boost::signal<void (TSignalParam)>> GetOnHoldSignal(const std::string& widgetName);
-	std::shared_ptr<boost::signal<void (TSignalParam)>> GetSignal(const std::string& signalName, const std::string& widgetName);
-    std::shared_ptr<boost::signal<void (TSignalParam)>> GetOnTapDownSignal(const std::string& widgetName);
+	std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> GetOnClickSignal(const std::string& widgetName);
+	std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> GetOnHoldSignal(const std::string& widgetName);
+	std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> GetSignal(const std::string& signalName, const std::string& widgetName);
+    std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> GetOnTapDownSignal(const std::string& widgetName);
 
 	//TFunctionBinderInterface implementation:
 	void SQ_MoveWidget(const SQChar *widgetName, float x, float y);

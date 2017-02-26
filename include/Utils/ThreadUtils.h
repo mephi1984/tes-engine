@@ -2,7 +2,7 @@
 #define THREAD_UTILS_H_INCLUDED
 
 #include "boost/asio.hpp"
-#include "boost/signal.hpp"
+#include "boost/signals2.hpp"
 #include "boost/thread.hpp"
 
 

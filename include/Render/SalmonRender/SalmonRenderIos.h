@@ -9,9 +9,12 @@ namespace SE
 class TSalmonRendererIos : public TSalmonRendererGLES20
 {
 protected:
+    
+    GLint defaultFBO;
 
 public:
- 
+    virtual void InitOpenGL(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
+
     virtual void SwitchToScreen();
 };
 

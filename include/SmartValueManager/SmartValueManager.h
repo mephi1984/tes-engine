@@ -40,7 +40,7 @@ public:
 	}
 
 	template<typename TYPENAME>
-	boost::signal<void(const TYPENAME&)>& GetSignal(const std::string& dictName, const std::string& valueName)
+	boost::signals2::signal<void(const TYPENAME&)>& GetSignal(const std::string& dictName, const std::string& valueName)
 	{
 		return boost::get<std::shared_ptr<TBindableVar<TYPENAME>>>(GetSmartValue(dictName, valueName))->OnVarChanged;
 	}

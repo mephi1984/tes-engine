@@ -10,11 +10,10 @@
 
 #include "boost/asio.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
-#include "boost/signal.hpp"
+#include "boost/signals2.hpp"
 #include "boost/variant.hpp"
 
 #include "include/Utils/Network/SignalSender.h"
-
 
 namespace SE
 {
@@ -28,7 +27,7 @@ void SendPropertyTree(boost::asio::io_service& ioService, boost::asio::ip::tcp::
 class TDataReadSignalMap
 {
 protected:
-	std::map<std::string, std::shared_ptr<boost::signal<void(boost::property_tree::ptree)>>> SignalMap;
+	std::map<std::string, std::shared_ptr<boost::signals2::signal<void(boost::property_tree::ptree)>>> SignalMap;
 public:
 
 	void AddSlot(const std::string& nodeName, boost::function<void(boost::property_tree::ptree)> f);
@@ -69,7 +68,7 @@ public:
 
 	void HandleReadData(const boost::system::error_code& error);
  
-	boost::signal<void()> ErrorSignal;
+	boost::signals2::signal<void()> ErrorSignal;
 };
 
 
@@ -100,9 +99,9 @@ public:
 
 	void HandleGetData(boost::property_tree::ptree pTree);
 
-	boost::signal<void()> AuthorizedSignal;
-	boost::signal<void(std::string, std::string)> SaveLoginPasswordSignal;
-	boost::signal<void()> ErrorSignal;
+	boost::signals2::signal<void()> AuthorizedSignal;
+	boost::signals2::signal<void(std::string, std::string)> SaveLoginPasswordSignal;
+	boost::signals2::signal<void()> ErrorSignal;
 };
 
 typedef boost::variant<std::shared_ptr<TSimpleAuthorization>> TAuthorizationVariant;
@@ -127,10 +126,10 @@ protected:
 	bool Opened;
 
 public:
-	boost::signal<void()> OnAddressNotResolvedSignal;
-	boost::signal<void()> OnConnectedSignal;
-	boost::signal<void()> OnAutorizedSignal;
-	boost::signal<void()> OnDisconnectedSignal;
+	boost::signals2::signal<void()> OnAddressNotResolvedSignal;
+	boost::signals2::signal<void()> OnConnectedSignal;
+	boost::signals2::signal<void()> OnAutorizedSignal;
+	boost::signals2::signal<void()> OnDisconnectedSignal;
 	
 	boost::shared_ptr<TDataReader> ClientDataReader;
 

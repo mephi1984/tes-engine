@@ -9,6 +9,13 @@
 #include <GLES2/gl2ext.h>
 #endif
 
+#ifdef TARGET_IOS
+//#include <OpenGLES/AEGL.h>
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#include <OpenGLES/ES2/glext.h>
+#endif
+
 namespace SE
 {
 
