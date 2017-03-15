@@ -65,3 +65,5 @@ iOSInjectionProject/
 
 Debug/
 x64/
+*.VC.db
+.vs/
