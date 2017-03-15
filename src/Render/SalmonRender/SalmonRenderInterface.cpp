@@ -65,8 +65,6 @@ void TSalmonRendererInterface::SetUniforms()
 	
 	RenderUniform4fv(CONST_STRING_MATERIAL_COLOR_UNIFORM, WhiteColor);
 	
-
-	ResourceManager->LightManager.SetLightUniforms();
 }
 
 

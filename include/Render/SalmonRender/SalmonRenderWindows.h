@@ -7,8 +7,6 @@ This code is the heart of engine. Here is the render and resource manager
 
 #include "include/Utils/Utils.h"
 
-#include "include/SimpleLand/SimpleLand.h"
-
 #include "include/Render/SalmonRender/SalmonRenderInterface.h"
 
 
@@ -20,7 +18,6 @@ class TSalmonRenderer : public TSalmonRendererInterface
 protected:
 
 	bool IsCameraTransparentToLand; //To make it work you must setup LandToCalcCollision
-	TSimpleLandClass* LandToCalcCollision;
 
 	float FogBeginDistance;
 	float FogEndDistance;
@@ -39,8 +36,6 @@ public:
 	~TSalmonRenderer();
 
 	bool BindOpenGLFunctions();
-
-	void SetLandToCalcCollision(TSimpleLandClass* landToCalcCollision);
 
 	float GetShadowClampValue();
 	void SetShadowClampValue(float shadowClampValue);

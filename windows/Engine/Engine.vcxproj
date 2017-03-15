@@ -118,7 +118,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Animation\SalmonAnimation.cpp" />
     <ClCompile Include="..\..\src\FontManager\FontManager.cpp" />
     <ClCompile Include="..\..\src\FrameManager\FrameManager.cpp" />
     <ClCompile Include="..\..\src\GlobalConst.cpp" />
@@ -126,15 +125,9 @@
     <ClCompile Include="..\..\src\GUIManager\GUIManager.cpp" />
     <ClCompile Include="..\..\src\GUIManager\KeyboardWidget.cpp" />
     <ClCompile Include="..\..\src\GUIManager\WidgetXmlParsers.cpp" />
-    <ClCompile Include="..\..\src\HalibutAnimation\HalibutAnimation.cpp" />
-    <ClCompile Include="..\..\src\LightManager\LightManager.cpp" />
-    <ClCompile Include="..\..\src\ModelManager\ModelManager.cpp" />
-    <ClCompile Include="..\..\src\ModelManager\NewModelManager.cpp" />
     <ClCompile Include="..\..\src\OpenGLExt\OpenGlExt.cpp" />
-    <ClCompile Include="..\..\src\PhysicsManager\PhysicsManager.cpp" />
     <ClCompile Include="..\..\src\Render\RenderMisc.cpp" />
     <ClCompile Include="..\..\src\Render\RenderParams.cpp" />
-    <ClCompile Include="..\..\src\Render\SalmonRender\BackgroundCubemap.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\Cameras.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderGLES20.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderInterface.cpp" />
@@ -142,7 +135,6 @@
     <ClCompile Include="..\..\src\SalmonEngineInterface.cpp" />
     <ClCompile Include="..\..\src\SalmonEngineWindows.cpp" />
     <ClCompile Include="..\..\src\ShaderManager\ShaderManager.cpp" />
-    <ClCompile Include="..\..\src\SimpleLand\SimpleLand.cpp" />
     <ClCompile Include="..\..\src\SmartValueManager\SmartValueManager.cpp" />
     <ClCompile Include="..\..\src\TextureManager\SalmonTexture.cpp" />
     <ClCompile Include="..\..\src\Utils\Console\Console.cpp" />
@@ -150,8 +142,6 @@
     <ClCompile Include="..\..\src\Utils\DataTypes\NewDataTypes.cpp" />
     <ClCompile Include="..\..\src\Utils\FileUtils\FileUtils.cpp" />
     <ClCompile Include="..\..\src\Utils\JpegHelper.cpp" />
-    <ClCompile Include="..\..\src\Utils\Network\Network.cpp" />
-    <ClCompile Include="..\..\src\Utils\Network\Server.cpp" />
     <ClCompile Include="..\..\src\Utils\PngHelper.cpp" />
     <ClCompile Include="..\..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
     <ClCompile Include="..\..\src\Utils\SimpleTimer.cpp" />
@@ -170,7 +160,6 @@
     <ClInclude Include="..\..\include\GUIManager\KeyboardWidget.h" />
     <ClInclude Include="..\..\include\GUIManager\WidgetTemplatesImpl.h" />
     <ClInclude Include="..\..\include\GUIManager\WidgetXmlParsers.h" />
-    <ClInclude Include="..\..\include\HalibutAnimation\HalibutAnimation.h" />
     <ClInclude Include="..\..\include\LightManager\LightManager.h" />
     <ClInclude Include="..\..\include\ModelManager\ModelManager.h" />
     <ClInclude Include="..\..\include\ModelManager\NewModelManager.h" />
@@ -178,7 +167,6 @@
     <ClInclude Include="..\..\include\PhysicsManager\PhysicsManager.h" />
     <ClInclude Include="..\..\include\Render\RenderMisc.h" />
     <ClInclude Include="..\..\include\Render\RenderParams.h" />
-    <ClInclude Include="..\..\include\Render\SalmonRender\BackgroundCubemap.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\Cameras.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderAndroid.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderGLES20.h" />
@@ -190,7 +178,6 @@
     <ClInclude Include="..\..\include\SalmonEngineIos.h" />
     <ClInclude Include="..\..\include\SalmonEngineWindows.h" />
     <ClInclude Include="..\..\include\ShaderManager\ShaderManager.h" />
-    <ClInclude Include="..\..\include\SimpleLand\SimpleLand.h" />
     <ClInclude Include="..\..\include\SmartValueManager\SmartValueManager.h" />
     <ClInclude Include="..\..\include\TextureManager\SalmonTexture.h" />
     <ClInclude Include="..\..\include\Utils\BindableVar.h" />
@@ -202,7 +189,6 @@
     <ClInclude Include="..\..\include\Utils\IosApi\ObjC\GLKViewTemplate.h" />
     <ClInclude Include="..\..\include\Utils\IosApi\ObjC\ViewControllerTemplate.h" />
     <ClInclude Include="..\..\include\Utils\JpegHelper.h" />
-    <ClInclude Include="..\..\include\Utils\Network\Network.h" />
     <ClInclude Include="..\..\include\Utils\Network\Server.h" />
     <ClInclude Include="..\..\include\Utils\Network\SignalSender.h" />
     <ClInclude Include="..\..\include\Utils\PngHelper.h" />

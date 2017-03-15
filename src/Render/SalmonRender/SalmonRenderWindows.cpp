@@ -16,7 +16,6 @@ TSalmonRenderer::TSalmonRenderer() :
 	FogBeginDistance(CONST_DEFAULT_FOG_BEGIN_DISTANCE), 
 	FogEndDistance(CONST_DEFAULT_FOG_END_DISTANCE), 
 	FogColor(CONST_DEFAULT_FOG_COLOR), 
-	LandToCalcCollision(NULL), 
 	IsCameraTransparentToLand(true)
 { 
 
@@ -267,14 +266,6 @@ void TSalmonRenderer::DrawQuad(const T2DQuad& quad)
 		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[2].v);
 		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[2].v);
 	glEnd();
-}
-
-
-
-void TSalmonRenderer::SetLandToCalcCollision(TSimpleLandClass* landToCalcCollision)
-{
-	IsCameraTransparentToLand = false;
-	LandToCalcCollision = landToCalcCollision;
 }
 
 

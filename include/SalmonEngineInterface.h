@@ -20,20 +20,14 @@ This code combines all headers for Salmon engine into one header file
 
 #include "include/Render/RenderMisc.h"
 
-#include "include/Animation/SalmonAnimation.h"
 #include "include/TextureManager/SalmonTexture.h"
 #include "include/ShaderManager/ShaderManager.h"
 #include "include/FrameManager/FrameManager.h"
 #include "include/LightManager/LightManager.h"
 
 #include "include/FontManager/FontManager.h"
-#include "include/SimpleLand/SimpleLand.h"
 #include "include/SmartValueManager/SmartValueManager.h"
-
-#include "include/ModelManager/NewModelManager.h"
-#include "include/PhysicsManager/PhysicsManager.h"
 #include "include/GUIManager/GUIManager.h"
-#include "include/HalibutAnimation/HalibutAnimation.h"
 
 namespace SE
 {
@@ -43,16 +37,11 @@ class TResourceManager
 protected:
 public:
 	TTextureListClass TexList;
-	TModelManager ModelManager;
-	TFlexModelManager FlexModelManager;
 	TShaderManager ShaderManager;
 	TFrameManager FrameManager;
-	TLightManager LightManager;
-	TModelAnimManager ModelAnimManager;
 	TFontManager FontManager;
     TSmartValueManager SmartValueManager;
 	TGUIManager GUIManager;
-	THalibutAnimationManager HalibutAnimationManager;
 
 	void Update(cardinal timer);
 

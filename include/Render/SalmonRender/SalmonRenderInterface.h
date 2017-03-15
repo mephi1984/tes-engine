@@ -3,11 +3,7 @@
 
 #include "include/Utils/Utils.h"
 
-#include "include/SimpleLand/SimpleLand.h"
-
 #include "include/Render/RenderMisc.h"
-
-#include "include/Render/SalmonRender/BackgroundCubemap.h"
 
 #include "include/Render/SalmonRender/Cameras.h"
 

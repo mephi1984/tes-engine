@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Animation\SalmonAnimation.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\FontManager\FontManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -39,31 +36,13 @@
     <ClCompile Include="..\..\src\GUIManager\WidgetXmlParsers.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\HalibutAnimation\HalibutAnimation.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\LightManager\LightManager.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ModelManager\ModelManager.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ModelManager\NewModelManager.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\OpenGLExt\OpenGlExt.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\PhysicsManager\PhysicsManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Render\RenderMisc.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Render\RenderParams.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Render\SalmonRender\BackgroundCubemap.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Render\SalmonRender\Cameras.cpp">
@@ -87,12 +66,6 @@
     <ClCompile Include="..\..\src\ShaderManager\ShaderManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\SimpleLand\SimpleLand.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SmartValueManager\SmartValueManager.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\TextureManager\SalmonTexture.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -111,12 +84,6 @@
     <ClCompile Include="..\..\src\Utils\JpegHelper.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Utils\Network\Network.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Utils\Network\Server.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Utils\PngHelper.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -133,6 +100,9 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Utils\WinApi\WinApi.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SmartValueManager\SmartValueManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,9 +137,6 @@
     <ClInclude Include="..\..\include\GUIManager\WidgetXmlParsers.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\HalibutAnimation\HalibutAnimation.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\LightManager\LightManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
@@ -189,9 +156,6 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Render\RenderParams.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Render\SalmonRender\BackgroundCubemap.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Render\SalmonRender\Cameras.h">
@@ -227,12 +191,6 @@
     <ClInclude Include="..\..\include\ShaderManager\ShaderManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\SimpleLand\SimpleLand.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SmartValueManager\SmartValueManager.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\TextureManager\SalmonTexture.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
@@ -263,9 +221,6 @@
     <ClInclude Include="..\..\include\Utils\JpegHelper.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Utils\Network\Network.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\Network\Server.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
@@ -294,6 +249,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\WinApi\WinApi.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SmartValueManager\SmartValueManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
