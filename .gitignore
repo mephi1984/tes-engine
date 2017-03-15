@@ -62,3 +62,6 @@ fastlane/screenshots
 
 iOSInjectionProject/
 /proj.ios_mac/.idea
+
+Debug/
+x64/

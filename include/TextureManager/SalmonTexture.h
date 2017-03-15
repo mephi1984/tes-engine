@@ -18,7 +18,6 @@ This code contains texture manager
 #include "include/Utils/PngHelper.h"
 #include "include/Utils/JpegHelper.h"
 #include "include/Utils/TgaLoader.h"
-#include "include/ScriptManager/ScriptManager.h"
 
 namespace SE
 {
@@ -45,7 +44,7 @@ struct TTextureData
 typedef std::map<std::string, TTextureInfo, std::less<std::string>> TTextureMap;
 
 
-class TTextureListClass : public TSerializeInterface, public TFunctionBinderInterface
+class TTextureListClass : public TSerializeInterface
 {
 protected:
     

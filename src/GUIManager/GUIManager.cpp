@@ -575,23 +575,8 @@ std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> TGUIManager::GetSi
 	return i->SignalMap[signalName];
 }
 
-void TGUIManager::SQ_MoveWidget(const SQChar *widgetName, float x, float y)
-{
-	MoveWidget(std::string(widgetName), vec2(x,y));
-}
-
-
 void TGUIManager::BindFunctions()
 {
-	ResourceManager->ScriptManager.AddFunction("pwl", 
-		TScriptInfo("PrintWidgetList"),
-		ResourceManager->GUIManager,
-		&TGUIManager::PrintWidgetList);
-
-	ResourceManager->ScriptManager.AddFunction("mw", 
-		TScriptInfo("MoveWidget"),
-		ResourceManager->GUIManager,
-		&TGUIManager::SQ_MoveWidget);
 }
 
 } //namespace SE

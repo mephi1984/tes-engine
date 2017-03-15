@@ -24,8 +24,6 @@ TResourceManager* ResourceManager;
 void TResourceManager::Update(cardinal timer)
 {
 
-	SoundManager.Update(timer);
-
 	GUIManager.Update(timer);
 
 	ST::MainThreadIoService.poll_one();
@@ -55,7 +53,7 @@ void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float ma
 {
 	ST::MainThreadId = boost::this_thread::get_id();
 
-	ResourceManager->ScriptManager.BindBasicFunctions();
+	//ResourceManager->ScriptManager.BindBasicFunctions();
 
 	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
 

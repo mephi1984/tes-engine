@@ -84,9 +84,6 @@
     <ClCompile Include="..\..\src\SalmonEngineWindows.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ScriptManager\ScriptManager.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ShaderManager\ShaderManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -94,12 +91,6 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\SmartValueManager\SmartValueManager.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SoundManager\SoundManagerDataTypes.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\SoundManager\SoundManagerWindows.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\TextureManager\SalmonTexture.cpp">
@@ -233,9 +224,6 @@
     <ClInclude Include="..\..\include\SalmonEngineWindows.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\ScriptManager\ScriptManager.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\ShaderManager\ShaderManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
@@ -243,21 +231,6 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\SmartValueManager\SmartValueManager.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SoundManager\SoundManagerAndroid.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SoundManager\SoundManagerDataTypes.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SoundManager\SoundManagerInterface.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SoundManager\SoundManagerIos.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\SoundManager\SoundManagerWindows.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\TextureManager\SalmonTexture.h">

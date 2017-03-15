@@ -3,7 +3,6 @@
 
 #include "include/Render/RenderMisc.h"
 #include "include/Render/RenderParams.h"
-#include "include/ScriptManager/ScriptManager.h"
 #include <map>
 #include <vector>
 
@@ -137,7 +136,7 @@ struct THalibutAnimObjectRecord
 
 
 
-class THalibutAnimationManager : public TFunctionBinderInterface
+class THalibutAnimationManager
 {
 protected:
 	std::vector<THalibutAnimObjectRecord> HalibutAnimObjectArr;

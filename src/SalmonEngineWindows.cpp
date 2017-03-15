@@ -63,7 +63,7 @@ void TApplication::OnKeyPress(cardinal key)
 		}
 		else if (key == 13|| key == 10) //Enter
 		{
-			ResourceManager->ScriptManager.RunScript(Console->ConsoleInput);
+			//ResourceManager->ScriptManager.RunScript(Console->ConsoleInput);
 
 			Console->InputHistory.push_back(Console->ConsoleInput);
 

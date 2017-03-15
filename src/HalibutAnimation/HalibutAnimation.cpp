@@ -495,7 +495,7 @@ void THalibutAnimationManager::PrintAnimationList()
 void THalibutAnimationManager::BindFunctions()
 {
 	//*Console<<"Bind functions in THalibutAnimationManager\n";
-	ResourceManager->ScriptManager.AddFunction("pal", TScriptInfo("PrintAnimationList"), *this, &THalibutAnimationManager::PrintAnimationList);
+	
 }
 
 } //namespace SE

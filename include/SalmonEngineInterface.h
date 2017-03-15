@@ -25,16 +25,7 @@ This code combines all headers for Salmon engine into one header file
 #include "include/ShaderManager/ShaderManager.h"
 #include "include/FrameManager/FrameManager.h"
 #include "include/LightManager/LightManager.h"
-#include "include/ScriptManager/ScriptManager.h"
-#ifdef TARGET_ANDROID
-#include "include/SoundManager/SoundManagerAndroid.h"
-#endif
-#ifdef TARGET_WIN32
-#include "include/SoundManager/SoundManagerWindows.h"
-#endif
-#ifdef TARGET_IOS
-#include "include/SoundManager/SoundManagerIos.h"
-#endif
+
 #include "include/FontManager/FontManager.h"
 #include "include/SimpleLand/SimpleLand.h"
 #include "include/SmartValueManager/SmartValueManager.h"
@@ -58,21 +49,10 @@ public:
 	TFrameManager FrameManager;
 	TLightManager LightManager;
 	TModelAnimManager ModelAnimManager;
-	TScriptManager ScriptManager;
 	TFontManager FontManager;
     TSmartValueManager SmartValueManager;
 	TGUIManager GUIManager;
 	THalibutAnimationManager HalibutAnimationManager;
-
-#ifdef TARGET_ANDROID
-	TSoundManagerAndroid SoundManager;
-#endif
-#ifdef TARGET_WIN32
-	TSoundManagerWindows SoundManager;
-#endif
-#ifdef TARGET_IOS
-	TSoundManagerIos SoundManager;
-#endif
 
 	void Update(cardinal timer);
 

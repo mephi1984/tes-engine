@@ -47,7 +47,7 @@ namespace SE
 		dataReader->DataReadSignalMap.AddSlot("Hello", boost::bind(&TSimpleAutorizator::HandleGetRegisterRequest, this, _1));
 		dataReader->DataReadSignalMap.AddSlot("HelloAgain", boost::bind(&TSimpleAutorizator::HandleGetLoginRequest, this, _1));
 	
-		dataReader->ErrorSignal.connect(ErrorSignal);
+		//dataReader->ErrorSignal.connect(ErrorSignal);
 
 		dataReader->StartReadOnce();
 

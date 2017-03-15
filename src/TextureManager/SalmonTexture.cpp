@@ -809,7 +809,7 @@ void TTextureListClass::PrintTextureList()
 void TTextureListClass::BindFunctions()
 {
 	//*Console<<"Bind functions in TTextureListClass\n";
-	ResourceManager->ScriptManager.AddFunction("ptl", TScriptInfo("PrintTextureList"), *this, &TTextureListClass::PrintTextureList);
+	//ResourceManager->ScriptManager.AddFunction("ptl", TScriptInfo("PrintTextureList"), *this, &TTextureListClass::PrintTextureList);
 }
 
 void TTextureListClass::SaveTexDataToPlainBmpToUserData(const std::string& fileName, TTextureData texData)

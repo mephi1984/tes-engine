@@ -6,7 +6,6 @@
 #include "include/GUIManager/KeyboardWidget.h"
 #include "include/GUIManager/WidgetXmlParsers.h"
 #include "include/Utils/Utils.h"
-#include "include/ScriptManager/ScriptManager.h"
 
 #include "boost/variant.hpp"
 #include "boost/thread.hpp"
@@ -123,7 +122,7 @@ typedef std::list<TWidgetTransformTask> TWidgetTrasfromTaskList;
 
 typedef std::vector<TWidgetStruct> TWidgetArr;
 
-class TGUIManager : public TFunctionBinderInterface
+class TGUIManager
 {
 protected:
 	
@@ -190,8 +189,6 @@ public:
 	std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> GetSignal(const std::string& signalName, const std::string& widgetName);
     std::shared_ptr<boost::signals2::signal<void (TSignalParam)>> GetOnTapDownSignal(const std::string& widgetName);
 
-	//TFunctionBinderInterface implementation:
-	void SQ_MoveWidget(const SQChar *widgetName, float x, float y);
 	virtual void BindFunctions();
 
 };
