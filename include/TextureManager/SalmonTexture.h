@@ -25,19 +25,19 @@ namespace SE
 
 struct TTextureInfo
 {
-	cardinal Width;
-	cardinal Height;
-	cardinal TexID;
-	cardinal RefCount;
+	size_t Width;
+	size_t Height;
+	size_t TexID;
+	size_t RefCount;
 };
 
 
 struct TTextureData
 {
-	cardinal Width;
-	cardinal Height;
+	size_t Width;
+	size_t Height;
 	char Format[8];
-	cardinal DataSize;
+	size_t DataSize;
 	boost::shared_array<char> Data;
 };
 
@@ -51,7 +51,7 @@ protected:
 	TTextureMap TexMap;
     
     std::map<std::string, boost::function<bool(const std::string&, TTextureData&)>> CreateFunctionMap;
-    std::map<std::string, boost::function<cardinal(TTextureData&)>> AddFunctionMap;
+    std::map<std::string, boost::function<size_t(TTextureData&)>> AddFunctionMap;
 
 	void NormalizeTexData(TTextureData& texData);
 
@@ -61,15 +61,15 @@ protected:
 	bool CreateTexDataFromPng(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromJpg(const std::string& filename, TTextureData& texData);
 	
-	cardinal AddTextureBmp24Data(const TTextureData& texData); //MAIN THREAD ONLY
-	cardinal AddTextureBmp32Data(const TTextureData& texData); //MAIN THREAD ONLY
-	cardinal AddCubemapTextureBmp24Data(TTextureData* texData); //MAIN THREAD ONLY
-	//cardinal AddCubemapTextureBmp32Data(TTextureData* texData); Not implemented yet
+	size_t AddTextureBmp24Data(const TTextureData& texData); //MAIN THREAD ONLY
+	size_t AddTextureBmp32Data(const TTextureData& texData); //MAIN THREAD ONLY
+	size_t AddCubemapTextureBmp24Data(TTextureData* texData); //MAIN THREAD ONLY
+	//size_t AddCubemapTextureBmp32Data(TTextureData* texData); Not implemented yet
 
 
-	cardinal InnerAddEmptyTexture(const std::string& texName, cardinal width, cardinal height);  //MAIN THREAD ONLY
-	cardinal InnerAddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height);  //MAIN THREAD ONLY
-	cardinal InnerAddDepthTexture(const std::string& texName, cardinal width, cardinal height);  //MAIN THREAD ONLY
+	size_t InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
+	size_t InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
+	size_t InnerAddDepthTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
 	void InnerDeleteTexture(TTextureMap::iterator itr);  //MAIN THREAD ONLY //MAIN THREAD ONLY
 	
 
@@ -83,7 +83,7 @@ public:
 
 	virtual void Serialize(boost::property_tree::ptree& propertyTree);
 
-	cardinal operator[](const std::string& s)
+	size_t operator[](const std::string& s)
 	{
 		if (TexMap.count(s) != 0)
 			return TexMap[s].TexID;
@@ -91,22 +91,22 @@ public:
 			return 0;
 	}
 
-	cardinal GetTextureHeight(const std::string& texName);
-	cardinal GetTextureWidth(const std::string& texName);
+	size_t GetTextureHeight(const std::string& texName);
+	size_t GetTextureWidth(const std::string& texName);
 
-	cardinal AddTextureDirectly(const std::string& filename, std::string texName = ""); //Loads texture directly from this file or fails
-	cardinal AddTexture(const std::string& fileName);
-	cardinal AddTexture(const std::string& fileName, std::string texName); //Adds path to resources to the filename then call previous one
-	cardinal AddTextureFromUserdata(const std::string& fileName, std::string texName = ""); //Same as above but checks if file is created in user data
+	size_t AddTextureDirectly(const std::string& filename, std::string texName = ""); //Loads texture directly from this file or fails
+	size_t AddTexture(const std::string& fileName);
+	size_t AddTexture(const std::string& fileName, std::string texName); //Adds path to resources to the filename then call previous one
+	size_t AddTextureFromUserdata(const std::string& fileName, std::string texName = ""); //Same as above but checks if file is created in user data
 
-	cardinal AddCubemapTexture(std::string filename[6]); // "posx.bmp","negx.bmp","posy.bmp","negy.bmp","posz.bmp","negz.bmp"
+	size_t AddCubemapTexture(std::string filename[6]); // "posx.bmp","negx.bmp","posy.bmp","negy.bmp","posz.bmp","negz.bmp"
 
 
-	cardinal AddEmptyTexture(const std::string& texName, cardinal width, cardinal height);
-	cardinal AddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height);
-	cardinal AddDepthTexture(const std::string& texName, cardinal width, cardinal height);
+	size_t AddEmptyTexture(const std::string& texName, size_t width, size_t height);
+	size_t AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height);
+	size_t AddDepthTexture(const std::string& texName, size_t width, size_t height);
 	void DeleteTexture(const std::string& texName);
-	void DeleteTexture(cardinal texID);
+	void DeleteTexture(size_t texID);
 
 	void PrintTextureList();
 

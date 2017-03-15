@@ -3,14 +3,14 @@
 namespace SE
 {
 
-const cardinal CONST_BUTTON_HIGHLIGHT_TIME = 100;
+const size_t CONST_BUTTON_HIGHLIGHT_TIME = 100;
 
 TInstancingWidgetAncestor::~TInstancingWidgetAncestor() 
 {
 }
 
 
-void TInstancingWidgetAncestor::Update(cardinal dt) 
+void TInstancingWidgetAncestor::Update(size_t dt) 
 {
 }
 
@@ -268,7 +268,7 @@ TUniversalButton::TUniversalButton()
 
 
 
-void TUniversalButton::Update(cardinal dt)
+void TUniversalButton::Update(size_t dt)
 {
 	if (ButtonState == BS_GO_PRESSED)
 	{
@@ -776,7 +776,7 @@ bool TCheckBox::CheckClick(vec2 mousePos)
 	}
 }
 
-void TCheckBox::Update(cardinal dt)
+void TCheckBox::Update(size_t dt)
 {
 }
 
@@ -984,7 +984,7 @@ bool TRadioButton::CheckClick(vec2 mousePos)
 	}
 }
 
-void TRadioButton::Update(cardinal dt)
+void TRadioButton::Update(size_t dt)
 {
 }
 
@@ -1125,7 +1125,7 @@ TMover::~TMover()
 {
 }
 
-void TMover::Update(cardinal dt)
+void TMover::Update(size_t dt)
 {
 }
 
@@ -1233,7 +1233,7 @@ void THorizontalJoystick::ReturnSelectorBack()
 	}
 }
 
-void THorizontalJoystick::Update(cardinal dt)
+void THorizontalJoystick::Update(size_t dt)
 {
 	if (ButtonState == BS_GO_PRESSED)
 	{

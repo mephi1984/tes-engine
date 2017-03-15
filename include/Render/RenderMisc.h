@@ -61,7 +61,7 @@ public:
 class VBOObject //Must stay in shared ptr only!
 {
 public:
-	cardinal Buffer;
+	size_t Buffer;
 
 	VBOObject();
 

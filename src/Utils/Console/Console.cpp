@@ -11,7 +11,7 @@
 namespace SE
 {
 
-const cardinal CONST_MAX_ROWS_IN_HISTORY = 20;
+const size_t CONST_MAX_ROWS_IN_HISTORY = 20;
 
 const float CONST_CONSOLE_PART_OF_SCREEN = 0.35f;
 
@@ -72,9 +72,9 @@ void TSimpleConsole::Draw()
 void TSimpleConsole::CutHistory()
 {
 	/*
-	cardinal i = 0;
+	size_t i = 0;
 
-	cardinal pos = std::string::npos;
+	size_t pos = std::string::npos;
 	
 	do
 	{
@@ -129,7 +129,7 @@ TFileConsole& TFileConsole::operator<<(const std::string& s)
 
 	PrintImmediate(string_with_time_mark);
 
-	History += string_with_time_mark+endl;
+	History += string_with_time_mark+"\n";
 	CutHistory();
 
 	return *this;
@@ -139,10 +139,10 @@ TFileConsole& TFileConsole::operator<<(const std::string& s)
 void TFileConsole::PrintImmediate(const std::string& s)
 {
     
-	f<<s+endl;
+	f<<s+ "\n";
 	f.flush();
 
-	OutputDebugString( (s+endl).c_str() ); 
+	OutputDebugString( (s+ "\n").c_str() );
     
 }
 

@@ -24,7 +24,7 @@ const float CONST_MAX_CAM_PHI = pi/2;
 const int CONST_MAX_SHADER_LIGHTS = 8;
 //Max light sources count (for shader)
 
-//const cardinal CONST_TIMER_INTERVAL = 5;
+//const size_t CONST_TIMER_INTERVAL = 5;
 //Time interval to call Application::Update()
 
 const float CONST_DEFAULT_FOG_BEGIN_DISTANCE = 14.0f;

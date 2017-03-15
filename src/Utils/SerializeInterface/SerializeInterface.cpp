@@ -55,7 +55,7 @@ void ReplaceText(boost::property_tree::ptree& propertyTree, std::map<std::string
 boost::property_tree::ptree::iterator ReplaceIncludeFile(boost::property_tree::ptree& propertyTree, boost::property_tree::ptree::iterator propertyTreeItr, std::map<std::string, std::string> replaceMap)
 {
 	boost::shared_array<char> xmlFileArr;
-	cardinal xmlFileSize;
+	size_t xmlFileSize;
 
 	std::string fileName = propertyTreeItr->second.get<std::string>("<xmlattr>.file");
 
@@ -159,7 +159,7 @@ std::shared_ptr<boost::property_tree::ptree> StringToPropertyTree(std::string xm
 
 }
 
-std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(boost::shared_array<char> xmlFileArr, cardinal xmlFileSize, std::map<std::string, std::string> replaceMap)
+std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(boost::shared_array<char> xmlFileArr, size_t xmlFileSize, std::map<std::string, std::string> replaceMap)
 {
 	std::string xmlCode = std::string(&xmlFileArr[0], &xmlFileArr[xmlFileSize]);
 	
@@ -168,7 +168,7 @@ std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(boost::shared_ar
 
 std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(const std::string& fileName, std::map<std::string, std::string> replaceMap)
 {
-	cardinal byteCount;
+	size_t byteCount;
 
 #ifdef UTILS_ENGINE
 	boost::shared_array<char> file = CreateMemFromFile<char>(fileName, byteCount);

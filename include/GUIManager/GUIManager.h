@@ -19,7 +19,7 @@ extern const std::string CONST_DRAG_SIGNAL_NAME;
 extern const std::string CONST_TAPDOWN_SIGNAL_NAME;
 
 
-typedef boost::variant<cardinal, vec2> TSignalParam;
+typedef boost::variant<size_t, vec2> TSignalParam;
 
 struct TWidgetStruct
 {
@@ -160,7 +160,7 @@ public:
 	void DeleteWidgetLaterOnUpdate(const std::string& name);
 	void DeleteWidgetGroupLaterOnUpdate(const std::string& groupName);
 
-	void Update(cardinal dt);
+	void Update(size_t dt);
 	void Draw();
 
 	void MoveWidget(const std::string& widgetName, vec2 shift);

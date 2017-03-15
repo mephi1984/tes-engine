@@ -18,7 +18,7 @@ public:
 	TRenderPairList TriangleListVector;
 	vec2 LeftBottomPos;
 
-	virtual void Update(cardinal dt);
+	virtual void Update(size_t dt);
 
 	virtual bool CheckClick(vec2 mousePos);
 
@@ -160,7 +160,7 @@ public:
 
 	TUniversalButton();
 
-	virtual void Update(cardinal dt);
+	virtual void Update(size_t dt);
 
 	virtual bool CheckClick(vec2 mousePos);
 
@@ -244,7 +244,7 @@ public:
 	~TCheckBox();
 
 	virtual bool CheckClick(vec2 mousePos);
-	virtual void Update(cardinal dt);
+	virtual void Update(size_t dt);
 
 	virtual void OnTapDown(vec2 pos);
 	virtual void OnTapUp(vec2 pos);
@@ -288,7 +288,7 @@ public:
 	~TRadioButton();
 
 	virtual bool CheckClick(vec2 mousePos);
-	virtual void Update(cardinal dt);
+	virtual void Update(size_t dt);
 
 	virtual void OnTapDown(vec2 pos);
 	virtual void OnTapUp(vec2 pos);
@@ -330,7 +330,7 @@ public:
 	TMover();
 	~TMover();
 
-	virtual void Update(cardinal dt);
+	virtual void Update(size_t dt);
 
 	virtual bool CheckClick(vec2 mousePos);
 
@@ -377,7 +377,7 @@ public:
 
 	THorizontalJoystick();
 
-	virtual void Update(cardinal dt);
+	virtual void Update(size_t dt);
 
 	virtual bool CheckClick(vec2 mousePos);
 

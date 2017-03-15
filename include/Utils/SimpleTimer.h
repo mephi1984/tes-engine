@@ -17,7 +17,7 @@ public:
 	TSimpleTimer();
 
 	void SetTimer(int timer);
-	void Update(cardinal dt);
+	void Update(size_t dt);
 	bool IsOver();
 
 	boost::posix_time::time_duration GetPosixTime();

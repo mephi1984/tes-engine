@@ -28,7 +28,7 @@ struct TPngDataStruct
 
 
 
-TPngDataStruct read_png_file(const boost::shared_array<char>& fileArr, cardinal fileSize);
+TPngDataStruct read_png_file(const boost::shared_array<char>& fileArr, size_t fileSize);
 
 
 } //namespace SE

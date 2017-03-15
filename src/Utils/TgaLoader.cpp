@@ -19,7 +19,7 @@ namespace SE
 bool LoadTGA(const std::string& filename, TTextureData& texture)				// Load a TGA file
 {
 	
-	cardinal byteCount;
+	size_t byteCount;
 
 	boost::shared_array<char> fTGA = CreateMemFromFile<char>(filename, byteCount);
 

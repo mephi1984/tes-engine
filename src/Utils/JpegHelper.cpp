@@ -45,7 +45,7 @@ bool LoadJpg(const std::string& filename, TTextureData& texData)
   int row_stride;
 
 
-  cardinal fileSize;
+  size_t fileSize;
 
   boost::shared_array<unsigned char> fileArr = CreateMemFromFile<unsigned char>(filename, fileSize);
 

@@ -50,14 +50,14 @@ void TFontManager::AddFont(const std::string& fontName, const std::string& bitma
 	currentFont.SheetWidth = ResourceManager->TexList.GetTextureWidth(texName);
 	currentFont.SheetHeight = ResourceManager->TexList.GetTextureHeight(texName);
 
-	cardinal byteCount;
+	size_t byteCount;
 
 	boost::shared_array<char> charmapFileArr = boost::shared_array<char>(CreateMemFromFile<char>(ST::PathToResources+charmapFile, byteCount));
 
 	//Need to rewrite this code :(
 
 	TFontParams fontParams;
-	cardinal character;
+	size_t character;
 
 	std::stringstream charmapFileStream;
 	charmapFileStream.write(&charmapFileArr[0], byteCount);
@@ -118,7 +118,7 @@ std::string TFontManager::GetCurrentFontTextureName()
 }
 
 
-float TFontManager::DrawChar(vec2 pos, cardinal character)
+float TFontManager::DrawChar(vec2 pos, size_t character)
 {
 	//Also see DrawCharToVBO
 
@@ -153,7 +153,7 @@ float TFontManager::DrawChar(vec2 pos, cardinal character)
 	return fontParams.Advance*scale_x;
 }
 
-float TFontManager::DrawCharToVBO(vec2 pos, cardinal character, TTriangleList& triangleList)
+float TFontManager::DrawCharToVBO(vec2 pos, size_t character, TTriangleList& triangleList)
 {
 	//Also see DrawChar
 
@@ -210,7 +210,7 @@ vec2 TFontManager::FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBas
 	float maxWidth = posTo.v[0] - posFrom.v[0];
 
 
-	//cardinal p = 0;
+	//size_t p = 0;
 	vec2 cursor;
 
 
@@ -330,7 +330,7 @@ TTriangleList TFontManager::DrawStringToVBO(vec2 pos, TTextBasicAreaParams param
         
         float rowWidth = GetTextAdvance(rowStr);
         
-        for (cardinal i=0; i<rowStr.size(); i++)
+        for (size_t i=0; i<rowStr.size(); i++)
         {
             vec2 realPos = pos;
             if (params.TextHorizontalAlignment == THA_RIGHT)

@@ -15,7 +15,7 @@ void TSimpleTimer::SetTimer(int timer)
 	Timer = timer;
 }
 
-void TSimpleTimer::Update(cardinal dt)
+void TSimpleTimer::Update(size_t dt)
 {
 	if (Timer > 0)
 	{

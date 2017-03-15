@@ -117,9 +117,9 @@ void GetFileList(const std::string& searchkey, std::vector<std::string> &list);
 std::string AutocompleteExtension(const std::string& fileName);
 
 template<typename TYPENAME>
-boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
+boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, size_t& intCount)
 {
-	cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+	size_t SIZEOF_TYPENAME = sizeof(TYPENAME);
     
     FILE * pFile;
     
@@ -162,9 +162,9 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
 #ifdef TARGET_LINUX
 
 template<typename TYPENAME>
-boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
+boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, size_t& intCount)
 {
-	cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+	size_t SIZEOF_TYPENAME = sizeof(TYPENAME);
     
     FILE * pFile;
     
@@ -208,13 +208,13 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
 #ifdef TARGET_ANDROID
 
 template<typename TYPENAME>
-boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
+boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, size_t& intCount)
 {
 	if (std::string(fileName.begin(), fileName.begin() + 5) == "/data")
 	{
 		*Console<<"File is in userdata - "+fileName;
 
-		cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+		size_t SIZEOF_TYPENAME = sizeof(TYPENAME);
 
 		FILE * pFile;
 
@@ -265,9 +265,9 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, car
 #ifdef TARGET_IOS
 
 template<typename TYPENAME>
-boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, cardinal& intCount)
+boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, size_t& intCount)
 {
-    cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+    size_t SIZEOF_TYPENAME = sizeof(TYPENAME);
     
     FILE * pFile;
     

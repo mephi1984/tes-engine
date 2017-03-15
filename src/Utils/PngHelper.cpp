@@ -11,9 +11,9 @@ typedef PNG_CONST png_byte        FAR * png_const_bytep;
 struct TPngReadStruct
 {
 	const boost::shared_array<char>& FileArr;
-	cardinal FileSize;
+	size_t FileSize;
 	int CurrentPointer;
-	TPngReadStruct(const boost::shared_array<char>& fileArr, cardinal fileSize)
+	TPngReadStruct(const boost::shared_array<char>& fileArr, size_t fileSize)
 		: FileArr(fileArr)
 		, FileSize(fileSize)
 		, CurrentPointer(8)
@@ -37,7 +37,7 @@ void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 		throw ErrorToLog("PNG pointer gone too far!");
 	}
 
-	for (cardinal i = 0; i < length; i++)
+	for (size_t i = 0; i < length; i++)
 	{
 		data[i] = pngReadStruct->FileArr[pngReadStruct->CurrentPointer + i];
 	}
@@ -47,7 +47,7 @@ void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 }
 
 
-TPngDataStruct read_png_file(const boost::shared_array<char>& fileArr, cardinal fileSize)
+TPngDataStruct read_png_file(const boost::shared_array<char>& fileArr, size_t fileSize)
 {
 
 	TPngDataStruct result;
@@ -57,7 +57,7 @@ TPngDataStruct read_png_file(const boost::shared_array<char>& fileArr, cardinal 
 
 	char header[8];    // 8 is the maximum size that can be checked
 
-	for (cardinal i=0; i<8; i++)
+	for (size_t i=0; i<8; i++)
 	{
 		header[i] = fileArr[i];
 	}

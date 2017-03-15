@@ -74,7 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;../../../libs/libogg-1.3.0/include;../../../libs/libvorbis-1.3.2/include;../../../libs/sqplus/sqplus;../../../libs/sqplus/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;NOSOUND;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -95,7 +95,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;../../../libs/libogg-1.3.0/include;../../../libs/libvorbis-1.3.2/include;../../../libs/sqplus/sqplus;../../../libs/sqplus/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;NOSOUND;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

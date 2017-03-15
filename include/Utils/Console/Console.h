@@ -53,9 +53,9 @@ protected:
 
 public:
 	std::string ConsoleInput;
-	cardinal ConsoleCursor;
+	size_t ConsoleCursor;
 	std::vector<std::string> InputHistory;
-	cardinal InputHistoryCursor;
+	size_t InputHistoryCursor;
 
 	TSimpleConsole() : History(""), TextSavedInTriangleList(""), ConsoleCursor(0), InputHistoryCursor(0) { }
 	

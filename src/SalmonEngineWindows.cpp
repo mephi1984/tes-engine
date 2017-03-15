@@ -21,11 +21,11 @@ HDC hDC;		//Device context
 //There might be anything
 const char CONST_WINDOW_CLASS_NAME[] = "TSalmonEngineForm";
 
-const cardinal CONST_TIMER_INTERVAL = 10;
+const size_t CONST_TIMER_INTERVAL = 10;
 
 //To calculate when to call Update
-cardinal NewTickCount;
-cardinal LastTickCount;
+size_t NewTickCount;
+size_t LastTickCount;
 
 //User application
 TApplication* App = NULL;
@@ -44,7 +44,7 @@ TApplication::~TApplication()
 {
 }
 
-void TApplication::OnKeyPress(cardinal key)
+void TApplication::OnKeyPress(size_t key)
 {
 	if (IsConsoleOut)
 	{
@@ -79,7 +79,7 @@ void TApplication::OnKeyPress(cardinal key)
 		}
 		else if (key > 0x100) //VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT
 		{
-			cardinal realKey = key - 0x100;
+			size_t realKey = key - 0x100;
 
 			if (realKey == VK_UP)
 			{
@@ -117,7 +117,7 @@ void TApplication::OnKeyPress(cardinal key)
 		}
 		else
 		{
-			*Console<<"Key is "+tostr(key)+endl;
+			*Console<<"Key is "+tostr(key)+ "\n";
 		}
 
 	}

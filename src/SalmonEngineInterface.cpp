@@ -21,7 +21,7 @@ TResourceManager* ResourceManager;
 
 
 
-void TResourceManager::Update(cardinal timer)
+void TResourceManager::Update(size_t timer)
 {
 
 	GUIManager.Update(timer);
@@ -105,7 +105,7 @@ void TApplicationAncestor::OuterDraw()
 	glEnable(GL_DEPTH_TEST);
 }
 
-void TApplicationAncestor::OuterUpdate(cardinal timer)
+void TApplicationAncestor::OuterUpdate(size_t timer)
 {
 	TryUpdateMainThreadId();
 

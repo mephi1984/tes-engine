@@ -29,17 +29,17 @@ TTextureListClass::TTextureListClass()
 	CreateFunctionMap[".jpeg"] = boost::bind(&TTextureListClass::CreateTexDataFromJpg, this, _1, _2);
    
 
-	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> cardinal
+	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> size_t
 	{
-		boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
-		return PerformInMainThread<cardinal>(f);
+		boost::function<size_t()> f = boost::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
+		return PerformInMainThread<size_t>(f);
 	};
 
 
-	AddFunctionMap["bmp32"] = [this](TTextureData& texData) -> cardinal
+	AddFunctionMap["bmp32"] = [this](TTextureData& texData) -> size_t
 	{
-		boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
-		return PerformInMainThread<cardinal>(f);
+		boost::function<size_t()> f = boost::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
+		return PerformInMainThread<size_t>(f);
 	};
 	
     
@@ -57,11 +57,11 @@ void TTextureListClass::Clear()
 	PerformInMainThreadAsync(boost::bind(&TTextureListClass::InnerClear, this));
 }
 
-cardinal TTextureListClass::InnerAddEmptyTexture(const std::string& texName, cardinal width, cardinal height)
+size_t TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 
-	cardinal texID;
+	size_t texID;
 
 	if (TexMap.count(texName) == 0)
 	{
@@ -95,11 +95,11 @@ cardinal TTextureListClass::InnerAddEmptyTexture(const std::string& texName, car
 
 
 }
-cardinal TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height)
+size_t TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 	
-	cardinal texID;
+	size_t texID;
 
 	if (TexMap.count(texName) == 0)
 	{
@@ -150,13 +150,13 @@ cardinal TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texNa
 	return texID;
 }
 
-cardinal TTextureListClass::InnerAddDepthTexture(const std::string& texName, cardinal width, cardinal height)
+size_t TTextureListClass::InnerAddDepthTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 
 	
 	#ifdef TARGET_WIN32
-	cardinal texID;
+	size_t texID;
 
 	if (TexMap.count(texName) == 0)
 	{
@@ -263,8 +263,8 @@ void TTextureListClass::NormalizeTexData(TTextureData& texData)
 		return;
 	}
 
-	cardinal newWidth = GetGreaterPower2(texData.Width);
-	cardinal newHeight = GetGreaterPower2(texData.Height);
+	size_t newWidth = GetGreaterPower2(texData.Width);
+	size_t newHeight = GetGreaterPower2(texData.Height);
 
 	if (!strcmp(texData.Format, "bmp32"))
 	{
@@ -316,7 +316,7 @@ void TTextureListClass::NormalizeTexData(TTextureData& texData)
 bool TTextureListClass::CreateTexDataFromBmp24(const std::string& filename, TTextureData& texData)
 {
 
-	cardinal fileSize;
+	size_t fileSize;
 	boost::shared_array<char> fileArr = CreateMemFromFile<char>(filename, fileSize);
 	
 	if (fileSize<22)
@@ -325,18 +325,18 @@ bool TTextureListClass::CreateTexDataFromBmp24(const std::string& filename, TTex
 	//This refers to BITMAPV5HEADER
 
 	strcpy(texData.Format, "bmp24");
-	texData.Width = *reinterpret_cast<cardinal*>(&fileArr[18]);
-	texData.Height = *reinterpret_cast<cardinal*>(&fileArr[22]);
+	texData.Width = *reinterpret_cast<size_t*>(&fileArr[18]);
+	texData.Height = *reinterpret_cast<size_t*>(&fileArr[22]);
 	
 	texData.DataSize = texData.Height * texData.Width * 3;
 
 	texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
 	
-	cardinal pos = *reinterpret_cast<cardinal*>(&fileArr[10]);
-	cardinal x = 0;
+	size_t pos = *reinterpret_cast<size_t*>(&fileArr[10]);
+	size_t x = 0;
 
-	for (cardinal i=0; i<texData.Width; i++)
-		for(cardinal j=0; j<texData.Height; j++)
+	for (size_t i=0; i<texData.Width; i++)
+		for(size_t j=0; j<texData.Height; j++)
 		{
 				
 			if (pos+3>fileSize)
@@ -356,7 +356,7 @@ bool TTextureListClass::CreateTexDataFromBmp24(const std::string& filename, TTex
 
 bool TTextureListClass::CreateTexDataFromBmp32(const std::string& filename, TTextureData& texData)
 {
-	cardinal fileSize;
+	size_t fileSize;
 	
 	boost::shared_array<char> fileArr = CreateMemFromFile<char>(filename, fileSize);
 
@@ -366,18 +366,18 @@ bool TTextureListClass::CreateTexDataFromBmp32(const std::string& filename, TTex
 	//Meaning BITMAPV5HEADER
 
 	strcpy(texData.Format, "bmp32");
-	texData.Width = *reinterpret_cast<cardinal*>(&fileArr[18]);
-	texData.Height = *reinterpret_cast<cardinal*>(&fileArr[22]);
+	texData.Width = *reinterpret_cast<size_t*>(&fileArr[18]);
+	texData.Height = *reinterpret_cast<size_t*>(&fileArr[22]);
 
 	texData.DataSize = texData.Height * texData.Width * 4;
 
 	texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
 
-	cardinal pos = *reinterpret_cast<cardinal*>(&fileArr[10]);
-	cardinal x = 0;
+	size_t pos = *reinterpret_cast<size_t*>(&fileArr[10]);
+	size_t x = 0;
 
-	for (cardinal i=0; i<texData.Width; i++)
-		for(cardinal j=0; j<texData.Height; j++)
+	for (size_t i=0; i<texData.Width; i++)
+		for(size_t j=0; j<texData.Height; j++)
 		{
 				
 			if (pos+4>fileSize)
@@ -416,7 +416,7 @@ bool TTextureListClass::CreateTexDataFromJpg(const std::string& filename, TTextu
 
 bool TTextureListClass::CreateTexDataFromPng(const std::string& filename, TTextureData& texData)
 {
-	cardinal fileSize;
+	size_t fileSize;
 	boost::shared_array<char> fileArr = CreateMemFromFile<char>(filename, fileSize);
 
 	if (fileSize < 22)
@@ -427,7 +427,7 @@ bool TTextureListClass::CreateTexDataFromPng(const std::string& filename, TTextu
 	texData.Width = s.Width;
 	texData.Height = s.Height;
 
-	cardinal bytesPerPixel;
+	size_t bytesPerPixel;
 
 	if (s.ColorType == PNG_COLOR_TYPE_RGB)
 	{
@@ -446,11 +446,11 @@ bool TTextureListClass::CreateTexDataFromPng(const std::string& filename, TTextu
 	texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
 
 
-	cardinal x;
+	size_t x;
 
-	for (cardinal i=0; i<texData.Width; i++)
+	for (size_t i=0; i<texData.Width; i++)
 	{
-		for(cardinal j=0; j<texData.Height; j++)
+		for(size_t j=0; j<texData.Height; j++)
 		{
 
 			x = (i + (texData.Height - j - 1) * texData.Width) * bytesPerPixel;
@@ -480,11 +480,11 @@ bool TTextureListClass::CreateTexDataFromPng(const std::string& filename, TTextu
 
 }
 
-cardinal TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
+size_t TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
 {
 	AssertIfInMainThread();
 
-	cardinal TexID = 0;
+	size_t TexID = 0;
 
 	glGenTextures(1, &TexID);
 	if (TexID == 0)
@@ -506,11 +506,11 @@ cardinal TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
     return TexID;
 }
 
-cardinal TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
+size_t TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
 {
 	AssertIfInMainThread();
 
-	cardinal TexID;
+	size_t TexID;
 	glGenTextures(1, &TexID);
 	if (TexID == 0)
 	{
@@ -532,11 +532,11 @@ cardinal TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
     return TexID;
 }
 
-cardinal TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
+size_t TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
 {
 	AssertIfInMainThread();
 
-	cardinal TexID;
+	size_t TexID;
 	glGenTextures(1, &TexID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, TexID);
 	
@@ -561,7 +561,7 @@ cardinal TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
     return TexID;
 }
 
-cardinal TTextureListClass::GetTextureHeight(const std::string& texName)
+size_t TTextureListClass::GetTextureHeight(const std::string& texName)
 {
 	if (TexMap.count(texName) != 0)
 			return TexMap[texName].Height;
@@ -569,7 +569,7 @@ cardinal TTextureListClass::GetTextureHeight(const std::string& texName)
 			return 0;
 }
 
-cardinal TTextureListClass::GetTextureWidth(const std::string& texName)
+size_t TTextureListClass::GetTextureWidth(const std::string& texName)
 {
 	if (TexMap.count(texName) != 0)
 			return TexMap[texName].Width;
@@ -578,9 +578,9 @@ cardinal TTextureListClass::GetTextureWidth(const std::string& texName)
 }
 
 
-cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std::string texName)
+size_t TTextureListClass::AddTextureDirectly(const std::string& filename, std::string texName)
 {
-	cardinal TexID;
+	size_t TexID;
 
 	//Basically:
 	if (filename == "")
@@ -623,12 +623,12 @@ cardinal TTextureListClass::AddTextureDirectly(const std::string& filename, std:
 
 }
 
-cardinal TTextureListClass::AddTexture(const std::string& fileName)
+size_t TTextureListClass::AddTexture(const std::string& fileName)
 {
 	return AddTexture(fileName, GetFileName(fileName));
 }
 
-cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
+size_t TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
 {
 	if (texName == "")
 	{
@@ -657,7 +657,7 @@ cardinal TTextureListClass::AddTexture(const std::string& fileName, std::string 
 }
 
 
-cardinal TTextureListClass::AddTextureFromUserdata(const std::string& fileName, std::string texName)
+size_t TTextureListClass::AddTextureFromUserdata(const std::string& fileName, std::string texName)
 {
 	
 	if (!IsFileExistsInUserData(fileName))
@@ -671,7 +671,7 @@ cardinal TTextureListClass::AddTextureFromUserdata(const std::string& fileName, 
 }
 
 
-cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
+size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
 {
 
 	filename[0] = ST::PathToResources + filename[0];
@@ -683,7 +683,7 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 	std::string texname = GetFileName(filename[0]);
 	std::string texext;
-	cardinal TexID;
+	size_t TexID;
 	int i;
 
 	if (TexMap.count(texname) == 0)
@@ -712,9 +712,9 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 		//All textures have been inserted into texData[6], lets add them
 
-		boost::function<cardinal()> f = boost::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
+		boost::function<size_t()> f = boost::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
 
-		TexID = PerformInMainThread<cardinal>(f);
+		TexID = PerformInMainThread<size_t>(f);
 
 		if (TexID != 0)
 		{
@@ -740,27 +740,27 @@ cardinal TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 }
 
-cardinal TTextureListClass::AddEmptyTexture(const std::string& texName, cardinal width, cardinal height)
+size_t TTextureListClass::AddEmptyTexture(const std::string& texName, size_t width, size_t height)
 {
-	boost::function<cardinal()> f = boost::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
+	boost::function<size_t()> f = boost::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
 
-	return PerformInMainThread<cardinal>(f);
+	return PerformInMainThread<size_t>(f);
 }
 
 
-cardinal TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, cardinal width, cardinal height)
+size_t TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
 {
-	boost::function<cardinal()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
+	boost::function<size_t()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
-	return PerformInMainThread<cardinal>(f);
+	return PerformInMainThread<size_t>(f);
 }
 
 
-cardinal TTextureListClass::AddDepthTexture(const std::string& texName, cardinal width, cardinal height)
+size_t TTextureListClass::AddDepthTexture(const std::string& texName, size_t width, size_t height)
 {
-	boost::function<cardinal()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
+	boost::function<size_t()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
-	return PerformInMainThread<cardinal>(f);
+	return PerformInMainThread<size_t>(f);
 }
 
 void TTextureListClass::DeleteTexture(const std::string& texName)
@@ -771,7 +771,7 @@ void TTextureListClass::DeleteTexture(const std::string& texName)
 	}
 }
 
-void TTextureListClass::DeleteTexture(cardinal texID)
+void TTextureListClass::DeleteTexture(size_t texID)
 {
 	TTextureMap::iterator i = TexMap.begin();
 
@@ -837,11 +837,11 @@ void TTextureListClass::SaveTexDataToPlainBmpToUserData(const std::string& fileN
 	fwrite (&(texData.Width), 4, 1, pFile); //18 -> 22
 	fwrite (&(texData.Height), 4, 1, pFile); //22 -> 26
 
-	cardinal x = 0;
+	size_t x = 0;
 
-	for (cardinal i = 0; i < texData.Width; i++)
+	for (size_t i = 0; i < texData.Width; i++)
 	{
-		for(cardinal j = 0; j < texData.Height; j++)
+		for(size_t j = 0; j < texData.Height; j++)
 		{
 			x = (i * texData.Height + j) + (i * texData.Height + j) + (i * texData.Height + j);
 

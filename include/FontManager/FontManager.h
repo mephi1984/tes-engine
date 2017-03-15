@@ -96,9 +96,9 @@ struct TFontParams
 struct TFont
 {
 	std::string TexName;
-	cardinal SheetWidth;
-	cardinal SheetHeight;
-	std::map<cardinal, TFontParams> CharMap;
+	size_t SheetWidth;
+	size_t SheetHeight;
+	std::map<size_t, TFontParams> CharMap;
 };
 
 class TTriangleList; //HalibutRender.h
@@ -110,8 +110,8 @@ protected:
 
 	std::stack<std::string> FontStack;
 
-	float DrawChar(vec2 pos, cardinal character);
-	float DrawCharToVBO(vec2 pos, cardinal character, TTriangleList& triangleList);
+	float DrawChar(vec2 pos, size_t character);
+	float DrawCharToVBO(vec2 pos, size_t character, TTriangleList& triangleList);
 
 	vec2 FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string& str);
 public:
@@ -151,7 +151,7 @@ float GetCharAdvance(CHARTYPE character)
 
 	static_assert(sizeof(CHARTYPE) <= 4, "LOL, we have to implement more than 4-byte character!"); // LOL, we have to implement more than 4-byte character!
 		
-	TFontParams& fontParams = currentFont.CharMap[static_cast<cardinal>(character)];
+	TFontParams& fontParams = currentFont.CharMap[static_cast<size_t>(character)];
 
 
 	int scale_x = currentFont.SheetWidth;

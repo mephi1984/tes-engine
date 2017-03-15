@@ -597,7 +597,7 @@ void TSalmonRendererInterface::SwitchToFrameBuffer(const std::string& frameName)
 	}
 }
 
-void TSalmonRendererInterface::SwitchToCubemapBuffer(const std::string& frameName,cardinal cubeSide)
+void TSalmonRendererInterface::SwitchToCubemapBuffer(const std::string& frameName,size_t cubeSide)
 {
 	AssertIfInMainThread();
 	
@@ -681,7 +681,7 @@ void TSalmonRendererInterface::DrawFramePartScreen(const std::string& frameName,
 {
 	AssertIfInMainThread();
 
-	cardinal texID = ResourceManager->FrameManager.GetFrameTexture(frameName.c_str());
+	size_t texID = ResourceManager->FrameManager.GetFrameTexture(frameName.c_str());
 
 	if (texID != 0)
 	{

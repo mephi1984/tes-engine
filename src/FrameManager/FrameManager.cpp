@@ -36,7 +36,7 @@ void TFrameManager::FreeFrameManager()
 
 }
 
-cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardinal width,cardinal height)
+size_t TFrameManager::AddFrameRenderBuffer(const std::string& frameName,size_t width,size_t height)
 {
 	AssertIfInMainThread();
 
@@ -53,12 +53,12 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
 		
 		
 		std::string texName = frameName + "Texture";
-		cardinal texID = ResourceManager->TexList.AddEmptyTexture(texName,width,height);
+		size_t texID = ResourceManager->TexList.AddEmptyTexture(texName,width,height);
 	
 		
-		cardinal frameBuffer;
-		cardinal depthRenderBuffer;
-		cardinal status;
+		size_t frameBuffer;
+		size_t depthRenderBuffer;
+		size_t status;
         
         
 
@@ -127,7 +127,7 @@ cardinal TFrameManager::AddFrameRenderBuffer(const std::string& frameName,cardin
     
 }
 
-cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal width,cardinal height)
+size_t TFrameManager::AddCubemapBuffer(const std::string& frameName,size_t width,size_t height)
 {
 	AssertIfInMainThread();
 
@@ -142,11 +142,11 @@ cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal w
 	{
 
 		std::string texName = frameName + "Texture";
-		cardinal texID = ResourceManager->TexList.AddEmptyCubemapTexture(texName,width,height);
+		size_t texID = ResourceManager->TexList.AddEmptyCubemapTexture(texName,width,height);
 
-		cardinal frameBuffer;
-		cardinal depthRenderBuffer;
-		cardinal status;
+		size_t frameBuffer;
+		size_t depthRenderBuffer;
+		size_t status;
 
 
 		glGenFramebuffers(1,&frameBuffer);
@@ -200,7 +200,7 @@ cardinal TFrameManager::AddCubemapBuffer(const std::string& frameName,cardinal w
 
 			break;
 		default:
-			*Console<<"ERROR number : "+tostr(status)+endl;
+			*Console<<"ERROR number : "+tostr(status)+ "\n";
 			*Console<<"FrameManager::ERROR - frame buffer can not be added correctly: "+frameName;
 			ResourceManager->TexList.DeleteTexture(texName);
 			glDeleteRenderbuffers(1, &depthRenderBuffer);
@@ -239,7 +239,7 @@ void TFrameManager::DeleteFrameRenderBuffer(const std::string& frameName)
 	}
 }
 
-cardinal TFrameManager::AddDepthBuffer(const std::string& frameName, cardinal width, cardinal height)
+size_t TFrameManager::AddDepthBuffer(const std::string& frameName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 
@@ -251,10 +251,10 @@ cardinal TFrameManager::AddDepthBuffer(const std::string& frameName, cardinal wi
 	{
 
 		std::string texName = frameName + "Texture";
-		cardinal depthTexID = ResourceManager->TexList.AddDepthTexture(texName,width,height);
+		size_t depthTexID = ResourceManager->TexList.AddDepthTexture(texName,width,height);
 
-		cardinal frameBuffer;
-		cardinal status;
+		size_t frameBuffer;
+		size_t status;
 
 
 		glGenFramebuffers(1,&frameBuffer);
@@ -305,7 +305,7 @@ cardinal TFrameManager::AddDepthBuffer(const std::string& frameName, cardinal wi
 
 
 
-cardinal TFrameManager::GetFrameTexture(const std::string& frameName)
+size_t TFrameManager::GetFrameTexture(const std::string& frameName)
 {
 	if (FrameMap.count(frameName) > 0)
 	{
@@ -340,9 +340,9 @@ TTextureData TFrameManager::ReadFromBufferToTexData(const std::string& frameName
 
 	glReadPixels(0, 0, FrameMap[frameName].Width, FrameMap[frameName].Height, GL_RGBA, GL_UNSIGNED_BYTE, &data[0]);
 
-	for (cardinal i=0; i < texData.Width; i++)
+	for (size_t i=0; i < texData.Width; i++)
 	{
-		for (cardinal j=0; j < texData.Height; j++)
+		for (size_t j=0; j < texData.Height; j++)
 		{
 			int x = (i * texData.Height + j) + (i * texData.Height + j) + (i * texData.Height + j);
 

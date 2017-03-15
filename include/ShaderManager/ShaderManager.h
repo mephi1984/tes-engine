@@ -69,10 +69,10 @@ class TShaderManager; //see below
 class TShaderResource
 {
 protected:
-	cardinal ShaderProgram;
+	size_t ShaderProgram;
 
-	std::map<std::string,cardinal,std::less<std::string> >  UniformList;
-	std::map<std::string,cardinal,std::less<std::string> >  AttribList;
+	std::map<std::string,size_t,std::less<std::string> >  UniformList;
+	std::map<std::string,size_t,std::less<std::string> >  AttribList;
 
 public:
 	TShaderResource();

@@ -39,8 +39,8 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 	int fragmentShaderCompiled;
 	int programLinked;
 
-	cardinal vertexShader;
-	cardinal fragmentShader;
+	size_t vertexShader;
+	size_t fragmentShader;
 
 	int vertexCodeLength = strlen(vertexCode.get());
 	int fragmentCodeLength = strlen(fragmentCode.get());
@@ -91,7 +91,7 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 	
 	int dummySize;			//Dummy
 	int dummyLen;			//Dummy
-	cardinal dummyType;		//Dummy
+	size_t dummyType;		//Dummy
 
 	//================= Parsing all uniforms ================
 
@@ -211,7 +211,7 @@ bool TShaderManager::AddShader(const std::string& shaderName, const std::string&
 	}
 
 	*Console<<"Prepare to add shader "+shaderName;
-	cardinal fSize;
+	size_t fSize;
 	boost::shared_array<char> fPointer;
 	boost::shared_array<char> vertexCode;
 	boost::shared_array<char> fragmentCode;

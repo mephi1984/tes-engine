@@ -120,7 +120,7 @@ void TGUIManager::AddWidgetTransformTask(TWidgetTransformTask widgetTransformTas
 	WidgetTrasfromTaskList.push_back(widgetTransformTask);
 }
 
-void TGUIManager::Update(cardinal dt)
+void TGUIManager::Update(size_t dt)
 {
 	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
 	

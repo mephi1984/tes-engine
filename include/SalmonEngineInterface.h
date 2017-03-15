@@ -43,7 +43,7 @@ public:
     TSmartValueManager SmartValueManager;
 	TGUIManager GUIManager;
 
-	void Update(cardinal timer);
+	void Update(size_t timer);
 
 	~TResourceManager();
 };
@@ -79,7 +79,7 @@ public:
 	virtual void OuterDraw();
 	//What to draw
 
-	virtual void OuterUpdate(cardinal timer);
+	virtual void OuterUpdate(size_t timer);
 	//To do on update
 
 	virtual void UpdateQuick() { }
@@ -100,7 +100,7 @@ public:
 
 	virtual void InnerDraw() { }
 	
-	virtual void InnerUpdate(cardinal timer) { }
+	virtual void InnerUpdate(size_t timer) { }
 	
 
 
@@ -119,7 +119,7 @@ public:
 	virtual void OnMouseWheel(short int delta) { }
 	//To do on mouse wheel move
 
-	virtual void OnKeyPress(cardinal key) { } //Try not to override this. But if you need to override, call ancestor!
+	virtual void OnKeyPress(size_t key) { } //Try not to override this. But if you need to override, call ancestor!
     
     virtual void OnScale(float scale) { }
 };

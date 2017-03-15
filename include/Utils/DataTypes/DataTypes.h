@@ -16,12 +16,6 @@ This code contains additional data types and some const values to use
 namespace SE
 {
 
-typedef unsigned int cardinal;
-typedef unsigned short int word;
-//typedef unsigned char byte;
-
-typedef cardinal* pcardinal;
-
 //Use mat4 to store projection/modelview matrices (i.e. for shadow mapping)
 struct mat4
 {
@@ -58,9 +52,10 @@ const vec3 ZeroVec3(0.0f, 0.0f, 0.0f);
 
 const vec4 ZeroQuat(0.0f, 0.0f, 0.0f, 1.0f);
 
+/*
 const std::string fendl="\x0D\x0A"; //Windows-style, for files
 const std::string endl="\n";
-
+*/
 vec4 InverseQuat(const vec4& q);
 
 //For shadow mapping or for OpenGL ES 2.0
@@ -176,7 +171,7 @@ bool IsPower2(T x)
 	return ( (x > 0) && ((x & (x - 1)) == 0) );
 }
 
-cardinal GetGreaterPower2(cardinal x);
+size_t GetGreaterPower2(size_t x);
 
 vec2 StringToVec2(std::string str);
 vec3 StringToVec3(std::string str);

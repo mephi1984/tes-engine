@@ -105,7 +105,7 @@ public:
 
 	virtual void SwitchToScreen();
 	virtual void SwitchToFrameBuffer(const std::string& frameName);
-	void SwitchToCubemapBuffer(const std::string& frameName,cardinal cubeSide);
+	void SwitchToCubemapBuffer(const std::string& frameName,size_t cubeSide);
 	
 	void BeginDrawToDepthBufferGlobal(std::string& globalBufferName);
 	void BeginDrawToDepthBufferLocal(std::string& localBufferName);

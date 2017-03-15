@@ -364,14 +364,14 @@ float roundf(float r)
 	return (r > 0.0f) ? floorf(r + 0.5f) : ceilf(r - 0.5f); 
 } 
 
-cardinal GetGreaterPower2(cardinal x)
+size_t GetGreaterPower2(size_t x)
 {
 	if (x > 65536)
 	{
 		throw ErrorToLog("GetGreaterPower2: x("+tostr(x)+") is bigger than 65536");
 	}
 
-	cardinal result = 1;
+	size_t result = 1;
 
 	while (x > result)
 	{

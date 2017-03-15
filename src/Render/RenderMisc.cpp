@@ -383,7 +383,7 @@ void CheckGlError(const std::string& msg)
 {
 	AssertIfInMainThread();
 
-	cardinal error = glGetError();
+	size_t error = glGetError();
 	
 	if (error != GL_NO_ERROR)
 	{

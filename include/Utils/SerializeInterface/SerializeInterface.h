@@ -16,7 +16,7 @@ namespace SE
 
 std::shared_ptr<boost::property_tree::ptree> StringToPropertyTree(std::string xmlCode, std::map<std::string, std::string> replaceMap = std::map<std::string, std::string>());
 
-std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(boost::shared_array<char> xmlFileArr, cardinal xmlFileSize, std::map<std::string, std::string> replaceMap = std::map<std::string, std::string>());
+std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(boost::shared_array<char> xmlFileArr, size_t xmlFileSize, std::map<std::string, std::string> replaceMap = std::map<std::string, std::string>());
 
 std::shared_ptr<boost::property_tree::ptree> FileToPropertyTree(const std::string& fileName, std::map<std::string, std::string> replaceMap = std::map<std::string, std::string>());
 

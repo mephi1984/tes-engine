@@ -28,11 +28,11 @@ extern const int CONST_SCREEN_FRAMEBUFFER;
     
 struct TFrame
 {
-	cardinal FrameBuffer;
-	cardinal DepthRenderBuffer;
-	cardinal TexID;
-	cardinal Width;
-	cardinal Height;
+	size_t FrameBuffer;
+	size_t DepthRenderBuffer;
+	size_t TexID;
+	size_t Width;
+	size_t Height;
 	std::string TexName;
 };
 
@@ -60,19 +60,19 @@ public:
 	void FreeFrameManager();
 	//Clean up frame map
 
-	cardinal AddFrameRenderBuffer(const std::string& frameName, cardinal width, cardinal height);
+	size_t AddFrameRenderBuffer(const std::string& frameName, size_t width, size_t height);
 	//Add a new render buffer with name frameName. Width and height must be power of two (512, 1024 etc) 
 	
 	void DeleteFrameRenderBuffer(const std::string& frameName);
 	//Delete render / depth buffer with name frameName 
 
-	cardinal AddDepthBuffer(const std::string& frameName, cardinal width, cardinal height);
+	size_t AddDepthBuffer(const std::string& frameName, size_t width, size_t height);
 	//Add depth buffer with name frameName Width and height must be power of two (512, 1024 etc)
 
-	cardinal AddCubemapBuffer(const std::string& frameName, cardinal width, cardinal height);
+	size_t AddCubemapBuffer(const std::string& frameName, size_t width, size_t height);
 	//Add cubemap render buffer with name frameName Width and height must be power of two (512, 1024 etc)
 
-	cardinal GetFrameTexture(const std::string& frameName);
+	size_t GetFrameTexture(const std::string& frameName);
 	//Get texture ID from frame with name frameName
 
 	ivec2 GetFrameWidthHeight(const std::string& frameName);
