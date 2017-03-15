@@ -28,6 +28,8 @@ This code combines all headers for Salmon engine into one header file
 #include "include/FontManager/FontManager.h"
 #include "include/SmartValueManager/SmartValueManager.h"
 #include "include/GUIManager/GUIManager.h"
+#include "include/GUIManager/NewGuiManager.h"
+
 
 namespace SE
 {
@@ -42,6 +44,8 @@ public:
 	TFontManager FontManager;
     TSmartValueManager SmartValueManager;
 	TGUIManager GUIManager;
+
+	NewGuiManager newGuiManager;
 
 	void Update(size_t timer);
 

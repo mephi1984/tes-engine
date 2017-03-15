@@ -25,6 +25,7 @@ void TResourceManager::Update(size_t timer)
 {
 
 	GUIManager.Update(timer);
+	newGuiManager.Update(timer);
 
 	ST::MainThreadIoService.poll_one();
     ST::MainThreadIoService.reset();
@@ -58,6 +59,8 @@ void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float ma
 	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
 
 	InnerInit();
+
+	ResourceManager->newGuiManager.Init();
     
     CheckGlError();
     
@@ -67,6 +70,7 @@ void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float ma
 	
 void TApplicationAncestor::OuterDeinit()
 {
+	ResourceManager->newGuiManager.Deinit();
 	TryUpdateMainThreadId();
 	*Console<<"Outer Deinit";
 	CheckGlError("OuterDeinit");
@@ -93,6 +97,7 @@ void TApplicationAncestor::OuterDraw()
 	Renderer->LoadIdentity();
 
 	ResourceManager->GUIManager.Draw();
+	ResourceManager->newGuiManager.Draw();
 
 	Renderer->PushShader("DefaultShader");
 	
@@ -120,24 +125,28 @@ void TApplicationAncestor::OuterUpdate(size_t timer)
 void TApplicationAncestor::OuterOnTapDown(Vector2f p, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMouseDown(p, touchNumber);
+	ResourceManager->newGuiManager.OnMouseDown(p, touchNumber);
 	InnerOnTapDown(p);
 }
 
 void TApplicationAncestor::OuterOnTapUp(Vector2f p, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMouseUp(p, touchNumber);
+	ResourceManager->newGuiManager.OnMouseUp(p, touchNumber);
 	InnerOnTapUp(p);
 }
 
 void TApplicationAncestor::OuterOnTapUpAfterMove(Vector2f p, int touchNumber)
 {
     ResourceManager->GUIManager.OnMouseUpAfterMove(p, touchNumber);
+	ResourceManager->newGuiManager.OnMouseUpAfterMove(p, touchNumber);
 	InnerOnTapUpAfterMove(p);
 }
 
 void TApplicationAncestor::OuterOnMove(Vector2f shift, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMove(shift, touchNumber);
+	ResourceManager->newGuiManager.OnMove(shift, touchNumber);
 	InnerOnMove(shift);
 }
 

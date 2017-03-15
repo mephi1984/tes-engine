@@ -132,6 +132,7 @@ void TApplication::OnKeyPress(size_t key)
 		else
 		{
 			ResourceManager->GUIManager.KeyPressedSignal(static_cast<int>(key));
+			ResourceManager->newGuiManager.OnKeyPressed(static_cast<int>(key));
 		}
 
 		App->InnerOnKeyPress(key);

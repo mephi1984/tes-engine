@@ -105,6 +105,9 @@
     <ClCompile Include="..\..\src\SmartValueManager\SmartValueManager.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\GUIManager\NewGuiManager.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Animation\SalmonAnimation.h">
@@ -252,6 +255,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\SmartValueManager\SmartValueManager.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUIManager\NewGuiManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
