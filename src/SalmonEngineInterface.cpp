@@ -58,9 +58,11 @@ void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float ma
 
 	Renderer->InitOpenGL(screenWidth, screenHeight, matrixWidth, matrixHeight);
 
+	ResourceManager->newGuiManager.Init();
+
 	InnerInit();
 
-	ResourceManager->newGuiManager.Init();
+	
     
     CheckGlError();
     
