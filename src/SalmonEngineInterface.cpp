@@ -117,25 +117,25 @@ void TApplicationAncestor::OuterUpdate(size_t timer)
 }
 
 
-void TApplicationAncestor::OuterOnTapDown(vec2 p, int touchNumber)
+void TApplicationAncestor::OuterOnTapDown(Vector2f p, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMouseDown(p, touchNumber);
 	InnerOnTapDown(p);
 }
 
-void TApplicationAncestor::OuterOnTapUp(vec2 p, int touchNumber)
+void TApplicationAncestor::OuterOnTapUp(Vector2f p, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMouseUp(p, touchNumber);
 	InnerOnTapUp(p);
 }
 
-void TApplicationAncestor::OuterOnTapUpAfterMove(vec2 p, int touchNumber)
+void TApplicationAncestor::OuterOnTapUpAfterMove(Vector2f p, int touchNumber)
 {
     ResourceManager->GUIManager.OnMouseUpAfterMove(p, touchNumber);
 	InnerOnTapUpAfterMove(p);
 }
 
-void TApplicationAncestor::OuterOnMove(vec2 shift, int touchNumber)
+void TApplicationAncestor::OuterOnMove(Vector2f shift, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMove(shift, touchNumber);
 	InnerOnMove(shift);

@@ -47,9 +47,9 @@ TRenderParamsSetter::TRenderParamsSetter(const TRenderParams& renderParams)
 		RenderUniform1f(i->first, i->second);
 	}
 
-	for (std::map<std::string, vec4>::iterator i = RenderParams.Vec4Map.begin(); i != RenderParams.Vec4Map.end(); ++i)
+	for (std::map<std::string, Vector4f>::iterator i = RenderParams.Vec4Map.begin(); i != RenderParams.Vec4Map.end(); ++i)
 	{
-		RenderUniform4fv(i->first, i->second.v);
+		RenderUniform4fv(i->first, i->second.data());
 	}
 }
 

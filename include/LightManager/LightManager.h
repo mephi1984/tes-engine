@@ -21,17 +21,17 @@ class TLightManager
 protected:
 	bool LightingEnabled;
 	
-	vec3 LightPos;
-	vec3 LightDirection;
+	Vector3f LightPos;
+	Vector3f LightDirection;
 
-	vec4 LightColor;
+	Vector4f LightColor;
 
 public:
 	TLightManager();
 
-	void SetLightPos(vec3 pos);
-	void SetLightDirection(vec3 dir);
-	void SetLightColor(vec4 color);
+	void SetLightPos(Vector3f pos);
+	void SetLightDirection(Vector3f dir);
+	void SetLightColor(Vector4f color);
 
 	void SetLightOn();
 	void SetLightOff();

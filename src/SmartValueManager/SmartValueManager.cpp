@@ -35,17 +35,17 @@ void TSmartValueManager::Serialize(boost::property_tree::ptree& propertyTree)
 				{
 					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<float>>(new TBindableVar<float>(subSubTree.second.get<float>("<xmlattr>.value")));
 				}
-				else if (type == "vec2")
+				else if (type == "Vector2f")
 				{
-					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<vec2>>(new TBindableVar<vec2>(StringToVec2(subSubTree.second.get<std::string>("<xmlattr>.value"))));
+					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<Vector2f>>(new TBindableVar<Vector2f>(StringToVec2(subSubTree.second.get<std::string>("<xmlattr>.value"))));
 				}
-				else if (type == "vec3")
+				else if (type == "Vector3f")
 				{
-					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<vec3>>(new TBindableVar<vec3>(StringToVec3(subSubTree.second.get<std::string>("<xmlattr>.value"))));
+					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<Vector3f>>(new TBindableVar<Vector3f>(StringToVec3(subSubTree.second.get<std::string>("<xmlattr>.value"))));
 				}
-				else if (type == "vec4")
+				else if (type == "Vector4f")
 				{
-					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<vec4>>(new TBindableVar<vec4>(StringToVec4(subSubTree.second.get<std::string>("<xmlattr>.value"))));
+					DisctionariesMap[dictName][key] = std::shared_ptr<TBindableVar<Vector4f>>(new TBindableVar<Vector4f>(StringToVec4(subSubTree.second.get<std::string>("<xmlattr>.value"))));
 				}
 				else
 				{

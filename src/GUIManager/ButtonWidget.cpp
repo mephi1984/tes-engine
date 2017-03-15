@@ -14,18 +14,18 @@ void TInstancingWidgetAncestor::Update(size_t dt)
 {
 }
 
-bool TInstancingWidgetAncestor::CheckClick(vec2 mousePos) 
+bool TInstancingWidgetAncestor::CheckClick(Vector2f mousePos) 
 {
 	return false;
 }
 
 
-bool TSquareStatic::CheckClick(vec2 mousePos)
+bool TSquareStatic::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -35,20 +35,20 @@ bool TSquareStatic::CheckClick(vec2 mousePos)
 	}
 }
 
-TSquareStatic* TSquareStatic::CreateStatic(vec2 posFrom, vec2 posTo)
+TSquareStatic* TSquareStatic::CreateStatic(Vector2f posFrom, Vector2f posTo)
 {
 	TSquareStatic* staticWidget = new TSquareStatic();
 
 	staticWidget->LeftBottomPos = posFrom;
-	staticWidget->Width = posTo.v[0] - posFrom.v[0];
-	staticWidget->Height = posTo.v[1] - posFrom.v[1];
+	staticWidget->Width = posTo(0) - posFrom(0);
+	staticWidget->Height = posTo(1) - posFrom(1);
 
 	return staticWidget;
 
 }
 
 
-TSquareStatic* TSquareStatic::CreateStaticWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TSquareStatic*)> staticFillerFunc)
+TSquareStatic* TSquareStatic::CreateStaticWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TSquareStatic*)> staticFillerFunc)
 {
 	TSquareStatic* staticWidget = TSquareStatic::CreateStatic(posFrom, posTo);
 
@@ -58,7 +58,7 @@ TSquareStatic* TSquareStatic::CreateStaticWithFiller(vec2 posFrom, vec2 posTo, b
 }
 
 
-TSquareStatic* TSquareStatic::CreateStaticWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TSquareStatic*)>> staticFillerFuncArr)
+TSquareStatic* TSquareStatic::CreateStaticWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TSquareStatic*)>> staticFillerFuncArr)
 {
 	TSquareStatic* staticWidget = TSquareStatic::CreateStatic(posFrom, posTo);
 
@@ -71,7 +71,7 @@ TSquareStatic* TSquareStatic::CreateStaticWithFillers(vec2 posFrom, vec2 posTo, 
 }
 
 
-void TSquareStatic::StaticTextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TSquareStatic* staticToFill)
+void TSquareStatic::StaticTextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, TSquareStatic* staticToFill)
 {
 	
 	TRenderParams renderParams;
@@ -86,7 +86,7 @@ void TSquareStatic::StaticTextureFiller(vec2 posFrom, vec2 posTo, const std::str
 	staticToFill->TriangleListVector.insert(staticToFill->TriangleListVector.end(), TRenderPair(renderParams, triangleList));
 }
 
-void TSquareStatic::StaticTextFiller(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams, TSquareStatic* staticToFill)
+void TSquareStatic::StaticTextFiller(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams, TSquareStatic* staticToFill)
 {
 	
 	TRenderParams renderParams = buttonTextParams.RenderParams;
@@ -111,13 +111,13 @@ void TSquareStatic::StaticTextFiller(vec2 posFrom, vec2 posTo, TTextParams butto
 	
 }
 
-TSquareStatic* TSquareStatic::CreateStaticTexture(vec2 posFrom, vec2 posTo, const std::string& texName)
+TSquareStatic* TSquareStatic::CreateStaticTexture(Vector2f posFrom, Vector2f posTo, const std::string& texName)
 {
 	return CreateStaticWithFiller(posFrom, posTo, boost::bind(TSquareStatic::StaticTextureFiller, posFrom, posTo, texName, _1));
 
 }
 
-TSquareStatic* TSquareStatic::CreateStaticText(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams)
+TSquareStatic* TSquareStatic::CreateStaticText(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams)
 {
 	return CreateStaticWithFiller(posFrom, posTo, boost::bind(TSquareStatic::StaticTextFiller, posFrom, posTo, buttonTextParams, _1));
 }
@@ -125,7 +125,7 @@ TSquareStatic* TSquareStatic::CreateStaticText(vec2 posFrom, vec2 posTo, TTextPa
 
 
 
-TTriangleList CreateTriangleListForText(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams)
+TTriangleList CreateTriangleListForText(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams)
 {
 	TTriangleList triangleList;
 
@@ -151,12 +151,12 @@ TDynamicText::~TDynamicText()
 	}
 }
 
-bool TDynamicText::CheckClick(vec2 mousePos)
+bool TDynamicText::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -172,8 +172,8 @@ void TDynamicText::UpdateText(std::string text)
 	{
 		LastTextParams.Text = text;
 
-		vec2 posFrom = LeftBottomPos;
-		vec2 posTo = LeftBottomPos + vec2(Width, Height);
+		Vector2f posFrom = LeftBottomPos;
+		Vector2f posTo = LeftBottomPos + Vector2f(Width, Height);
 
 		
 		PerformInMainThreadAsync(
@@ -185,18 +185,18 @@ void TDynamicText::UpdateText(std::string text)
 	}
 }
 
-TDynamicText* TDynamicText::CreateDynamicText(vec2 posFrom, vec2 posTo)
+TDynamicText* TDynamicText::CreateDynamicText(Vector2f posFrom, Vector2f posTo)
 {
 	TDynamicText* dynamicText = new TDynamicText();
 
 	dynamicText->LeftBottomPos = posFrom;
-	dynamicText->Width = posTo.v[0] - posFrom.v[0];
-	dynamicText->Height = posTo.v[1] - posFrom.v[1];
+	dynamicText->Width = posTo(0) - posFrom(0);
+	dynamicText->Height = posTo(1) - posFrom(1);
 
 	return dynamicText;
 }
 
-TDynamicText* TDynamicText::CreateDynamicTextWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TDynamicText*)> dynamicTextFillerFunc)
+TDynamicText* TDynamicText::CreateDynamicTextWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TDynamicText*)> dynamicTextFillerFunc)
 {
 	TDynamicText* dynamicText = TDynamicText::CreateDynamicText(posFrom, posTo);
 
@@ -205,7 +205,7 @@ TDynamicText* TDynamicText::CreateDynamicTextWithFiller(vec2 posFrom, vec2 posTo
 	return dynamicText;
 }
 
-TDynamicText* TDynamicText::CreateDynamicTextWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TDynamicText*)>> dynamicTextFillerFuncArr)
+TDynamicText* TDynamicText::CreateDynamicTextWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TDynamicText*)>> dynamicTextFillerFuncArr)
 {
 	TDynamicText* dynamicText = TDynamicText::CreateDynamicText(posFrom, posTo);
 
@@ -217,7 +217,7 @@ TDynamicText* TDynamicText::CreateDynamicTextWithFillers(vec2 posFrom, vec2 posT
 	return dynamicText;
 }
 
-void TDynamicText::TextParamsFiller(vec2 posFrom, vec2 posTo, TTextParams textParams, TDynamicText* dynamicTextToFill)
+void TDynamicText::TextParamsFiller(Vector2f posFrom, Vector2f posTo, TTextParams textParams, TDynamicText* dynamicTextToFill)
 {
 	TRenderParams renderParams = textParams.RenderParams;
 
@@ -298,12 +298,12 @@ void TUniversalButton::Update(size_t dt)
 }
 
 
-bool TUniversalButton::CheckClick(vec2 mousePos)
+bool TUniversalButton::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -313,7 +313,7 @@ bool TUniversalButton::CheckClick(vec2 mousePos)
 	}
 }
 
-void TUniversalButton::OnTapDown(vec2 pos)
+void TUniversalButton::OnTapDown(Vector2f pos)
 {
 	if (ButtonState == BS_NORMAL || ButtonState == BS_GO_NORMAL)
 	{
@@ -322,7 +322,7 @@ void TUniversalButton::OnTapDown(vec2 pos)
 
 }
 
-void TUniversalButton::OnTapUp(vec2 pos)
+void TUniversalButton::OnTapUp(Vector2f pos)
 {
 	if (ButtonState == BS_PRESSED || ButtonState == BS_GO_PRESSED)
 	{
@@ -331,7 +331,7 @@ void TUniversalButton::OnTapUp(vec2 pos)
 
 }
     
-void TUniversalButton::OnTapUpAfterMove(vec2 pos)
+void TUniversalButton::OnTapUpAfterMove(Vector2f pos)
 {
     OnTapUp(pos);
 }
@@ -345,20 +345,20 @@ void TUniversalButton::OnMoveOut()
 	}
 }
 
-TUniversalButton* TUniversalButton::CreateButton(vec2 posFrom, vec2 posTo)
+TUniversalButton* TUniversalButton::CreateButton(Vector2f posFrom, Vector2f posTo)
 {
 	TUniversalButton* button = new TUniversalButton();
 
 	button->LeftBottomPos = posFrom;
 
-	button->Width = posTo.v[0] - posFrom.v[0];
+	button->Width = posTo(0) - posFrom(0);
 
-	button->Height = posTo.v[1] - posFrom.v[1];
+	button->Height = posTo(1) - posFrom(1);
 
 	return button;
 }
 
-TUniversalButton* TUniversalButton::CreateButtonWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TUniversalButton*)> buttonFillerFunc)
+TUniversalButton* TUniversalButton::CreateButtonWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TUniversalButton*)> buttonFillerFunc)
 {
 	
 	TUniversalButton* button = TUniversalButton::CreateButton(posFrom, posTo);
@@ -368,7 +368,7 @@ TUniversalButton* TUniversalButton::CreateButtonWithFiller(vec2 posFrom, vec2 po
 	return button;
 }
 
-TUniversalButton* TUniversalButton::CreateButtonWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TUniversalButton*)> > buttonFillerFuncArr)
+TUniversalButton* TUniversalButton::CreateButtonWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TUniversalButton*)> > buttonFillerFuncArr)
 {
 	TUniversalButton* button = TUniversalButton::CreateButton(posFrom, posTo);
 
@@ -380,7 +380,7 @@ TUniversalButton* TUniversalButton::CreateButtonWithFillers(vec2 posFrom, vec2 p
 	return button;
 }
 
-void TUniversalButton::SquareButtonFiller(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNamePressed, TUniversalButton* buttonToFill)
+void TUniversalButton::SquareButtonFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNamePressed, TUniversalButton* buttonToFill)
 {
 	
 	TRenderParams renderParams;
@@ -402,7 +402,7 @@ void TUniversalButton::SquareButtonFiller(vec2 posFrom, vec2 posTo, const std::s
 }
 
 
-void TUniversalButton::TextButtonFiller(vec2 posFrom, vec2 posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed, TUniversalButton* buttonToFill)
+void TUniversalButton::TextButtonFiller(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed, TUniversalButton* buttonToFill)
 {
 
 
@@ -452,17 +452,17 @@ void TUniversalButton::TextButtonFiller(vec2 posFrom, vec2 posTo, TTextParams bu
 
 }
 
-TUniversalButton* TUniversalButton::CreateSquareButton(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNamePressed)
+TUniversalButton* TUniversalButton::CreateSquareButton(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNamePressed)
 {
 	return CreateButtonWithFiller(posFrom, posTo, boost::bind(TUniversalButton::SquareButtonFiller, posFrom, posTo, texName, texNamePressed, _1));
 }
 
-TUniversalButton* TUniversalButton::CreateTextOnlyButton(vec2 posFrom, vec2 posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed)
+TUniversalButton* TUniversalButton::CreateTextOnlyButton(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed)
 {
 	return CreateButtonWithFiller(posFrom, posTo, boost::bind(TUniversalButton::TextButtonFiller, posFrom, posTo, buttonTextParamsNormal, buttonTextParamsPressed, _1));
 }
 
-TUniversalButton* TUniversalButton::CreateSquareAndTextButton(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNamePressed, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed)
+TUniversalButton* TUniversalButton::CreateSquareAndTextButton(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNamePressed, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed)
 {
 
 	std::vector<boost::function<void(TUniversalButton*)> > funcIter;
@@ -476,20 +476,20 @@ TUniversalButton* TUniversalButton::CreateSquareAndTextButton(vec2 posFrom, vec2
 }
 
 
-TEdit* TEdit::CreateEdit(vec2 posFrom, vec2 posTo)
+TEdit* TEdit::CreateEdit(Vector2f posFrom, Vector2f posTo)
 {
 	TEdit* edit = new TEdit();
 
 	edit->LeftBottomPos = posFrom;
 
-	edit->Width = posTo.v[0] - posFrom.v[0];
+	edit->Width = posTo(0) - posFrom(0);
 
-	edit->Height = posTo.v[1] - posFrom.v[1];
+	edit->Height = posTo(1) - posFrom(1);
 
 	return edit;
 }
 
-TEdit* TEdit::CreateEditWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TEdit*)> fillerFunc)
+TEdit* TEdit::CreateEditWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TEdit*)> fillerFunc)
 {
 	TEdit* edit = CreateEdit(posFrom, posTo);
 
@@ -498,7 +498,7 @@ TEdit* TEdit::CreateEditWithFiller(vec2 posFrom, vec2 posTo, boost::function<voi
 	return edit;
 }
 
-TEdit* TEdit::CreateEditWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TEdit*)> > fillerFuncArr)
+TEdit* TEdit::CreateEditWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TEdit*)> > fillerFuncArr)
 {
 	TEdit* edit = CreateEdit(posFrom, posTo);
 
@@ -510,7 +510,7 @@ TEdit* TEdit::CreateEditWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost:
 	return edit;
 }
 
-void TEdit::EditFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TTextParams textParams, TEdit* edit)
+void TEdit::EditFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, TTextParams textParams, TEdit* edit)
 {
 
 	TRenderParams renderParams;
@@ -568,7 +568,7 @@ void TEdit::SmartValueTextFiller(const std::string& dictionaryName, const std::s
 }
 
 /*
-TEdit* TEdit::CreateEdit(vec2 posFrom, vec2 posTo, const std::string& texName, TTextParams textParams)
+TEdit* TEdit::CreateEdit(Vector2f posFrom, Vector2f posTo, const std::string& texName, TTextParams textParams)
 {
 	
 
@@ -618,18 +618,18 @@ TEdit::~TEdit()
 
 void TEdit::RefreshTextTriangleList()
 {
-	TTriangleList triangleList = CreateTriangleListForText(LeftBottomPos, LeftBottomPos + vec2(Width, Height), TextParams);
+	TTriangleList triangleList = CreateTriangleListForText(LeftBottomPos, LeftBottomPos + Vector2f(Width, Height), TextParams);
 
 	TextIterator->second = triangleList;
 
 }
 
-bool TEdit::CheckClick(vec2 mousePos)
+bool TEdit::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -639,7 +639,7 @@ bool TEdit::CheckClick(vec2 mousePos)
 	}
 }
 
-void TEdit::OnTapDown(vec2 pos)
+void TEdit::OnTapDown(Vector2f pos)
 {
 	if (!InputConnection.connected())
 	{
@@ -761,12 +761,12 @@ void TCheckBox::RefreshVisibility()
 	}
 }
 
-bool TCheckBox::CheckClick(vec2 mousePos)
+bool TCheckBox::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -780,11 +780,11 @@ void TCheckBox::Update(size_t dt)
 {
 }
 
-void TCheckBox::OnTapDown(vec2 pos)
+void TCheckBox::OnTapDown(Vector2f pos)
 {
 }
 
-void TCheckBox::OnTapUp(vec2 pos)
+void TCheckBox::OnTapUp(Vector2f pos)
 {
 	SetChecked(!IsChecked);
 }
@@ -794,20 +794,20 @@ void TCheckBox::OnMoveOut()
 }
 
 
-TCheckBox* TCheckBox::CreateCheckBox(vec2 posFrom, vec2 posTo)
+TCheckBox* TCheckBox::CreateCheckBox(Vector2f posFrom, Vector2f posTo)
 {
 	TCheckBox* checkBox = new TCheckBox();
 
 	checkBox->LeftBottomPos = posFrom;
 
-	checkBox->Width = posTo.v[0] - posFrom.v[0];
+	checkBox->Width = posTo(0) - posFrom(0);
 
-	checkBox->Height = posTo.v[1] - posFrom.v[1];
+	checkBox->Height = posTo(1) - posFrom(1);
 
 	return checkBox;
 }
 
-TCheckBox* TCheckBox::CreateCheckBoxWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TCheckBox*)> checkBoxFillerFunc)
+TCheckBox* TCheckBox::CreateCheckBoxWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TCheckBox*)> checkBoxFillerFunc)
 {
 	TCheckBox* checkBox = TCheckBox::CreateCheckBox(posFrom, posTo);
 
@@ -816,7 +816,7 @@ TCheckBox* TCheckBox::CreateCheckBoxWithFiller(vec2 posFrom, vec2 posTo, boost::
 	return checkBox;
 }
 
-TCheckBox* TCheckBox::CreateCheckBoxWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TCheckBox*)> > checkBoxFillerFuncArr)
+TCheckBox* TCheckBox::CreateCheckBoxWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TCheckBox*)> > checkBoxFillerFuncArr)
 {
 	TCheckBox* checkBox = TCheckBox::CreateCheckBox(posFrom, posTo);
 
@@ -828,7 +828,7 @@ TCheckBox* TCheckBox::CreateCheckBoxWithFillers(vec2 posFrom, vec2 posTo, std::v
 	return checkBox;
 }
 
-void TCheckBox::TextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, TCheckBox* checkBoxToFill)
+void TCheckBox::TextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, TCheckBox* checkBoxToFill)
 {
 
 	TRenderParams renderParams;
@@ -850,7 +850,7 @@ void TCheckBox::TextureFiller(vec2 posFrom, vec2 posTo, const std::string& texNa
 
 }
 
-void TCheckBox::TextFiller(vec2 posFrom, vec2 posTo, TTextParams textParams, TCheckBox* checkBoxToFill)
+void TCheckBox::TextFiller(Vector2f posFrom, Vector2f posTo, TTextParams textParams, TCheckBox* checkBoxToFill)
 {
 	
 	TRenderParams renderParams = textParams.RenderParams;
@@ -899,12 +899,12 @@ void TCheckBox::SmartValueFiller(const std::string& dictionaryName, const std::s
 }
 
 
-TCheckBox* TCheckBox::CreateSimpleCheckBox(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked)
+TCheckBox* TCheckBox::CreateSimpleCheckBox(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked)
 {
 	return CreateCheckBoxWithFiller(posFrom, posTo, boost::bind(&TCheckBox::TextureFiller, posFrom, posTo, texName, texNameChecked, _1));
 }
 
-TCheckBox* TCheckBox::CreateCheckBoxWithText(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, vec2 textPosFrom, vec2 textPosTo, TTextParams textParams)
+TCheckBox* TCheckBox::CreateCheckBoxWithText(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, Vector2f textPosFrom, Vector2f textPosTo, TTextParams textParams)
 {
 	TCheckBox* checkBox = CreateCheckBox(posFrom, posTo);
 
@@ -969,12 +969,12 @@ void TRadioButton::RefreshVisibility()
 	}
 }
 
-bool TRadioButton::CheckClick(vec2 mousePos)
+bool TRadioButton::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -988,11 +988,11 @@ void TRadioButton::Update(size_t dt)
 {
 }
 
-void TRadioButton::OnTapDown(vec2 pos)
+void TRadioButton::OnTapDown(Vector2f pos)
 {
 }
 
-void TRadioButton::OnTapUp(vec2 pos)
+void TRadioButton::OnTapUp(Vector2f pos)
 {
 	SetChecked(true);
 }
@@ -1002,20 +1002,20 @@ void TRadioButton::OnMoveOut()
 }
 
 
-TRadioButton* TRadioButton::CreateRadioButton(vec2 posFrom, vec2 posTo)
+TRadioButton* TRadioButton::CreateRadioButton(Vector2f posFrom, Vector2f posTo)
 {
 	TRadioButton* radioButton = new TRadioButton();
 
 	radioButton->LeftBottomPos = posFrom;
 
-	radioButton->Width = posTo.v[0] - posFrom.v[0];
+	radioButton->Width = posTo(0) - posFrom(0);
 
-	radioButton->Height = posTo.v[1] - posFrom.v[1];
+	radioButton->Height = posTo(1) - posFrom(1);
 
 	return radioButton;
 }
 
-TRadioButton* TRadioButton::CreateRadioButtonWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TRadioButton*)> radioButtonFillerFunc)
+TRadioButton* TRadioButton::CreateRadioButtonWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TRadioButton*)> radioButtonFillerFunc)
 {
 	TRadioButton* radioButton = TRadioButton::CreateRadioButton(posFrom, posTo);
 
@@ -1024,7 +1024,7 @@ TRadioButton* TRadioButton::CreateRadioButtonWithFiller(vec2 posFrom, vec2 posTo
 	return radioButton;
 }
 
-TRadioButton* TRadioButton::CreateRadioButtonWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TRadioButton*)> > radioButtonFillerFuncArr)
+TRadioButton* TRadioButton::CreateRadioButtonWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TRadioButton*)> > radioButtonFillerFuncArr)
 {
 	TRadioButton* radioButton = TRadioButton::CreateRadioButton(posFrom, posTo);
 
@@ -1036,7 +1036,7 @@ TRadioButton* TRadioButton::CreateRadioButtonWithFillers(vec2 posFrom, vec2 posT
 	return radioButton;
 }
 
-void TRadioButton::TextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, TRadioButton* radioButtonToFill)
+void TRadioButton::TextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, TRadioButton* radioButtonToFill)
 {
 
 	TRenderParams renderParams;
@@ -1058,7 +1058,7 @@ void TRadioButton::TextureFiller(vec2 posFrom, vec2 posTo, const std::string& te
 
 }
 
-void TRadioButton::TextFiller(vec2 posFrom, vec2 posTo, TTextParams textParams, TRadioButton* radioButtonToFill)
+void TRadioButton::TextFiller(Vector2f posFrom, Vector2f posTo, TTextParams textParams, TRadioButton* radioButtonToFill)
 {
 	
 	TRenderParams renderParams = textParams.RenderParams;
@@ -1089,12 +1089,12 @@ void TRadioButton::CheckedFiller(bool isChecked, TRadioButton* radioButtonToFill
 	radioButtonToFill->SetChecked(isChecked);
 }
 
-TRadioButton* TRadioButton::CreateSimpleRadioButton(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked)
+TRadioButton* TRadioButton::CreateSimpleRadioButton(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked)
 {
 	return CreateRadioButtonWithFiller(posFrom, posTo, boost::bind(&TRadioButton::TextureFiller, posFrom, posTo, texName, texNameChecked, _1));
 }
 
-TRadioButton* TRadioButton::CreateRadioButtonWithText(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, vec2 textPosFrom, vec2 textPosTo, TTextParams textParams)
+TRadioButton* TRadioButton::CreateRadioButtonWithText(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, Vector2f textPosFrom, Vector2f textPosTo, TTextParams textParams)
 {
 	TRadioButton* radioButton = CreateRadioButton(posFrom, posTo);
 
@@ -1129,12 +1129,12 @@ void TMover::Update(size_t dt)
 {
 }
 
-bool TMover::CheckClick(vec2 mousePos)
+bool TMover::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -1144,18 +1144,18 @@ bool TMover::CheckClick(vec2 mousePos)
 	}
 }
 
-void TMover::OnTapDown(vec2 pos)
+void TMover::OnTapDown(Vector2f pos)
 {
 }
 
-void TMover::OnTapUp(vec2 pos)
+void TMover::OnTapUp(Vector2f pos)
 {
 }
 
-void TMover::OnMove(vec2 shift)
+void TMover::OnMove(Vector2f shift)
 {
 	float oldPosCursor = PosCursor;
-	PosCursor -= shift.v[1];
+	PosCursor -= shift(1);
 
 	if (PosCursor < 0)
 	{
@@ -1171,7 +1171,7 @@ void TMover::OnMove(vec2 shift)
 
 	if (shift_y != 0)
 	{
-	ResourceManager->GUIManager.MoveWidgetGroup(GroupName, SelfName, vec2(0, shift_y));
+	ResourceManager->GUIManager.MoveWidgetGroup(GroupName, SelfName, Vector2f(0, shift_y));
 	}
 }
 
@@ -1180,15 +1180,15 @@ void TMover::OnMoveOut()
 }
 
 
-TMover* TMover::CreateMover(vec2 posFrom, vec2 posTo, std::string groupName, std::string selfName, float maxHeight)
+TMover* TMover::CreateMover(Vector2f posFrom, Vector2f posTo, std::string groupName, std::string selfName, float maxHeight)
 {
 	TMover* mover = new TMover();
 
 	mover->LeftBottomPos = posFrom;
 
-	mover->Width = posTo.v[0] - posFrom.v[0];
+	mover->Width = posTo(0) - posFrom(0);
 
-	mover->Height = posTo.v[1] - posFrom.v[1];
+	mover->Height = posTo(1) - posFrom(1);
 
 	mover->GroupName = groupName;
 
@@ -1214,10 +1214,10 @@ void THorizontalJoystick::ReturnSelectorBack()
 {
 	SelectorPos = 0;
 
-	float selectorCenterPos = LeftBottomPos.v[0] + 0.5f * Width;
+	float selectorCenterPos = LeftBottomPos(0) + 0.5f * Width;
 
-	vec2 selectorPosFrom = vec2(selectorCenterPos - SelectorWidth * 0.5f, LeftBottomPos.v[1]);
-	vec2 selectorPosTo = vec2(selectorCenterPos + SelectorWidth * 0.5f, LeftBottomPos.v[1] + Height);
+	Vector2f selectorPosFrom = Vector2f(selectorCenterPos - SelectorWidth * 0.5f, LeftBottomPos(1));
+	Vector2f selectorPosTo = Vector2f(selectorCenterPos + SelectorWidth * 0.5f, LeftBottomPos(1) + Height);
 
 
 	for (std::vector<TRenderPairList::iterator>::iterator i = PressedTextureIteratorArr.begin(); i != PressedTextureIteratorArr.end(); ++i)
@@ -1263,12 +1263,12 @@ void THorizontalJoystick::Update(size_t dt)
 }
 
 
-bool THorizontalJoystick::CheckClick(vec2 mousePos)
+bool THorizontalJoystick::CheckClick(Vector2f mousePos)
 {
-	if (mousePos.v[0] >= LeftBottomPos.v[0] &&
-		mousePos.v[0] <= LeftBottomPos.v[0] + Width &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= LeftBottomPos(0) &&
+		mousePos(0) <= LeftBottomPos(0) + Width &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -1278,16 +1278,16 @@ bool THorizontalJoystick::CheckClick(vec2 mousePos)
 	}
 }
 
-bool THorizontalJoystick::CheckSelectorClicked(vec2 mousePos)
+bool THorizontalJoystick::CheckSelectorClicked(Vector2f mousePos)
 {
-	float selectorCenterPos = LeftBottomPos.v[0] + (SelectorPos + 1) * 0.5f * Width;
+	float selectorCenterPos = LeftBottomPos(0) + (SelectorPos + 1) * 0.5f * Width;
 	float selectorLeftPos = selectorCenterPos - SelectorWidth * 0.5f;
 	float selectorRightPos = selectorCenterPos + SelectorWidth * 0.5f;
 
-	if (mousePos.v[0] >= selectorLeftPos &&
-		mousePos.v[0] <= selectorRightPos &&
-		mousePos.v[1] >= LeftBottomPos.v[1] &&
-		mousePos.v[1] <= LeftBottomPos.v[1] + Height)
+	if (mousePos(0) >= selectorLeftPos &&
+		mousePos(0) <= selectorRightPos &&
+		mousePos(1) >= LeftBottomPos(1) &&
+		mousePos(1) <= LeftBottomPos(1) + Height)
 	{
 		return true;
 	}
@@ -1298,7 +1298,7 @@ bool THorizontalJoystick::CheckSelectorClicked(vec2 mousePos)
 }
 
 
-void THorizontalJoystick::OnTapDown(vec2 pos)
+void THorizontalJoystick::OnTapDown(Vector2f pos)
 {
 	if (ButtonState == BS_NORMAL || ButtonState == BS_GO_NORMAL)
 	{
@@ -1311,7 +1311,7 @@ void THorizontalJoystick::OnTapDown(vec2 pos)
 	}
 }
 
-void THorizontalJoystick::OnTapUp(vec2 pos)
+void THorizontalJoystick::OnTapUp(Vector2f pos)
 {
 	if (ButtonState == BS_PRESSED || ButtonState == BS_GO_PRESSED)
 	{
@@ -1322,28 +1322,28 @@ void THorizontalJoystick::OnTapUp(vec2 pos)
 	ReturnSelectorBack();
 }
     
-void THorizontalJoystick::OnTapUpAfterMove(vec2 pos)
+void THorizontalJoystick::OnTapUpAfterMove(Vector2f pos)
 {
     OnTapUp(pos);
 	SelectorPos = 0.f;
 }
 
-void THorizontalJoystick::OnTapUpAfterMoveOut(vec2 pos)
+void THorizontalJoystick::OnTapUpAfterMoveOut(Vector2f pos)
 {
     OnTapUp(pos);
 	SelectorPos = 0.f;
 }
 
-void THorizontalJoystick::OnMove(vec2 shift)
+void THorizontalJoystick::OnMove(Vector2f shift)
 {
 	if (SelectorTouched)
 	{
-		SelectorPos = SE::clamp(SelectorPos - 2.f * shift.v[0] / (Width - SelectorWidth), -1.f, 1.f);
+		SelectorPos = SE::clamp(SelectorPos - 2.f * shift(0) / (Width - SelectorWidth), -1.f, 1.f);
 		
-		float selectorCenterPos = LeftBottomPos.v[0] + SelectorWidth * 0.5f + (SelectorPos + 1) * 0.5f * (Width - SelectorWidth);
+		float selectorCenterPos = LeftBottomPos(0) + SelectorWidth * 0.5f + (SelectorPos + 1) * 0.5f * (Width - SelectorWidth);
 
-		vec2 selectorPosFrom = vec2(selectorCenterPos - SelectorWidth * 0.5f, LeftBottomPos.v[1]);
-		vec2 selectorPosTo = vec2(selectorCenterPos + SelectorWidth * 0.5f, LeftBottomPos.v[1] + Height);
+		Vector2f selectorPosFrom = Vector2f(selectorCenterPos - SelectorWidth * 0.5f, LeftBottomPos(1));
+		Vector2f selectorPosTo = Vector2f(selectorCenterPos + SelectorWidth * 0.5f, LeftBottomPos(1) + Height);
 
 
 		for (std::vector<TRenderPairList::iterator>::iterator i = PressedTextureIteratorArr.begin(); i != PressedTextureIteratorArr.end(); ++i)
@@ -1374,23 +1374,23 @@ float THorizontalJoystick::GetSelectorPos()
 	return SelectorPos;
 }
 
-THorizontalJoystick* THorizontalJoystick::CreateJoystick(vec2 posFrom, vec2 posTo, float selectorWidth)
+THorizontalJoystick* THorizontalJoystick::CreateJoystick(Vector2f posFrom, Vector2f posTo, float selectorWidth)
 {
 	
 	THorizontalJoystick* widget = new THorizontalJoystick();
 
 	widget->LeftBottomPos = posFrom;
 
-	widget->Width = posTo.v[0] - posFrom.v[0];
+	widget->Width = posTo(0) - posFrom(0);
 
-	widget->Height = posTo.v[1] - posFrom.v[1];
+	widget->Height = posTo(1) - posFrom(1);
 
 	widget->SelectorWidth = selectorWidth;
 
 	return widget;
 }
 
-THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFiller(vec2 posFrom, vec2 posTo, float selectorWidth, boost::function<void(THorizontalJoystick*)> fillerFunc)
+THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFiller(Vector2f posFrom, Vector2f posTo, float selectorWidth, boost::function<void(THorizontalJoystick*)> fillerFunc)
 {
 	
 	THorizontalJoystick* joystick = THorizontalJoystick::CreateJoystick(posFrom, posTo, selectorWidth);
@@ -1400,7 +1400,7 @@ THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFiller(vec2 posFrom,
 	return joystick;
 }
 
-THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFillers(vec2 posFrom, vec2 posTo, float selectorWidth, std::vector<boost::function<void(THorizontalJoystick*)> > fillerFuncArr)
+THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFillers(Vector2f posFrom, Vector2f posTo, float selectorWidth, std::vector<boost::function<void(THorizontalJoystick*)> > fillerFuncArr)
 {
 	THorizontalJoystick* joystick = THorizontalJoystick::CreateJoystick(posFrom, posTo, selectorWidth);
 
@@ -1413,13 +1413,13 @@ THorizontalJoystick* THorizontalJoystick::CreateJoystickWithFillers(vec2 posFrom
 }
 
 
-void THorizontalJoystick::SquareJoystickFiller(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed, THorizontalJoystick* joystickToFill)
+void THorizontalJoystick::SquareJoystickFiller(Vector2f posFrom, Vector2f posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed, THorizontalJoystick* joystickToFill)
 {
 	
-	float selectorCenterPos = 0.5f * (posFrom.v[0] + posTo.v[0]);
+	float selectorCenterPos = 0.5f * (posFrom(0) + posTo(0));
 
-	vec2 selectorPosFrom = vec2(selectorCenterPos - selectorWidth * 0.5f, posFrom.v[1]);
-	vec2 selectorPosTo = vec2(selectorCenterPos + selectorWidth * 0.5f, posTo.v[1]);
+	Vector2f selectorPosFrom = Vector2f(selectorCenterPos - selectorWidth * 0.5f, posFrom(1));
+	Vector2f selectorPosTo = Vector2f(selectorCenterPos + selectorWidth * 0.5f, posTo(1));
 
 	TRenderParams renderParams;
 
@@ -1452,7 +1452,7 @@ void THorizontalJoystick::SquareJoystickFiller(vec2 posFrom, vec2 posTo, float s
 
 }
 
-THorizontalJoystick* THorizontalJoystick::CreateSquareJoystick(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed)
+THorizontalJoystick* THorizontalJoystick::CreateSquareJoystick(Vector2f posFrom, Vector2f posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed)
 {
 	return CreateJoystickWithFiller(posFrom, posTo, selectorWidth, boost::bind(THorizontalJoystick::SquareJoystickFiller, posFrom, posTo, selectorWidth, texNameField, texName, texNamePressed, _1));
 }

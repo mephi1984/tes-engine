@@ -26,7 +26,7 @@ struct TRenderParams : public TSerializeInterface
 
 	mutable std::map<std::string, std::string> SamplerMap;
 	mutable std::map<std::string, float> FloatMap;
-	mutable std::map<std::string, vec4> Vec4Map;
+	mutable std::map<std::string, Vector4f> Vec4Map;
 	
 	virtual void Serialize(boost::property_tree::ptree& propertyTree);
 

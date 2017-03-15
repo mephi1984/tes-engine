@@ -19,7 +19,7 @@ extern const std::string CONST_DRAG_SIGNAL_NAME;
 extern const std::string CONST_TAPDOWN_SIGNAL_NAME;
 
 
-typedef boost::variant<size_t, vec2> TSignalParam;
+typedef boost::variant<size_t, Vector2f> TSignalParam;
 
 struct TWidgetStruct
 {
@@ -97,7 +97,7 @@ struct TWidgetStruct
 struct TWidgetTransformTask
 {
 	std::string GroupName;
-	vec2 PosTo;
+	Vector2f PosTo;
 	int CurrentTime;
 	int TotalTime;
 
@@ -108,7 +108,7 @@ struct TWidgetTransformTask
 		MS_SQRT
 	} MoveStyle;
 
-	TWidgetTransformTask(const std::string& groupName, vec2 posTo, int totalTime, int currentTime, TMoveStyle moveStyle)
+	TWidgetTransformTask(const std::string& groupName, Vector2f posTo, int totalTime, int currentTime, TMoveStyle moveStyle)
 		: GroupName(groupName)
 		, PosTo(posTo)
 		, TotalTime(totalTime)
@@ -130,12 +130,12 @@ protected:
 
 	TWidgetTrasfromTaskList WidgetTrasfromTaskList;
 
-	void MoveWidgetByIterator(TWidgetArr::iterator widget, vec2 shift);
+	void MoveWidgetByIterator(TWidgetArr::iterator widget, Vector2f shift);
 
 	TWidgetArr::iterator FindWidgetInArr(const std::string& widgetName);
 
-    std::map<int, vec2> LastTapPos;
-	std::map<int, vec2> TotalShift;
+    std::map<int, Vector2f> LastTapPos;
+	std::map<int, Vector2f> TotalShift;
 
 	boost::mutex WidgetListMutex;
 public:
@@ -163,18 +163,18 @@ public:
 	void Update(size_t dt);
 	void Draw();
 
-	void MoveWidget(const std::string& widgetName, vec2 shift);
-	void MoveWidgetGroup(const std::string& widgetGroupName, const std::string& exceptWidget, vec2 shift);
+	void MoveWidget(const std::string& widgetName, Vector2f shift);
+	void MoveWidgetGroup(const std::string& widgetGroupName, const std::string& exceptWidget, Vector2f shift);
 
 	void AddWidgetTransformTask(TWidgetTransformTask widgetTransformTask);
 
-	void OnMouseDown(vec2 pos, int touchNumber);
+	void OnMouseDown(Vector2f pos, int touchNumber);
 
-	void OnMouseUp(vec2 pos, int touchNumber);
+	void OnMouseUp(Vector2f pos, int touchNumber);
     
-    void OnMouseUpAfterMove(vec2 pos, int touchNumber);
+    void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-	void OnMove(vec2 shift, int touchNumber);
+	void OnMove(Vector2f shift, int touchNumber);
 
 	void ShowKeyboard(const std::string text = "");
 	void HideKeyboard();

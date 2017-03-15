@@ -16,17 +16,17 @@ protected:
 
 public:
 	TRenderPairList TriangleListVector;
-	vec2 LeftBottomPos;
+	Vector2f LeftBottomPos;
 
 	virtual void Update(size_t dt);
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
-	virtual void OnTapDown(vec2 pos) { }
-	virtual void OnTapUp(vec2 pos) { }
-    virtual void OnTapUpAfterMove(vec2 pos) { }
-	virtual void OnTapUpAfterMoveOut(vec2 pos) { }
-	virtual void OnMove(vec2 shift) { }
+	virtual void OnTapDown(Vector2f pos) { }
+	virtual void OnTapUp(Vector2f pos) { }
+    virtual void OnTapUpAfterMove(Vector2f pos) { }
+	virtual void OnTapUpAfterMoveOut(Vector2f pos) { }
+	virtual void OnMove(Vector2f shift) { }
 	virtual void OnMoveOut() { }
 	virtual void OnKeyPress(int key) { }
 
@@ -87,17 +87,17 @@ struct TSquareStatic : public TInstancingWidgetAncestor
 	{
 	}
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
-	static TSquareStatic* CreateStatic(vec2 posFrom, vec2 posTo);
-	static TSquareStatic* CreateStaticWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TSquareStatic*)> staticFillerFunc);
-	static TSquareStatic* CreateStaticWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TSquareStatic*)>> staticFillerFuncArr);
+	static TSquareStatic* CreateStatic(Vector2f posFrom, Vector2f posTo);
+	static TSquareStatic* CreateStaticWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TSquareStatic*)> staticFillerFunc);
+	static TSquareStatic* CreateStaticWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TSquareStatic*)>> staticFillerFuncArr);
 
-	static void StaticTextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TSquareStatic* staticToFill);
-	static void StaticTextFiller(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams, TSquareStatic* staticToFill);
+	static void StaticTextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, TSquareStatic* staticToFill);
+	static void StaticTextFiller(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams, TSquareStatic* staticToFill);
 
-	static TSquareStatic* CreateStaticTexture(vec2 posFrom, vec2 posTo, const std::string& texName);
-	static TSquareStatic* CreateStaticText(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams);
+	static TSquareStatic* CreateStaticTexture(Vector2f posFrom, Vector2f posTo, const std::string& texName);
+	static TSquareStatic* CreateStaticText(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams);
 
 };
 
@@ -120,21 +120,21 @@ public:
 	TDynamicText();
 	~TDynamicText();
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
 	void UpdateText(std::string text);
 
-	static TDynamicText* CreateDynamicText(vec2 posFrom, vec2 posTo);
-	static TDynamicText* CreateDynamicTextWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TDynamicText*)> dynamicTextFillerFunc);
-	static TDynamicText* CreateDynamicTextWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TDynamicText*)>> dynamicTextFillerFuncArr);
+	static TDynamicText* CreateDynamicText(Vector2f posFrom, Vector2f posTo);
+	static TDynamicText* CreateDynamicTextWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TDynamicText*)> dynamicTextFillerFunc);
+	static TDynamicText* CreateDynamicTextWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TDynamicText*)>> dynamicTextFillerFuncArr);
 
-	static void TextParamsFiller(vec2 posFrom, vec2 posTo, TTextParams textParams, TDynamicText* dynamicTextToFill);
+	static void TextParamsFiller(Vector2f posFrom, Vector2f posTo, TTextParams textParams, TDynamicText* dynamicTextToFill);
 	static void SmartValueTextFiller(const std::string& dictionaryName, const std::string& smartValueName, TDynamicText* dynamicTextToFill);
 
 };
 
 
-TTriangleList CreateTriangleListForText(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams);
+TTriangleList CreateTriangleListForText(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams);
 
 class TUniversalButton : public TInstancingWidgetAncestor
 {
@@ -162,23 +162,23 @@ public:
 
 	virtual void Update(size_t dt);
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
-    virtual void OnTapUpAfterMove(vec2 pos);
+	virtual void OnTapDown(Vector2f pos);
+	virtual void OnTapUp(Vector2f pos);
+    virtual void OnTapUpAfterMove(Vector2f pos);
 	virtual void OnMoveOut();
 
-	static TUniversalButton* CreateButton(vec2 posFrom, vec2 posTo);
-	static TUniversalButton* CreateButtonWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TUniversalButton*)> buttonFillerFunc);
-	static TUniversalButton* CreateButtonWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TUniversalButton*)> > buttonFillerFuncArr);
+	static TUniversalButton* CreateButton(Vector2f posFrom, Vector2f posTo);
+	static TUniversalButton* CreateButtonWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TUniversalButton*)> buttonFillerFunc);
+	static TUniversalButton* CreateButtonWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TUniversalButton*)> > buttonFillerFuncArr);
 
-	static void SquareButtonFiller(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNamePressed, TUniversalButton* buttonToFill);
-	static void TextButtonFiller(vec2 posFrom, vec2 posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed, TUniversalButton* buttonToFill);
+	static void SquareButtonFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNamePressed, TUniversalButton* buttonToFill);
+	static void TextButtonFiller(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed, TUniversalButton* buttonToFill);
 
-	static TUniversalButton* CreateSquareButton(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNamePressed);
-	static TUniversalButton* CreateTextOnlyButton(vec2 posFrom, vec2 posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed);
-	static TUniversalButton* CreateSquareAndTextButton(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNamePressed, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed);
+	static TUniversalButton* CreateSquareButton(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNamePressed);
+	static TUniversalButton* CreateTextOnlyButton(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed);
+	static TUniversalButton* CreateSquareAndTextButton(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNamePressed, TTextParams buttonTextParamsNormal, TTextParams buttonTextParamsPressed);
 };
 
 
@@ -205,23 +205,23 @@ public:
 	
 	boost::signals2::signal<void(std::string)> OnTextChanged;
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
 	virtual void OnKeyPress(int key);
-	virtual void OnTapDown(vec2 pos);
+	virtual void OnTapDown(Vector2f pos);
 
 	void SetText(const std::string& newText);
     void OnSetAllText(std::string newText); //For iOS only
     std::string GetText();
 
-	static TEdit* CreateEdit(vec2 posFrom, vec2 posTo);
-	static TEdit* CreateEditWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TEdit*)> fillerFunc);
-	static TEdit* CreateEditWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TEdit*)> > fillerFuncArr);
+	static TEdit* CreateEdit(Vector2f posFrom, Vector2f posTo);
+	static TEdit* CreateEditWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TEdit*)> fillerFunc);
+	static TEdit* CreateEditWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TEdit*)> > fillerFuncArr);
 	
-	static void EditFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TTextParams textParams, TEdit* edit);
+	static void EditFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, TTextParams textParams, TEdit* edit);
 	static void SmartValueTextFiller(const std::string& dictionaryName, const std::string& smartValueName, TEdit* edit);
 
-	//static TEdit* CreateEdit(vec2 posFrom, vec2 posTo, const std::string& texName, TTextParams textParams);
+	//static TEdit* CreateEdit(Vector2f posFrom, Vector2f posTo, const std::string& texName, TTextParams textParams);
 };
 
 
@@ -243,28 +243,28 @@ public:
 	TCheckBox();
 	~TCheckBox();
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 	virtual void Update(size_t dt);
 
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
+	virtual void OnTapDown(Vector2f pos);
+	virtual void OnTapUp(Vector2f pos);
 	virtual void OnMoveOut();
 
 	//Logic:
 	void SetChecked(bool isChecked);
 	boost::signals2::signal<void(bool)> OnSetChecked;
 
-	static TCheckBox* CreateCheckBox(vec2 posFrom, vec2 posTo);
-	static TCheckBox* CreateCheckBoxWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TCheckBox*)> checkBoxFillerFunc);
-	static TCheckBox* CreateCheckBoxWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TCheckBox*)> > checkBoxFillerFuncArr);
+	static TCheckBox* CreateCheckBox(Vector2f posFrom, Vector2f posTo);
+	static TCheckBox* CreateCheckBoxWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TCheckBox*)> checkBoxFillerFunc);
+	static TCheckBox* CreateCheckBoxWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TCheckBox*)> > checkBoxFillerFuncArr);
 
-	static void TextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, TCheckBox* checkBoxToFill);
-	static void TextFiller(vec2 posFrom, vec2 posTo, TTextParams textParams, TCheckBox* checkBoxToFill);
+	static void TextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, TCheckBox* checkBoxToFill);
+	static void TextFiller(Vector2f posFrom, Vector2f posTo, TTextParams textParams, TCheckBox* checkBoxToFill);
 	static void CheckedFiller(bool isChecked, TCheckBox* checkBoxToFill);
 	static void SmartValueFiller(const std::string& dictionaryName, const std::string& smartValueName, TCheckBox* checkBoxToFill);
 
-	static TCheckBox* CreateSimpleCheckBox(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked);
-	static TCheckBox* CreateCheckBoxWithText(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, vec2 textPosFrom, vec2 textPosTo, TTextParams textParams);
+	static TCheckBox* CreateSimpleCheckBox(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked);
+	static TCheckBox* CreateCheckBoxWithText(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, Vector2f textPosFrom, Vector2f textPosTo, TTextParams textParams);
 };
 
 
@@ -287,30 +287,30 @@ public:
 	TRadioButton();
 	~TRadioButton();
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 	virtual void Update(size_t dt);
 
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
+	virtual void OnTapDown(Vector2f pos);
+	virtual void OnTapUp(Vector2f pos);
 	virtual void OnMoveOut();
 
 	//Logic:
 	void SetChecked(bool isChecked);
 	boost::signals2::signal<void(bool)> OnSetChecked;
 
-	static TRadioButton* CreateRadioButton(vec2 posFrom, vec2 posTo);
-	static TRadioButton* CreateRadioButtonWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TRadioButton*)> radioButtonFillerFunc);
-	static TRadioButton* CreateRadioButtonWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TRadioButton*)> > radioButtonFillerFuncArr);
+	static TRadioButton* CreateRadioButton(Vector2f posFrom, Vector2f posTo);
+	static TRadioButton* CreateRadioButtonWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TRadioButton*)> radioButtonFillerFunc);
+	static TRadioButton* CreateRadioButtonWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TRadioButton*)> > radioButtonFillerFuncArr);
 
-	static void TextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, TRadioButton* radioButtonToFill);
-	static void TextFiller(vec2 posFrom, vec2 posTo, TTextParams textParams, TRadioButton* radioButtonToFill);
+	static void TextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, TRadioButton* radioButtonToFill);
+	static void TextFiller(Vector2f posFrom, Vector2f posTo, TTextParams textParams, TRadioButton* radioButtonToFill);
 	static void CheckedFiller(bool isChecked, TRadioButton* radioButtonToFill);
 	
 	template <typename TYPENAME>
 	static void SmartValueFiller(const std::string& dictionaryName, const std::string& smartValueName, TYPENAME value, TRadioButton* radioButtonToFill);
 
-	static TRadioButton* CreateSimpleRadioButton(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked);
-	static TRadioButton* CreateRadioButtonWithText(vec2 posFrom, vec2 posTo, const std::string& texName, const std::string& texNameChecked, vec2 textPosFrom, vec2 textPosTo, TTextParams textParams);
+	static TRadioButton* CreateSimpleRadioButton(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked);
+	static TRadioButton* CreateRadioButtonWithText(Vector2f posFrom, Vector2f posTo, const std::string& texName, const std::string& texNameChecked, Vector2f textPosFrom, Vector2f textPosTo, TTextParams textParams);
 };
 
 
@@ -332,16 +332,16 @@ public:
 
 	virtual void Update(size_t dt);
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
-	virtual void OnMove(vec2 shift);
+	virtual void OnTapDown(Vector2f pos);
+	virtual void OnTapUp(Vector2f pos);
+	virtual void OnMove(Vector2f shift);
 	virtual void OnMoveOut();
 
 	virtual bool IsTransparentForInput() { return true; }
 
-	static TMover* CreateMover(vec2 posFrom, vec2 posTo, std::string groupName, std::string selfName, float maxHeight);
+	static TMover* CreateMover(Vector2f posFrom, Vector2f posTo, std::string groupName, std::string selfName, float maxHeight);
 };
 
 
@@ -379,25 +379,25 @@ public:
 
 	virtual void Update(size_t dt);
 
-	virtual bool CheckClick(vec2 mousePos);
+	virtual bool CheckClick(Vector2f mousePos);
 
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
-    virtual void OnTapUpAfterMove(vec2 pos);
-	virtual void OnTapUpAfterMoveOut(vec2 pos);
+	virtual void OnTapDown(Vector2f pos);
+	virtual void OnTapUp(Vector2f pos);
+    virtual void OnTapUpAfterMove(Vector2f pos);
+	virtual void OnTapUpAfterMoveOut(Vector2f pos);
 	virtual void OnMoveOut();
-	virtual void OnMove(vec2 shift);
+	virtual void OnMove(Vector2f shift);
 
 	float GetSelectorPos();
-	bool CheckSelectorClicked(vec2 mousePos);
+	bool CheckSelectorClicked(Vector2f mousePos);
 
-	static THorizontalJoystick* CreateJoystick(vec2 posFrom, vec2 posTo, float selectorWidth);
-	static THorizontalJoystick* CreateJoystickWithFiller(vec2 posFrom, vec2 posTo, float selectorWidth, boost::function<void(THorizontalJoystick*)> fillerFunc);
-	static THorizontalJoystick* CreateJoystickWithFillers(vec2 posFrom, vec2 posTo, float selectorWidth, std::vector<boost::function<void(THorizontalJoystick*)> > fillerFuncArr);
+	static THorizontalJoystick* CreateJoystick(Vector2f posFrom, Vector2f posTo, float selectorWidth);
+	static THorizontalJoystick* CreateJoystickWithFiller(Vector2f posFrom, Vector2f posTo, float selectorWidth, boost::function<void(THorizontalJoystick*)> fillerFunc);
+	static THorizontalJoystick* CreateJoystickWithFillers(Vector2f posFrom, Vector2f posTo, float selectorWidth, std::vector<boost::function<void(THorizontalJoystick*)> > fillerFuncArr);
 
-	static void SquareJoystickFiller(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed, THorizontalJoystick* joystickToFill);
+	static void SquareJoystickFiller(Vector2f posFrom, Vector2f posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed, THorizontalJoystick* joystickToFill);
 	
-	static THorizontalJoystick* CreateSquareJoystick(vec2 posFrom, vec2 posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed);
+	static THorizontalJoystick* CreateSquareJoystick(Vector2f posFrom, Vector2f posTo, float selectorWidth, const std::string& texNameField, const std::string& texName, const std::string& texNamePressed);
 };
 
 } //namespace SE

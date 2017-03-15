@@ -7,38 +7,38 @@ namespace SE
 	TKeyboardWidget::TKeyboardWidget()
 		: Shifted(false)
 	{
-		std::vector<std::pair<ivec2, int>> LineChars;
+		std::vector<std::pair<Vector2i, int>> LineChars;
 
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(16, 185), static_cast<int>('q')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(48, 185), static_cast<int>('w')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(80, 185), static_cast<int>('e')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(112, 185), static_cast<int>('r')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(144, 185), static_cast<int>('t')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(176, 185), static_cast<int>('y')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(208, 185), static_cast<int>('u')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(240, 185), static_cast<int>('i')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(272, 185), static_cast<int>('o')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(304, 185), static_cast<int>('p')));
-
-
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(32, 131), static_cast<int>('a')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(64, 131), static_cast<int>('s')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(96, 131), static_cast<int>('d')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(128, 131), static_cast<int>('f')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(160, 131), static_cast<int>('g')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(192, 131), static_cast<int>('h')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(224, 131), static_cast<int>('j')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(256, 131), static_cast<int>('k')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(288, 131), static_cast<int>('l')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(16, 185), static_cast<int>('q')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(48, 185), static_cast<int>('w')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(80, 185), static_cast<int>('e')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(112, 185), static_cast<int>('r')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(144, 185), static_cast<int>('t')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(176, 185), static_cast<int>('y')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(208, 185), static_cast<int>('u')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(240, 185), static_cast<int>('i')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(272, 185), static_cast<int>('o')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(304, 185), static_cast<int>('p')));
 
 
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(62, 78), static_cast<int>('z')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(94, 78), static_cast<int>('x')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(126, 78), static_cast<int>('c')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(158, 78), static_cast<int>('v')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(190, 78), static_cast<int>('b')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(222, 78), static_cast<int>('n')));
-		LineChars.push_back(std::pair<ivec2, int>(ivec2(254, 78), static_cast<int>('m')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(32, 131), static_cast<int>('a')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(64, 131), static_cast<int>('s')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(96, 131), static_cast<int>('d')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(128, 131), static_cast<int>('f')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(160, 131), static_cast<int>('g')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(192, 131), static_cast<int>('h')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(224, 131), static_cast<int>('j')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(256, 131), static_cast<int>('k')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(288, 131), static_cast<int>('l')));
+
+
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(62, 78), static_cast<int>('z')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(94, 78), static_cast<int>('x')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(126, 78), static_cast<int>('c')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(158, 78), static_cast<int>('v')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(190, 78), static_cast<int>('b')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(222, 78), static_cast<int>('n')));
+		LineChars.push_back(std::pair<Vector2i, int>(Vector2i(254, 78), static_cast<int>('m')));
 
 		
 		
@@ -46,29 +46,29 @@ namespace SE
 
 		BOOST_FOREACH(auto& linePair, LineChars)
 		{
-			std::tuple<TVisualKey, int, int> line_tuple = std::tuple<TVisualKey, int, int>(TVisualKey(linePair.first, ivec2(26, 38)), linePair.second, linePair.second);
+			std::tuple<TVisualKey, int, int> line_tuple = std::tuple<TVisualKey, int, int>(TVisualKey(linePair.first, Vector2i(26, 38)), linePair.second, linePair.second);
 		
 			VisualKeyArr.push_back(line_tuple);
 		}
 
 		//Backspace
-		std::tuple<TVisualKey, int, int> backspace_tuple = std::tuple<TVisualKey, int, int>(TVisualKey(ivec2(299, 77), ivec2(36, 38)), 8, 8);
+		std::tuple<TVisualKey, int, int> backspace_tuple = std::tuple<TVisualKey, int, int>(TVisualKey(Vector2i(299, 77), Vector2i(36, 38)), 8, 8);
 		
 		VisualKeyArr.push_back(backspace_tuple);
 
 		//Space
-		std::tuple<TVisualKey, int, int> space_tuple = std::tuple<TVisualKey, int, int>(TVisualKey(ivec2(160, 23), ivec2(154, 38)), static_cast<int>(' '), static_cast<int>(' '));
+		std::tuple<TVisualKey, int, int> space_tuple = std::tuple<TVisualKey, int, int>(TVisualKey(Vector2i(160, 23), Vector2i(154, 38)), static_cast<int>(' '), static_cast<int>(' '));
 		
 		VisualKeyArr.push_back(space_tuple);
 
 
-		LeftBottomPos = vec2(0,0);
+		LeftBottomPos = Vector2f(0,0);
 
 		TRenderParams renderParams;
 
 		renderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "keyboard.png";
 
-		TTriangleList triangleList = MakeTriangleList(vec2(0,0), vec2(320.f, 216.f));
+		TTriangleList triangleList = MakeTriangleList(Vector2f(0,0), Vector2f(320.f, 216.f));
 
 		triangleList.RefreshBuffer();
 
@@ -129,31 +129,31 @@ namespace SE
 		
 	}
 
-	bool TKeyboardWidget::CheckClick(vec2 mousePos)
+	bool TKeyboardWidget::CheckClick(Vector2f mousePos)
 	{
 		mousePos -= LeftBottomPos;
 
-		return (mousePos.v[0] >= 0.f && mousePos.v[1] >= 0.f && mousePos.v[0] <= 320.f && mousePos.v[1] <= 216.f);
+		return (mousePos(0) >= 0.f && mousePos(1) >= 0.f && mousePos(0) <= 320.f && mousePos(1) <= 216.f);
 	}
 
-	void TKeyboardWidget::OnTapDown(vec2 pos)
+	void TKeyboardWidget::OnTapDown(Vector2f pos)
 	{
 	}
 
-	void TKeyboardWidget::OnTapUp(vec2 pos)
+	void TKeyboardWidget::OnTapUp(Vector2f pos)
 	{
 		pos -= LeftBottomPos;
 
 		BOOST_FOREACH(auto& visualKeyElement, VisualKeyArr)
 		{
-			if (std::get<0>(visualKeyElement).CheckClicked(ivec2(pos.v[0], pos.v[1])))
+			if (std::get<0>(visualKeyElement).CheckClicked(Vector2i(pos(0), pos(1))))
 			{
 				ResourceManager->GUIManager.KeyPressedSignal(std::get<1>(visualKeyElement));
 			}
 		}
 
-		if (pos.v[0] >= 280 - 74/2 && pos.v[0] <= 280 + 74/2 &&
-			pos.v[1] >= 23 - 38/2 && pos.v[1] <= 23 + 38/2)
+		if (pos(0) >= 280 - 74/2 && pos(0) <= 280 + 74/2 &&
+			pos(1) >= 23 - 38/2 && pos(1) <= 23 + 38/2)
 		{
 			ResourceManager->GUIManager.HideKeyboard();
 		}

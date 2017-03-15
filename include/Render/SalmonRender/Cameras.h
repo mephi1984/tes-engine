@@ -9,9 +9,9 @@ namespace SE
 	
 struct TCameraInterface
 {
-	vec3 CamVec;
+	Vector3f CamVec;
 
-	vec3 CamShift;
+	Vector3f CamShift;
 
 	TCameraInterface();
 
@@ -44,22 +44,25 @@ struct TPanoramicCamera : public TCameraInterface
 
 	void SetCamView();
 
-	void SetCamShift(const vec3& camShift);
+	void SetCamShift(const Vector3f& camShift);
 };
 
+/*
 struct TPitCamera : public TCameraInterface
 {
-	vec4 CameraQuat;
+	Vector4f CameraQuat;
 	
 	void SetCamView();
 
 	void CalcCamVec();
 
-	void RotateByQuat(vec4 quat);
+	void RotateByQuat(Vector4f quat);
 };
+*/
 
+//typedef boost::variant<TPanoramicCamera, TPitCamera> TCamera;
 
-typedef boost::variant<TPanoramicCamera, TPitCamera> TCamera;
+typedef boost::variant<TPanoramicCamera> TCamera;
 
 
 struct TSetCameraViewVisitor : public boost::static_visitor<void>
@@ -68,11 +71,11 @@ struct TSetCameraViewVisitor : public boost::static_visitor<void>
     {
         panoramicCamera.SetCamView();
     }
-    
+    /*
     void operator()(TPitCamera& pitCamera)
     {
         pitCamera.SetCamView();
-    }
+    }*/
 };
 
 
@@ -83,37 +86,38 @@ struct TCalcCamVecVisitor : public boost::static_visitor<void>
         panoramicCamera.CalcCamVec();
     }
     
+	/*
     void operator()(TPitCamera& pitCamera)
     {
         pitCamera.CalcCamVec();
-    }
+    }*/
 };
 
 
-struct TGetCamVecVisitor : public boost::static_visitor<vec3&>
+struct TGetCamVecVisitor : public boost::static_visitor<Vector3f&>
 {
-	vec3& operator()(TPanoramicCamera& panoramicCamera) const
+	Vector3f& operator()(TPanoramicCamera& panoramicCamera) const
     {
         return panoramicCamera.CamVec;
     }
-    
-    vec3& operator()(TPitCamera& pitCamera) const
+    /*
+    Vector3f& operator()(TPitCamera& pitCamera) const
     {
         return pitCamera.CamVec;
-    }
+    }*/
 };
 
-struct TGetCamShiftVisitor : public boost::static_visitor<vec3&>
+struct TGetCamShiftVisitor : public boost::static_visitor<Vector3f&>
 {
-	vec3& operator()(TPanoramicCamera& panoramicCamera) const
+	Vector3f& operator()(TPanoramicCamera& panoramicCamera) const
     {
         return panoramicCamera.CamShift;
     }
-    
-    vec3& operator()(TPitCamera& pitCamera) const
+    /*
+    Vector3f& operator()(TPitCamera& pitCamera) const
     {
         return pitCamera.CamShift;
-    }
+    }*/
 };
 
 

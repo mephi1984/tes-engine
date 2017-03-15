@@ -21,7 +21,7 @@ protected:
 
 	float FogBeginDistance;
 	float FogEndDistance;
-	vec4 FogColor;
+	Vector4f FogColor;
 
 
 	//Other data:
@@ -42,7 +42,7 @@ public:
 	
 	float GetFogBeginDistance();
 	float GetFogEndDistance();
-	vec4 GetFogColor();
+	Vector4f GetFogColor();
 
 	void DrawTriangleList(const TTriangleList& triangleList);
 	

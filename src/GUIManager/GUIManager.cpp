@@ -156,29 +156,29 @@ void TGUIManager::Update(size_t dt)
 			i->CurrentTime = i->TotalTime;
 		}
 
-		vec2 oldPos;
-		vec2 newPos;
+		Vector2f oldPos;
+		Vector2f newPos;
 
 		float t0 = clamp<float>((prevCurrentTime + 0.f)/i->TotalTime, 0, 1);
 		float t = clamp<float>((i->CurrentTime + 0.f)/i->TotalTime, 0, 1);
 
 		if (i->MoveStyle == TWidgetTransformTask::MS_LINEAR)
 		{
-			oldPos = InterpolateLinear<vec2>(vec2(0,0), i->PosTo, t0);
-			newPos = InterpolateLinear<vec2>(vec2(0,0), i->PosTo, t);
+			oldPos = InterpolateLinear<Vector2f>(Vector2f(0,0), i->PosTo, t0);
+			newPos = InterpolateLinear<Vector2f>(Vector2f(0,0), i->PosTo, t);
 		}
 		if (i->MoveStyle == TWidgetTransformTask::MS_SQR)
 		{
-			oldPos = InterpolateSqr<vec2>(vec2(0,0), i->PosTo, t0);
-			newPos = InterpolateSqr<vec2>(vec2(0,0), i->PosTo, t);
+			oldPos = InterpolateSqr<Vector2f>(Vector2f(0,0), i->PosTo, t0);
+			newPos = InterpolateSqr<Vector2f>(Vector2f(0,0), i->PosTo, t);
 		}
 		if (i->MoveStyle == TWidgetTransformTask::MS_SQRT)
 		{
-			oldPos = InterpolateSqrt<vec2>(vec2(0,0), i->PosTo, t0);
-			newPos = InterpolateSqrt<vec2>(vec2(0,0), i->PosTo, t);
+			oldPos = InterpolateSqrt<Vector2f>(Vector2f(0,0), i->PosTo, t0);
+			newPos = InterpolateSqrt<Vector2f>(Vector2f(0,0), i->PosTo, t);
 		}
 
-		vec2 moveDistance = newPos - oldPos;
+		Vector2f moveDistance = newPos - oldPos;
 
 		for (TWidgetArr::iterator j = WidgetArr.begin(); j != WidgetArr.end(); ++j)
 		{
@@ -246,35 +246,37 @@ TWidgetArr::iterator TGUIManager::FindWidgetInArr(const std::string& widgetName)
 	return i;
 }
 
-void TGUIManager::MoveWidgetByIterator(TWidgetArr::iterator widget, vec2 shift)
+void TGUIManager::MoveWidgetByIterator(TWidgetArr::iterator widget, Vector2f shift)
 {
 	widget->Widget->LeftBottomPos += shift;
 
-	std::vector<vec3>::iterator i;
+	std::vector<Vector3f>::iterator i;
 
 	TRenderPairList::iterator itr;
 
 	for (itr = widget->Widget->TriangleListVector.begin(); itr != widget->Widget->TriangleListVector.end(); ++itr)
 	{
-		std::vector<vec3>& vertexCoordVec = itr->second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB];
+		std::vector<Vector3f>& vertexCoordVec = itr->second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB];
 
 		for (i = vertexCoordVec.begin(); i != vertexCoordVec.end(); ++i)
 		{
-			*i += vec3(shift, 0);
+			Vector3f f;
+			f << shift, 0;
+			*i += f;
 		}
 
 		itr->second.RefreshBuffer();
 	}
 }
 
-void TGUIManager::MoveWidget(const std::string& widgetName, vec2 shift)
+void TGUIManager::MoveWidget(const std::string& widgetName, Vector2f shift)
 {
 	
 	TWidgetArr::iterator widget = FindWidgetInArr(widgetName);
 	MoveWidgetByIterator(widget, shift);
 }
 
-void TGUIManager::MoveWidgetGroup(const std::string& widgetGroupName, const std::string& exceptWidget, vec2 shift)
+void TGUIManager::MoveWidgetGroup(const std::string& widgetGroupName, const std::string& exceptWidget, Vector2f shift)
 {
 	for (TWidgetArr::iterator i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
@@ -285,7 +287,7 @@ void TGUIManager::MoveWidgetGroup(const std::string& widgetGroupName, const std:
 	}
 }
 
-void TGUIManager::OnMouseDown(vec2 pos, int touchNumber)
+void TGUIManager::OnMouseDown(Vector2f pos, int touchNumber)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
     
@@ -296,7 +298,7 @@ void TGUIManager::OnMouseDown(vec2 pos, int touchNumber)
 	TWidgetArr::reverse_iterator i;
 
 	LastTapPos[touchNumber] = pos;
-	TotalShift[touchNumber] = vec2(0,0);
+	TotalShift[touchNumber] = Vector2f(0,0);
     
     std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap;
 
@@ -326,7 +328,7 @@ void TGUIManager::OnMouseDown(vec2 pos, int touchNumber)
 
 }
 
-void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
+void TGUIManager::OnMouseUp(Vector2f pos, int touchNumber)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
     
@@ -364,7 +366,7 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
 
 }
     
-    void TGUIManager::OnMouseUpAfterMove(vec2 pos, int touchNumber)
+    void TGUIManager::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
     {
         //Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
         
@@ -419,7 +421,7 @@ void TGUIManager::OnMouseUp(vec2 pos, int touchNumber)
     }
 
 
-void TGUIManager::OnMove(vec2 shift, int touchNumber)
+void TGUIManager::OnMove(Vector2f shift, int touchNumber)
 {
 	//Xperimental - need to call widget methods and signals	NOT IN "FOR" LOOP
 
@@ -487,7 +489,7 @@ void TGUIManager::ShowKeyboard(const std::string text)
 		/*
 		if (!KeyboardIsOnScreen)
 		{
-			MoveWidget("Keyboard", vec2(0, 216));
+			MoveWidget("Keyboard", Vector2f(0, 216));
 			KeyboardIsOnScreen = true;
 		}*/
 
@@ -513,7 +515,7 @@ void TGUIManager::HideKeyboard()
     /*
 	if (KeyboardIsOnScreen)
 	{
-		MoveWidget("Keyboard", vec2(0, -216));
+		MoveWidget("Keyboard", Vector2f(0, -216));
 		KeyboardIsOnScreen = false;
 	}*/
 }
@@ -529,7 +531,7 @@ void TGUIManager::PrintWidgetList()
 
 	for (i = WidgetArr.begin(); i != WidgetArr.end(); ++i)
 	{
-		std::string widgetRow = i->Name + " (" + tostr(i->Widget->LeftBottomPos.v[0]) + ", " + tostr(i->Widget->LeftBottomPos.v[1]) + ")";
+		std::string widgetRow = i->Name + " (" + tostr(i->Widget->LeftBottomPos(0)) + ", " + tostr(i->Widget->LeftBottomPos(1)) + ")";
 		Console->PrintImmediate(widgetRow);
 	}
 }

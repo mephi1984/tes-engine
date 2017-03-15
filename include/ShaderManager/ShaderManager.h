@@ -101,8 +101,8 @@ public:
 	
 
 	#ifdef TARGET_WIN32
-	friend void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<vec2> >& vec2CoordArr);
-	friend void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<vec3> >& vec3CoordArr);
+	friend void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr);
+	friend void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
 	#endif
 	
 	friend class TShaderManager;
@@ -151,8 +151,8 @@ void EnableVertexAttribArray(const std::string& attribName);
 void DisableVertexAttribArray(const std::string& attribName);
 
 #ifdef TARGET_WIN32
-void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<vec2> >& vec2CoordArr);
-void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<vec3> >& vec3CoordArr);
+void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr);
+void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
 #endif
 
 } //namespace SE

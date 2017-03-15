@@ -39,15 +39,15 @@ void TSimpleConsole::Draw()
 	Renderer->PushMatrix();
 	Renderer->LoadIdentity();
 
-	Renderer->DrawRect(vec2(0.f, screenHeight*(1.f - CONST_CONSOLE_PART_OF_SCREEN)), vec2(screenWidth, screenHeight));
+	Renderer->DrawRect(Vector2f(0.f, screenHeight*(1.f - CONST_CONSOLE_PART_OF_SCREEN)), Vector2f(screenWidth, screenHeight));
 	
 	if (TextSavedInTriangleList != History)
 	{
 		TextSavedInTriangleList = History;
-		*HistoryTriangeList = ResourceManager->FontManager.DrawTextInBoxToVBO(vec2(0.f, screenHeight * (1.f - CONST_CONSOLE_PART_OF_SCREEN)), vec2(static_cast<float>(screenWidth), static_cast<float>(screenHeight)), CONST_ROW_WIDTH, TextSavedInTriangleList);
+		*HistoryTriangeList = ResourceManager->FontManager.DrawTextInBoxToVBO(Vector2f(0.f, screenHeight * (1.f - CONST_CONSOLE_PART_OF_SCREEN)), Vector2f(static_cast<float>(screenWidth), static_cast<float>(screenHeight)), CONST_ROW_WIDTH, TextSavedInTriangleList);
 	}
 
-	TTriangleList consoleInputTriangleList = ResourceManager->FontManager.DrawTextInBoxToVBO(vec2(0.f, screenHeight * (1.f - CONST_CONSOLE_PART_OF_SCREEN)), vec2(static_cast<float>(screenWidth), static_cast<float>(screenHeight)), CONST_ROW_WIDTH, ">"+ConsoleInput);
+	TTriangleList consoleInputTriangleList = ResourceManager->FontManager.DrawTextInBoxToVBO(Vector2f(0.f, screenHeight * (1.f - CONST_CONSOLE_PART_OF_SCREEN)), Vector2f(static_cast<float>(screenWidth), static_cast<float>(screenHeight)), CONST_ROW_WIDTH, ">"+ConsoleInput);
 
 	glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList[ResourceManager->FontManager.GetCurrentFontTextureName()]);
 
@@ -58,7 +58,7 @@ void TSimpleConsole::Draw()
 
 	float advance = ResourceManager->FontManager.GetTextAdvance(ConsoleInputAtCursor);
 
-	TTriangleList consoleCursorTriangleList = ResourceManager->FontManager.DrawTextInBoxToVBO(vec2(advance, screenHeight*(1.f - CONST_CONSOLE_PART_OF_SCREEN)), vec2(static_cast<float>(screenWidth), static_cast<float>(screenHeight)), 14, "|");
+	TTriangleList consoleCursorTriangleList = ResourceManager->FontManager.DrawTextInBoxToVBO(Vector2f(advance, screenHeight*(1.f - CONST_CONSOLE_PART_OF_SCREEN)), Vector2f(static_cast<float>(screenWidth), static_cast<float>(screenHeight)), 14, "|");
 
 	Renderer->DrawTriangleList(consoleCursorTriangleList);
 	

@@ -257,14 +257,14 @@ void TSalmonRenderer::DrawQuad(const T2DQuad& quad)
 
 	glBegin(GL_QUADS);
 		VertexAttrib3fv(CONST_STRING_NORMAL_ATTRIB, CONST_DEFAULT_NORM_VEC);
-		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[0].v);
-		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[0].v);
-		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[1].v);
-		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[1].v);
-		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[3].v);
-		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[3].v);
-		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[2].v);
-		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[2].v);
+		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[0].data());
+		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[0].data());
+		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[1].data());
+		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[1].data());
+		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[3].data());
+		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[3].data());
+		VertexAttrib2fv(CONST_STRING_TEXCOORD_ATTRIB, quad.TextureCoord[2].data());
+		VertexAttrib3fv(CONST_STRING_POSITION_ATTRIB, quad.VertexCoord[2].data());
 	glEnd();
 }
 
@@ -298,7 +298,7 @@ float TSalmonRenderer::GetFogEndDistance()
 	return FogEndDistance;
 }
 
-vec4 TSalmonRenderer::GetFogColor()
+Vector4f TSalmonRenderer::GetFogColor()
 {
 	return FogColor;
 }

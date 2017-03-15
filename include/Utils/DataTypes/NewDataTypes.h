@@ -3,13 +3,19 @@
 
 #include <math.h>
 
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
+
 namespace SE
 {
+
+	using namespace Eigen;
 
 //Find this in DataTypes.h
 bool IsFloatEqual(float a, float b);
 
 
+/*
 template<typename TYPENAME1>
 class tvec4;
 
@@ -38,17 +44,17 @@ public:
 	tvec2<TYPENAME>& operator*=(TYPENAME c);
 };
 
-typedef tvec2<float> vec2;
-typedef tvec2<int> ivec2;
+typedef tvec2<float> Vector2f;
+typedef tvec2<int> Vector2i;
 
 
-vec2 Normalize(const vec2& a);
+Vector2f Normalize(const Vector2f& a);
 
 
-float Length(const vec2& a);
+float Length(const Vector2f& a);
 
 
-float DotProduct(const vec2& a,const vec2& b);
+float DotProduct(const Vector2f& a,const Vector2f& b);
 
 
 template<typename TYPENAME1>
@@ -75,13 +81,13 @@ public:
 	tvec3<TYPENAME1> operator*(const tmat3<TYPENAME1>& mt) const; //MultRowMatrix()
 };
 
-typedef tvec3<float> vec3;
+typedef tvec3<float> Vector3f;
 
 
-float DotProduct(const vec3& a,const vec3& b);
-vec3 CrossProduct(const vec3& a,const vec3& b);
-vec3 Normalize(const vec3& a);
-float Length(const vec3& a);
+float DotProduct(const Vector3f& a,const Vector3f& b);
+Vector3f CrossProduct(const Vector3f& a,const Vector3f& b);
+Vector3f Normalize(const Vector3f& a);
+float Length(const Vector3f& a);
 
 template<typename TYPENAME1>
 class tvec4
@@ -102,7 +108,7 @@ public:
 	tvec4<TYPENAME1>& operator-=(const tvec4<TYPENAME1>& vc);
 	const tvec4<TYPENAME1> operator+(const tvec4<TYPENAME1>& a) const;
 	const tvec4<TYPENAME1> operator-(const tvec4<TYPENAME1>& a) const;
-	//vec4& operator-(); not so obvious for quaternion :(
+	//Vector4f& operator-(); not so obvious for quaternion :(
 	tvec4<TYPENAME1>& operator*=(TYPENAME1 c);
 
 	tvec4<TYPENAME1>& operator*=(const tvec4<TYPENAME1>& q);
@@ -110,11 +116,11 @@ public:
 };
 
 
-typedef tvec4<float> vec4;
+typedef tvec4<float> Vector4f;
 
 
-vec4 InverseQuat(const vec4& q);
-vec4 NormalizeQuat(const vec4& q);
+Vector4f InverseQuat(const Vector4f& q);
+Vector4f NormalizeQuat(const Vector4f& q);
 
 
 template<typename TYPENAME1>
@@ -136,7 +142,7 @@ public:
 
 };
 
-typedef tmat2<float> mat2;
+typedef tmat2<float> Matrix2f;
 
 
 
@@ -160,55 +166,55 @@ public:
 
 };
 
-typedef tmat3<float> mat3;
+typedef tmat3<float> Matrix3f;
 
 
 
 
-mat3 TransposeMatrix(const mat3& m);
-mat3 InverseMatrix(const mat3& m);
+Matrix3f TransposeMatrix(const Matrix3f& m);
+Matrix3f InverseMatrix(const Matrix3f& m);
 
-mat3 CreateZRotationMatrix(float angle);
+Matrix3f CreateZRotationMatrix(float angle);
 
 //Outside:
-inline vec2 operator*(const vec2& a, float c)
+inline Vector2f operator*(const Vector2f& a, float c)
 {
-	 vec2 r;
-	 r.v[0] = a.v[0]*c;
-	 r.v[1] = a.v[1]*c;
+	 Vector2f r;
+	 r(0) = a(0)*c;
+	 r(1) = a(1)*c;
 	 return r;
 }
 
-inline vec2 operator*(float c, const vec2& a)
+inline Vector2f operator*(float c, const Vector2f& a)
 {
 	 return  a*c;
 }
 
-inline vec3 operator*(const vec3& a, float c)
+inline Vector3f operator*(const Vector3f& a, float c)
 {
-	 vec3 r;
-	 r.v[0] = a.v[0]*c;
-	 r.v[1] = a.v[1]*c;
-	 r.v[2] = a.v[2]*c;
+	 Vector3f r;
+	 r(0) = a(0)*c;
+	 r(1) = a(1)*c;
+	 r(2) = a(2)*c;
 	 return r;
 }
 
-inline vec3 operator*(float c, const vec3& a)
+inline Vector3f operator*(float c, const Vector3f& a)
 {
 	 return  a*c;
 }
 
-inline vec4 operator*(const vec4& a, float c)
+inline Vector4f operator*(const Vector4f& a, float c)
 {
-	 vec4 r;
-	 r.v[0] = a.v[0]*c;
-	 r.v[1] = a.v[1]*c;
-	 r.v[2] = a.v[2]*c;
+	 Vector4f r;
+	 r(0) = a(0)*c;
+	 r(1) = a(1)*c;
+	 r(2) = a(2)*c;
 	 r.v[3] = a.v[3]*c;
 	 return r;
 }
 
-inline vec4 operator*(float c,const vec4& a)
+inline Vector4f operator*(float c,const Vector4f& a)
 {
 	 return  a*c;
 }
@@ -217,14 +223,14 @@ inline vec4 operator*(float c,const vec4& a)
 
 
 
-//============= vec2 ================
+//============= Vector2f ================
 
 template<typename TYPENAME>
 inline tvec2<TYPENAME>& tvec2<TYPENAME>::operator=(const tvec2<TYPENAME>& vc)
 {
 	//Self-assignment is ok here
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
+	v[0] = vc(0);
+	v[1] = vc(1);
 
 	return *this;
 }
@@ -232,8 +238,8 @@ inline tvec2<TYPENAME>& tvec2<TYPENAME>::operator=(const tvec2<TYPENAME>& vc)
 template<typename TYPENAME>
 inline bool tvec2<TYPENAME>::operator==(const tvec2<TYPENAME>& vc) const
 {
-	if (IsFloatEqual(static_cast<float>(v[0]), static_cast<float>(vc.v[0])) &&
-		IsFloatEqual(static_cast<float>(v[1]), static_cast<float>(vc.v[1])))
+	if (IsFloatEqual(static_cast<float>(v[0]), static_cast<float>(vc(0))) &&
+		IsFloatEqual(static_cast<float>(v[1]), static_cast<float>(vc(1))))
 	{
 		return true;
 	}
@@ -250,8 +256,8 @@ inline bool tvec2<TYPENAME>::operator!=(const tvec2<TYPENAME>& vc) const
 template<typename TYPENAME>
 inline tvec2<TYPENAME>& tvec2<TYPENAME>::operator+=(const tvec2<TYPENAME>& vc)
 {
-	v[0] += vc.v[0];
-	v[1] += vc.v[1];
+	v[0] += vc(0);
+	v[1] += vc(1);
 
 	return *this;
 }
@@ -267,8 +273,8 @@ inline tvec2<TYPENAME> tvec2<TYPENAME>::operator+(const tvec2<TYPENAME>& a) cons
 template<typename TYPENAME>
 inline tvec2<TYPENAME>& tvec2<TYPENAME>::operator-=(const tvec2<TYPENAME>& vc)
 {
-	v[0] -= vc.v[0];
-	v[1] -= vc.v[1];
+	v[0] -= vc(0);
+	v[1] -= vc(1);
 
 	return *this;
 }
@@ -286,8 +292,8 @@ inline tvec2<TYPENAME> tvec2<TYPENAME>::operator-()
 {
 	tvec2<TYPENAME> r = *this;
 
-	r.v[0] = -v[0];
-	r.v[1] = -v[1];
+	r(0) = -v[0];
+	r(1) = -v[1];
 
 	return r;
 }
@@ -302,14 +308,14 @@ inline tvec2<TYPENAME>& tvec2<TYPENAME>::operator*=(TYPENAME c)
 }
 
 
-inline vec2 Normalize(const vec2& a)
+inline Vector2f Normalize(const Vector2f& a)
 {
-	vec2 r;
-	float d = a.v[0]*a.v[0]+a.v[1]*a.v[1];
+	Vector2f r;
+	float d = a(0)*a(0)+a(1)*a(1);
 	if (IsFloatEqual(d, 0.0f))
 	{
-		r.v[0] = 0.0f;
-		r.v[1] = 0.0f;
+		r(0) = 0.0f;
+		r(1) = 0.0f;
 		
 		return r;
 	}
@@ -317,24 +323,24 @@ inline vec2 Normalize(const vec2& a)
 	{
 		d = sqrtf(d);
 
-		r.v[0] = a.v[0]/d;
-		r.v[1] = a.v[1]/d;
+		r(0) = a(0)/d;
+		r(1) = a(1)/d;
 
 		return r;
 	}
 }
 
-inline float Length(const vec2& a)
+inline float Length(const Vector2f& a)
 {
-	return sqrtf(a.v[0]*a.v[0] + a.v[1]*a.v[1]);
+	return sqrtf(a(0)*a(0) + a(1)*a(1));
 }
 
-inline float DotProduct(const vec2& a,const vec2& b)
+inline float DotProduct(const Vector2f& a,const Vector2f& b)
 {
-	return a.v[0]*b.v[0] + a.v[1]*b.v[1];
+	return a(0)*b(0) + a(1)*b(1);
 }
 
-//============= vec3 ================
+//============= Vector3f ================
 
 
 template<typename TYPENAME1>
@@ -356,33 +362,33 @@ inline tvec3<TYPENAME1>::tvec3(TYPENAME1 x, TYPENAME1 y, TYPENAME1 z)
 template<typename TYPENAME1>
 inline tvec3<TYPENAME1>::tvec3(const tvec2<TYPENAME1>& vc, TYPENAME1 z)
 {
-    v[0] = vc.v[0];
-	v[1] = vc.v[1];
+    v[0] = vc(0);
+	v[1] = vc(1);
 	v[2] = z;
 }
 
 template<typename TYPENAME1>
 inline tvec3<TYPENAME1>::tvec3(const tvec3<TYPENAME1>& vc)
 {
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
-	v[2] = vc.v[2];
+	v[0] = vc(0);
+	v[1] = vc(1);
+	v[2] = vc(2);
 }
 
 template<typename TYPENAME1>
 inline tvec3<TYPENAME1>::tvec3(const tvec4<TYPENAME1>& vc)
 {
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
-	v[2] = vc.v[2];
+	v[0] = vc(0);
+	v[1] = vc(1);
+	v[2] = vc(2);
 }
 
 template<typename TYPENAME1>
 inline bool tvec3<TYPENAME1>::operator==(const tvec3<TYPENAME1>& vc) const
 {
-	if (IsFloatEqual(static_cast<float>(v[0]), static_cast<float>(vc.v[0])) &&
-		IsFloatEqual(static_cast<float>(v[1]), static_cast<float>(vc.v[1])) &&
-		IsFloatEqual(static_cast<float>(v[2]), static_cast<float>(vc.v[2])))
+	if (IsFloatEqual(static_cast<float>(v[0]), static_cast<float>(vc(0))) &&
+		IsFloatEqual(static_cast<float>(v[1]), static_cast<float>(vc(1))) &&
+		IsFloatEqual(static_cast<float>(v[2]), static_cast<float>(vc(2))))
 	{
 		return true;
 	}
@@ -401,9 +407,9 @@ template<typename TYPENAME1>
 inline tvec3<TYPENAME1>& tvec3<TYPENAME1>::operator=(const tvec3<TYPENAME1>& vc)
 {
 	//Self-assignment is ok here
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
-	v[2] = vc.v[2];
+	v[0] = vc(0);
+	v[1] = vc(1);
+	v[2] = vc(2);
 
 	return *this;
 }
@@ -411,9 +417,9 @@ inline tvec3<TYPENAME1>& tvec3<TYPENAME1>::operator=(const tvec3<TYPENAME1>& vc)
 template<typename TYPENAME1>
 inline tvec3<TYPENAME1>& tvec3<TYPENAME1>::operator+=(const tvec3<TYPENAME1>& vc)
 {
-	v[0] += vc.v[0];
-	v[1] += vc.v[1];
-	v[2] += vc.v[2];
+	v[0] += vc(0);
+	v[1] += vc(1);
+	v[2] += vc(2);
 
 	return *this;
 }
@@ -421,9 +427,9 @@ inline tvec3<TYPENAME1>& tvec3<TYPENAME1>::operator+=(const tvec3<TYPENAME1>& vc
 template<typename TYPENAME1>
 inline tvec3<TYPENAME1>& tvec3<TYPENAME1>::operator-=(const tvec3<TYPENAME1>& vc)
 {
-	v[0] -= vc.v[0];
-	v[1] -= vc.v[1];
-	v[2] -= vc.v[2];
+	v[0] -= vc(0);
+	v[1] -= vc(1);
+	v[2] -= vc(2);
 
 	return *this;
 }
@@ -449,9 +455,9 @@ inline tvec3<TYPENAME1> tvec3<TYPENAME1>::operator-()
 {
 	tvec3<TYPENAME1> r = *this;
 
-	r.v[0] = -v[0];
-	r.v[1] = -v[1];
-	r.v[2] = -v[2];
+	r(0) = -v[0];
+	r(1) = -v[1];
+	r(2) = -v[2];
 
 	return r;
 }
@@ -471,57 +477,57 @@ inline tvec3<TYPENAME1> tvec3<TYPENAME1>::operator*(const tmat3<TYPENAME1>& mt) 
 {
 	tvec3<TYPENAME1> r = *this;
 
-	r.v[0] = v[0]*mt.m[0] + v[1]*mt.m[1] + v[2]*mt.m[2];
-	r.v[1] = v[0]*mt.m[3] + v[1]*mt.m[4] + v[2]*mt.m[5];
-	r.v[2] = v[0]*mt.m[6] + v[1]*mt.m[7] + v[2]*mt.m[8];
+	r(0) = v[0]*mt.m[0] + v[1]*mt.m[1] + v[2]*mt.m[2];
+	r(1) = v[0]*mt.m[3] + v[1]*mt.m[4] + v[2]*mt.m[5];
+	r(2) = v[0]*mt.m[6] + v[1]*mt.m[7] + v[2]*mt.m[8];
 
 	return r;
 }
 
-inline float DotProduct(const vec3& a,const vec3& b)
+inline float DotProduct(const Vector3f& a,const Vector3f& b)
 {
-	return a.v[0]*b.v[0]+a.v[1]*b.v[1]+a.v[2]*b.v[2];
+	return a(0)*b(0)+a(1)*b(1)+a(2)*b(2);
 }
 
-inline vec3 CrossProduct(const vec3& a,const vec3& b)
+inline Vector3f CrossProduct(const Vector3f& a,const Vector3f& b)
 {
-	vec3 r;
-	r.v[0] = a.v[1]*b.v[2] - a.v[2]*b.v[1];
-	r.v[1] = a.v[2]*b.v[0] - a.v[0]*b.v[2];
-	r.v[2] = a.v[0]*b.v[1] - a.v[1]*b.v[0];
+	Vector3f r;
+	r(0) = a(1)*b(2) - a(2)*b(1);
+	r(1) = a(2)*b(0) - a(0)*b(2);
+	r(2) = a(0)*b(1) - a(1)*b(0);
 	return r;
 }
 
-inline vec3 Normalize(const vec3& a)
+inline Vector3f Normalize(const Vector3f& a)
 {
-	vec3 r;
-	float d = a.v[0]*a.v[0]+a.v[1]*a.v[1]+a.v[2]*a.v[2];
+	Vector3f r;
+	float d = a(0)*a(0)+a(1)*a(1)+a(2)*a(2);
 	if (IsFloatEqual(d,0.0f))
 	{
-		r.v[0] = 0.0f;
-		r.v[1] = 0.0f;
-		r.v[2] = 0.0f;
+		r(0) = 0.0f;
+		r(1) = 0.0f;
+		r(2) = 0.0f;
 		return r;
 	}
 	else
 	{
 		d = sqrtf(d);
 
-		r.v[0] = a.v[0]/d;
-		r.v[1] = a.v[1]/d;
-		r.v[2] = a.v[2]/d;
+		r(0) = a(0)/d;
+		r(1) = a(1)/d;
+		r(2) = a(2)/d;
 
 		return r;
 	}
 }
 
-inline float Length(const vec3& a)
+inline float Length(const Vector3f& a)
 {
-	return sqrtf(a.v[0]*a.v[0] + a.v[1]*a.v[1] + a.v[2]*a.v[2]);
+	return sqrtf(a(0)*a(0) + a(1)*a(1) + a(2)*a(2));
 }
 
 
-//============= vec4 ================
+//============= Vector4f ================
 
 
 template<typename TYPENAME1>
@@ -545,18 +551,18 @@ inline tvec4<TYPENAME1>::tvec4(TYPENAME1 x, TYPENAME1 y, TYPENAME1 z, TYPENAME1 
 template<typename TYPENAME1>
 inline tvec4<TYPENAME1>::tvec4(const tvec4<TYPENAME1>& vc)
 {
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
-	v[2] = vc.v[2];
+	v[0] = vc(0);
+	v[1] = vc(1);
+	v[2] = vc(2);
 	v[3] = vc.v[3];
 }
 
 template<typename TYPENAME1>
 inline tvec4<TYPENAME1>::tvec4(const tvec3<TYPENAME1>& vc)
 {
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
-	v[2] = vc.v[2];
+	v[0] = vc(0);
+	v[1] = vc(1);
+	v[2] = vc(2);
 	v[3] = 0.0f;
 }
 
@@ -628,9 +634,9 @@ inline tvec4<TYPENAME1>::tvec4(const tmat3<TYPENAME1>& m)
 template<typename TYPENAME1>
 inline bool tvec4<TYPENAME1>::operator==(const tvec4<TYPENAME1>& vc) const
 {
-	if (IsFloatEqual(static_cast<float>(v[0]), static_cast<float>(vc.v[0])) &&
-		IsFloatEqual(static_cast<float>(v[1]), static_cast<float>(vc.v[1])) &&
-		IsFloatEqual(static_cast<float>(v[2]), static_cast<float>(vc.v[2])) &&
+	if (IsFloatEqual(static_cast<float>(v[0]), static_cast<float>(vc(0))) &&
+		IsFloatEqual(static_cast<float>(v[1]), static_cast<float>(vc(1))) &&
+		IsFloatEqual(static_cast<float>(v[2]), static_cast<float>(vc(2))) &&
 		IsFloatEqual(static_cast<float>(v[3]), static_cast<float>(vc.v[3])))
 	{
 		return true;
@@ -649,9 +655,9 @@ template<typename TYPENAME1>
 inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator=(const tvec4<TYPENAME1>& vc)
 {
 	//Self-assignment is not actual here...
-	v[0] = vc.v[0];
-	v[1] = vc.v[1];
-	v[2] = vc.v[2];
+	v[0] = vc(0);
+	v[1] = vc(1);
+	v[2] = vc(2);
 	v[3] = vc.v[3];
 
 	return *this;
@@ -660,9 +666,9 @@ inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator=(const tvec4<TYPENAME1>& vc)
 template<typename TYPENAME1>
 inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator+=(const tvec4<TYPENAME1>& vc)
 {
-	v[0] += vc.v[0];
-	v[1] += vc.v[1];
-	v[2] += vc.v[2];
+	v[0] += vc(0);
+	v[1] += vc(1);
+	v[2] += vc(2);
 	v[3] += vc.v[3];
 
 	return *this;
@@ -671,9 +677,9 @@ inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator+=(const tvec4<TYPENAME1>& vc
 template<typename TYPENAME1>
 inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator-=(const tvec4<TYPENAME1>& vc)
 {
-	v[0] -= vc.v[0];
-	v[1] -= vc.v[1];
-	v[2] -= vc.v[2];
+	v[0] -= vc(0);
+	v[1] -= vc(1);
+	v[2] -= vc(2);
 	v[3] -= vc.v[3];
 	return *this;
 }
@@ -709,14 +715,14 @@ inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator*=(TYPENAME1 c)
 template<typename TYPENAME1>
 inline tvec4<TYPENAME1>& tvec4<TYPENAME1>::operator*=(const tvec4<TYPENAME1>& q)
 {
-	TYPENAME1 A = (v[3] + v[0]) * (q.v[3] + q.v[0]);
-	TYPENAME1 B = (v[2] - v[1]) * (q.v[1] - q.v[2]);
-	TYPENAME1 C = (v[0] - v[3]) * (q.v[1] + q.v[2]);
-	TYPENAME1 D = (v[1] + v[2]) * (q.v[0] - q.v[3]);
-	TYPENAME1 E = (v[0] + v[2]) * (q.v[0] + q.v[1]);
-	TYPENAME1 F = (v[0] - v[2]) * (q.v[0] - q.v[1]);
-	TYPENAME1 G = (v[3] + v[1]) * (q.v[3] - q.v[2]);
-	TYPENAME1 H = (v[3] - v[1]) * (q.v[3] + q.v[2]);
+	TYPENAME1 A = (v[3] + v[0]) * (q.v[3] + q(0));
+	TYPENAME1 B = (v[2] - v[1]) * (q(1) - q(2));
+	TYPENAME1 C = (v[0] - v[3]) * (q(1) + q(2));
+	TYPENAME1 D = (v[1] + v[2]) * (q(0) - q.v[3]);
+	TYPENAME1 E = (v[0] + v[2]) * (q(0) + q(1));
+	TYPENAME1 F = (v[0] - v[2]) * (q(0) - q(1));
+	TYPENAME1 G = (v[3] + v[1]) * (q.v[3] - q(2));
+	TYPENAME1 H = (v[3] - v[1]) * (q.v[3] + q(2));
 	
 	v[0] = A - ( E + F + G + H) * 0.5f;
 	v[1] =-C + ( E - F + G - H) * 0.5f;
@@ -735,24 +741,24 @@ inline tvec4<TYPENAME1> tvec4<TYPENAME1>::operator*(const tvec4<TYPENAME1>& q)  
 }
 
 
-inline vec4 InverseQuat(const vec4& q)
+inline Vector4f InverseQuat(const Vector4f& q)
 {
 	float n;
-	vec4 r;
-	n = (q.v[0]*q.v[0]+q.v[1]*q.v[1]+q.v[2]*q.v[2]+q.v[3]*q.v[3]);
+	Vector4f r;
+	n = (q(0)*q(0)+q(1)*q(1)+q(2)*q(2)+q.v[3]*q.v[3]);
 
 	if (n!=0.0f)
 	{
-		r.v[0] = -q.v[0] / n;
-		r.v[1] = -q.v[1] / n;
-		r.v[2] = -q.v[2] / n;
+		r(0) = -q(0) / n;
+		r(1) = -q(1) / n;
+		r(2) = -q(2) / n;
 		r.v[3] = q.v[3] / n;
 	}
 	else
 	{
-		r.v[0] = 0.0f;
-		r.v[1] = 0.0f;
-		r.v[2] = 0.0f;
+		r(0) = 0.0f;
+		r(1) = 0.0f;
+		r(2) = 0.0f;
 		r.v[3] = 1.0f;
 	};
 	
@@ -760,26 +766,26 @@ inline vec4 InverseQuat(const vec4& q)
 
 }
 
-inline vec4 NormalizeQuat(const vec4& q)
+inline Vector4f NormalizeQuat(const Vector4f& q)
 {
 	float n;
 
-	vec4 r;
+	Vector4f r;
 
-	n = (q.v[0]*q.v[0]+q.v[1]*q.v[1]+q.v[2]*q.v[2]+q.v[3]*q.v[3]);
+	n = (q(0)*q(0)+q(1)*q(1)+q(2)*q(2)+q.v[3]*q.v[3]);
 
 	if (n!=0.0f)
 	{
-		r.v[0] = q.v[0] / n;
-		r.v[1] = q.v[1] / n;
-		r.v[2] = q.v[2] / n;
+		r(0) = q(0) / n;
+		r(1) = q(1) / n;
+		r(2) = q(2) / n;
 		r.v[3] = q.v[3] / n;
 	}
 	
 	return r;
 
 }
-//========== mat2 ===========
+//========== Matrix2f ===========
 
 
 template<typename TYPENAME1>
@@ -872,12 +878,12 @@ template<typename TYPENAME1>
 inline tvec2<TYPENAME1> tmat2<TYPENAME1>::operator*(const tvec2<TYPENAME1>& vc) const
 {
 	tvec2<TYPENAME1> r;
-	r.v[0] = m[0]*vc.v[0] + m[2]*vc.v[1];
-	r.v[1] = m[1]*vc.v[0] + m[3]*vc.v[1];
+	r(0) = m[0]*vc(0) + m[2]*vc(1);
+	r(1) = m[1]*vc(0) + m[3]*vc(1);
 	return r;
 }
 
-//========== mat3 ===========
+//========== Matrix3f ===========
 
 
 template<typename TYPENAME1>
@@ -899,17 +905,17 @@ inline tmat3<TYPENAME1>::tmat3()
 template<typename TYPENAME1>
 inline tmat3<TYPENAME1>::tmat3(const tvec3<TYPENAME1>& col1, const tvec3<TYPENAME1>& col2, const tvec3<TYPENAME1>& col3)
 {
-	m[0] = col1.v[0];
-	m[1] = col1.v[1];
-	m[2] = col1.v[2];
+	m[0] = col1(0);
+	m[1] = col1(1);
+	m[2] = col1(2);
 
-	m[3] = col2.v[0];
-	m[4] = col2.v[1];
-	m[5] = col2.v[2];
+	m[3] = col2(0);
+	m[4] = col2(1);
+	m[5] = col2(2);
 
-	m[6] = col3.v[0];
-	m[7] = col3.v[1];
-	m[8] = col3.v[2];
+	m[6] = col3(0);
+	m[7] = col3(1);
+	m[8] = col3(2);
 }
 
 template<typename TYPENAME1>
@@ -933,17 +939,17 @@ inline tmat3<TYPENAME1>::tmat3(const tvec4<TYPENAME1>& q)
 {
 	TYPENAME1 wx, wy, wz, xx, yy, yz, xy, xz, zz,s,x2,y2,z2;
 
-	s=2.0f/(q.v[0]*q.v[0]+q.v[1]*q.v[1]+q.v[2]*q.v[2]+q.v[3]*q.v[3]);
+	s=2.0f/(q(0)*q(0)+q(1)*q(1)+q(2)*q(2)+q.v[3]*q.v[3]);
   
 
-	x2=q.v[0]*s;
-	y2=q.v[1]*s;
-	z2=q.v[2]*s;
+	x2=q(0)*s;
+	y2=q(1)*s;
+	z2=q(2)*s;
 
 	wx=q.v[3]*x2; wy=q.v[3]*y2; wz=q.v[3]*z2;
-	xx=q.v[0]*x2; xy=q.v[1]*x2; xz=q.v[2]*x2;
-	yy=q.v[1]*y2; yz=q.v[2]*y2;
-	zz=q.v[2]*z2;
+	xx=q(0)*x2; xy=q(1)*x2; xz=q(2)*x2;
+	yy=q(1)*y2; yz=q(2)*y2;
+	zz=q(2)*z2;
 
 	m[0] = 1.0f - (yy + zz);
 	m[1] = xy + wz;
@@ -1035,15 +1041,18 @@ template<typename TYPENAME1>
 inline tvec3<TYPENAME1> tmat3<TYPENAME1>::operator*(const tvec3<TYPENAME1>& vc) const
 {
 	tvec3<TYPENAME1> r;
-	r.v[0] = m[0]*vc.v[0] + m[3]*vc.v[1] + m[6]*vc.v[2];
-	r.v[1] = m[1]*vc.v[0] + m[4]*vc.v[1] + m[7]*vc.v[2];
-	r.v[2] = m[2]*vc.v[0] + m[5]*vc.v[1] + m[8]*vc.v[2];
+	r(0) = m[0]*vc(0) + m[3]*vc(1) + m[6]*vc(2);
+	r(1) = m[1]*vc(0) + m[4]*vc(1) + m[7]*vc(2);
+	r(2) = m[2]*vc(0) + m[5]*vc(1) + m[8]*vc(2);
 	return r;
 }
 
-mat3 TransposeMatrix(const mat3& m);
+Matrix3f TransposeMatrix(const Matrix3f& m);
 
-mat3 InverseMatrix(const mat3& m);
+Matrix3f InverseMatrix(const Matrix3f& m);
+
+
+*/
 
 } //namespace SE
 

@@ -37,13 +37,13 @@ TVALUE GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTre
 }
 
 template <>
-vec2 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
+Vector2f GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
 
 template <>
-vec3 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
+Vector3f GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
 
 template <>
-vec4 GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
+Vector4f GetValueFromSubtree(const boost::property_tree::ptree::value_type& subTree, const std::string& path);
 
 
 template <typename TKEY, typename TVALUE>

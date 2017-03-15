@@ -22,14 +22,14 @@ namespace SE
 
 struct T2DQuad
 {
-	vec3 VertexCoord[4];
-	vec2 TextureCoord[4];
+	Vector3f VertexCoord[4];
+	Vector2f TextureCoord[4];
 };
 
 struct TDataTriangleList
 {
-	mutable std::map<std::string, std::vector<vec3>> Vec3CoordArr; //mutable because when you call [] on map, it may create a new vector =)
-	mutable std::map<std::string, std::vector<vec2>> Vec2CoordArr; //mutable because when you call [] on map, it may create a new vector =)
+	mutable std::map<std::string, std::vector<Vector3f>> Vec3CoordArr; //mutable because when you call [] on map, it may create a new vector =)
+	mutable std::map<std::string, std::vector<Vector2f>> Vec2CoordArr; //mutable because when you call [] on map, it may create a new vector =)
 
 	TDataTriangleList& operator+=(const TDataTriangleList& dataTriangleList);
 };
@@ -117,54 +117,54 @@ class TTriangleList : public TTriangleListAncestor
 
    
 
-void FillVertexCoordVec(std::vector<vec3>& coordVec, int pos, vec2 posFrom, vec2 posTo);
+void FillVertexCoordVec(std::vector<Vector3f>& coordVec, int pos, Vector2f posFrom, Vector2f posTo);
 //Adds rect points (6 vertices) into coordVec
 
-void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+void FillTexCoordVec(std::vector<Vector2f>& coordVec, int pos, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Adds rect points (6 tex coords) into coordVec
 
-void FillVertexCoordVec_4Points(std::vector<vec3>& coordVec, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4);
+void FillVertexCoordVec_4Points(std::vector<Vector3f>& coordVec, int pos, Vector2f pos1, Vector2f pos2, Vector2f pos3, Vector2f pos4);
 //Adds rect points (6 vertices) into coordVec
 
-void FillTexCoordVec_4Points(std::vector<vec2>& coordVec, int pos, vec2 texCoord1 = vec2(0,0), vec2 texCoord2 = vec2(1,0), vec2 texCoord3 = vec2(1,1), vec2 texCoord4 = vec2(0,1));
+void FillTexCoordVec_4Points(std::vector<Vector2f>& coordVec, int pos, Vector2f texCoord1 = Vector2f(0,0), Vector2f texCoord2 = Vector2f(1,0), Vector2f texCoord3 = Vector2f(1,1), Vector2f texCoord4 = Vector2f(0,1));
 //Adds rect points (6 tex coords) into coordVec
 
 
-std::vector<vec3> MakeVertexCoordVec(vec2 posFrom, vec2 posTo);
+std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo);
 //Creates array of rect (6 vertices)
 
-std::vector<vec2> MakeTexCoordVec(vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+std::vector<Vector2f> MakeTexCoordVec(Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Creates array of rect (6 tex coords)
 
-TDataTriangleList MakeDataTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Creates a DataTriangleList just containing rect
 
-void MoveDataTriangleList(TDataTriangleList& triangleList, vec3 shift);
+void MoveDataTriangleList(TDataTriangleList& triangleList, Vector3f shift);
 //Translates all points in DataTriangleList with shift vector
 
-void RotateDataTriangleList(TDataTriangleList& triangleList, const mat3& m);
+void RotateDataTriangleList(TDataTriangleList& triangleList, const Matrix3f& m);
 //Rotates all points in triangleList with rotation matrix
 
 void ScaleDataTriangleList(TDataTriangleList& triangleList, float scale);
 //Scales all points in triangleList by scale value
 
-void ScaleDataTriangleList(TDataTriangleList& triangleList, vec3 scaleVec);
+void ScaleDataTriangleList(TDataTriangleList& triangleList, Vector3f scaleVec);
 //Scales all points in triangleList by scaleVec vector
 
 TDataTriangleList& ClearDataTriangleList(TDataTriangleList& triangleList);
 //Clears triangle list, returning itself
 
-TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<vec3>& vertexArr, const std::vector<vec2>& texCoordArr);
+TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr);
 //Inserts additional points and their tex coords into triangle list
 
-void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Replaces one rect in triangleList at position pos by new rect. pos is position in array for first vertex of a rectangle
 
-void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4, vec2 texCoord1 = vec2(0,0), vec2 texCoord2 = vec2(1,0), vec2 texCoord3 = vec2(1,1), vec2 texCoord4 = vec2(0,1));
+void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int pos, Vector2f pos1, Vector2f pos2, Vector2f pos3, Vector2f pos4, Vector2f texCoord1 = Vector2f(0,0), Vector2f texCoord2 = Vector2f(1,0), Vector2f texCoord3 = Vector2f(1,1), Vector2f texCoord4 = Vector2f(0,1));
 //Replaces one rect in triangleList at position pos by new rect. pos is position in array for first vertex of a rectangle
 
 
-TTriangleList MakeTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom = vec2(0,0), vec2 texCoordTo = vec2(1,1));
+TTriangleList MakeTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Creates triangle list containing rect
 
 void CheckGlError(const std::string& msg = "");

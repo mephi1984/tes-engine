@@ -13,23 +13,24 @@ namespace SE
 
 	struct TVisualKey
 	{
-		ivec2 Pos;
-		ivec2 WidthHeight;
+		Vector2i Pos;
+		Vector2i WidthHeight;
 
 		TVisualKey()
 		{
 		}
 
-		TVisualKey(ivec2 pos, ivec2 widthHeight)
+		TVisualKey(Vector2i pos, Vector2i widthHeight)
 			: Pos(pos)
 			, WidthHeight(widthHeight)
 		{
 		}
 
-		bool CheckClicked(ivec2 p)
+		bool CheckClicked(Vector2i p)
 		{
-			return (p.v[0] >= Pos.v[0] - WidthHeight.v[0]*0.5f && p.v[0] <= Pos.v[0] + WidthHeight.v[0]*0.5f) &&
-				(p.v[1] >= Pos.v[1] - WidthHeight.v[1]*0.5f && p.v[1] <= Pos.v[1] + WidthHeight.v[1]*0.5f);
+			
+			return (p(0) >= Pos(0) - WidthHeight(0)*0.5f && p(0) <= Pos(0) + WidthHeight(0)*0.5f) &&
+				(p(1) >= Pos(1) - WidthHeight(1)*0.5f && p(1) <= Pos(1) + WidthHeight(1)*0.5f);
 		}
 	};
 
@@ -47,20 +48,20 @@ public:
 
 	TKeyboardWidget();
 
-	virtual bool CheckClick(vec2 mousePos);
-	virtual void OnTapDown(vec2 pos);
-	virtual void OnTapUp(vec2 pos);
+	virtual bool CheckClick(Vector2f mousePos);
+	virtual void OnTapDown(Vector2f pos);
+	virtual void OnTapUp(Vector2f pos);
 
 	/*
-	static TSquareStatic* CreateStatic(vec2 posFrom, vec2 posTo);
-	static TSquareStatic* CreateStaticWithFiller(vec2 posFrom, vec2 posTo, boost::function<void(TSquareStatic*)> staticFillerFunc);
-	static TSquareStatic* CreateStaticWithFillers(vec2 posFrom, vec2 posTo, std::vector<boost::function<void(TSquareStatic*)>> staticFillerFuncArr);
+	static TSquareStatic* CreateStatic(Vector2f posFrom, Vector2f posTo);
+	static TSquareStatic* CreateStaticWithFiller(Vector2f posFrom, Vector2f posTo, boost::function<void(TSquareStatic*)> staticFillerFunc);
+	static TSquareStatic* CreateStaticWithFillers(Vector2f posFrom, Vector2f posTo, std::vector<boost::function<void(TSquareStatic*)>> staticFillerFuncArr);
 
-	static void StaticTextureFiller(vec2 posFrom, vec2 posTo, const std::string& texName, TSquareStatic* staticToFill);
-	static void StaticTextFiller(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams, TSquareStatic* staticToFill);
+	static void StaticTextureFiller(Vector2f posFrom, Vector2f posTo, const std::string& texName, TSquareStatic* staticToFill);
+	static void StaticTextFiller(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams, TSquareStatic* staticToFill);
 
-	static TSquareStatic* CreateStaticTexture(vec2 posFrom, vec2 posTo, const std::string& texName);
-	static TSquareStatic* CreateStaticText(vec2 posFrom, vec2 posTo, TTextParams buttonTextParams);*/
+	static TSquareStatic* CreateStaticTexture(Vector2f posFrom, Vector2f posTo, const std::string& texName);
+	static TSquareStatic* CreateStaticText(Vector2f posFrom, Vector2f posTo, TTextParams buttonTextParams);*/
 
 };
 

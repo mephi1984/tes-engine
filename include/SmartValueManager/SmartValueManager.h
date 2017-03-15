@@ -12,9 +12,9 @@ typedef boost::variant<
 	std::shared_ptr<TBindableVar<float>>,
 	std::shared_ptr<TBindableVar<bool>>,
 	std::shared_ptr<TBindableVar<std::string>>,
-	std::shared_ptr<TBindableVar<vec2>>,
-	std::shared_ptr<TBindableVar<vec3>>,
-	std::shared_ptr<TBindableVar<vec4>>> TSmartValue;
+	std::shared_ptr<TBindableVar<Vector2f>>,
+	std::shared_ptr<TBindableVar<Vector3f>>,
+	std::shared_ptr<TBindableVar<Vector4f>>> TSmartValue;
 
 
 class TSmartValueManager : public TSerializeInterface

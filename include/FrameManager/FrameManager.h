@@ -75,7 +75,7 @@ public:
 	size_t GetFrameTexture(const std::string& frameName);
 	//Get texture ID from frame with name frameName
 
-	ivec2 GetFrameWidthHeight(const std::string& frameName);
+	Vector2i GetFrameWidthHeight(const std::string& frameName);
 
 	TTextureData ReadFromBufferToTexData(const std::string& frameName);
 	

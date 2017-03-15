@@ -110,10 +110,10 @@ protected:
 
 	std::stack<std::string> FontStack;
 
-	float DrawChar(vec2 pos, size_t character);
-	float DrawCharToVBO(vec2 pos, size_t character, TTriangleList& triangleList);
+	float DrawChar(Vector2f pos, size_t character);
+	float DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList);
 
-	vec2 FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string& str);
+	Vector2f FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str);
 public:
 	TFontManager() { }
 	~TFontManager();
@@ -125,16 +125,16 @@ public:
 	void PushFont(const std::string& fontName);
 	void PopFont();
 
-	void DrawString(vec2 pos, TTextBasicAreaParams params, const std::string& str);
+	void DrawString(Vector2f pos, TTextBasicAreaParams params, const std::string& str);
 	
-	TTriangleList DrawStringToVBO(vec2 pos, TTextBasicAreaParams params, const std::string& str);
+	TTriangleList DrawStringToVBO(Vector2f pos, TTextBasicAreaParams params, const std::string& str);
 	
-	void DrawTextInBox(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
+	void DrawTextInBox(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
 
 	std::string GetCurrentFontName();
 	std::string GetCurrentFontTextureName();
 
-	TTriangleList DrawTextInBoxToVBO(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
+	TTriangleList DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
 
 
 	template<typename CHARTYPE>

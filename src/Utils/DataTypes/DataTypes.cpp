@@ -5,9 +5,10 @@
 namespace SE
 {
 
-mat4 InverseModelViewMatrix(const mat4& m)
+	/*
+Matrix4f InverseModelViewMatrix(const Matrix4f& m)
 {
-	mat4 r;
+	Matrix4f r;
 	r.m[0] = m.m[0];
 	r.m[1] = m.m[4];
 	r.m[2] = m.m[8];
@@ -32,9 +33,9 @@ mat4 InverseModelViewMatrix(const mat4& m)
 
 
 
-mat4 SetToNormalMatrix(const mat4& m)
+Matrix4f SetToNormalMatrix(const Matrix4f& m)
 {
-	mat4 r;
+	Matrix4f r;
 	r.m[0] = m.m[0];
 	r.m[1] = m.m[4];
 	r.m[2] = m.m[8];
@@ -55,36 +56,36 @@ mat4 SetToNormalMatrix(const mat4& m)
 
 	return r;
 }
-
-mat4 MakeOrthoMatrix(float width, float height)
+*/
+Matrix4f MakeOrthoMatrix(float width, float height)
 {
-	mat4 r;
-	r.m[0] = 2.f / width;
-	r.m[1] = 0;
-	r.m[2] = 0;
-	r.m[3] = 0;
+	Matrix4f r;
+	r(0) = 2.f / width;
+	r(1) = 0;
+	r(2) = 0;
+	r(3) = 0;
 	
-	r.m[4] = 0;
-	r.m[5] = 2.f / height;
-	r.m[6] = 0;
-	r.m[7] = 0;
+	r(4) = 0;
+	r(5) = 2.f / height;
+	r(6) = 0;
+	r(7) = 0;
 	
-	r.m[8] = 0;
-	r.m[9] = 0;
-	r.m[10] = -1;
-	r.m[11] = 0;
+	r(8) = 0;
+	r(9) = 0;
+	r(10) = -1;
+	r(11) = 0;
 	
-	r.m[12] = -1;
-	r.m[13] = -1;
-	r.m[14] = 0;
-	r.m[15] = 1;
+	r(12) = -1;
+	r(13) = -1;
+	r(14) = 0;
+	r(15) = 1;
 	
 	return r;
 }
 
-mat4 MakeFrustumMatrix(float left, float right, float bottom, float top, float nearVal, float farVal)
+Matrix4f MakeFrustumMatrix(float left, float right, float bottom, float top, float nearVal, float farVal)
 {
-	mat4 r;
+	Matrix4f r;
 
 	float a = (right + left) / (right - left);
 	
@@ -95,15 +96,15 @@ mat4 MakeFrustumMatrix(float left, float right, float bottom, float top, float n
 	float d = - (2.f * farVal * nearVal) / (farVal - nearVal);
 
 
-	r.m[0] = 2.f*nearVal / (right - left); r.m[4] = 0.f; r.m[8] = a; r.m[12] = 0.f;
-	r.m[1] = 0.f; r.m[5] = 2.f*nearVal / (top - bottom); r.m[9] = b; r.m[13] = 0.f;
-	r.m[2] = 0.f; r.m[6] = 0.f; r.m[10] = c; r.m[14] = d;
-	r.m[3] = 0.f; r.m[7] = 0.f; r.m[11] = -1; r.m[15] = 0.f;
+	r(0) = 2.f*nearVal / (right - left); r(4) = 0.f; r(8) = a; r(12) = 0.f;
+	r(1) = 0.f; r(5) = 2.f*nearVal / (top - bottom); r(9) = b; r(13) = 0.f;
+	r(2) = 0.f; r(6) = 0.f; r(10) = c; r(14) = d;
+	r(3) = 0.f; r(7) = 0.f; r(11) = -1; r(15) = 0.f;
 	
 	return r;
 }
 
-mat4 MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar)
+Matrix4f MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar)
 {
 	//angle = angle * pi / 180.f;
 
@@ -116,10 +117,10 @@ mat4 MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar)
 
 	return MakeFrustumMatrix(left, right, bottom, top, zNear, zFar);
 }
-
-mat4 MultMatrixMatrix(const mat4& m1, const mat4& m2)
+/*
+Matrix4f MultMatrixMatrix(const Matrix4f& m1, const Matrix4f& m2)
 {
-    mat4 r;
+    Matrix4f r;
 
 	r.m[0] = m1.m[0]*m2.m[0] + m1.m[4]*m2.m[1] + m1.m[8]*m2.m[2] + m1.m[12]*m2.m[3];
 	r.m[1] = m1.m[1]*m2.m[0] + m1.m[5]*m2.m[1] + m1.m[9]*m2.m[2] + m1.m[13]*m2.m[3];
@@ -144,14 +145,15 @@ mat4 MultMatrixMatrix(const mat4& m1, const mat4& m2)
 
     return r;
 }
-
+*/
 
 bool IsFloatEqual(float a, float b)
 {
 	return (fabs(b-a) <= CONST_EPSILON) ? true : false;
 }
 
-bool LineCouldCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr)
+/*
+bool LineCouldCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr)
 {
 	for (int i=0; i<3; i++)
 	{
@@ -175,18 +177,18 @@ bool LineCouldCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr
 }
 
 
-int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr)
+int LineCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr)
 {
-	vec3 dummy;
+	Vector3f dummy;
 	return LineCrossTriangle(a, b, tr, dummy);
 }
 
 
-int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr, vec3& CrossPoint)
+int LineCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr, Vector3f& CrossPoint)
 {
 
-	vec3 h, q, t, vx;
-	mat3 M;
+	Vector3f h, q, t, vx;
+	Matrix3f M;
 
 	h = b - a;
 
@@ -195,17 +197,17 @@ int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr, vec3
 		return -1;
 	}
 
-	M.m[0] = h.v[0];
-	M.m[3] = h.v[1];
-	M.m[6] = h.v[2];
+	M.m[0] = h(0);
+	M.m[3] = h(1);
+	M.m[6] = h(2);
 
-	M.m[1] = -tr.v.v[0];
-	M.m[4] = -tr.v.v[1];
-	M.m[7] = -tr.v.v[2];
+	M.m[1] = -tr.v(0);
+	M.m[4] = -tr.v(1);
+	M.m[7] = -tr.v(2);
 
-	M.m[2] = -tr.w.v[0];
-	M.m[5] = -tr.w.v[1];
-	M.m[8] = -tr.w.v[2];
+	M.m[2] = -tr.w(0);
+	M.m[5] = -tr.w(1);
+	M.m[8] = -tr.w(2);
 
 	M = InverseMatrix(M);
 
@@ -213,12 +215,12 @@ int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr, vec3
 
 	t = vx * M;
 
-	if ((t.v[0]<0)||(t.v[0]>1))
+	if ((t(0)<0)||(t(0)>1))
 	{
 		return 0;
 	}
 
-	q = a + h * t.v[0];
+	q = a + h * t(0);
 	
 	CrossPoint = q;
 
@@ -227,11 +229,11 @@ int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr, vec3
 
 }
 
-int PointInTriangle(const vec3& q, const TSmpTriangle& tr)
+int PointInTriangle(const Vector3f& q, const TSmpTriangle& tr)
 {
-	vec3 v,h;
+	Vector3f v,h;
 	float nf2[3];
-	vec4 quat, inv_quat, p;
+	Vector4f quat, inv_quat, p;
 
 	TSmpTriangle trx;
 
@@ -239,12 +241,12 @@ int PointInTriangle(const vec3& q, const TSmpTriangle& tr)
 
 	int i;
 
-	h = vec3(0.0f, 1.0f, 0.0f);
+	h = Vector3f(0.0f, 1.0f, 0.0f);
 	
 
-	if (IsFloatEqual(tr.n.v[0],0.0f) && (!IsFloatEqual(tr.n.v[1],0.0f)) && IsFloatEqual(tr.n.v[2],0.0f))
+	if (IsFloatEqual(tr.n(0),0.0f) && (!IsFloatEqual(tr.n(1),0.0f)) && IsFloatEqual(tr.n(2),0.0f))
 	{
-		quat = vec4(1.0f, 0.0f, 0.0f, 0.0f);
+		quat = Vector4f(1.0f, 0.0f, 0.0f, 0.0f);
 	}
 	else
 	{
@@ -258,41 +260,41 @@ int PointInTriangle(const vec3& q, const TSmpTriangle& tr)
 
 		v = Normalize(v);
 
-		quat.v[0] = v.v[0]*sina;
-		quat.v[1] = v.v[1]*sina;
-		quat.v[2] = v.v[2]*sina;
+		quat(0) = v(0)*sina;
+		quat(1) = v(1)*sina;
+		quat(2) = v(2)*sina;
 		quat.v[3] = cosa;
 
 	}
 
-	inv_quat.v[0] = - quat.v[0];
-	inv_quat.v[1] = - quat.v[1];
-	inv_quat.v[2] = - quat.v[2];
+	inv_quat(0) = - quat(0);
+	inv_quat(1) = - quat(1);
+	inv_quat(2) = - quat(2);
 	inv_quat.v[3] = quat.v[3];
 
 	for (i=0; i<3; i++)
 	{
-		p = vec4(tr.p[i]);
+		p = Vector4f(tr.p[i]);
 
 		p = quat * p * inv_quat;
 
-		trx.p[i] = vec3(p);
+		trx.p[i] = Vector3f(p);
 		
 	};
 
-	p.v[0] = q.v[0];
-	p.v[1] = q.v[1];
-	p.v[2] = q.v[2];
+	p(0) = q(0);
+	p(1) = q(1);
+	p(2) = q(2);
 	p.v[3] = 0.0f;
 
 	p = quat * p * inv_quat;
 
 
 	for (i=0;i<2;i++)
-		nf2[i] = (p.v[0]-trx.p[i].v[0])*(trx.p[i+1].v[2]-trx.p[i].v[2])-(p.v[2]-trx.p[i].v[2])*(trx.p[i+1].v[0]-trx.p[i].v[0]);
+		nf2[i] = (p(0)-trx.p[i](0))*(trx.p[i+1](2)-trx.p[i](2))-(p(2)-trx.p[i](2))*(trx.p[i+1](0)-trx.p[i](0));
 
 	//Not to go over array:
-	nf2[2] = (p.v[0]-trx.p[2].v[0])*(trx.p[0].v[2]-trx.p[2].v[2])-(p.v[2]-trx.p[2].v[2])*(trx.p[0].v[0]-trx.p[2].v[0]);
+	nf2[2] = (p(0)-trx.p[2](0))*(trx.p[0](2)-trx.p[2](2))-(p(2)-trx.p[2](2))*(trx.p[0](0)-trx.p[2](0));
 
 	if (((nf2[0]>=0.0f) && (nf2[1]>=0.0f) && (nf2[2]>=0.0f))
 		|| ((nf2[0]<=0.0f) && (nf2[1]<=0.0f) && (nf2[2]<=0.0f)))
@@ -307,16 +309,16 @@ int PointInTriangle(const vec3& q, const TSmpTriangle& tr)
 }
 
 
-int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& b2, vec2& r)
+int LineCrossLine2d(const Vector2f& a1, const Vector2f& a2, const Vector2f& b1, const Vector2f& b2, Vector2f& r)
 {
-	vec2 v = (a2 - a1);
+	Vector2f v = (a2 - a1);
 
-	mat2 m;
+	Matrix2f m;
 
-	m.m[0] = v.v[0];
-	m.m[1] = b1.v[0] - b2.v[0];
-	m.m[2] = v.v[1];
-	m.m[3] = b1.v[1] - b2.v[1];
+	m.m[0] = v(0);
+	m.m[1] = b1(0) - b2(0);
+	m.m[2] = v(1);
+	m.m[3] = b1(1) - b2(1);
 
 	float detm = m.m[0] * m.m[3] - m.m[1] * m.m[2];
 
@@ -325,14 +327,14 @@ int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& 
 		return -1;
 	}
 
-	mat2 ad_m;
+	Matrix2f ad_m;
 	ad_m.m[0] = m.m[3];
 	ad_m.m[1] = -m.m[2];
 
 	ad_m.m[2] = -m.m[1];
 	ad_m.m[3] = m.m[0];
 
-	mat2 rev_m;
+	Matrix2f rev_m;
 
 	rev_m.m[0] = ad_m.m[0]/detm;
 	rev_m.m[1] = ad_m.m[2]/detm;
@@ -340,24 +342,24 @@ int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& 
 	rev_m.m[2] = ad_m.m[1]/detm;
 	rev_m.m[3] = ad_m.m[3]/detm;
 
-	vec2 t;
-	vec2 vx = (b1 - a1);
-	t.v[0] =  vx.v[0] * rev_m.m[0] + vx.v[1] * rev_m.m[1];
-	t.v[1] =  vx.v[0] * rev_m.m[2] + vx.v[1] * rev_m.m[3]; 
+	Vector2f t;
+	Vector2f vx = (b1 - a1);
+	t(0) =  vx(0) * rev_m.m[0] + vx(1) * rev_m.m[1];
+	t(1) =  vx(0) * rev_m.m[2] + vx(1) * rev_m.m[3]; 
 
-	//if (t.v[0] < 0 || t.v[0] > 1 || t.v[1] < 0 || t.v[1] > 1)
-	//if (t.v[0] < 0.01f|| t.v[0] > 0.99f || t.v[1] < 0.01f || t.v[1] > 0.99f)
-	if (t.v[0] < -0.01f || t.v[0] > 1.01f || t.v[1] < -0.01f || t.v[1] > 1.01f)
+	//if (t(0) < 0 || t(0) > 1 || t(1) < 0 || t(1) > 1)
+	//if (t(0) < 0.01f|| t(0) > 0.99f || t(1) < 0.01f || t(1) > 0.99f)
+	if (t(0) < -0.01f || t(0) > 1.01f || t(1) < -0.01f || t(1) > 1.01f)
 	{
 		return 0;
 	}
 
-	r = a1 + v * t.v[0];
+	r = a1 + v * t(0);
 
 	return 1;
 
 }
-
+*/
 
 float roundf(float r)
 {
@@ -381,7 +383,8 @@ size_t GetGreaterPower2(size_t x)
 	return result;
 }
 
-vec2 StringToVec2(std::string str)
+
+Vector2f StringToVec2(std::string str)
 {
 	boost::erase_all(str, " ");
 
@@ -394,15 +397,15 @@ vec2 StringToVec2(std::string str)
 		throw ErrorToLog("StringToVec2 - vector is too short: "+str);
 	}
 
-	vec2 result;
+	Vector2f result;
 
-	result.v[0] = boost::lexical_cast<float>(splitVec[0]);
-	result.v[1] = boost::lexical_cast<float>(splitVec[1]);
+	result(0) = boost::lexical_cast<float>(splitVec[0]);
+	result(1) = boost::lexical_cast<float>(splitVec[1]);
 
 	return result;
 }
 
-vec3 StringToVec3(std::string str)
+Vector3f StringToVec3(std::string str)
 {
 	boost::erase_all(str, " ");
 
@@ -415,16 +418,16 @@ vec3 StringToVec3(std::string str)
 		throw ErrorToLog("StringToVec3 - vector is too short: "+str);
 	}
 
-	vec3 result;
+	Vector3f result;
 
-	result.v[0] = boost::lexical_cast<float>(splitVec[0]);
-	result.v[1] = boost::lexical_cast<float>(splitVec[1]);
-	result.v[2] = boost::lexical_cast<float>(splitVec[2]);
+	result(0) = boost::lexical_cast<float>(splitVec[0]);
+	result(1) = boost::lexical_cast<float>(splitVec[1]);
+	result(2) = boost::lexical_cast<float>(splitVec[2]);
 
 	return result;
 }
 
-vec4 StringToVec4(std::string str)
+Vector4f StringToVec4(std::string str)
 {
 	boost::erase_all(str, " ");
 
@@ -437,12 +440,12 @@ vec4 StringToVec4(std::string str)
 		throw ErrorToLog("StringToVec4 - vector is too short: "+str);
 	}
 
-	vec4 result;
+	Vector4f result;
 
-	result.v[0] = boost::lexical_cast<float>(splitVec[0]);
-	result.v[1] = boost::lexical_cast<float>(splitVec[1]);
-	result.v[2] = boost::lexical_cast<float>(splitVec[2]);
-	result.v[3] = boost::lexical_cast<float>(splitVec[3]);
+	result(0) = boost::lexical_cast<float>(splitVec[0]);
+	result(1) = boost::lexical_cast<float>(splitVec[1]);
+	result(2) = boost::lexical_cast<float>(splitVec[2]);
+	result(3) = boost::lexical_cast<float>(splitVec[3]);
 
 	return result;
 }

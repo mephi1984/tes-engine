@@ -140,7 +140,7 @@ void TTriangleList::InnerRefreshBuffer()
 		}
 
         BOOST_FOREACH(auto& i, Data.Vec3CoordArr)
-		//for (std::map<std::string, std::vector<vec3> >::iterator i = Data.Vec3CoordArr.begin(); i != Data.Vec3CoordArr.end(); ++i )
+		//for (std::map<std::string, std::vector<Vector3f> >::iterator i = Data.Vec3CoordArr.begin(); i != Data.Vec3CoordArr.end(); ++i )
 		{
 			if (VertBufferArr[i.first] == std::shared_ptr<VBOObject>())
 			{
@@ -188,28 +188,28 @@ void TTriangleList::RefreshBuffer()
 
 #endif
     
-void FillVertexCoordVec(std::vector<vec3>& coordVec, int pos, vec2 posFrom, vec2 posTo)
+void FillVertexCoordVec(std::vector<Vector3f>& coordVec, int pos, Vector2f posFrom, Vector2f posTo)
 {
-    vec2 pos1 = posFrom;
-	vec2 pos2 = vec2(posFrom.v[0], posTo.v[1]);
-	vec2 pos3 = posTo;
-	vec2 pos4 = vec2(posTo.v[0], posFrom.v[1]);
+    Vector2f pos1 = posFrom;
+	Vector2f pos2 = Vector2f(posFrom(0), posTo(1));
+	Vector2f pos3 = posTo;
+	Vector2f pos4 = Vector2f(posTo(0), posFrom(1));
     
-    coordVec[pos] = vec3(pos1, 0);
-    coordVec[pos+1] = vec3(pos2, 0);
-    coordVec[pos+2] = vec3(pos3, 0);
-    coordVec[pos+3] = vec3(pos3, 0);
-    coordVec[pos+4] = vec3(pos4, 0);
-    coordVec[pos+5] = vec3(pos1, 0);
- 
+    coordVec[pos] << pos1, 0;
+	coordVec[pos + 1] << pos2, 0;
+	coordVec[pos + 2] << pos3, 0;
+	coordVec[pos + 3] << pos3, 0;
+	coordVec[pos + 4] << pos4, 0;
+	coordVec[pos + 5] << pos1, 0;
+
 }
     
-void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom, vec2 texCoordTo)
+void FillTexCoordVec(std::vector<Vector2f>& coordVec, int pos, Vector2f texCoordFrom, Vector2f texCoordTo)
 {
-    vec2 tex1 = texCoordFrom;
-	vec2 tex2 = vec2(texCoordFrom.v[0], texCoordTo.v[1]);
-	vec2 tex3 = texCoordTo;
-	vec2 tex4 = vec2(texCoordTo.v[0], texCoordFrom.v[1]);
+    Vector2f tex1 = texCoordFrom;
+	Vector2f tex2 = Vector2f(texCoordFrom(0), texCoordTo(1));
+	Vector2f tex3 = texCoordTo;
+	Vector2f tex4 = Vector2f(texCoordTo(0), texCoordFrom(1));
     
     
     coordVec[pos] = tex1;
@@ -221,17 +221,17 @@ void FillTexCoordVec(std::vector<vec2>& coordVec, int pos, vec2 texCoordFrom, ve
 
 }
 
-void FillVertexCoordVec_4Points(std::vector<vec3>& coordVec, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4)
+void FillVertexCoordVec_4Points(std::vector<Vector3f>& coordVec, int pos, Vector2f pos1, Vector2f pos2, Vector2f pos3, Vector2f pos4)
 {
-	coordVec[pos] = vec3(pos1, 0);
-    coordVec[pos+1] = vec3(pos2, 0);
-    coordVec[pos+2] = vec3(pos3, 0);
-    coordVec[pos+3] = vec3(pos3, 0);
-    coordVec[pos+4] = vec3(pos4, 0);
-    coordVec[pos+5] = vec3(pos1, 0);
+	coordVec[pos] << pos1, 0;// = Vector3f(pos1, 0);
+	coordVec[pos + 1] << pos2, 0; // = Vector3f(pos2, 0);
+	coordVec[pos + 2] << pos3, 0; // = Vector3f(pos3, 0);
+	coordVec[pos + 3] << pos3, 0; // = Vector3f(pos3, 0);
+	coordVec[pos + 4] << pos4, 0;// = Vector3f(pos4, 0);
+	coordVec[pos + 5] << pos1, 0; // = Vector3f(pos1, 0);
 }
 
-void FillTexCoordVec_4Points(std::vector<vec2>& coordVec, int pos, vec2 texCoord1, vec2 texCoord2, vec2 texCoord3, vec2 texCoord4)
+void FillTexCoordVec_4Points(std::vector<Vector2f>& coordVec, int pos, Vector2f texCoord1, Vector2f texCoord2, Vector2f texCoord3, Vector2f texCoord4)
 {
 	coordVec[pos] = texCoord1;
     coordVec[pos+1] = texCoord2;
@@ -242,9 +242,9 @@ void FillTexCoordVec_4Points(std::vector<vec2>& coordVec, int pos, vec2 texCoord
 }
 
 
-std::vector<vec3> MakeVertexCoordVec(vec2 posFrom, vec2 posTo)
+std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo)
 {
-	std::vector<vec3> r;
+	std::vector<Vector3f> r;
     r.resize(6);
     
     FillVertexCoordVec(r, 0, posFrom, posTo);
@@ -252,9 +252,9 @@ std::vector<vec3> MakeVertexCoordVec(vec2 posFrom, vec2 posTo)
 	return r;
 }
 
-std::vector<vec2> MakeTexCoordVec(vec2 texCoordFrom, vec2 texCoordTo)
+std::vector<Vector2f> MakeTexCoordVec(Vector2f texCoordFrom, Vector2f texCoordTo)
 {
-	std::vector<vec2> r;
+	std::vector<Vector2f> r;
     r.resize(6);
 	FillTexCoordVec(r, 0, texCoordFrom, texCoordTo);
     
@@ -262,7 +262,7 @@ std::vector<vec2> MakeTexCoordVec(vec2 texCoordFrom, vec2 texCoordTo)
 }
 
 
-TDataTriangleList MakeDataTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom, vec2 texCoordTo)
+TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom, Vector2f texCoordTo)
 {
 	TDataTriangleList triangleList;
 
@@ -272,7 +272,7 @@ TDataTriangleList MakeDataTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFr
 	return triangleList;
 }
 
-void MoveDataTriangleList(TDataTriangleList& triangleList, vec3 shift)
+void MoveDataTriangleList(TDataTriangleList& triangleList, Vector3f shift)
 {
 	if (triangleList.Vec3CoordArr.count(CONST_STRING_POSITION_ATTRIB) == 0)
 	{
@@ -285,16 +285,17 @@ void MoveDataTriangleList(TDataTriangleList& triangleList, vec3 shift)
 	}
 }
 
-void RotateDataTriangleList(TDataTriangleList& triangleList, const mat3& m)
+void RotateDataTriangleList(TDataTriangleList& triangleList, const Matrix3f& m)
 {
 	if (triangleList.Vec3CoordArr.count(CONST_STRING_POSITION_ATTRIB) == 0)
 	{
 		return;
 	}
 
-    BOOST_FOREACH(vec3& i, triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB])
+    BOOST_FOREACH(Vector3f& i, triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB])
 	{
-		i = i * m;
+		//i = i * m;
+		i = m * i;
 	}
 }
 
@@ -305,26 +306,26 @@ void ScaleDataTriangleList(TDataTriangleList& triangleList, float scale)
 		return;
 	}
 
-    BOOST_FOREACH(vec3& i, triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB])
+    BOOST_FOREACH(Vector3f& i, triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB])
 	{
-		i.v[0] *= scale;
-		i.v[1] *= scale;
-		i.v[2] *= scale;
+		i(0) *= scale;
+		i(1) *= scale;
+		i(2) *= scale;
 	}
 }
 
-void ScaleDataTriangleList(TDataTriangleList& triangleList, vec3 scaleVec)
+void ScaleDataTriangleList(TDataTriangleList& triangleList, Vector3f scaleVec)
 {
 	if (triangleList.Vec3CoordArr.count(CONST_STRING_POSITION_ATTRIB) == 0)
 	{
 		return;
 	}
 
-    BOOST_FOREACH(vec3& i, triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB])
+    BOOST_FOREACH(Vector3f& i, triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB])
 	{
-		i.v[0] *= scaleVec.v[0];
-		i.v[1] *= scaleVec.v[1];
-		i.v[2] *= scaleVec.v[2];
+		i(0) *= scaleVec(0);
+		i(1) *= scaleVec(1);
+		i(2) *= scaleVec(2);
 	}
 }
 
@@ -344,7 +345,7 @@ TDataTriangleList& ClearDataTriangleList(TDataTriangleList& triangleList)
 	return triangleList;
 }
 
-TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<vec3>& vertexArr, const std::vector<vec2>& texCoordArr)
+TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr)
 {
 	triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].insert(triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].end(), vertexArr.begin(), vertexArr.end());
 	triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].insert(triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].end(), texCoordArr.begin(), texCoordArr.end());
@@ -353,7 +354,7 @@ TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, c
 }
 
 
-TTriangleList MakeTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom, vec2 texCoordTo)
+TTriangleList MakeTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom, Vector2f texCoordTo)
 {
 	TTriangleList triangleList;
 
@@ -365,13 +366,13 @@ TTriangleList MakeTriangleList(vec2 posFrom, vec2 posTo, vec2 texCoordFrom, vec2
 
 }
     
-void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, vec2 posFrom, vec2 posTo, vec2 texCoordFrom, vec2 texCoordTo)
+void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom, Vector2f texCoordTo)
 {
     FillVertexCoordVec(triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB], pos, posFrom, posTo);
 	FillTexCoordVec(triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB], pos, texCoordFrom, texCoordTo);
 }
 
-void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int pos, vec2 pos1, vec2 pos2, vec2 pos3, vec2 pos4, vec2 texCoord1, vec2 texCoord2, vec2 texCoord3, vec2 texCoord4)
+void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int pos, Vector2f pos1, Vector2f pos2, Vector2f pos3, Vector2f pos4, Vector2f texCoord1, Vector2f texCoord2, Vector2f texCoord3, Vector2f texCoord4)
 {
 	FillVertexCoordVec_4Points(triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB], pos, pos1, pos2, pos3, pos4);
 	FillTexCoordVec_4Points(triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB], pos, texCoord1, texCoord2, texCoord3, texCoord4);

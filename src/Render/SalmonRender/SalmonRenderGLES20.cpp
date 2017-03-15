@@ -28,12 +28,12 @@ void TSalmonRendererGLES20::DrawTriangleList(const TTriangleList& triangleList)
 {
 	AssertIfInMainThread();
 	
-	for (std::map<std::string, std::vector<vec2> >::iterator i = triangleList.Data.Vec2CoordArr.begin(); i != triangleList.Data.Vec2CoordArr.end(); ++i )
+	for (std::map<std::string, std::vector<Vector2f> >::iterator i = triangleList.Data.Vec2CoordArr.begin(); i != triangleList.Data.Vec2CoordArr.end(); ++i )
 	{
 		VertexAttribPointer2fv(i->first, 0, reinterpret_cast<const char*>(&triangleList.Data.Vec2CoordArr[i->first][0]));
 	}
 	
-	for (std::map<std::string, std::vector<vec3> >::iterator i = triangleList.Data.Vec3CoordArr.begin(); i != triangleList.Data.Vec3CoordArr.end(); ++i )
+	for (std::map<std::string, std::vector<Vector3f> >::iterator i = triangleList.Data.Vec3CoordArr.begin(); i != triangleList.Data.Vec3CoordArr.end(); ++i )
 	{
 		VertexAttribPointer3fv(i->first, 0, reinterpret_cast<const char*>(&triangleList.Data.Vec3CoordArr[i->first][0]));
 	}

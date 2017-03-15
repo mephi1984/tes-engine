@@ -13,24 +13,31 @@ This code contains additional data types and some const values to use
 
 #include "NewDataTypes.h"
 
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
+
 namespace SE
 {
+	using namespace Eigen;
 
-//Use mat4 to store projection/modelview matrices (i.e. for shadow mapping)
-struct mat4
+
+
+	/*
+//Use Matrix4f to store projection/modelview matrices (i.e. for shadow mapping)
+struct Matrix4f
 {
 	float m[16];
 };
 
 struct TSmpTriangle
 {
-	vec3 p[3];
-	vec3 v;
-	vec3 w;
-	vec3 n;
+	Vector3f p[3];
+	Vector3f v;
+	Vector3f w;
+	Vector3f n;
 };
 
-
+*/
 const float pi = 3.14159265359f;
 
 const float CONST_EPSILON = 0.00001f;
@@ -39,45 +46,37 @@ const float WhiteColor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const float RedColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 const float NoColor[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-const mat3 IdentityMatrix(vec3(1.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), vec3(0.0f, 0.0f, 1.0f));
-
-const mat4 IdentityMatrix4 = 
-	{ 1.f, 0.f, 0.f, 0.f,
-	  0.f, 1.f, 0.f, 0.f,
-	  0.f, 0.f, 1.f, 0.f,
-	  0.f, 0.f, 0.f, 1.f };
-
-
-const vec3 ZeroVec3(0.0f, 0.0f, 0.0f);
-
-const vec4 ZeroQuat(0.0f, 0.0f, 0.0f, 1.0f);
-
 /*
-const std::string fendl="\x0D\x0A"; //Windows-style, for files
-const std::string endl="\n";
-*/
-vec4 InverseQuat(const vec4& q);
+
+const Vector3f ZeroVec3(0.0f, 0.0f, 0.0f);
+
+const Vector4f ZeroQuat(0.0f, 0.0f, 0.0f, 1.0f);
+
+Vector4f InverseQuat(const Vector4f& q);
 
 //For shadow mapping or for OpenGL ES 2.0
-mat4 InverseModelViewMatrix(const mat4& m);
-mat4 SetToNormalMatrix(const mat4& m);
-mat4 MakeOrthoMatrix(float width, float height);
-mat4 MakeFrustumMatrix(float left, float right, float bottom, float top, float nearVal, float farVal);
-mat4 MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar);
-
-mat4 MultMatrixMatrix(const mat4& m1, const mat4& m2);
-
+Matrix4f InverseModelViewMatrix(const Matrix4f& m);
+Matrix4f SetToNormalMatrix(const Matrix4f& m);
+*/
+Matrix4f MakeOrthoMatrix(float width, float height);
+Matrix4f MakeFrustumMatrix(float left, float right, float bottom, float top, float nearVal, float farVal);
+Matrix4f MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar);
+/*
+Matrix4f MultMatrixMatrix(const Matrix4f& m1, const Matrix4f& m2);
+*/
 bool IsFloatEqual(float a, float b);
+/*
+bool LineCouldCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr); //overall (dimensional) test
 
-bool LineCouldCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr); //overall (dimensional) test
+int LineCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr);
 
-int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr);
+int LineCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr, Vector3f& CrossPoint);
 
-int LineCrossTriangle(const vec3& a, const vec3& b, const TSmpTriangle& tr, vec3& CrossPoint);
+int PointInTriangle(const Vector3f& q, const TSmpTriangle& tr);
 
-int PointInTriangle(const vec3& q, const TSmpTriangle& tr);
+int LineCrossLine2d(const Vector2f& a1, const Vector2f& a2, const Vector2f& b1, const Vector2f& b2, Vector2f& r);
+*/
 
-int LineCrossLine2d(const vec2& a1, const vec2& a2, const vec2& b1, const vec2& b2, vec2& r);
 
 template<typename T>
 inline std::string tostr(T i)
@@ -173,9 +172,9 @@ bool IsPower2(T x)
 
 size_t GetGreaterPower2(size_t x);
 
-vec2 StringToVec2(std::string str);
-vec3 StringToVec3(std::string str);
-vec4 StringToVec4(std::string str);
+Vector2f StringToVec2(std::string str);
+Vector3f StringToVec3(std::string str);
+Vector4f StringToVec4(std::string str);
 
 // ================================================
 // ========== wide strings and UTF8 strings =======

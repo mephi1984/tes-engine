@@ -16,8 +16,8 @@ void TStaticWidgetParser::Serialize(boost::property_tree::ptree& propertyTree)
 	float height = propertyTree.get<float>("<xmlattr>.height");
 	int order = propertyTree.get<int>("<xmlattr>.order", 0);
 
-	vec2 posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
-	vec2 posTo(xCenter + width*0.5f, yCenter + height*0.5f);
+	Vector2f posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
+	Vector2f posTo(xCenter + width*0.5f, yCenter + height*0.5f);
 
 	//boost::property_tree::ptree& fillerTree = propertyTree.find("Filler")->second;
 
@@ -71,8 +71,8 @@ void TDynamicTextWidgetParser::Serialize(boost::property_tree::ptree& propertyTr
 	float height = propertyTree.get<float>("<xmlattr>.height");
 	int order = propertyTree.get<int>("<xmlattr>.order", 0);
 
-	vec2 posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
-	vec2 posTo(xCenter + width*0.5f, yCenter + height*0.5f);
+	Vector2f posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
+	Vector2f posTo(xCenter + width*0.5f, yCenter + height*0.5f);
 
 	//boost::property_tree::ptree& fillerTree = propertyTree.find("Filler")->second;
 
@@ -127,8 +127,8 @@ void TButtonWidgetParser::Serialize(boost::property_tree::ptree& propertyTree)
 	float height = propertyTree.get<float>("<xmlattr>.height");
 	int order = propertyTree.get<int>("<xmlattr>.order", 0);
 
-	vec2 posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
-	vec2 posTo(xCenter + width*0.5f, yCenter + height*0.5f);
+	Vector2f posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
+	Vector2f posTo(xCenter + width*0.5f, yCenter + height*0.5f);
 
 	std::vector<boost::function<void(TUniversalButton*)> > fillerFuncArr;
 
@@ -193,8 +193,8 @@ void TEditWidgetParser::Serialize(boost::property_tree::ptree& propertyTree)
 	float height = propertyTree.get<float>("<xmlattr>.height");
 	int order = propertyTree.get<int>("<xmlattr>.order", 0);
 
-	vec2 posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
-	vec2 posTo(xCenter + width*0.5f, yCenter + height*0.5f);
+	Vector2f posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
+	Vector2f posTo(xCenter + width*0.5f, yCenter + height*0.5f);
 	/*
 	//The only one filler
 	std::string texName = propertyTree.get<std::string>("Filler.<xmlattr>.texName");
@@ -272,8 +272,8 @@ void TCheckBoxWidgetParser::Serialize(boost::property_tree::ptree& propertyTree)
 	float height = propertyTree.get<float>("<xmlattr>.height");
 	int order = propertyTree.get<int>("<xmlattr>.order", 0);
 
-	vec2 posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
-	vec2 posTo(xCenter + width*0.5f, yCenter + height*0.5f);
+	Vector2f posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
+	Vector2f posTo(xCenter + width*0.5f, yCenter + height*0.5f);
 
 	std::vector<boost::function<void(TCheckBox*)> > fillerFuncArr;
 
@@ -305,8 +305,8 @@ void TCheckBoxWidgetParser::Serialize(boost::property_tree::ptree& propertyTree)
 				float textWidth = fillerTree.get<float>("<xmlattr>.width");
 				float textHeight = fillerTree.get<float>("<xmlattr>.height");
 
-				vec2 textPosFrom(textXCenter - textWidth*0.5f, textYCenter - textHeight*0.5f);
-				vec2 textPosTo(textXCenter + textWidth*0.5f, textYCenter + textHeight*0.5f);
+				Vector2f textPosFrom(textXCenter - textWidth*0.5f, textYCenter - textHeight*0.5f);
+				Vector2f textPosTo(textXCenter + textWidth*0.5f, textYCenter + textHeight*0.5f);
 
 				fillerFuncArr.push_back(boost::bind(TCheckBox::TextFiller, textPosFrom, textPosTo, textParams, _1));
 
@@ -352,8 +352,8 @@ void TRadioButtonWidgetParser::Serialize(boost::property_tree::ptree& propertyTr
 	float height = propertyTree.get<float>("<xmlattr>.height");
 	int order = propertyTree.get<int>("<xmlattr>.order", 0);
 
-	vec2 posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
-	vec2 posTo(xCenter + width*0.5f, yCenter + height*0.5f);
+	Vector2f posFrom(xCenter - width*0.5f, yCenter - height*0.5f);
+	Vector2f posTo(xCenter + width*0.5f, yCenter + height*0.5f);
 
 	std::vector<boost::function<void(TRadioButton*)> > fillerFuncArr;
 
@@ -385,8 +385,8 @@ void TRadioButtonWidgetParser::Serialize(boost::property_tree::ptree& propertyTr
 				float textWidth = fillerTree.get<float>("<xmlattr>.width");
 				float textHeight = fillerTree.get<float>("<xmlattr>.height");
 
-				vec2 textPosFrom(textXCenter - textWidth*0.5f, textYCenter - textHeight*0.5f);
-				vec2 textPosTo(textXCenter + textWidth*0.5f, textYCenter + textHeight*0.5f);
+				Vector2f textPosFrom(textXCenter - textWidth*0.5f, textYCenter - textHeight*0.5f);
+				Vector2f textPosTo(textXCenter + textWidth*0.5f, textYCenter + textHeight*0.5f);
 
 				fillerFuncArr.push_back(boost::bind(TRadioButton::TextFiller, textPosFrom, textPosTo, textParams, _1));
 

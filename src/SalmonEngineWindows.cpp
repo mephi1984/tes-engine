@@ -30,8 +30,8 @@ size_t LastTickCount;
 //User application
 TApplication* App = NULL;
 
-vec2 MouseButtonPos;
-vec2 MouseTotalShift;
+Vector2f MouseButtonPos;
+Vector2f MouseTotalShift;
 bool MouseButtonPressed = false;
 bool MouseMoved = false;
 
@@ -222,12 +222,12 @@ case WM_MOUSEMOVE:
 
 		if (MouseButtonPressed)
 		{
-			vec2 currentMousePos(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
+			Vector2f currentMousePos(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
 			
-			currentMousePos.v[0] *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
-			currentMousePos.v[1] *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
+			currentMousePos(0) *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
+			currentMousePos(1) *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
 
-			vec2 shift = (MouseButtonPos - currentMousePos);
+			Vector2f shift = (MouseButtonPos - currentMousePos);
 
 			App->OuterOnMove(shift, 0);
 
@@ -235,7 +235,7 @@ case WM_MOUSEMOVE:
 
 			MouseTotalShift += shift;
 
-			if (fabs(MouseTotalShift.v[0]) > 10.f || fabs(MouseTotalShift.v[1]) > 10.f)
+			if (fabs(MouseTotalShift(0)) > 10.f || fabs(MouseTotalShift(1)) > 10.f)
 			{
 				MouseMoved = true;
 			}
@@ -251,10 +251,10 @@ case WM_MOUSEMOVE:
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.RightButtonPressed = (wParam & MK_RBUTTON);
 
-		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
+		MouseButtonPos = Vector2f(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
 
-		MouseButtonPos.v[0] *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
-		MouseButtonPos.v[1] *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
+		MouseButtonPos(0) *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
+		MouseButtonPos(1) *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
 
 		if (mouseState.LeftButtonPressed)
 		{
@@ -266,7 +266,7 @@ case WM_MOUSEMOVE:
 
 		MouseMoved = false;
 
-		MouseTotalShift = vec2(0,0);
+		MouseTotalShift = Vector2f(0,0);
 		
 
 
@@ -280,9 +280,9 @@ case WM_MOUSEMOVE:
 		mouseState.MiddleButtonPressed = (wParam & MK_RBUTTON);
 
 
-		MouseButtonPos = vec2(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
-		MouseButtonPos.v[0] *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
-		MouseButtonPos.v[1] *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
+		MouseButtonPos = Vector2f(static_cast<float>(mouseState.X), static_cast<float>(Renderer->GetScreenHeight() - mouseState.Y));
+		MouseButtonPos(0) *= SE::Renderer->GetMatrixWidth() / SE::Renderer->GetScreenWidth();
+		MouseButtonPos(1) *= SE::Renderer->GetMatrixHeight() / SE::Renderer->GetScreenHeight();
 
 
 

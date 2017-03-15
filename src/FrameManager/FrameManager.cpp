@@ -316,14 +316,14 @@ size_t TFrameManager::GetFrameTexture(const std::string& frameName)
 }
 
 
-ivec2 TFrameManager::GetFrameWidthHeight(const std::string& frameName)
+Vector2i TFrameManager::GetFrameWidthHeight(const std::string& frameName)
 {
 	if (FrameMap.count(frameName) == 0)
 	{
 		throw ErrorToLog("Frame "+frameName+" not found!");
 	}
 
-	return ivec2(FrameMap[frameName].Width, FrameMap[frameName].Height);
+	return Vector2i(FrameMap[frameName].Width, FrameMap[frameName].Height);
 }
 
 

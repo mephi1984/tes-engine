@@ -384,7 +384,7 @@ void DisableVertexAttribArray(const std::string& attribName)
 
 
 #ifdef TARGET_WIN32
-void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<vec2> >& vec2CoordArr)
+void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr)
 {
 	if (ResourceManager != NULL)
 			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
@@ -393,7 +393,7 @@ void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string,
 	
 }
 
-void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<vec3> >& vec3CoordArr)
+void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr)
 {
 	if (ResourceManager != NULL)
 			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)

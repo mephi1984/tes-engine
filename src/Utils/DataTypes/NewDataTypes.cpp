@@ -4,10 +4,10 @@
 
 namespace SE
 {
-
-mat3 TransposeMatrix(const mat3& m)
+	/*
+Matrix3f TransposeMatrix(const Matrix3f& m)
 {
-	mat3 r;
+	Matrix3f r;
 	r.m[0] = m.m[0];
 	r.m[1] = m.m[3];
 	r.m[2] = m.m[6];
@@ -20,10 +20,10 @@ mat3 TransposeMatrix(const mat3& m)
 	return r;
 }
 
-mat3 InverseMatrix(const mat3& m)
+Matrix3f InverseMatrix(const Matrix3f& m)
 {
 	float d;
-	mat3 r;
+	Matrix3f r;
     
 	d = m.m[0]*(m.m[4]*m.m[8] - m.m[5]*m.m[7]);
 	d -= m.m[1]*(m.m[3]*m.m[8] - m.m[6]*m.m[5]);
@@ -53,9 +53,9 @@ mat3 InverseMatrix(const mat3& m)
 	return r;
 }
 
-mat3 CreateZRotationMatrix(float angle)
+Matrix3f CreateZRotationMatrix(float angle)
 {
-	mat3 result = IdentityMatrix;
+	Matrix3f result = Matrix3f::Identity();
 
 	result.m[0] = cosf(angle);
 	result.m[1] = -sinf(angle);
@@ -63,7 +63,7 @@ mat3 CreateZRotationMatrix(float angle)
 	result.m[4] = cosf(angle);
 
 	return result;
-}
+}*/
 
 
 } //namespace SE

@@ -118,7 +118,7 @@ std::string TFontManager::GetCurrentFontTextureName()
 }
 
 
-float TFontManager::DrawChar(vec2 pos, size_t character)
+float TFontManager::DrawChar(Vector2f pos, size_t character)
 {
 	//Also see DrawCharToVBO
 
@@ -140,12 +140,12 @@ float TFontManager::DrawChar(vec2 pos, size_t character)
 
 	float width = scale_x*fontParams.BitmapWidth;
 
-	vec2 p1 = pos + vec2(+ scale_x*fontParams.InternalShiftX, -height- scale_y*fontParams.InternalShiftY);
-	vec2 p2 = pos + vec2(width + scale_x*fontParams.InternalShiftX, - scale_y* fontParams.InternalShiftY);
+	Vector2f p1 = pos + Vector2f(+ scale_x*fontParams.InternalShiftX, -height- scale_y*fontParams.InternalShiftY);
+	Vector2f p2 = pos + Vector2f(width + scale_x*fontParams.InternalShiftX, - scale_y* fontParams.InternalShiftY);
 	
-	vec2 t1 = vec2(fontParams.ShiftX,
+	Vector2f t1 = Vector2f(fontParams.ShiftX,
 		1 - fontParams.ShiftY - fontParams.BitmapHeight - fontParams.InternalShiftY);
-	vec2 t2 = vec2(fontParams.ShiftX + fontParams.BitmapWidth, 
+	Vector2f t2 = Vector2f(fontParams.ShiftX + fontParams.BitmapWidth, 
 		1 - fontParams.ShiftY - fontParams.InternalShiftY);
 	
 	Renderer->DrawRect(p1, p2, t1, t2);
@@ -153,7 +153,7 @@ float TFontManager::DrawChar(vec2 pos, size_t character)
 	return fontParams.Advance*scale_x;
 }
 
-float TFontManager::DrawCharToVBO(vec2 pos, size_t character, TTriangleList& triangleList)
+float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList)
 {
 	//Also see DrawChar
 
@@ -175,13 +175,13 @@ float TFontManager::DrawCharToVBO(vec2 pos, size_t character, TTriangleList& tri
 
 	float width = scale_x*fontParams.BitmapWidth;
 	
-	vec2 p1 = pos + vec2(+ scale_x*fontParams.InternalShiftX, -height - scale_y*fontParams.InternalShiftY);
-	vec2 p2 = pos + vec2(width + scale_x*fontParams.InternalShiftX, - scale_y* fontParams.InternalShiftY);
+	Vector2f p1 = pos + Vector2f(+ scale_x*fontParams.InternalShiftX, -height - scale_y*fontParams.InternalShiftY);
+	Vector2f p2 = pos + Vector2f(width + scale_x*fontParams.InternalShiftX, - scale_y* fontParams.InternalShiftY);
 
 	
-	vec2 t1 = vec2(fontParams.ShiftX,
+	Vector2f t1 = Vector2f(fontParams.ShiftX,
 		1 - fontParams.ShiftY - fontParams.BitmapHeight - fontParams.InternalShiftY);
-	vec2 t2 = vec2(fontParams.ShiftX + fontParams.BitmapWidth, 
+	Vector2f t2 = Vector2f(fontParams.ShiftX + fontParams.BitmapWidth, 
 		1 - fontParams.ShiftY - fontParams.InternalShiftY);
 
 	triangleList.Data += MakeDataTriangleList(p1, p2, t1, t2);
@@ -190,7 +190,7 @@ float TFontManager::DrawCharToVBO(vec2 pos, size_t character, TTriangleList& tri
 }
 
 
-vec2 TFontManager::FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string& str)
+Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str)
 {
 
 	std::string fontName = GetCurrentFontName();
@@ -201,17 +201,17 @@ vec2 TFontManager::FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBas
     
     //Apply padding:
     
-    posFrom.v[0] += params.HorizontalPadding;
-    posTo.v[0] -= params.HorizontalPadding;
-    posFrom.v[1] += params.VerticalPadding;
-    posTo.v[1] -= params.VerticalPadding;
+    posFrom(0) += params.HorizontalPadding;
+    posTo(0) -= params.HorizontalPadding;
+    posFrom(1) += params.VerticalPadding;
+    posTo(1) -= params.VerticalPadding;
     
 
-	float maxWidth = posTo.v[0] - posFrom.v[0];
+	float maxWidth = posTo(0) - posFrom(0);
 
 
 	//size_t p = 0;
-	vec2 cursor;
+	Vector2f cursor;
 
 
 	std::vector<std::string> explodedByParagraph;
@@ -233,27 +233,27 @@ vec2 TFontManager::FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBas
 
 			float adv = GetTextAdvance(s);
 
-			if (adv + cursor.v[0] < maxWidth)
+			if (adv + cursor(0) < maxWidth)
 			{
 				result += s + " ";
-				cursor.v[0] += adv + GetCharAdvance(' ');
+				cursor(0) += adv + GetCharAdvance(' ');
 			}
 			else
 			{
 				if (adv < maxWidth)
 				{
 					result += "\n" + s + " "; 
-					cursor.v[0] = adv + GetCharAdvance(' ');
+					cursor(0) = adv + GetCharAdvance(' ');
 				}
 				else
 				{
 					for (int k=0; k<s.size(); k++)
 					{
 						result += s[k];
-						cursor.v[0] += GetCharAdvance(s[k]);
-						if (cursor.v[0] > maxWidth)
+						cursor(0) += GetCharAdvance(s[k]);
+						if (cursor(0) > maxWidth)
 						{
-							cursor.v[0] = 0;
+							cursor(0) = 0;
 							result += "\n";
 						}
 					}
@@ -262,7 +262,7 @@ vec2 TFontManager::FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBas
 		}
 
 		result += "\n";
-		cursor.v[0] = 0;
+		cursor(0) = 0;
 
 	}
 
@@ -280,31 +280,31 @@ vec2 TFontManager::FitStringToBoxWithWordWrap(vec2 posFrom, vec2 posTo, TTextBas
 		found = str.find_first_of('\n', found + 1);
 	}
     
-    vec2 result_vec = vec2(posFrom.v[0], posFrom.v[1] + intervalY*rows);
+    Vector2f result_vec = Vector2f(posFrom(0), posFrom(1) + intervalY*rows);
     
     if (params.TextHorizontalAlignment == THA_RIGHT)
     {
-        result_vec.v[0] = posTo.v[0];
+        result_vec(0) = posTo(0);
     }
     else if (params.TextHorizontalAlignment == THA_CENTER)
     {
-        result_vec.v[0] = (posTo.v[0] + posFrom.v[0])*0.5f;
+        result_vec(0) = (posTo(0) + posFrom(0))*0.5f;
     }
     
     if (params.TextVerticalAlignment == TVA_TOP)
     {
-        result_vec.v[1] = posTo.v[1];
+        result_vec(1) = posTo(1);
     }
     else if (params.TextVerticalAlignment == TVA_CENTER)
     {
-        result_vec.v[1] = (posTo.v[1] + posFrom.v[1])*0.5f;
+        result_vec(1) = (posTo(1) + posFrom(1))*0.5f;
     }
 
 	return result_vec;
 
 }
 
-TTriangleList TFontManager::DrawStringToVBO(vec2 pos, TTextBasicAreaParams params, const std::string& str)
+TTriangleList TFontManager::DrawStringToVBO(Vector2f pos, TTextBasicAreaParams params, const std::string& str)
 {
 
 	std::wstring ws;
@@ -320,7 +320,7 @@ TTriangleList TFontManager::DrawStringToVBO(vec2 pos, TTextBasicAreaParams param
     
     boost::split(rowArr, ws, boost::algorithm::is_any_of("\n"));
 
-	vec2 startPos = pos;
+	Vector2f startPos = pos;
     
     float rowsHeight = rowArr.size() * CONST_HEIGHT_COEF*params.Height;
     
@@ -332,30 +332,30 @@ TTriangleList TFontManager::DrawStringToVBO(vec2 pos, TTextBasicAreaParams param
         
         for (size_t i=0; i<rowStr.size(); i++)
         {
-            vec2 realPos = pos;
+            Vector2f realPos = pos;
             if (params.TextHorizontalAlignment == THA_RIGHT)
             {
-                realPos.v[0] = realPos.v[0] - rowWidth;
+                realPos(0) = realPos(0) - rowWidth;
             }
             else if (params.TextHorizontalAlignment == THA_CENTER)
             {
-                realPos.v[0] = realPos.v[0] - rowWidth*0.5f;
-				realPos.v[0] = floorf(realPos.v[0]);
+                realPos(0) = realPos(0) - rowWidth*0.5f;
+				realPos(0) = floorf(realPos(0));
             }
             
             if (params.TextVerticalAlignment == TVA_CENTER)
             {
-                realPos.v[1] = realPos.v[1] + rowsHeight*0.5f;
-				realPos.v[1] = floorf(realPos.v[1]);
+                realPos(1) = realPos(1) + rowsHeight*0.5f;
+				realPos(1) = floorf(realPos(1));
             }
             
             width = DrawCharToVBO(realPos, rowStr[i], triangleList);
             
-            pos += vec2(width, 0);
+            pos += Vector2f(width, 0);
         }
         
-        pos.v[1] -= CONST_HEIGHT_COEF*params.Height;
-        pos.v[0] = startPos.v[0];
+        pos(1) -= CONST_HEIGHT_COEF*params.Height;
+        pos(0) = startPos(0);
     }
 
 	triangleList.RefreshBuffer();
@@ -364,7 +364,7 @@ TTriangleList TFontManager::DrawStringToVBO(vec2 pos, TTextBasicAreaParams param
 }
 	
 
-void TFontManager::DrawString(vec2 pos, TTextBasicAreaParams params, const std::string& str)
+void TFontManager::DrawString(Vector2f pos, TTextBasicAreaParams params, const std::string& str)
 {
 	TTriangleList triangleList = DrawStringToVBO(pos, params, str);
 
@@ -372,9 +372,9 @@ void TFontManager::DrawString(vec2 pos, TTextBasicAreaParams params, const std::
 
 }
 
-void TFontManager::DrawTextInBox(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string str, bool wordWrap)
+void TFontManager::DrawTextInBox(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap)
 {
-	vec2 realPosFrom;
+	Vector2f realPosFrom;
 	if (wordWrap)
 	{
 		realPosFrom = FitStringToBoxWithWordWrap(posFrom, posTo, params, str);
@@ -388,10 +388,10 @@ void TFontManager::DrawTextInBox(vec2 posFrom, vec2 posTo, TTextBasicAreaParams 
 	DrawString(realPosFrom, params, str);
 }
 
-TTriangleList TFontManager::DrawTextInBoxToVBO(vec2 posFrom, vec2 posTo, TTextBasicAreaParams params, std::string str, bool wordWrap)
+TTriangleList TFontManager::DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap)
 {
 
-	vec2 realPosFrom;
+	Vector2f realPosFrom;
 	if (wordWrap)
 	{
 		realPosFrom = FitStringToBoxWithWordWrap(posFrom, posTo, params, str);
