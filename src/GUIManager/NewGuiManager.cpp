@@ -73,11 +73,13 @@ namespace SE
 	void WidgetAncestor::UpdateRenderPair()
 	{
 
-		Vector2f posFrom(margin(0), parent.getHeightWithPadding() - getHeight() + margin(1));
+		//Vector2f posFrom(0, parent.getContentAreaHeight() - getDrawHeight());
 
-		Vector2f posTo(-margin(0) + getWidth(), parent.getHeightWithPadding() - margin(1));
+		//Vector2f posTo(getDrawWidth(), parent.getContentAreaHeight());
 
-		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+		Vector2f posFrom(margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1));
+
+		Vector2f posTo(margin(0) + getDrawWidth(), parent.getContentAreaHeight() - margin(1));
 
 
 		std::string textureName = Visit(background,
@@ -126,17 +128,17 @@ namespace SE
 		switch (layoutStyle)
 		{
 		case LS_FIXED:
-			return innerWidth();
+			return innerWidth() + 2.f*padding(0);
 			break;
 		case LS_WRAP_CONTENT:
-			return innerWidth();
+			return innerWidth() + 2.f*padding(0);
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getWidthWithPadding() - 2 * margin(0);
+			return parent.getContentAreaWidth() - 2 * margin(0);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getWidthWithPadding() - 2 * margin(0);
+			return parent.getContentAreaWidth() - 2 * margin(0);
 			break;
 		}
 
@@ -147,17 +149,17 @@ namespace SE
 		switch (layoutStyle)
 		{
 		case LS_FIXED:
-			return innerHeight();
+			return innerHeight() + 2.f*padding(1);
 			break;
 		case LS_WRAP_CONTENT:
-			return innerHeight();
+			return innerHeight() + 2.f*padding(1);
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getHeightWithPadding() - 2 * margin(1);
+			return parent.getContentAreaHeight() - 2 * margin(1);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getHeightWithPadding() - 2 * margin(1);
+			return parent.getContentAreaHeight() - 2 * margin(1);
 			break;
 		}
 
@@ -181,6 +183,16 @@ namespace SE
 			[this](LayoutStyle layoutStyle) { return this->calcHeightForLayoutStyle(layoutStyle); });
 	}
 
+
+	float WidgetAncestor::getWidthToMeasure()
+	{
+		return getWidth() + 2*margin(0);
+	}
+	float WidgetAncestor::getHeightToMeasure()
+	{
+		return getHeight() + 2*margin(1);
+	}
+
 	
 
 	float WidgetAncestor::getWidthWithPadding()
@@ -193,6 +205,38 @@ namespace SE
 	{
 		return getHeight() - padding(1) * 2;
 	}
+
+
+	float WidgetAncestor::getContentAreaWidth()
+	{
+		return getWidth() - padding(0) * 2;
+	}
+
+	float WidgetAncestor::getContentAreaHeight()
+	{
+		return getHeight() - padding(1) * 2;
+	}
+
+	float WidgetAncestor::getDrawWidth()
+	{
+		return getWidth();
+	}
+
+	float WidgetAncestor::getDrawHeight()
+	{
+		return getHeight();
+	}
+
+	float WidgetAncestor::getViewWidth()
+	{
+		return getWidth() + 2*margin(0);
+	}
+
+	float WidgetAncestor::getViewHeight()
+	{
+		return getHeight() + 2 * margin(1);
+	}
+
 
 
 	void WidgetAncestor::setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth)
@@ -250,9 +294,9 @@ namespace SE
 		{
 			if (!layoutStyleIsMatchParent(children[i]->layoutWidth))
 			{
-				if (result < children[i]->getWidth())
+				if (result < children[i]->getViewWidth())
 				{
-					result = children[i]->getWidth();
+					result = children[i]->getViewWidth();
 				}
 			}
 		}
@@ -275,16 +319,14 @@ namespace SE
 		for (size_t i = 0; i < children.size(); i++)
 		{
 
-			result += children[i]->getHeight();
-			/*
-			if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
+			result += children[i]->getViewHeight();
+			
+			if (i > 0)
 			{
-				if (result < children[i]->getHeight())
-				{
-					result = children[i]->getHeight();
-				}
-			}*/
+				result += itemSpacing;
+			}
 		}
+
 
 		return result;
 	}
@@ -307,7 +349,7 @@ namespace SE
 			
 			children[i]->Draw();
 
-			Renderer->TranslateMatrix(Vector3f(0, -children[i]->getHeight() - itemSpacing, 0));
+			Renderer->TranslateMatrix(Vector3f(0, -children[i]->getViewHeight() - itemSpacing, 0));
 
 		}
 
@@ -396,6 +438,16 @@ namespace SE
 	}
 
 	float NewGuiManager::getHeightWithPadding()
+	{
+		return Renderer->GetScreenHeight();
+	}
+
+	float NewGuiManager::getContentAreaWidth()
+	{
+		return Renderer->GetScreenWidth();
+	}
+
+	float NewGuiManager::getContentAreaHeight()
 	{
 		return Renderer->GetScreenHeight();
 	}

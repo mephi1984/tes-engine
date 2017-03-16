@@ -18,6 +18,11 @@ namespace SE
 		virtual float getWidthWithPadding() = 0;
 		virtual float getHeightWithPadding() = 0;
 
+
+
+		virtual float getContentAreaWidth() = 0;
+		virtual float getContentAreaHeight() = 0;
+
 	};
 
 
@@ -67,8 +72,21 @@ namespace SE
 		virtual float getWidth();
 		virtual float getHeight();
 
+		virtual float getWidthToMeasure();
+		virtual float getHeightToMeasure();
+
+
 		virtual float getWidthWithPadding();		
 		virtual float getHeightWithPadding();
+
+		virtual float getContentAreaWidth();
+		virtual float getContentAreaHeight();
+
+		virtual float getDrawWidth();
+		virtual float getDrawHeight();
+
+		virtual float getViewWidth();
+		virtual float getViewHeight();
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -152,6 +170,8 @@ namespace SE
 		virtual float getWidthWithPadding();
 		virtual float getHeightWithPadding();
 
+		virtual float getContentAreaWidth();
+		virtual float getContentAreaHeight();
 	};
 
 
