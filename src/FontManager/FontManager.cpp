@@ -211,7 +211,7 @@ Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f pos
 
 
 	//size_t p = 0;
-	Vector2f cursor;
+	Vector2f cursor(0, 0);
 
 
 	std::vector<std::string> explodedByParagraph;
@@ -233,14 +233,14 @@ Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f pos
 
 			float adv = GetTextAdvance(s);
 
-			if (adv + cursor(0) < maxWidth)
+			if (adv + cursor(0) <= maxWidth)
 			{
 				result += s + " ";
 				cursor(0) += adv + GetCharAdvance(' ');
 			}
 			else
 			{
-				if (adv < maxWidth)
+				if (adv <= maxWidth)
 				{
 					result += "\n" + s + " "; 
 					cursor(0) = adv + GetCharAdvance(' ');

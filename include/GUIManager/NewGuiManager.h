@@ -150,6 +150,59 @@ namespace SE
 
 	};
 
+	/*
+	class TextParams
+	{
+	public:
+		std::string Text;
+		std::string FontName;
+		TTextBasicAreaParams BasicTextAreaParams;
+		TRenderParams RenderParams;
+
+		TextParams()
+		{
+		}
+
+		TextParams(const std::string& text)
+			: Text(text)
+		{
+		}
+
+		TextParams(const std::string& text, const std::string& fontName, int height, float horizontalPadding, float verticalPadding, TTextHorizontalAlignment textHorizontalAlignment, TTextVerticalAlignment textVerticalAlignment)
+			: Text(text)
+			, FontName(fontName)
+			, BasicTextAreaParams(height, horizontalPadding, verticalPadding, textHorizontalAlignment, textVerticalAlignment)
+		{
+		}
+	};*/
+
+
+
+	class Label : public WidgetAncestor
+	{
+	protected:
+
+		
+
+		TRenderPair textRenderPair;
+
+	public:
+
+		TTextParams textParams;
+
+		Label(WidgetParentInterface& widgetParent);
+
+		float innerWidth();
+
+		float innerHeight();
+
+		virtual void Draw();
+
+		void setText(const std::string& text);
+
+		void UpdateTextRenderPair();
+	};
+
 
 
 	class NewGuiManager : public WidgetParentInterface

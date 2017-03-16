@@ -330,8 +330,10 @@ namespace SE
 	{
 
 		WidgetAncestor::Draw();
+
+		Vector3f shift = Vector3f(padding(0) + margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
 		
-		Vector3f shift = Vector3f(padding(0) + margin(0), padding(1) + margin(1), 0);
+		//Vector3f shift = Vector3f(padding(0) + margin(0), padding(1) + margin(1), 0);
 
 		Renderer->PushMatrix();
 
@@ -456,7 +458,74 @@ namespace SE
 
 	}
 
+	//=======================================
 
+	Label::Label(WidgetParentInterface& widgetParent)
+		: WidgetAncestor(widgetParent)
+	{
+		textParams.BasicTextAreaParams.HorizontalPadding = 0;
+		textParams.BasicTextAreaParams.VerticalPadding = 0;
+		//textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_CENTER;
+		textParams.BasicTextAreaParams.Height = 18;
+
+
+	}
+
+
+	float Label::innerWidth()
+	{
+		return ResourceManager->FontManager.GetTextAdvance(textParams.Text);
+	}
+
+	float Label::innerHeight()
+	{
+		return textParams.BasicTextAreaParams.Height;
+	}
+
+
+	void Label::Draw()
+	{
+		WidgetAncestor::Draw();
+
+		
+		TRenderParamsSetter render(textRenderPair.first);
+
+		Renderer->DrawTriangleList(textRenderPair.second);
+	}
+
+
+	void Label::setText(const std::string& text)
+	{
+		textParams.Text = text;
+
+		UpdateTextRenderPair();
+	}
+	
+
+	void Label::UpdateTextRenderPair()
+	{
+		//TTriangleList triangleList;
+
+		if (textParams.FontName == "")
+		{
+			textParams.FontName = ResourceManager->FontManager.GetCurrentFontName();
+		}
+
+		ResourceManager->FontManager.PushFont(textParams.FontName);
+
+		Vector2f posFrom(margin(0) + padding(0), parent.getContentAreaHeight() - getContentAreaHeight() - margin(1)- padding(1));
+
+		Vector2f posTo(margin(0) + padding(0) + getContentAreaWidth(), parent.getContentAreaHeight() - margin(1) - padding(1));
+
+		textRenderPair.second = ResourceManager->FontManager.DrawTextInBoxToVBO(posFrom, posTo, textParams.BasicTextAreaParams, textParams.Text, true);
+
+		textRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = ResourceManager->FontManager.GetCurrentFontTextureName();
+
+		
+		textRenderPair.second.RefreshBuffer();
+
+		ResourceManager->FontManager.PopFont();
+	}
 	
 
 
