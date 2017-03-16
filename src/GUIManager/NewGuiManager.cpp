@@ -468,13 +468,16 @@ namespace SE
 		//textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_CENTER;
 		textParams.BasicTextAreaParams.Height = 18;
 
+		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_CENTER;
+
 
 	}
 
 
 	float Label::innerWidth()
 	{
-		return ResourceManager->FontManager.GetTextAdvance(textParams.Text);
+		//return ResourceManager->FontManager.GetTextAdvance(textParams.Text);
+		return ResourceManager->FontManager.GetTextAdvance(textParams.Text) + 2; //To prevent wrong word wrap
 	}
 
 	float Label::innerHeight()
