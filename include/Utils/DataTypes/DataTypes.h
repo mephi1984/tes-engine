@@ -11,7 +11,6 @@ This code contains additional data types and some const values to use
 #include <stdlib.h>
 #include "boost/lexical_cast.hpp"
 
-#include "NewDataTypes.h"
 
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
@@ -21,23 +20,6 @@ namespace SE
 	using namespace Eigen;
 
 
-
-	/*
-//Use Matrix4f to store projection/modelview matrices (i.e. for shadow mapping)
-struct Matrix4f
-{
-	float m[16];
-};
-
-struct TSmpTriangle
-{
-	Vector3f p[3];
-	Vector3f v;
-	Vector3f w;
-	Vector3f n;
-};
-
-*/
 const float pi = 3.14159265359f;
 
 const float CONST_EPSILON = 0.00001f;
@@ -46,24 +28,10 @@ const float WhiteColor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const float RedColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 const float NoColor[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-/*
-
-const Vector3f ZeroVec3(0.0f, 0.0f, 0.0f);
-
-const Vector4f ZeroQuat(0.0f, 0.0f, 0.0f, 1.0f);
-
-Vector4f InverseQuat(const Vector4f& q);
-
-//For shadow mapping or for OpenGL ES 2.0
-Matrix4f InverseModelViewMatrix(const Matrix4f& m);
-Matrix4f SetToNormalMatrix(const Matrix4f& m);
-*/
 Matrix4f MakeOrthoMatrix(float width, float height);
 Matrix4f MakeFrustumMatrix(float left, float right, float bottom, float top, float nearVal, float farVal);
 Matrix4f MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar);
-/*
-Matrix4f MultMatrixMatrix(const Matrix4f& m1, const Matrix4f& m2);
-*/
+
 bool IsFloatEqual(float a, float b);
 /*
 bool LineCouldCrossTriangle(const Vector3f& a, const Vector3f& b, const TSmpTriangle& tr); //overall (dimensional) test

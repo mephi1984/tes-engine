@@ -5,58 +5,6 @@
 namespace SE
 {
 
-	/*
-Matrix4f InverseModelViewMatrix(const Matrix4f& m)
-{
-	Matrix4f r;
-	r.m[0] = m.m[0];
-	r.m[1] = m.m[4];
-	r.m[2] = m.m[8];
-	r.m[3] = 0.0f;
-	r.m[4] = m.m[1];
-	r.m[5] = m.m[5];
-	r.m[6] = m.m[9];
-	r.m[7] = 0.0f;
-	r.m[8] = m.m[2];
-	r.m[9] = m.m[6];
-	r.m[10] = m.m[10];
-	r.m[11] = 0.0f;
-
-	r.m[12] = - (m.m[12]*r.m[0] + m.m[13]*r.m[4] + m.m[14]*r.m[8]);
-	r.m[13] = - (m.m[12]*r.m[1] + m.m[13]*r.m[5] + m.m[14]*r.m[9]);
-	r.m[14] = - (m.m[12]*r.m[2] + m.m[13]*r.m[6] + m.m[14]*r.m[10]);
-	r.m[15] = 1.0f;
-
-	return r;
-
-}
-
-
-
-Matrix4f SetToNormalMatrix(const Matrix4f& m)
-{
-	Matrix4f r;
-	r.m[0] = m.m[0];
-	r.m[1] = m.m[4];
-	r.m[2] = m.m[8];
-	r.m[3] = 0.0f;
-	r.m[4] = m.m[1];
-	r.m[5] = m.m[5];
-	r.m[6] = m.m[9];
-	r.m[7] = 0.0f;
-	r.m[8] = m.m[2];
-	r.m[9] = m.m[6];
-	r.m[10] = m.m[10];
-	r.m[11] = 0.0f;
-
-	r.m[12] = 0.0f;
-	r.m[13] = 0.0f;
-	r.m[14] = 0.0f;
-	r.m[15] = 1.0f;
-
-	return r;
-}
-*/
 Matrix4f MakeOrthoMatrix(float width, float height)
 {
 	Matrix4f r;
@@ -117,36 +65,6 @@ Matrix4f MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFa
 
 	return MakeFrustumMatrix(left, right, bottom, top, zNear, zFar);
 }
-/*
-Matrix4f MultMatrixMatrix(const Matrix4f& m1, const Matrix4f& m2)
-{
-    Matrix4f r;
-
-	r.m[0] = m1.m[0]*m2.m[0] + m1.m[4]*m2.m[1] + m1.m[8]*m2.m[2] + m1.m[12]*m2.m[3];
-	r.m[1] = m1.m[1]*m2.m[0] + m1.m[5]*m2.m[1] + m1.m[9]*m2.m[2] + m1.m[13]*m2.m[3];
-	r.m[2] = m1.m[2]*m2.m[0] + m1.m[6]*m2.m[1] + m1.m[10]*m2.m[2] + m1.m[14]*m2.m[3];
-	r.m[3] = m1.m[3]*m2.m[0] + m1.m[7]*m2.m[1] + m1.m[11]*m2.m[2] + m1.m[15]*m2.m[3];
-
-	r.m[4] = m1.m[0]*m2.m[4] + m1.m[4]*m2.m[5] + m1.m[8]*m2.m[6] + m1.m[12]*m2.m[7];
-	r.m[5] = m1.m[1]*m2.m[4] + m1.m[5]*m2.m[5] + m1.m[9]*m2.m[6] + m1.m[13]*m2.m[7];
-	r.m[6] = m1.m[2]*m2.m[4] + m1.m[6]*m2.m[5] + m1.m[10]*m2.m[6] + m1.m[14]*m2.m[7];
-	r.m[7] = m1.m[3]*m2.m[4] + m1.m[7]*m2.m[5] + m1.m[11]*m2.m[6] + m1.m[15]*m2.m[7];
-
-
-	r.m[8] = m1.m[0]*m2.m[8] + m1.m[4]*m2.m[9] + m1.m[8]*m2.m[10] + m1.m[12]*m2.m[11];
-	r.m[9] = m1.m[1]*m2.m[8] + m1.m[5]*m2.m[9] + m1.m[9]*m2.m[10] + m1.m[13]*m2.m[11];
-	r.m[10] = m1.m[2]*m2.m[8] + m1.m[6]*m2.m[9] + m1.m[10]*m2.m[10] + m1.m[14]*m2.m[11];
-	r.m[11] = m1.m[3]*m2.m[8] + m1.m[7]*m2.m[9] + m1.m[11]*m2.m[10] + m1.m[15]*m2.m[11];
-	
-	r.m[12] = m1.m[0]*m2.m[12] + m1.m[4]*m2.m[13] + m1.m[8]*m2.m[14] + m1.m[12]*m2.m[15];
-	r.m[13] = m1.m[1]*m2.m[12] + m1.m[5]*m2.m[13] + m1.m[9]*m2.m[14] + m1.m[13]*m2.m[15];
-	r.m[14] = m1.m[2]*m2.m[12] + m1.m[6]*m2.m[13] + m1.m[10]*m2.m[14] + m1.m[14]*m2.m[15];
-	r.m[15] = m1.m[3]*m2.m[12] + m1.m[7]*m2.m[13] + m1.m[11]*m2.m[14] + m1.m[15]*m2.m[15];
-
-    return r;
-}
-*/
-
 bool IsFloatEqual(float a, float b)
 {
 	return (fabs(b-a) <= CONST_EPSILON) ? true : false;

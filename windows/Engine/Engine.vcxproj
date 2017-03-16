@@ -140,7 +140,6 @@
     <ClCompile Include="..\..\src\TextureManager\SalmonTexture.cpp" />
     <ClCompile Include="..\..\src\Utils\Console\Console.cpp" />
     <ClCompile Include="..\..\src\Utils\DataTypes\DataTypes.cpp" />
-    <ClCompile Include="..\..\src\Utils\DataTypes\NewDataTypes.cpp" />
     <ClCompile Include="..\..\src\Utils\FileUtils\FileUtils.cpp" />
     <ClCompile Include="..\..\src\Utils\JpegHelper.cpp" />
     <ClCompile Include="..\..\src\Utils\PngHelper.cpp" />
@@ -185,7 +184,6 @@
     <ClInclude Include="..\..\include\Utils\BindableVar.h" />
     <ClInclude Include="..\..\include\Utils\Console\Console.h" />
     <ClInclude Include="..\..\include\Utils\DataTypes\DataTypes.h" />
-    <ClInclude Include="..\..\include\Utils\DataTypes\NewDataTypes.h" />
     <ClInclude Include="..\..\include\Utils\ErrorTypes\ErrorTypes.h" />
     <ClInclude Include="..\..\include\Utils\FileUtils\FileUtils.h" />
     <ClInclude Include="..\..\include\Utils\IosApi\ObjC\GLKViewTemplate.h" />
