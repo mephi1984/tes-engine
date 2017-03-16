@@ -23,6 +23,13 @@ namespace SE
 
 	class WidgetAncestor : public WidgetParentInterface
 	{
+	protected:
+
+		boost::variant<std::string, Vector4f> background;
+
+		TRenderPair renderPair;
+
+
 	public:
 
 		enum LayoutStyle
@@ -48,10 +55,11 @@ namespace SE
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
 
-		virtual void UpdateRenderPair() = 0;
+		void setBackground(boost::variant<std::string, Vector4f> background);
+
+		virtual void UpdateRenderPair();
 
 		virtual void Draw();
-
 
 		float calcWidthForLayoutStyle(LayoutStyle layoutStyle);
 		float calcHeightForLayoutStyle(LayoutStyle layoutStyle);
@@ -62,8 +70,8 @@ namespace SE
 		virtual float getWidthWithPadding();		
 		virtual float getHeightWithPadding();
 
-		virtual float innerWidth() = 0;
-		virtual float innerHeight() = 0;
+		virtual float innerWidth();
+		virtual float innerHeight();
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
@@ -74,19 +82,9 @@ namespace SE
 	{
 	protected:
 
-		boost::variant<std::string, Vector4f> background;
-
 	public:
-		TRenderPair renderPair;
-
+		
 		ImageView(WidgetParentInterface& widgetParent);
-
-		void setBackground(boost::variant<std::string, Vector4f> background);
-
-		virtual void UpdateRenderPair();
-
-		virtual float innerWidth();
-		virtual float innerHeight();
 
 		virtual void Draw();
 	};
@@ -106,8 +104,6 @@ namespace SE
 		std::vector<std::shared_ptr<WidgetAncestor>> children;
 
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
-
-		virtual void UpdateRenderPair();
 
 		virtual float innerWidth();
 		virtual float innerHeight();

@@ -55,6 +55,8 @@ namespace SE
 		, margin(0, 0)
 		, padding(0, 0)
 	{
+		background = Vector4f(1, 1, 1, 1);
+		UpdateRenderPair();
 	}
 
 	WidgetAncestor::~WidgetAncestor()
@@ -62,9 +64,61 @@ namespace SE
 
 	}
 
-	void WidgetAncestor::Draw()
+	void WidgetAncestor::setBackground(boost::variant<std::string, Vector4f> background)
+	{
+		this->background = background;
+		UpdateRenderPair();
+	}
+
+	void WidgetAncestor::UpdateRenderPair()
 	{
 
+		Vector2f posFrom(margin(0), parent.getHeightWithPadding() - getHeight() + margin(1));
+
+		Vector2f posTo(-margin(0) + getWidth(), parent.getHeightWithPadding() - margin(1));
+
+		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+
+		std::string textureName = Visit(background,
+			[this](Vector4f color) { return "white.bmp"; },
+			[this](std::string textureName) { return textureName; });
+
+		Vector4f color = Visit(background,
+			[this](Vector4f color) { return  color; },
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
+
+
+		renderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
+		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+		for (auto& colorVec : renderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = color;
+		}
+
+		renderPair.second.RefreshBuffer();
+	}
+
+	float WidgetAncestor::innerWidth()
+	{
+		return Visit(background,
+			[this](Vector4f color) { return 0.f; },
+			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); });
+	}
+
+	float WidgetAncestor::innerHeight()
+	{
+		return Visit(background,
+			[this](Vector4f color) { return 0.f; },
+			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
+	}
+
+	void WidgetAncestor::Draw()
+	{
+		TRenderParamsSetter render(renderPair.first);
+
+		Renderer->DrawTriangleList(renderPair.second);
 	}
 
 	float WidgetAncestor::calcWidthForLayoutStyle(LayoutStyle layoutStyle)
@@ -78,11 +132,11 @@ namespace SE
 			return innerWidth();
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getWidthWithPadding();
+			return parent.getWidthWithPadding() - 2 * margin(0);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getWidthWithPadding();
+			return parent.getWidthWithPadding() - 2 * margin(0);
 			break;
 		}
 
@@ -99,11 +153,11 @@ namespace SE
 			return innerHeight();
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getHeightWithPadding();
+			return parent.getHeightWithPadding() - 2 * margin(1);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getHeightWithPadding();
+			return parent.getHeightWithPadding() - 2 * margin(1);
 			break;
 		}
 
@@ -113,7 +167,7 @@ namespace SE
 
 	float WidgetAncestor::getWidth()
 	{
-
+	
 		return Visit(layoutWidth,
 			[this](float width) { return width; },
 			[this](LayoutStyle layoutStyle) { return this->calcWidthForLayoutStyle(layoutStyle); });
@@ -160,65 +214,14 @@ namespace SE
 	ImageView::ImageView(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
 	{
-		background = Vector4f(1,1,1,1);
-		UpdateRenderPair();
+
 	}
 
-	void ImageView::setBackground(boost::variant<std::string, Vector4f> background)
-	{
-		this->background = background;
-		UpdateRenderPair();
-	}
 
-	void ImageView::UpdateRenderPair()
-	{
-
-		Vector2f posFrom(margin(0), parent.getHeightWithPadding() - getHeight() + margin(1));
-
-		Vector2f posTo(-margin(0) + getWidth(), parent.getHeightWithPadding() - margin(1));
-
-		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
-		
-
-		std::string textureName = Visit(background,
-			[this](Vector4f color) { return "white.bmp"; },
-			[this](std::string textureName) { return textureName; });
-
-		Vector4f color = Visit(background,
-			[this](Vector4f color) { return  color; },
-			[this](std::string textureName) { return Vector4f(1,1,1,1); });
-
-		
-		renderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
-
-		for (auto& colorVec : renderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-		
-		renderPair.second.RefreshBuffer();
-	}
-
-	float ImageView::innerWidth()
-	{
-		return Visit(background,
-			[this](Vector4f color) { return 0.f; },
-			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); });
-	}
-
-	float ImageView::innerHeight()
-	{
-		return Visit(background,
-			[this](Vector4f color) { return 0.f; },
-			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
-	}
 
 	void ImageView::Draw()
 	{
-		TRenderParamsSetter render(renderPair.first);
-
-		Renderer->DrawTriangleList(renderPair.second);
+		WidgetAncestor::Draw();
 	}
 
 	//========================================
@@ -230,18 +233,6 @@ namespace SE
 	{
 		UpdateRenderPair();
 	}
-
-	void VerticalLinearLayout::UpdateRenderPair()
-	{
-
-		//Vector2f parentSize(parent.getWidthWithPadding(), parent.getHeightWithPadding());
-		//Vector2f size(getWidth(), getHeight());
-
-
-		//renderPair.second.Data = MakeDataTriangleList(parentSize - size + margin, parentSize - margin);
-		//renderPair.second.RefreshBuffer();
-	}
-
 
 	float VerticalLinearLayout::innerWidth()
 	{
@@ -283,13 +274,16 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+
+			result += children[i]->getHeight();
+			/*
 			if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
 			{
 				if (result < children[i]->getHeight())
 				{
 					result = children[i]->getHeight();
 				}
-			}
+			}*/
 		}
 
 		return result;
@@ -298,6 +292,8 @@ namespace SE
 
 	void VerticalLinearLayout::Draw()
 	{
+
+		WidgetAncestor::Draw();
 		
 		Vector3f shift = Vector3f(padding(0) + margin(0), padding(1) + margin(1), 0);
 
