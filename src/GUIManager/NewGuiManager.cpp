@@ -4,14 +4,53 @@
 namespace SE
 {
 
+
+	//==== Simple visitor solution from Habrahabr's user 0xd34df00d =======
+
+	namespace detail
+	{
+		template<typename... Args>
+		struct VisitorBase : Args...
+		{
+			VisitorBase(Args&&... args)
+				: Args{ std::forward<Args>(args) }...
+			{
+			}
+		};
+
+		template<typename R, typename... Args>
+		struct Visitor : boost::static_visitor<R>, VisitorBase<Args...>
+		{
+			using VisitorBase<Args...>::VisitorBase;
+		};
+	}
+
+	template<typename HeadVar, typename... TailVars, typename... Args>
+	auto Visit(const boost::variant<HeadVar, TailVars...>& v, Args&&... args)
+	{
+		using R_t = decltype (detail::VisitorBase<Args...> { std::forward<Args>(args)... } (std::declval<HeadVar>()));
+
+		return boost::apply_visitor(detail::Visitor<R_t, Args...> { std::forward<Args>(args)... }, v);
+	}
+
+
+
+
+	//==============================================
+
+
+
+
+
+
 	WidgetParentInterface::~WidgetParentInterface()
 	{
 
 	}
 
 	WidgetAncestor::WidgetAncestor(WidgetParentInterface& widgetParent)
-		: layoutStyleWidth(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
-		, layoutStyleHeight(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
+		: layoutWidth(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
+		, layoutHeight(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
 		, parent(widgetParent)
 		, margin(0, 0)
 		, padding(0, 0)
@@ -28,10 +67,9 @@ namespace SE
 
 	}
 
-
-	float WidgetAncestor::getWidth()
+	float WidgetAncestor::calcWidthForLayoutStyle(LayoutStyle layoutStyle)
 	{
-		switch (layoutStyleWidth)
+		switch (layoutStyle)
 		{
 		case LS_FIXED:
 			return innerWidth();
@@ -50,10 +88,9 @@ namespace SE
 
 		return 0;
 	}
-
-	float WidgetAncestor::getHeight()
+	float WidgetAncestor::calcHeightForLayoutStyle(LayoutStyle layoutStyle)
 	{
-		switch (layoutStyleHeight)
+		switch (layoutStyle)
 		{
 		case LS_FIXED:
 			return innerHeight();
@@ -71,6 +108,23 @@ namespace SE
 		}
 
 		return 0;
+	}
+
+
+	float WidgetAncestor::getWidth()
+	{
+
+		return Visit(layoutWidth,
+			[this](float width) { return width; },
+			[this](LayoutStyle layoutStyle) { return this->calcWidthForLayoutStyle(layoutStyle); });
+
+	}
+
+	float WidgetAncestor::getHeight()
+	{
+		return Visit(layoutHeight,
+			[this](float width) { return width; },
+			[this](LayoutStyle layoutStyle) { return this->calcHeightForLayoutStyle(layoutStyle); });
 	}
 
 	
@@ -87,16 +141,16 @@ namespace SE
 	}
 
 
-	void WidgetAncestor::setLayoutStyleWidth(LayoutStyle layoutStyleWidth)
+	void WidgetAncestor::setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth)
 	{
-		this->layoutStyleWidth = layoutStyleWidth;
+		this->layoutWidth = layoutWidth;
 
 		UpdateRenderPair();
 	}
 
-	void WidgetAncestor::setLayoutStyleHeight(LayoutStyle layoutStyleHeight)
+	void WidgetAncestor::setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight)
 	{
-		this->layoutStyleHeight = layoutStyleHeight;
+		this->layoutHeight = layoutHeight;
 
 		UpdateRenderPair();
 	}
@@ -106,6 +160,13 @@ namespace SE
 	ImageView::ImageView(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
 	{
+		background = Vector4f(1,1,1,1);
+		UpdateRenderPair();
+	}
+
+	void ImageView::setBackground(boost::variant<std::string, Vector4f> background)
+	{
+		this->background = background;
 		UpdateRenderPair();
 	}
 
@@ -116,19 +177,41 @@ namespace SE
 
 		Vector2f posTo(-margin(0) + getWidth(), parent.getHeightWithPadding() - margin(1));
 
-		renderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "bt_box_yellow.jpg";
 		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+		
+
+		std::string textureName = Visit(background,
+			[this](Vector4f color) { return "white.bmp"; },
+			[this](std::string textureName) { return textureName; });
+
+		Vector4f color = Visit(background,
+			[this](Vector4f color) { return  color; },
+			[this](std::string textureName) { return Vector4f(1,1,1,1); });
+
+		
+		renderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
+		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+		for (auto& colorVec : renderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = color;
+		}
+		
 		renderPair.second.RefreshBuffer();
 	}
 
 	float ImageView::innerWidth()
 	{
-		return 200;
+		return Visit(background,
+			[this](Vector4f color) { return 0.f; },
+			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); });
 	}
 
 	float ImageView::innerHeight()
 	{
-		return 200;
+		return Visit(background,
+			[this](Vector4f color) { return 0.f; },
+			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
 	}
 
 	void ImageView::Draw()
@@ -162,11 +245,19 @@ namespace SE
 
 	float VerticalLinearLayout::innerWidth()
 	{
+
+		auto layoutStyleIsMatchParent = [](boost::variant<float, LayoutStyle> layoutWidth)
+		{
+			return Visit(layoutWidth,
+				[](float width) { return false; },
+				[](LayoutStyle layoutStyle) { return layoutStyle = LS_MATCH_PARENT; });
+		};
+	
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->layoutStyleWidth != LS_MATCH_PARENT)
+			if (!layoutStyleIsMatchParent(children[i]->layoutWidth))
 			{
 				if (result < children[i]->getWidth())
 				{
@@ -180,11 +271,19 @@ namespace SE
 
 	float VerticalLinearLayout::innerHeight()
 	{
+		auto layoutStyleIsMatchParent = [](boost::variant<float, LayoutStyle> layoutWidth)
+		{
+			return Visit(layoutWidth,
+				[](float width) { return false; },
+				[](LayoutStyle layoutStyle) { return layoutStyle = LS_MATCH_PARENT; });
+		};
+
+
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->layoutStyleHeight != LS_MATCH_PARENT)
+			if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
 			{
 				if (result < children[i]->getHeight())
 				{

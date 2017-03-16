@@ -28,9 +28,10 @@ struct T2DQuad
 
 struct TDataTriangleList
 {
+	mutable std::map<std::string, std::vector<Vector4f>> Vec4CoordArr; //mutable because when you call [] on map, it may create a new vector =)
 	mutable std::map<std::string, std::vector<Vector3f>> Vec3CoordArr; //mutable because when you call [] on map, it may create a new vector =)
 	mutable std::map<std::string, std::vector<Vector2f>> Vec2CoordArr; //mutable because when you call [] on map, it may create a new vector =)
-
+	
 	TDataTriangleList& operator+=(const TDataTriangleList& dataTriangleList);
 };
 
@@ -154,7 +155,8 @@ void ScaleDataTriangleList(TDataTriangleList& triangleList, Vector3f scaleVec);
 TDataTriangleList& ClearDataTriangleList(TDataTriangleList& triangleList);
 //Clears triangle list, returning itself
 
-TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr);
+//TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr);
+TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr, const std::vector<Vector4f>& colorArr);
 //Inserts additional points and their tex coords into triangle list
 
 void Replace6PointsInTriangleList(TDataTriangleList& triangleList, int pos, Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));

@@ -35,6 +35,18 @@ VBOObject::~VBOObject()
 
 TDataTriangleList& TDataTriangleList::operator+=(const TDataTriangleList& dataTriangleList)
 {
+	BOOST_FOREACH(auto& i, dataTriangleList.Vec4CoordArr)
+	{
+		if (Vec4CoordArr.count(i.first) == 0)
+		{
+			Vec4CoordArr[i.first] = i.second;
+		}
+		else
+		{
+			Vec4CoordArr[i.first].insert(Vec4CoordArr[i.first].end(), i.second.begin(), i.second.end());
+		}
+	}
+
 	BOOST_FOREACH(auto& i, dataTriangleList.Vec3CoordArr)
 	{
 		if (Vec3CoordArr.count(i.first) == 0)
@@ -114,7 +126,7 @@ void TTriangleList::InnerRefreshBuffer()
 {
 	AssertIfInMainThread();
 
-	if (NeedPrepareBufferObjects && Data.Vec2CoordArr.size() > 0 && Data.Vec3CoordArr.size() > 0)
+	if (NeedPrepareBufferObjects && Data.Vec2CoordArr.size() > 0 && Data.Vec3CoordArr.size() > 0 && Data.Vec4CoordArr.size() > 0)
 	{
 
 		NeedPrepareBufferObjects = false;
@@ -140,7 +152,6 @@ void TTriangleList::InnerRefreshBuffer()
 		}
 
         BOOST_FOREACH(auto& i, Data.Vec3CoordArr)
-		//for (std::map<std::string, std::vector<Vector3f> >::iterator i = Data.Vec3CoordArr.begin(); i != Data.Vec3CoordArr.end(); ++i )
 		{
 			if (VertBufferArr[i.first] == std::shared_ptr<VBOObject>())
 			{
@@ -151,6 +162,26 @@ void TTriangleList::InnerRefreshBuffer()
 				if (i.second.size() > 0)
 				{
 					glBufferData(GL_ARRAY_BUFFER, i.second.size() * 12, &i.second[0], GL_STATIC_DRAW);
+				}
+				else
+				{
+					glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STATIC_DRAW);
+				}
+			}
+		}
+
+
+		BOOST_FOREACH(auto& i, Data.Vec4CoordArr)
+		{
+			if (VertBufferArr[i.first] == std::shared_ptr<VBOObject>())
+			{
+				VertBufferArr[i.first] = std::shared_ptr<VBOObject>(new VBOObject);
+				glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+
+				//What to do if buffer becomes empty?
+				if (i.second.size() > 0)
+				{
+					glBufferData(GL_ARRAY_BUFFER, i.second.size() * 16, &i.second[0], GL_STATIC_DRAW);
 				}
 				else
 				{
@@ -171,6 +202,12 @@ void TTriangleList::InnerRefreshBuffer()
     {
 		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
 		RefreshAttribBuffer3fv(i.first, Data.Vec3CoordArr);
+	}
+
+	BOOST_FOREACH(auto& i, Data.Vec4CoordArr)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+		RefreshAttribBuffer4fv(i.first, Data.Vec4CoordArr);
 	}
 
 	NeedRefreshBuffer = false;
@@ -242,6 +279,21 @@ void FillTexCoordVec_4Points(std::vector<Vector2f>& coordVec, int pos, Vector2f 
 }
 
 
+std::vector<Vector4f> MakeColorCoordVec(Vector4f color)
+{
+	std::vector<Vector4f> r;
+	r.resize(6);
+
+	r[0] = color;
+	r[1] = color;
+	r[2] = color;
+	r[3] = color;
+	r[4] = color;
+	r[5] = color;
+
+	return r;
+}
+
 std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo)
 {
 	std::vector<Vector3f> r;
@@ -266,6 +318,7 @@ TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector2
 {
 	TDataTriangleList triangleList;
 
+	triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVec(Vector4f(1,1,1,1));
 	triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVec(posFrom, posTo);
 	triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec(texCoordFrom, texCoordTo);
 
@@ -345,8 +398,10 @@ TDataTriangleList& ClearDataTriangleList(TDataTriangleList& triangleList)
 	return triangleList;
 }
 
-TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr)
+TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, const std::vector<Vector3f>& vertexArr, const std::vector<Vector2f>& texCoordArr, const std::vector<Vector4f>& colorArr)
 {
+
+	triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB].insert(triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB].end(), colorArr.begin(), colorArr.end());
 	triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].insert(triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].end(), vertexArr.begin(), vertexArr.end());
 	triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].insert(triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB].end(), texCoordArr.begin(), texCoordArr.end());
 				

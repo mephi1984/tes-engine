@@ -368,6 +368,13 @@ void VertexAttribPointer3fv(const std::string& attribName,int stride, const char
 				glVertexAttribPointer(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], 3, GL_FLOAT, GL_FALSE, stride, pointer);
 }
 
+void VertexAttribPointer4fv(const std::string& attribName, int stride, const char* pointer)
+{
+	if (ResourceManager != NULL)
+		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
+			glVertexAttribPointer(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], 4, GL_FLOAT, GL_FALSE, stride, pointer);
+}
+
 void EnableVertexAttribArray(const std::string& attribName)
 {
 	if (ResourceManager != NULL)
@@ -399,6 +406,14 @@ void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string,
 			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
 				if (vec3CoordArr[attribName].size() > 0)
 					glBufferData(GL_ARRAY_BUFFER, vec3CoordArr[attribName].size()*12, &(*vec3CoordArr[attribName].begin()), GL_STATIC_DRAW);
+}
+
+void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr)
+{
+	if (ResourceManager != NULL)
+		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
+			if (vec4CoordArr[attribName].size() > 0)
+				glBufferData(GL_ARRAY_BUFFER, vec4CoordArr[attribName].size() * 16, &(*vec4CoordArr[attribName].begin()), GL_STATIC_DRAW);
 }
 #endif
 

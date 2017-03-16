@@ -33,11 +33,10 @@ namespace SE
 			LS_RELATIVE_SIZE
 		};
 
-		LayoutStyle layoutStyleWidth;
-		LayoutStyle layoutStyleHeight;
 		
 
-		Vector2f layoutStyleContentSize;
+		boost::variant<float, LayoutStyle> layoutWidth;
+		boost::variant<float, LayoutStyle> layoutHeight;
 
 		WidgetParentInterface& parent;
 
@@ -53,6 +52,10 @@ namespace SE
 
 		virtual void Draw();
 
+
+		float calcWidthForLayoutStyle(LayoutStyle layoutStyle);
+		float calcHeightForLayoutStyle(LayoutStyle layoutStyle);
+
 		virtual float getWidth();
 		virtual float getHeight();
 
@@ -62,8 +65,8 @@ namespace SE
 		virtual float innerWidth() = 0;
 		virtual float innerHeight() = 0;
 
-		virtual void setLayoutStyleWidth(LayoutStyle layoutStyleWidth);
-		virtual void setLayoutStyleHeight(LayoutStyle layoutStyleHeight);
+		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
+		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
 	};
 
@@ -71,12 +74,14 @@ namespace SE
 	{
 	protected:
 
-		
+		boost::variant<std::string, Vector4f> background;
 
 	public:
 		TRenderPair renderPair;
 
 		ImageView(WidgetParentInterface& widgetParent);
+
+		void setBackground(boost::variant<std::string, Vector4f> background);
 
 		virtual void UpdateRenderPair();
 

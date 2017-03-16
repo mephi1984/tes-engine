@@ -108,6 +108,7 @@ void TSalmonRendererInterface::TryEnableVertexAttribArrays()
 
 	EnableVertexAttribArray(CONST_STRING_POSITION_ATTRIB);
 	EnableVertexAttribArray(CONST_STRING_NORMAL_ATTRIB);
+	EnableVertexAttribArray(CONST_STRING_COLOR_ATTRIB);
 	EnableVertexAttribArray(CONST_STRING_TEXCOORD_ATTRIB);
 	EnableVertexAttribArray(CONST_STRING_TANGENT_ATTRIB);
 	EnableVertexAttribArray(CONST_STRING_BINORMAL_ATTRIB);
@@ -120,6 +121,7 @@ void TSalmonRendererInterface::TryDisableVertexAttribArrays()
 	DisableVertexAttribArray(CONST_STRING_BINORMAL_ATTRIB);
 	DisableVertexAttribArray(CONST_STRING_TANGENT_ATTRIB);	
 	DisableVertexAttribArray(CONST_STRING_TEXCOORD_ATTRIB);
+	DisableVertexAttribArray(CONST_STRING_COLOR_ATTRIB);
 	DisableVertexAttribArray(CONST_STRING_NORMAL_ATTRIB);
 	DisableVertexAttribArray(CONST_STRING_POSITION_ATTRIB);
 }

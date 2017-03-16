@@ -163,7 +163,6 @@
     <ClInclude Include="..\..\include\GUIManager\WidgetXmlParsers.h" />
     <ClInclude Include="..\..\include\LightManager\LightManager.h" />
     <ClInclude Include="..\..\include\ModelManager\ModelManager.h" />
-    <ClInclude Include="..\..\include\ModelManager\NewModelManager.h" />
     <ClInclude Include="..\..\include\OpenGLExt\OpenGlExt.h" />
     <ClInclude Include="..\..\include\PhysicsManager\PhysicsManager.h" />
     <ClInclude Include="..\..\include\Render\RenderMisc.h" />

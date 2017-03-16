@@ -53,6 +53,8 @@ const std::string CONST_STRING_MODELTRANSLATEVECTOR_UNIFORM = "ModelTranslateVec
 
 
 //Attributes
+
+const std::string CONST_STRING_COLOR_ATTRIB = "vColor";
 const std::string CONST_STRING_POSITION_ATTRIB = "vPosition";
 const std::string CONST_STRING_TEXCOORD_ATTRIB = "vTexCoord";
 
@@ -95,6 +97,7 @@ public:
 	friend void VertexAttrib3fv(const std::string& attribName, const float* value);
 	friend void VertexAttribPointer2fv(const std::string& attribName,int stride, const char* pointer);
 	friend void VertexAttribPointer3fv(const std::string& attribName,int stride, const char* pointer);
+	friend void VertexAttribPointer4fv(const std::string& attribName, int stride, const char* pointer);
 	
 	friend void EnableVertexAttribArray(const std::string& attribName);
 	friend void DisableVertexAttribArray(const std::string& attribName);
@@ -103,6 +106,7 @@ public:
 	#ifdef TARGET_WIN32
 	friend void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr);
 	friend void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
+	friend void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr);
 	#endif
 	
 	friend class TShaderManager;
@@ -146,6 +150,7 @@ void VertexAttrib2fv(const std::string& attribName, const float* value);
 void VertexAttrib3fv(const std::string& attribName, const float* value);
 void VertexAttribPointer2fv(const std::string& attribName, int stride, const char* pointer);
 void VertexAttribPointer3fv(const std::string& attribName, int stride, const char* pointer);
+void VertexAttribPointer4fv(const std::string& attribName, int stride, const char* pointer);
 
 void EnableVertexAttribArray(const std::string& attribName);
 void DisableVertexAttribArray(const std::string& attribName);
@@ -153,6 +158,7 @@ void DisableVertexAttribArray(const std::string& attribName);
 #ifdef TARGET_WIN32
 void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr);
 void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
+void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr);
 #endif
 
 } //namespace SE
