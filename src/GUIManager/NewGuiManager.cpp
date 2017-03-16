@@ -34,12 +34,19 @@ namespace SE
 	}
 
 
-
-
 	//==============================================
 
 
 
+	bool layoutStyleIsMatchParent(boost::variant<float, WidgetAncestor::LayoutStyle> layoutWidth)
+	{
+		return Visit(layoutWidth,
+			[](float width) { return false; },
+			[](WidgetAncestor::LayoutStyle layoutStyle) { return layoutStyle == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT; });
+	};
+
+
+	//=========================
 
 
 
@@ -72,10 +79,6 @@ namespace SE
 
 	void WidgetAncestor::UpdateRenderPair()
 	{
-
-		//Vector2f posFrom(0, parent.getContentAreaHeight() - getDrawHeight());
-
-		//Vector2f posTo(getDrawWidth(), parent.getContentAreaHeight());
 
 		Vector2f posFrom(margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1));
 
@@ -134,11 +137,11 @@ namespace SE
 			return innerWidth() + 2.f*padding(0);
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getContentAreaWidth() - 2 * margin(0);
+			return parent.getContentAreaLeftoverWidth() - 2 * margin(0);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getContentAreaWidth() - 2 * margin(0);
+			return parent.getContentAreaLeftoverWidth() - 2 * margin(0);
 			break;
 		}
 
@@ -155,11 +158,11 @@ namespace SE
 			return innerHeight() + 2.f*padding(1);
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getContentAreaHeight() - 2 * margin(1);
+			return parent.getContentAreaLeftoverHeight() - 2 * margin(1);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getContentAreaHeight() - 2 * margin(1);
+			return parent.getContentAreaLeftoverHeight() - 2 * margin(1);
 			break;
 		}
 
@@ -167,74 +170,50 @@ namespace SE
 	}
 
 
-	float WidgetAncestor::getWidth()
+
+	float WidgetAncestor::getContentAreaWidth()
 	{
-	
+		return getDrawWidth() - padding(0) * 2;
+	}
+
+	float WidgetAncestor::getContentAreaHeight()
+	{
+		return getDrawHeight() - padding(1) * 2;
+	}
+
+	float WidgetAncestor::getContentAreaLeftoverWidth()
+	{
+		return getContentAreaWidth();
+	}
+
+	float WidgetAncestor::getContentAreaLeftoverHeight()
+	{
+		return getContentAreaHeight();
+	}
+
+	float WidgetAncestor::getDrawWidth()
+	{
 		return Visit(layoutWidth,
 			[this](float width) { return width; },
 			[this](LayoutStyle layoutStyle) { return this->calcWidthForLayoutStyle(layoutStyle); });
 
 	}
 
-	float WidgetAncestor::getHeight()
+	float WidgetAncestor::getDrawHeight()
 	{
 		return Visit(layoutHeight,
 			[this](float width) { return width; },
 			[this](LayoutStyle layoutStyle) { return this->calcHeightForLayoutStyle(layoutStyle); });
 	}
 
-
-	float WidgetAncestor::getWidthToMeasure()
-	{
-		return getWidth() + 2*margin(0);
-	}
-	float WidgetAncestor::getHeightToMeasure()
-	{
-		return getHeight() + 2*margin(1);
-	}
-
-	
-
-	float WidgetAncestor::getWidthWithPadding()
-	{
-		return getWidth() - padding(0) * 2;
-	}
-
-
-	float WidgetAncestor::getHeightWithPadding()
-	{
-		return getHeight() - padding(1) * 2;
-	}
-
-
-	float WidgetAncestor::getContentAreaWidth()
-	{
-		return getWidth() - padding(0) * 2;
-	}
-
-	float WidgetAncestor::getContentAreaHeight()
-	{
-		return getHeight() - padding(1) * 2;
-	}
-
-	float WidgetAncestor::getDrawWidth()
-	{
-		return getWidth();
-	}
-
-	float WidgetAncestor::getDrawHeight()
-	{
-		return getHeight();
-	}
-
 	float WidgetAncestor::getViewWidth()
 	{
-		return getWidth() + 2*margin(0);
+		return getDrawWidth() + 2*margin(0);
 	}
 
 	float WidgetAncestor::getViewHeight()
 	{
-		return getHeight() + 2 * margin(1);
+		return getDrawHeight() + 2 * margin(1);
 	}
 
 
@@ -281,13 +260,6 @@ namespace SE
 	float VerticalLinearLayout::innerWidth()
 	{
 
-		auto layoutStyleIsMatchParent = [](boost::variant<float, LayoutStyle> layoutWidth)
-		{
-			return Visit(layoutWidth,
-				[](float width) { return false; },
-				[](LayoutStyle layoutStyle) { return layoutStyle = LS_MATCH_PARENT; });
-		};
-	
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -306,13 +278,6 @@ namespace SE
 
 	float VerticalLinearLayout::innerHeight()
 	{
-		auto layoutStyleIsMatchParent = [](boost::variant<float, LayoutStyle> layoutWidth)
-		{
-			return Visit(layoutWidth,
-				[](float width) { return false; },
-				[](LayoutStyle layoutStyle) { return layoutStyle = LS_MATCH_PARENT; });
-		};
-
 
 		float result = 0;
 
@@ -330,6 +295,35 @@ namespace SE
 
 		return result;
 	}
+
+	float VerticalLinearLayout::getContentAreaLeftoverHeight()
+	{
+		float originalContentAreaHeight = WidgetAncestor::getContentAreaHeight();
+
+
+
+		float sizeToRemove = 0;
+
+		int activeChildrenCount = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+		if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
+		{
+		sizeToRemove += children[i]->getViewHeight();
+
+		activeChildrenCount += 1;
+		}
+		}
+
+		if (children.size() > 1)
+		{
+		sizeToRemove += (children.size() - 1) * itemSpacing;
+		}
+
+		return originalContentAreaHeight - sizeToRemove;
+	}
+
 
 
 	void VerticalLinearLayout::Draw()
@@ -354,11 +348,116 @@ namespace SE
 		}
 
 		Renderer->PopMatrix();
-
-		//TRenderParamsSetter render(renderPair.first);
-
-		//Renderer->DrawTriangleList(renderPair.second);
 	}
+
+	//========================================
+
+
+	HorizontalLinearLayout::HorizontalLinearLayout(WidgetParentInterface& widgetParent)
+		: WidgetAncestor(widgetParent)
+		, itemSpacing(0)
+	{
+		UpdateRenderPair();
+	}
+
+	float HorizontalLinearLayout::innerHeight()
+	{
+
+		
+
+		float result = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
+			{
+				if (result < children[i]->getViewHeight())
+				{
+					result = children[i]->getViewHeight();
+				}
+			}
+		}
+
+		return result;
+	}
+
+	float HorizontalLinearLayout::innerWidth()
+	{
+
+		float result = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+
+			result += children[i]->getViewWidth();
+
+			if (i > 0)
+			{
+				result += itemSpacing;
+			}
+		}
+
+
+		return result;
+	}
+
+	float HorizontalLinearLayout::getContentAreaLeftoverWidth()
+	{
+		float originalContentAreaWidth = WidgetAncestor::getContentAreaWidth();
+
+		float sizeToRemove = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			if (!layoutStyleIsMatchParent(children[i]->layoutWidth))
+			{
+				sizeToRemove += children[i]->getViewWidth();
+
+			}
+		}
+
+		if (children.size() > 1)
+		{
+			sizeToRemove += (children.size() - 1) * itemSpacing;
+		}
+
+		return originalContentAreaWidth - sizeToRemove;
+	}
+
+
+
+	void HorizontalLinearLayout::Draw()
+	{
+
+		WidgetAncestor::Draw();
+
+		Vector3f shift = Vector3f(padding(0) + margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
+
+
+		//Vector2f posFrom(margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1));
+
+		//Vector2f posTo(margin(0) + getDrawWidth(), parent.getContentAreaHeight() - margin(1));
+
+
+		Renderer->PushMatrix();
+
+		Renderer->TranslateMatrix(shift);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+
+			children[i]->Draw();
+
+			Renderer->TranslateMatrix(Vector3f(children[i]->getViewHeight() + itemSpacing, 0, 0));
+
+		}
+
+		Renderer->PopMatrix();
+
+	}
+
+
+	
 
 
 	//======================================
@@ -431,17 +530,6 @@ namespace SE
 
 	}
 
-
-	float NewGuiManager::getWidthWithPadding()
-	{
-		return Renderer->GetScreenWidth();
-	}
-
-	float NewGuiManager::getHeightWithPadding()
-	{
-		return Renderer->GetScreenHeight();
-	}
-
 	float NewGuiManager::getContentAreaWidth()
 	{
 		return Renderer->GetScreenWidth();
@@ -450,6 +538,16 @@ namespace SE
 	float NewGuiManager::getContentAreaHeight()
 	{
 		return Renderer->GetScreenHeight();
+	}
+
+	float NewGuiManager::getContentAreaLeftoverWidth()
+	{
+		return getContentAreaWidth();
+	}
+
+	float NewGuiManager::getContentAreaLeftoverHeight()
+	{
+		return getContentAreaHeight();
 	}
 
 

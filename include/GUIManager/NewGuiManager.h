@@ -15,13 +15,11 @@ namespace SE
 	public:
 		virtual ~WidgetParentInterface();
 
-		virtual float getWidthWithPadding() = 0;
-		virtual float getHeightWithPadding() = 0;
-
-
-
 		virtual float getContentAreaWidth() = 0;
 		virtual float getContentAreaHeight() = 0;
+
+		virtual float getContentAreaLeftoverWidth() = 0;
+		virtual float getContentAreaLeftoverHeight() = 0;
 
 	};
 
@@ -69,18 +67,11 @@ namespace SE
 		float calcWidthForLayoutStyle(LayoutStyle layoutStyle);
 		float calcHeightForLayoutStyle(LayoutStyle layoutStyle);
 
-		virtual float getWidth();
-		virtual float getHeight();
-
-		virtual float getWidthToMeasure();
-		virtual float getHeightToMeasure();
-
-
-		virtual float getWidthWithPadding();		
-		virtual float getHeightWithPadding();
-
 		virtual float getContentAreaWidth();
 		virtual float getContentAreaHeight();
+
+		virtual float getContentAreaLeftoverWidth();
+		virtual float getContentAreaLeftoverHeight();
 
 		virtual float getDrawWidth();
 		virtual float getDrawHeight();
@@ -126,6 +117,34 @@ namespace SE
 		virtual float innerWidth();
 		virtual float innerHeight();
 
+		virtual float getContentAreaLeftoverHeight();
+
+
+		virtual void Draw();
+
+	};
+
+
+	class HorizontalLinearLayout : public WidgetAncestor
+	{
+	protected:
+
+
+	public:
+
+		float itemSpacing;
+
+		TRenderPair renderPair;
+
+		std::vector<std::shared_ptr<WidgetAncestor>> children;
+
+		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
+
+		virtual float innerWidth();
+		virtual float innerHeight();
+
+		virtual float getContentAreaLeftoverWidth();
+
 
 		virtual void Draw();
 
@@ -167,11 +186,11 @@ namespace SE
 
 		void OnKeyPressed(int key);
 
-		virtual float getWidthWithPadding();
-		virtual float getHeightWithPadding();
-
 		virtual float getContentAreaWidth();
 		virtual float getContentAreaHeight();
+
+		virtual float getContentAreaLeftoverWidth();
+		virtual float getContentAreaLeftoverHeight();
 	};
 
 
