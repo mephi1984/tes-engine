@@ -75,6 +75,7 @@ namespace SE
 		, parent(widgetParent)
 		, margin(0, 0)
 		, padding(0, 0)
+		, focused(false)
 	{
 		background = Vector4f(1, 1, 1, 1);
 		UpdateRenderPair();
@@ -253,7 +254,7 @@ namespace SE
 
 	void WidgetAncestor::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
+		focused = true;
 	}
 
 	void WidgetAncestor::OnMouseUp(Vector2f pos, int touchNumber)
@@ -274,6 +275,12 @@ namespace SE
 	void WidgetAncestor::OnKeyPressed(int key)
 	{
 
+	}
+
+
+	void WidgetAncestor::RemoveFocusRecursively()
+	{
+		focused = false;
 	}
 
 
@@ -424,7 +431,6 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
-
 	}
 
 	void VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -479,6 +485,18 @@ namespace SE
 	void VerticalLinearLayout::OnKeyPressed(int key)
 	{
 
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
+
+	}
+
+	void VerticalLinearLayout::RemoveFocusRecursively()
+	{
+		focused = false;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->focused = false;
+		}
 	}
 
 	//========================================
@@ -666,7 +684,17 @@ namespace SE
 
 	void HorizontalLinearLayout::OnKeyPressed(int key)
 	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
+	}
 
+	void HorizontalLinearLayout::RemoveFocusRecursively()
+	{
+		focused = false;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->focused = false;
+		}
 	}
 
 	//=======================================
@@ -744,11 +772,14 @@ namespace SE
 
 	//=========================================
 
+	const float Button::CONST_BUTTON_PRESS_TIME = 0.1f;
 
 	Button::Button(WidgetParentInterface& widgetParent)
 		: Label(widgetParent)
+		, buttonState(BS_NONE)
+		, buttonTimer(0.f)
 	{
-		buttonPressed = false;
+
 	}
 
 	void Button::setPressedDrawable(boost::variant<std::string, Vector4f> pressedDrawable)
@@ -786,7 +817,7 @@ namespace SE
 
 		Vector4f color = Visit(pressedDrawable,
 			[this](Vector4f color) { return  color; },
-			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 0); });
 
 
 		pressedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
@@ -802,19 +833,14 @@ namespace SE
 
 	void Button::Draw()
 	{
-		
 
-		if (buttonPressed)
-		{
+		WidgetAncestor::Draw();
 		
-			TRenderParamsSetter render1(pressedRenderPair.first);
+		
+		TRenderParamsSetter render1(pressedRenderPair.first);
 
-			Renderer->DrawTriangleList(pressedRenderPair.second);
-		}
-		else
-		{
-			WidgetAncestor::Draw();
-		}
+		Renderer->DrawTriangleList(pressedRenderPair.second);
+
 
 		TRenderParamsSetter render2(textRenderPair.first);
 
@@ -824,23 +850,91 @@ namespace SE
 	void Button::Update(size_t dt)
 	{
 
+		if (buttonState == ButtonState::BS_PRESSING)
+		{
+			buttonTimer += dt / 1000.f;
+
+			if (buttonTimer >= CONST_BUTTON_PRESS_TIME)
+			{
+				buttonTimer = CONST_BUTTON_PRESS_TIME;
+				buttonState = ButtonState::BS_PRESSED;
+			}
+		}
+
+		if (buttonState == ButtonState::BS_EASING)
+		{
+			buttonTimer -= dt / 1000.f;
+
+			if (buttonTimer <= 0)
+			{
+				buttonTimer = 0;
+				buttonState = ButtonState::BS_NONE;
+			}
+		}
+
+		for (auto& color : pressedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			color(3) = buttonTimer / CONST_BUTTON_PRESS_TIME;
+		}
+		
+		pressedRenderPair.second.RefreshBuffer();
+
 	}
 
 	void Button::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-		buttonPressed = true;
+		if (buttonState == ButtonState::BS_NONE || buttonState == ButtonState::BS_EASING)
+		{
+			buttonState = BS_PRESSING;
+		}
+			
+		
 	}
 
 	void Button::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		buttonPressed = false;
+		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
+		{
+			buttonState = BS_EASING;
+		}
 	}
 
 	void Button::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		buttonPressed = false;
+		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
+		{
+			buttonState = BS_EASING;
+		}
 	}
-	
+
+	//=======================================
+
+	EditText::EditText(WidgetParentInterface& widgetParent)
+		: Label(widgetParent)
+	{
+
+	}
+
+	void EditText::OnKeyPressed(int key)
+	{
+		if (focused)
+		{
+			if (key == 8) //Backspace
+			{
+				if (textParams.Text.size() > 0)
+				{
+					textParams.Text.erase(textParams.Text.end() - 1);
+				}
+			}
+			else if (key >= 32 && key <= 255) //ASCII
+			{
+				textParams.Text += static_cast<char>(key);
+			}
+
+			UpdateTextRenderPair();
+			UpdateRenderPair();
+		}
+	}
 
 
 	//======================================
@@ -883,10 +977,14 @@ namespace SE
 	void NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
+
+
 		Vector2f relativePos = pos;
 
 		for (size_t i = 0; i < widgets.size(); i++)
 		{
+			widgets[i]->RemoveFocusRecursively();
+
 			float drawHeight = getContentAreaHeight();
 
 			float childViewHeight = widgets[i]->getViewHeight();

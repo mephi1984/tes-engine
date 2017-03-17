@@ -44,7 +44,6 @@ namespace SE
 		};
 
 		
-
 		boost::variant<float, LayoutStyle> layoutWidth;
 		boost::variant<float, LayoutStyle> layoutHeight;
 
@@ -53,7 +52,7 @@ namespace SE
 		Vector2f margin;
 		Vector2f padding;
 
-		//std::vector<std::shared_ptr<WidgetAncestor>> children;
+		bool focused;
 
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
@@ -96,6 +95,8 @@ namespace SE
 		virtual void OnMove(Vector2f shift, int touchNumber);
 
 		virtual void OnKeyPressed(int key);
+
+		virtual void RemoveFocusRecursively();
 
 	};
 
@@ -146,6 +147,8 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
+		virtual void RemoveFocusRecursively();
+
 	};
 
 
@@ -183,6 +186,8 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
+		virtual void RemoveFocusRecursively();
+
 	};
 
 
@@ -216,7 +221,19 @@ namespace SE
 
 		boost::variant<std::string, Vector4f> pressedDrawable;
 
-		bool buttonPressed;
+		static const float CONST_BUTTON_PRESS_TIME;
+
+		enum ButtonState
+		{
+			BS_NONE,
+			BS_PRESSING,
+			BS_PRESSED,
+			BS_EASING
+		};
+
+		ButtonState buttonState;
+
+		float buttonTimer;
 
 	public:
 
@@ -245,6 +262,19 @@ namespace SE
 		
 	};
 
+
+
+	class EditText : public Label
+	{
+	protected:
+
+	public:
+
+		EditText(WidgetParentInterface& widgetParent);
+
+		virtual void OnKeyPressed(int key);
+
+	};
 
 
 	class NewGuiManager : public WidgetParentInterface
