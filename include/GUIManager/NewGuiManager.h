@@ -85,6 +85,18 @@ namespace SE
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
+		virtual void Update(size_t dt);
+
+		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		virtual void OnMove(Vector2f shift, int touchNumber);
+
+		virtual void OnKeyPressed(int key);
+
 	};
 
 	class ImageView : public WidgetAncestor
@@ -108,7 +120,7 @@ namespace SE
 
 		float itemSpacing;
 
-		TRenderPair renderPair;
+		//TRenderPair renderPair;
 
 		std::vector<std::shared_ptr<WidgetAncestor>> children;
 
@@ -121,6 +133,18 @@ namespace SE
 
 
 		virtual void Draw();
+
+		virtual void Update(size_t dt);
+
+		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		virtual void OnMove(Vector2f shift, int touchNumber);
+
+		virtual void OnKeyPressed(int key);
 
 	};
 
@@ -145,44 +169,26 @@ namespace SE
 
 		virtual float getContentAreaLeftoverWidth();
 
-
 		virtual void Draw();
 
+		virtual void Update(size_t dt);
+
+		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		virtual void OnMove(Vector2f shift, int touchNumber);
+
+		virtual void OnKeyPressed(int key);
+
 	};
-
-	/*
-	class TextParams
-	{
-	public:
-		std::string Text;
-		std::string FontName;
-		TTextBasicAreaParams BasicTextAreaParams;
-		TRenderParams RenderParams;
-
-		TextParams()
-		{
-		}
-
-		TextParams(const std::string& text)
-			: Text(text)
-		{
-		}
-
-		TextParams(const std::string& text, const std::string& fontName, int height, float horizontalPadding, float verticalPadding, TTextHorizontalAlignment textHorizontalAlignment, TTextVerticalAlignment textVerticalAlignment)
-			: Text(text)
-			, FontName(fontName)
-			, BasicTextAreaParams(height, horizontalPadding, verticalPadding, textHorizontalAlignment, textVerticalAlignment)
-		{
-		}
-	};*/
-
 
 
 	class Label : public WidgetAncestor
 	{
 	protected:
-
-		
 
 		TRenderPair textRenderPair;
 
@@ -201,6 +207,42 @@ namespace SE
 		void setText(const std::string& text);
 
 		void UpdateTextRenderPair();
+	};
+
+
+	class Button : public Label
+	{
+	protected:
+
+		boost::variant<std::string, Vector4f> pressedDrawable;
+
+		bool buttonPressed;
+
+	public:
+
+		TRenderPair pressedRenderPair;
+
+		Button(WidgetParentInterface& widgetParent);
+
+		void setPressedDrawable(boost::variant<std::string, Vector4f> pressedDrawable);
+
+		float innerWidth();
+
+		float innerHeight();
+
+		void UpdatePressedRenderPair();
+
+		virtual void Draw();
+
+		void Update(size_t dt);
+
+		void OnMouseDown(Vector2f pos, int touchNumber);
+
+		void OnMouseUp(Vector2f pos, int touchNumber);
+
+		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		
 	};
 
 
