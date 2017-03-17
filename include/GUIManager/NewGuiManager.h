@@ -84,6 +84,9 @@ namespace SE
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
+		virtual void setMargin(Vector2f newMargin);
+		virtual void setPadding(Vector2f newPadding);
+
 		virtual void Update(size_t dt);
 
 		virtual void OnMouseDown(Vector2f pos, int touchNumber);
@@ -121,16 +124,26 @@ namespace SE
 
 		float itemSpacing;
 
-		//TRenderPair renderPair;
-
 		std::vector<std::shared_ptr<WidgetAncestor>> children;
 
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
+
+		template <typename T>
+		std::shared_ptr<T> CreateAndAddChildOfType()
+		{
+			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
+
+			children.push_back(ptr);
+
+			return ptr;
+		}
 
 		virtual float innerWidth();
 		virtual float innerHeight();
 
 		virtual float getContentAreaLeftoverHeight();
+
+		virtual void UpdateRenderPair();
 
 
 		virtual void Draw();
@@ -167,10 +180,22 @@ namespace SE
 
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
 
+		template <typename T>
+		std::shared_ptr<T> CreateAndAddChildOfType()
+		{
+			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
+
+			children.push_back(ptr);
+
+			return ptr;
+		}
+
 		virtual float innerWidth();
 		virtual float innerHeight();
 
 		virtual float getContentAreaLeftoverWidth();
+
+		virtual void UpdateRenderPair();
 
 		virtual void Draw();
 
@@ -211,6 +236,8 @@ namespace SE
 
 		void setText(const std::string& text);
 
+		virtual void UpdateRenderPair();
+
 		void UpdateTextRenderPair();
 	};
 
@@ -246,6 +273,8 @@ namespace SE
 		float innerWidth();
 
 		float innerHeight();
+
+		virtual void UpdateRenderPair();
 
 		void UpdatePressedRenderPair();
 
@@ -297,6 +326,16 @@ namespace SE
 		void Init();
 		void Deinit();
 
+		template <typename T>
+		std::shared_ptr<T> CreateAndAddChildOfType()
+		{
+			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
+
+			widgets.push_back(ptr);
+
+			return ptr;
+		}
+
 		void Update(size_t dt);
 
 		void Draw();
@@ -316,6 +355,8 @@ namespace SE
 
 		virtual float getContentAreaLeftoverWidth();
 		virtual float getContentAreaLeftoverHeight();
+
+		virtual void UpdateAllRenderPair();
 	};
 
 

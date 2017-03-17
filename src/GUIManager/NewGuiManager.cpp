@@ -247,6 +247,18 @@ namespace SE
 		UpdateRenderPair();
 	}
 
+	void WidgetAncestor::setMargin(Vector2f newMargin)
+	{
+		margin = newMargin;
+		UpdateRenderPair();
+	}
+
+	void WidgetAncestor::setPadding(Vector2f newPadding)
+	{
+		padding = newPadding;
+		UpdateRenderPair();
+	}
+
 	void WidgetAncestor::Update(size_t dt)
 	{
 
@@ -375,6 +387,17 @@ namespace SE
 		}
 
 		return originalContentAreaHeight - sizeToRemove;
+	}
+
+	void VerticalLinearLayout::UpdateRenderPair()
+	{
+		WidgetAncestor::UpdateRenderPair();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->UpdateRenderPair();
+		}
+
 	}
 
 
@@ -571,6 +594,16 @@ namespace SE
 		return originalContentAreaWidth - sizeToRemove;
 	}
 
+	void HorizontalLinearLayout::UpdateRenderPair()
+	{
+		WidgetAncestor::UpdateRenderPair();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->UpdateRenderPair();
+		}
+
+	}
 
 
 	void HorizontalLinearLayout::Draw()
@@ -743,6 +776,12 @@ namespace SE
 		UpdateTextRenderPair();
 	}
 	
+	void Label::UpdateRenderPair()
+	{
+		WidgetAncestor::UpdateRenderPair();
+
+		UpdateTextRenderPair();
+	}
 
 	void Label::UpdateTextRenderPair()
 	{
@@ -802,6 +841,13 @@ namespace SE
 		float textHeight = Label::innerHeight();
 
 		return backgroundHeight > textHeight ? backgroundHeight : textHeight;
+	}
+
+	void Button::UpdateRenderPair()
+	{
+		Label::UpdateRenderPair();
+		UpdatePressedRenderPair();
+
 	}
 
 	void Button::UpdatePressedRenderPair()
@@ -931,7 +977,6 @@ namespace SE
 				textParams.Text += static_cast<char>(key);
 			}
 
-			UpdateTextRenderPair();
 			UpdateRenderPair();
 		}
 	}
@@ -1078,6 +1123,16 @@ namespace SE
 	{
 		return getContentAreaHeight();
 	}
+
+	void NewGuiManager::UpdateAllRenderPair()
+	{
+		for (size_t i = 0; i < widgets.size(); i++)
+		{
+			widgets[i]->UpdateRenderPair();
+		}
+
+	}
+
 
 
 } //namespace SE
