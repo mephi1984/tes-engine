@@ -143,6 +143,8 @@ namespace SE
 
 		virtual float getContentAreaLeftoverHeight();
 
+		void setItemSpacing(float newItemSpacing);
+
 		virtual void UpdateRenderPair();
 
 
@@ -194,6 +196,8 @@ namespace SE
 		virtual float innerHeight();
 
 		virtual float getContentAreaLeftoverWidth();
+
+		void setItemSpacing(float itemSpacing);
 
 		virtual void UpdateRenderPair();
 

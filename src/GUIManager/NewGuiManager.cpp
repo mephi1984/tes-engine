@@ -373,20 +373,27 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-		if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
-		{
-		sizeToRemove += children[i]->getViewHeight();
+			if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
+			{
+				sizeToRemove += children[i]->getViewHeight();
 
-		activeChildrenCount += 1;
-		}
+				activeChildrenCount += 1;
+			}
 		}
 
 		if (children.size() > 1)
 		{
-		sizeToRemove += (children.size() - 1) * itemSpacing;
+			sizeToRemove += (children.size() - 1) * itemSpacing;
 		}
 
 		return originalContentAreaHeight - sizeToRemove;
+	}
+
+	void VerticalLinearLayout::setItemSpacing(float newItemSpacing)
+	{
+		itemSpacing = newItemSpacing;
+
+		UpdateRenderPair();
 	}
 
 	void VerticalLinearLayout::UpdateRenderPair()
@@ -592,6 +599,13 @@ namespace SE
 		}
 
 		return originalContentAreaWidth - sizeToRemove;
+	}
+
+	void HorizontalLinearLayout::setItemSpacing(float newItemSpacing)
+	{
+		itemSpacing = newItemSpacing;
+
+		UpdateRenderPair();
 	}
 
 	void HorizontalLinearLayout::UpdateRenderPair()
@@ -958,7 +972,7 @@ namespace SE
 	EditText::EditText(WidgetParentInterface& widgetParent)
 		: Label(widgetParent)
 	{
-
+		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_LEFT;
 	}
 
 	void EditText::OnKeyPressed(int key)
