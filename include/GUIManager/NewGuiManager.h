@@ -10,6 +10,8 @@
 namespace SE
 {
 
+	class WidgetAncestor;
+
 	class WidgetParentInterface
 	{
 	public:
@@ -21,9 +23,22 @@ namespace SE
 		virtual float getContentAreaLeftoverWidth() = 0;
 		virtual float getContentAreaLeftoverHeight() = 0;
 
+		std::vector<std::shared_ptr<WidgetAncestor>> children;
+
+		template <typename T>
+		std::shared_ptr<T> CreateAndAddChildOfType()
+		{
+			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
+
+			children.push_back(ptr);
+
+			return ptr;
+		}
+
 	};
 
 
+	
 	class WidgetAncestor : public WidgetParentInterface
 	{
 	protected:
@@ -34,6 +49,8 @@ namespace SE
 
 
 	public:
+
+		bool inited;
 
 		enum LayoutStyle
 		{
@@ -112,6 +129,7 @@ namespace SE
 
 	};
 
+
 	class ImageView : public WidgetAncestor
 	{
 	protected:
@@ -133,19 +151,9 @@ namespace SE
 
 		float itemSpacing;
 
-		std::vector<std::shared_ptr<WidgetAncestor>> children;
-
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
 
-		template <typename T>
-		std::shared_ptr<T> CreateAndAddChildOfType()
-		{
-			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
-
-			children.push_back(ptr);
-
-			return ptr;
-		}
+		
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -187,19 +195,7 @@ namespace SE
 
 		TRenderPair renderPair;
 
-		std::vector<std::shared_ptr<WidgetAncestor>> children;
-
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
-
-		template <typename T>
-		std::shared_ptr<T> CreateAndAddChildOfType()
-		{
-			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
-
-			children.push_back(ptr);
-
-			return ptr;
-		}
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -326,11 +322,7 @@ namespace SE
 		TRenderPair BackgroundRenderPair;
 
 
-		//std::vector<std::shared_ptr<WidgetAncestor>> widgets;
-
 	public:
-
-		std::vector<std::shared_ptr<WidgetAncestor>> widgets;
 
 		NewGuiManager();
 
@@ -338,16 +330,6 @@ namespace SE
 
 		void Init();
 		void Deinit();
-
-		template <typename T>
-		std::shared_ptr<T> CreateAndAddChildOfType()
-		{
-			std::shared_ptr<T> ptr = std::make_shared<T>(*this);
-
-			widgets.push_back(ptr);
-
-			return ptr;
-		}
 
 		void Update(size_t dt);
 
@@ -373,7 +355,7 @@ namespace SE
 
 		void LoadFromConfig(const std::string& configFileName);
 
-		void AddWidgetsRecursively(std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree);
+		void AddWidgetsRecursively(WidgetParentInterface& parentWidget, std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree);
 
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);

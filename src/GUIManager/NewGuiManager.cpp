@@ -75,8 +75,10 @@ namespace SE
 
 	}
 
+
 	WidgetAncestor::WidgetAncestor(WidgetParentInterface& widgetParent)
-		: layoutWidth(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
+		: inited(false)
+		, layoutWidth(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
 		, layoutHeight(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
 		, parent(widgetParent)
 		, marginTop(0)
@@ -106,6 +108,10 @@ namespace SE
 
 	void WidgetAncestor::UpdateRenderPair()
 	{
+		if (!inited)
+		{
+			return;
+		}
 
 		Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
 
@@ -255,7 +261,7 @@ namespace SE
 	void WidgetAncestor::setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight)
 	{
 		this->layoutHeight = layoutHeight;
-
+		
 		UpdateRenderPair();
 	}
 
@@ -418,6 +424,11 @@ namespace SE
 
 	void VerticalLinearLayout::UpdateRenderPair()
 	{
+		if (!inited)
+		{
+			return;
+		}
+
 		WidgetAncestor::UpdateRenderPair();
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -629,6 +640,11 @@ namespace SE
 
 	void HorizontalLinearLayout::UpdateRenderPair()
 	{
+		if (!inited)
+		{
+			return;
+		}
+
 		WidgetAncestor::UpdateRenderPair();
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -819,6 +835,10 @@ namespace SE
 
 	void Label::UpdateTextRenderPair()
 	{
+		if (!inited)
+		{
+			return;
+		}
 		//TTriangleList triangleList;
 
 		if (textParams.FontName == "")
@@ -858,7 +878,7 @@ namespace SE
 	void Button::setPressedDrawable(boost::variant<std::string, Vector4f> pressedDrawable)
 	{
 		this->pressedDrawable = pressedDrawable;
-		UpdatePressedRenderPair();
+		UpdateRenderPair();
 	}
 
 	float Button::innerWidth()
@@ -879,6 +899,11 @@ namespace SE
 
 	void Button::UpdateRenderPair()
 	{
+		if (!inited)
+		{
+			return;
+		}
+
 		Label::UpdateRenderPair();
 		UpdatePressedRenderPair();
 
@@ -1030,10 +1055,7 @@ namespace SE
 
 	void NewGuiManager::Init()
 	{
-		/*
-		BackgroundRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "bt_box_yellow.jpg";
-		BackgroundRenderPair.second.Data = MakeDataTriangleList(Vector2f(0, 0), Vector2f(Renderer->GetScreenWidth(), Renderer->GetScreenHeight()*0.5f));
-		BackgroundRenderPair.second.RefreshBuffer();*/
+
 	}
 
 	void NewGuiManager::Deinit()
@@ -1044,13 +1066,13 @@ namespace SE
 	void NewGuiManager::Update(size_t dt)
 	{
 
-		std::for_each(widgets.begin(), widgets.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
 	}
 
 	void NewGuiManager::Draw()
 	{
 
-		std::for_each(widgets.begin(), widgets.end(), std::bind(&WidgetAncestor::Draw, std::placeholders::_1));
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Draw, std::placeholders::_1));
 	}
 
 	void NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
@@ -1060,21 +1082,21 @@ namespace SE
 
 		Vector2f relativePos = pos;
 
-		for (size_t i = 0; i < widgets.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
-			widgets[i]->RemoveFocusRecursively();
+			children[i]->RemoveFocusRecursively();
 
 			float drawHeight = getContentAreaHeight();
 
-			float childViewHeight = widgets[i]->getViewHeight();
+			float childViewHeight = children[i]->getViewHeight();
 
 			float localHeightDiff = drawHeight - childViewHeight;
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 		
-			if (pointIsInsideView(innerRelativePos, widgets[i]))
+			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				widgets[i]->OnMouseDown(innerRelativePos, touchNumber);
+				children[i]->OnMouseDown(innerRelativePos, touchNumber);
 			}
 
 
@@ -1086,19 +1108,19 @@ namespace SE
 	{
 		Vector2f relativePos = pos;
 
-		for (size_t i = 0; i < widgets.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
 			float drawHeight = getContentAreaHeight();
 
-			float childViewHeight = widgets[i]->getViewHeight();
+			float childViewHeight = children[i]->getViewHeight();
 
 			float localHeightDiff = drawHeight - childViewHeight;
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-			if (pointIsInsideView(innerRelativePos, widgets[i]))
+			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				widgets[i]->OnMouseUp(innerRelativePos, touchNumber);
+				children[i]->OnMouseUp(innerRelativePos, touchNumber);
 			}
 
 
@@ -1109,20 +1131,20 @@ namespace SE
 	{
 		Vector2f relativePos = pos;
 
-		for (size_t i = 0; i < widgets.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
 			float drawHeight = getContentAreaHeight();
 
-			float childViewHeight = widgets[i]->getViewHeight();
+			float childViewHeight = children[i]->getViewHeight();
 
 			float localHeightDiff = drawHeight - childViewHeight;
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-if (pointIsInsideView(innerRelativePos, widgets[i]))
-{
-	widgets[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
-}
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+			}
 
 
 		}
@@ -1130,12 +1152,12 @@ if (pointIsInsideView(innerRelativePos, widgets[i]))
 
 	void NewGuiManager::OnMove(Vector2f shift, int touchNumber)
 	{
-		std::for_each(widgets.begin(), widgets.end(), std::bind(&WidgetAncestor::OnMove, std::placeholders::_1, shift, touchNumber));
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMove, std::placeholders::_1, shift, touchNumber));
 	}
 
 	void NewGuiManager::OnKeyPressed(int key)
 	{
-		std::for_each(widgets.begin(), widgets.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
 	}
 
 	float NewGuiManager::getContentAreaWidth()
@@ -1160,9 +1182,9 @@ if (pointIsInsideView(innerRelativePos, widgets[i]))
 
 	void NewGuiManager::UpdateAllRenderPair()
 	{
-		for (size_t i = 0; i < widgets.size(); i++)
+		for (size_t i = 0; i < children.size(); i++)
 		{
-			widgets[i]->UpdateRenderPair();
+			children[i]->UpdateRenderPair();
 		}
 
 	}
@@ -1180,15 +1202,15 @@ if (pointIsInsideView(innerRelativePos, widgets[i]))
 
 		boost::property_tree::read_json(ss, ptree);
 
-		AddWidgetsRecursively(widgets, ptree.get_child("widgets"));
+		AddWidgetsRecursively(*this, children, ptree.get_child("widgets"));
 
 		UpdateAllRenderPair();
 
 	}
 
-	void NewGuiManager::AddWidgetsRecursively(std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree)
+	void NewGuiManager::AddWidgetsRecursively(WidgetParentInterface& parentWidget, std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree)
 	{
-		for (auto pWidgetRecord : ptree)
+		for (auto& pWidgetRecord : ptree)
 		{
 			std::string type = pWidgetRecord.second.get<std::string>("type");
 
@@ -1196,31 +1218,73 @@ if (pointIsInsideView(innerRelativePos, widgets[i]))
 
 			if (type == "VerticalLinearLayout")
 			{
-				auto verticalLinearLayout = ResourceManager->newGuiManager.CreateAndAddChildOfType<VerticalLinearLayout>();
+				auto verticalLinearLayout = parentWidget.CreateAndAddChildOfType<VerticalLinearLayout>();
 
+				verticalLinearLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
 				
 				auto child = pWidgetRecord.second.get_child_optional("children");
 
 				if (child)
 				{
-					AddWidgetsRecursively(verticalLinearLayout->children, *child);
+					AddWidgetsRecursively(*verticalLinearLayout, verticalLinearLayout->children, *child);
 				}
 
 				widget = verticalLinearLayout;
 
 			}
+			if (type == "HorizontalLinearLayout")
+			{
+				auto horizontalLinearLayout = parentWidget.CreateAndAddChildOfType<HorizontalLinearLayout>();
+
+				horizontalLinearLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+
+				auto child = pWidgetRecord.second.get_child_optional("children");
+
+				if (child)
+				{
+					AddWidgetsRecursively(*horizontalLinearLayout, horizontalLinearLayout->children, *child);
+				}
+
+				widget = horizontalLinearLayout;
+
+			}
 			if (type == "Label")
 			{
-				auto label = ResourceManager->newGuiManager.CreateAndAddChildOfType<Label>();
+				auto label = parentWidget.CreateAndAddChildOfType<Label>();
+
+				label->setText(pWidgetRecord.second.get<std::string>("text", ""));
 
 				widget = label;
 			}
+			if (type == "EditText")
+			{
+				auto editText = parentWidget.CreateAndAddChildOfType<EditText>();
+
+				editText->setText(pWidgetRecord.second.get<std::string>("text", ""));
+
+				widget = editText;
+			}
+			if (type == "Button")
+			{
+				auto button = parentWidget.CreateAndAddChildOfType<Button>();
+
+				button->setText(pWidgetRecord.second.get<std::string>("text", ""));
+				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "")));
+
+				widget = button;
+			}
+			if (type == "ImageView")
+			{
+				auto imageView = parentWidget.CreateAndAddChildOfType<ImageView>();
+
+				widget = imageView;
+			}
+
+			
 
 			widget->setPadding(pWidgetRecord.second.get<float>("paddingTop", 0.f), pWidgetRecord.second.get<float>("paddingBottom", 0.f), pWidgetRecord.second.get<float>("paddingLeft", 0.f), pWidgetRecord.second.get<float>("paddingRight", 0.f));
 
 			widget->setMargin(pWidgetRecord.second.get<float>("marginTop", 0.f), pWidgetRecord.second.get<float>("marginBottom", 0.f), pWidgetRecord.second.get<float>("marginLeft", 0.f), pWidgetRecord.second.get<float>("marginRight", 0.f));
-
-			auto widthValue = pWidgetRecord.second.get_optional<std::string>("width");
 
 			widget->setLayoutWidth(layoutDimentionFromConfigValue(pWidgetRecord.second.get<std::string>("width", "wrap_content")));
 
@@ -1228,6 +1292,8 @@ if (pointIsInsideView(innerRelativePos, widgets[i]))
 
 			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "")));
 
+
+			widget->inited = true;
 			
 
 		}
@@ -1243,7 +1309,7 @@ if (pointIsInsideView(innerRelativePos, widgets[i]))
 		{
 			return WidgetAncestor::LayoutStyle::LS_MATCH_PARENT;
 		}
-		else if(configValue == "match_parent")
+		else if(configValue == "wrap_content")
 		{
 			return WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT;
 		}
