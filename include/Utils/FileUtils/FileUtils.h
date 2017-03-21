@@ -146,6 +146,7 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, siz
     
     if (result != fSize)
     {
+		delete[] fileData;
         throw ErrorToLog("File not loaded: " + fileName);
     }
     
@@ -192,6 +193,7 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, siz
     
     if (result != fSize)
     {
+		delete[] fileData;
         throw ErrorToLog("File not loaded: " + fileName);
     }
     
@@ -243,6 +245,7 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, siz
 
 		if (result != fSize)
 		{
+			delete[] fileData;
 			throw ErrorToLog("File not loaded: " + fileName);
 		}
 
@@ -296,6 +299,7 @@ boost::shared_array<TYPENAME> CreateMemFromFile(const std::string& fileName, siz
     
     if (result != fSize)
     {
+		delete[] fileData;
         throw ErrorToLog("File not loaded: " + fileName);
     }
     

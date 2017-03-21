@@ -1,5 +1,11 @@
 #include "include/Engine.h"
 
+#include "boost/property_tree/ptree.hpp"
+#include "boost/property_tree/json_parser.hpp"
+#include "boost/algorithm/string/replace.hpp"
+#include "boost/algorithm/string.hpp"
+#include "boost/lexical_cast.hpp"
+
 
 namespace SE
 {
@@ -73,8 +79,14 @@ namespace SE
 		: layoutWidth(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
 		, layoutHeight(WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT)
 		, parent(widgetParent)
-		, margin(0, 0)
-		, padding(0, 0)
+		, marginTop(0)
+		, marginBottom(0)
+		, marginLeft(0)
+		, marginRight(0)
+		, paddingTop(0)
+		, paddingBottom(0)
+		, paddingLeft(0)
+		, paddingRight(0)
 		, focused(false)
 	{
 		background = Vector4f(1, 1, 1, 1);
@@ -95,9 +107,9 @@ namespace SE
 	void WidgetAncestor::UpdateRenderPair()
 	{
 
-		Vector2f posFrom(margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1));
+		Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
 
-		Vector2f posTo(margin(0) + getDrawWidth(), parent.getContentAreaHeight() - margin(1));
+		Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
 
 
 		std::string textureName = Visit(background,
@@ -146,17 +158,17 @@ namespace SE
 		switch (layoutStyle)
 		{
 		case LS_FIXED:
-			return innerWidth() + 2.f*padding(0);
+			return innerWidth() + paddingLeft + paddingRight;
 			break;
 		case LS_WRAP_CONTENT:
-			return innerWidth() + 2.f*padding(0);
+			return innerWidth() + paddingLeft + paddingRight;
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getContentAreaLeftoverWidth() - 2 * margin(0);
+			return parent.getContentAreaLeftoverWidth() - (marginLeft + marginRight);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getContentAreaLeftoverWidth() - 2 * margin(0);
+			return parent.getContentAreaLeftoverWidth() - (marginLeft + marginRight);
 			break;
 		}
 
@@ -167,17 +179,17 @@ namespace SE
 		switch (layoutStyle)
 		{
 		case LS_FIXED:
-			return innerHeight() + 2.f*padding(1);
+			return innerHeight() + (paddingTop + paddingBottom);
 			break;
 		case LS_WRAP_CONTENT:
-			return innerHeight() + 2.f*padding(1);
+			return innerHeight() + (paddingTop + paddingBottom);
 			break;
 		case LS_MATCH_PARENT:
-			return parent.getContentAreaLeftoverHeight() - 2 * margin(1);
+			return parent.getContentAreaLeftoverHeight() - (marginTop + marginBottom);
 			break;
 		case LS_RELATIVE_SIZE:
 			//Todo: need to fix this
-			return parent.getContentAreaLeftoverHeight() - 2 * margin(1);
+			return parent.getContentAreaLeftoverHeight() - (marginTop + marginBottom);
 			break;
 		}
 
@@ -188,12 +200,12 @@ namespace SE
 
 	float WidgetAncestor::getContentAreaWidth()
 	{
-		return getDrawWidth() - padding(0) * 2;
+		return getDrawWidth() - (paddingLeft + paddingRight);
 	}
 
 	float WidgetAncestor::getContentAreaHeight()
 	{
-		return getDrawHeight() - padding(1) * 2;
+		return getDrawHeight() - (paddingTop + paddingBottom);
 	}
 
 	float WidgetAncestor::getContentAreaLeftoverWidth()
@@ -223,12 +235,12 @@ namespace SE
 
 	float WidgetAncestor::getViewWidth()
 	{
-		return getDrawWidth() + 2*margin(0);
+		return getDrawWidth() + (marginLeft + marginRight);
 	}
 
 	float WidgetAncestor::getViewHeight()
 	{
-		return getDrawHeight() + 2 * margin(1);
+		return getDrawHeight() + (marginTop + marginBottom);
 	}
 
 
@@ -247,15 +259,23 @@ namespace SE
 		UpdateRenderPair();
 	}
 
-	void WidgetAncestor::setMargin(Vector2f newMargin)
+	void WidgetAncestor::setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight)
 	{
-		margin = newMargin;
+		marginTop = newMarginTop;
+		marginBottom = newMarginBottom;
+		marginLeft = newMarginLeft;
+		marginRight = newMarginRight;
+
 		UpdateRenderPair();
 	}
 
-	void WidgetAncestor::setPadding(Vector2f newPadding)
+	void WidgetAncestor::setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight)
 	{
-		padding = newPadding;
+		paddingTop = newPaddingTop;
+		paddingBottom = newPaddingBottom;
+		paddingLeft = newPaddingLeft;
+		paddingRight = newPaddingRight;
+
 		UpdateRenderPair();
 	}
 
@@ -414,9 +434,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		Vector3f shift = Vector3f(padding(0) + margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
-		
-		//Vector3f shift = Vector3f(padding(0) + margin(0), padding(1) + margin(1), 0);
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom, 0);
 
 		Renderer->PushMatrix();
 
@@ -443,7 +462,7 @@ namespace SE
 	void VerticalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-padding(0) - margin(0), -margin(1) - padding(1));
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
 		float diff = getContentAreaHeight();
 
@@ -465,7 +484,7 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-padding(0) - margin(0), -margin(1) - padding(1));
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
 		float diff = getContentAreaHeight();
 
@@ -487,7 +506,7 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-padding(0) - margin(0), -margin(1) - padding(1));
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
 		float diff = getContentAreaHeight();
 
@@ -625,7 +644,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		Vector3f shift = Vector3f(padding(0) + margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom, 0);
 
 		Renderer->PushMatrix();
 
@@ -653,7 +673,7 @@ namespace SE
 	void HorizontalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-padding(0) - margin(0), -margin(1) - padding(1));
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -678,7 +698,7 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-padding(0) - margin(0), -margin(1) - padding(1));
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -702,7 +722,7 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-padding(0) - margin(0), -margin(1) - padding(1));
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -808,9 +828,9 @@ namespace SE
 
 		ResourceManager->FontManager.PushFont(textParams.FontName);
 
-		Vector2f posFrom(margin(0) + padding(0), parent.getContentAreaHeight() - getContentAreaHeight() - margin(1)- padding(1));
+		Vector2f posFrom(marginLeft + paddingLeft, parent.getContentAreaHeight() - getContentAreaHeight() - marginTop - paddingTop);
 
-		Vector2f posTo(margin(0) + padding(0) + getContentAreaWidth(), parent.getContentAreaHeight() - margin(1) - padding(1));
+		Vector2f posTo(marginLeft + paddingLeft + getContentAreaWidth(), parent.getContentAreaHeight() - marginTop - paddingTop);
 
 		textRenderPair.second = ResourceManager->FontManager.DrawTextInBoxToVBO(posFrom, posTo, textParams.BasicTextAreaParams, textParams.Text, true);
 
@@ -866,9 +886,9 @@ namespace SE
 
 	void Button::UpdatePressedRenderPair()
 	{
-		Vector2f posFrom(margin(0), parent.getContentAreaHeight() - getDrawHeight() - margin(1));
+		Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
 
-		Vector2f posTo(margin(0) + getDrawWidth(), parent.getContentAreaHeight() - margin(1));
+		Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
 
 
 		std::string textureName = Visit(pressedDrawable,
@@ -1099,10 +1119,10 @@ namespace SE
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-			if (pointIsInsideView(innerRelativePos, widgets[i]))
-			{
-				widgets[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
-			}
+if (pointIsInsideView(innerRelativePos, widgets[i]))
+{
+	widgets[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+}
 
 
 		}
@@ -1143,6 +1163,132 @@ namespace SE
 		for (size_t i = 0; i < widgets.size(); i++)
 		{
 			widgets[i]->UpdateRenderPair();
+		}
+
+	}
+
+	void NewGuiManager::LoadFromConfig(const std::string& configFileName)
+	{
+		size_t count;
+		boost::shared_array<char> data = CreateMemFromFile<char>(ST::PathToResources + configFileName, count);
+
+
+		std::stringstream ss;
+		ss.write(&data[0], count);
+
+		boost::property_tree::ptree ptree;
+
+		boost::property_tree::read_json(ss, ptree);
+
+		AddWidgetsRecursively(widgets, ptree.get_child("widgets"));
+
+		UpdateAllRenderPair();
+
+	}
+
+	void NewGuiManager::AddWidgetsRecursively(std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree)
+	{
+		for (auto pWidgetRecord : ptree)
+		{
+			std::string type = pWidgetRecord.second.get<std::string>("type");
+
+			std::shared_ptr<WidgetAncestor> widget;
+
+			if (type == "VerticalLinearLayout")
+			{
+				auto verticalLinearLayout = ResourceManager->newGuiManager.CreateAndAddChildOfType<VerticalLinearLayout>();
+
+				
+				auto child = pWidgetRecord.second.get_child_optional("children");
+
+				if (child)
+				{
+					AddWidgetsRecursively(verticalLinearLayout->children, *child);
+				}
+
+				widget = verticalLinearLayout;
+
+			}
+			if (type == "Label")
+			{
+				auto label = ResourceManager->newGuiManager.CreateAndAddChildOfType<Label>();
+
+				widget = label;
+			}
+
+			widget->setPadding(pWidgetRecord.second.get<float>("paddingTop", 0.f), pWidgetRecord.second.get<float>("paddingBottom", 0.f), pWidgetRecord.second.get<float>("paddingLeft", 0.f), pWidgetRecord.second.get<float>("paddingRight", 0.f));
+
+			widget->setMargin(pWidgetRecord.second.get<float>("marginTop", 0.f), pWidgetRecord.second.get<float>("marginBottom", 0.f), pWidgetRecord.second.get<float>("marginLeft", 0.f), pWidgetRecord.second.get<float>("marginRight", 0.f));
+
+			auto widthValue = pWidgetRecord.second.get_optional<std::string>("width");
+
+			widget->setLayoutWidth(layoutDimentionFromConfigValue(pWidgetRecord.second.get<std::string>("width", "wrap_content")));
+
+			widget->setLayoutHeight(layoutDimentionFromConfigValue(pWidgetRecord.second.get<std::string>("height", "wrap_content")));
+
+			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "")));
+
+			
+
+		}
+
+
+	}
+
+	boost::variant<float, WidgetAncestor::LayoutStyle> NewGuiManager::layoutDimentionFromConfigValue(std::string configValue)
+	{
+		boost::to_lower(configValue);
+
+		if (configValue == "match_parent")
+		{
+			return WidgetAncestor::LayoutStyle::LS_MATCH_PARENT;
+		}
+		else if(configValue == "match_parent")
+		{
+			return WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT;
+		}
+		else
+		{
+			try
+			{
+				return boost::lexical_cast<float>(configValue);
+			}
+			catch (boost::bad_lexical_cast& castError)
+			{
+				return WidgetAncestor::LayoutStyle::LS_WRAP_CONTENT;
+			}
+		}
+
+	}
+
+
+	boost::variant<std::string, Vector4f> NewGuiManager::layoutBackgroundFromConfigValue(std::string configValue)
+	{
+
+		if (boost::starts_with(configValue, "#"))
+		{
+			configValue.erase(configValue.begin(), configValue.begin() + 1);
+
+			unsigned int color;
+			std::stringstream ss;
+			ss << std::hex << configValue;
+			ss >> color;
+
+			Vector4f result;
+
+			result(3) = (color % 256) / 255.f;
+
+			result(2) = ((color >> 8) % 256) / 255.f;
+
+			result(1) = ((color >> 16) % 256) / 255.f;
+
+			result(0) = ((color >> 24) % 256) / 255.f;
+
+			return result;
+		}
+		else
+		{
+			return configValue;
 		}
 
 	}

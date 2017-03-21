@@ -49,8 +49,17 @@ namespace SE
 
 		WidgetParentInterface& parent;
 
-		Vector2f margin;
-		Vector2f padding;
+		float marginTop;
+		float marginBottom;
+		float marginLeft;
+		float marginRight;
+		//Vector2f margin;
+		//Vector2f padding;
+
+		float paddingTop;
+		float paddingBottom;
+		float paddingLeft;
+		float paddingRight;
 
 		bool focused;
 
@@ -84,8 +93,8 @@ namespace SE
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
-		virtual void setMargin(Vector2f newMargin);
-		virtual void setPadding(Vector2f newPadding);
+		virtual void setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight);
+		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
 
 		virtual void Update(size_t dt);
 
@@ -361,6 +370,13 @@ namespace SE
 		virtual float getContentAreaLeftoverHeight();
 
 		virtual void UpdateAllRenderPair();
+
+		void LoadFromConfig(const std::string& configFileName);
+
+		void AddWidgetsRecursively(std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree);
+
+		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
+		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
 	};
 
 
