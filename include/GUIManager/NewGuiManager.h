@@ -266,6 +266,51 @@ namespace SE
 	};
 
 
+	class VerticalScrollLayout : public VerticalLinearLayout
+	{
+	protected:
+
+
+	public:
+
+		float scroll;
+
+		VerticalScrollLayout(WidgetParentInterface& widgetParent);
+
+		void Draw();
+
+		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+	};
+
+	class HorizontalScrollLayout : public HorizontalLinearLayout
+	{
+	protected:
+
+
+	public:
+
+		float scroll;
+
+		HorizontalScrollLayout(WidgetParentInterface& widgetParent);
+
+		void Draw();
+
+		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+	};
+
+
 	class Label : public WidgetAncestor
 	{
 	protected:

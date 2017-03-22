@@ -1097,6 +1097,337 @@ namespace SE
 
 	//=======================================
 
+	VerticalScrollLayout::VerticalScrollLayout(WidgetParentInterface& widgetParent)
+		: VerticalLinearLayout(widgetParent)
+		, scroll(0)
+	{
+	}
+	
+	void VerticalScrollLayout::Draw()
+	{
+
+		WidgetAncestor::Draw();
+
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom + scroll, 0);
+
+		Renderer->PushMatrix();
+
+		Renderer->TranslateMatrix(shift);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+
+
+			children[i]->Draw();
+
+			Renderer->TranslateMatrix(Vector3f(0, -children[i]->getViewHeight() - itemSpacing, 0));
+
+		}
+
+		Renderer->PopMatrix();
+	}
+
+
+	void VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	{
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+
+		float diff = getContentAreaHeight();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			diff += -itemSpacing;
+		}
+	}
+
+	void VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+
+		float diff = getContentAreaHeight();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			diff += -itemSpacing;
+		}
+	}
+
+	void VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			diff += -itemSpacing;
+		}
+	}
+
+
+	void VerticalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		
+
+		float viewHeight = getDrawHeight();
+		float contentHeight = innerHeight();
+
+		if (contentHeight > viewHeight)
+		{
+			scroll -= shift(1);
+
+			if (scroll < 0)
+			{
+				scroll = 0;
+			}
+
+			if (scroll > contentHeight - viewHeight)
+			{
+				scroll = contentHeight - viewHeight;
+			}
+		}
+
+		
+		/*
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			diff += -itemSpacing;
+		}*/
+	}
+
+	//========================================
+
+
+	HorizontalScrollLayout::HorizontalScrollLayout(WidgetParentInterface& widgetParent)
+		: HorizontalLinearLayout(widgetParent)
+		, scroll(0)
+	{
+	}
+
+	void HorizontalScrollLayout::Draw()
+	{
+
+		WidgetAncestor::Draw();
+
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft - scroll, parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom, 0);
+
+		Renderer->PushMatrix();
+
+		Renderer->TranslateMatrix(shift);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+
+			children[i]->Draw();
+
+			Renderer->TranslateMatrix(Vector3f(children[i]->getViewWidth() + itemSpacing, 0, 0));
+
+		}
+
+		Renderer->PopMatrix();
+
+	}
+
+
+	void HorizontalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	{
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}
+
+	}
+
+	void HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}
+	}
+
+	void HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}
+	}
+
+	void HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		float viewWidth = getDrawWidth();
+		float contentWidth = innerWidth();
+
+		if (contentWidth > viewWidth)
+		{
+			scroll += shift(0);
+
+			if (scroll < 0)
+			{
+				scroll = 0;
+			}
+
+			if (scroll > contentWidth - viewWidth)
+			{
+				scroll = contentWidth - viewWidth;
+			}
+		}
+
+		/*
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}*/
+	}
+
+
+	//=======================================
+
 	Label::Label(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
 	{
@@ -1576,6 +1907,7 @@ namespace SE
 				widget = horizontalLinearLayout;
 
 			}
+			
 			if (type == "FrameLayout")
 			{
 				auto frameLayout = parentWidget.CreateAndAddChildOfType<FrameLayout>();
@@ -1588,6 +1920,38 @@ namespace SE
 				}
 
 				widget = frameLayout;
+
+			}
+			if (type == "VerticalScrollLayout")
+			{
+				auto verticalScrollLayout = parentWidget.CreateAndAddChildOfType<VerticalScrollLayout>();
+
+				verticalScrollLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+
+				auto child = pWidgetRecord.second.get_child_optional("children");
+
+				if (child)
+				{
+					AddWidgetsRecursively(*verticalScrollLayout, verticalScrollLayout->children, *child);
+				}
+
+				widget = verticalScrollLayout;
+
+			}
+			if (type == "HorizontalScrollLayout")
+			{
+				auto horizontalScrollLayout = parentWidget.CreateAndAddChildOfType<HorizontalScrollLayout>();
+
+				horizontalScrollLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+
+				auto child = pWidgetRecord.second.get_child_optional("children");
+
+				if (child)
+				{
+					AddWidgetsRecursively(*horizontalScrollLayout, horizontalScrollLayout->children, *child);
+				}
+
+				widget = horizontalScrollLayout;
 
 			}
 			if (type == "Label")
