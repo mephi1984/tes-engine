@@ -230,7 +230,7 @@ case WM_MOUSEMOVE:
 
 			Vector2f shift = (MouseButtonPos - currentMousePos);
 
-			App->OuterOnMove(shift, 0);
+			App->OuterOnMove(currentMousePos, shift, 0);
 
 			MouseButtonPos = currentMousePos;
 

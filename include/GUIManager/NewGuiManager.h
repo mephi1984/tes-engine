@@ -70,8 +70,6 @@ namespace SE
 		float marginBottom;
 		float marginLeft;
 		float marginRight;
-		//Vector2f margin;
-		//Vector2f padding;
 
 		float paddingTop;
 		float paddingBottom;
@@ -121,7 +119,9 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f shift, int touchNumber);
+		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+
+		virtual void OnMouseCancel(int touchNumber);
 
 		virtual void OnKeyPressed(int key);
 
@@ -175,7 +175,9 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f shift, int touchNumber);
+		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+
+		virtual void OnMouseCancel(int touchNumber);
 
 		virtual void OnKeyPressed(int key);
 
@@ -216,7 +218,46 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f shift, int touchNumber);
+		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+
+		virtual void OnMouseCancel(int touchNumber);
+
+		virtual void OnKeyPressed(int key);
+
+		virtual void RemoveFocusRecursively();
+
+	};
+
+
+	class FrameLayout : public WidgetAncestor
+	{
+	protected:
+
+
+	public:
+
+		FrameLayout(WidgetParentInterface& widgetParent);
+
+		virtual float innerWidth();
+		virtual float innerHeight();
+
+		virtual float getContentAreaLeftoverHeight();
+
+		virtual void UpdateRenderPair();
+
+		virtual void Draw();
+
+		virtual void Update(size_t dt);
+
+		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+
+		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+
+		virtual void OnMouseCancel(int touchNumber);
 
 		virtual void OnKeyPressed(int key);
 
@@ -297,6 +338,8 @@ namespace SE
 
 		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
+		virtual void OnMouseCancel(int touchNumber);
+
 		
 	};
 
@@ -341,7 +384,7 @@ namespace SE
 
 		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		void OnMove(Vector2f shift, int touchNumber);
+		void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		void OnKeyPressed(int key);
 

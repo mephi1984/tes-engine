@@ -95,7 +95,7 @@ public:
 
 	virtual void OuterOnTapUpAfterMove(Vector2f p, int touchNumber);
 
-	virtual void OuterOnMove(Vector2f shift, int touchNumber);
+	virtual void OuterOnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 
 	virtual void InnerInit() { }

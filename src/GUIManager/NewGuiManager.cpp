@@ -56,7 +56,6 @@ namespace SE
 		float viewWidth = widget->getViewWidth();
 		float viewHeight = widget->getViewHeight();
 		if ((point(0) >= 0) && (point(1) >= 0) && (point(0) <= viewWidth) && (point(1) <= viewHeight))
-		//if ((point(0) >= 0) && (point(0) <= viewWidth))
 		{
 			return true;
 		}
@@ -103,6 +102,12 @@ namespace SE
 	void WidgetAncestor::setBackground(boost::variant<std::string, Vector4f> background)
 	{
 		this->background = background;
+
+		Visit(background,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
+
+
 		UpdateRenderPair();
 	}
 
@@ -305,7 +310,12 @@ namespace SE
 
 	}
 
-	void WidgetAncestor::OnMove(Vector2f shift, int touchNumber)
+	void WidgetAncestor::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+
+	}
+
+	void WidgetAncestor::OnMouseCancel(int touchNumber)
 	{
 
 	}
@@ -477,7 +487,6 @@ namespace SE
 
 		float diff = getContentAreaHeight();
 
-
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			diff += -children[i]->getViewHeight();
@@ -487,6 +496,10 @@ namespace SE
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
 				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
 			}
 
 			diff += -itemSpacing;
@@ -499,7 +512,6 @@ namespace SE
 
 		float diff = getContentAreaHeight();
 
-
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			diff += -children[i]->getViewHeight();
@@ -509,6 +521,10 @@ namespace SE
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
 				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
 			}
 
 			diff += -itemSpacing;
@@ -532,14 +548,47 @@ namespace SE
 			{
 				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
 			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
 
 			diff += -itemSpacing;
 		}
 	}
 
-	void VerticalLinearLayout::OnMove(Vector2f shift, int touchNumber)
+	void VerticalLinearLayout::OnMouseCancel(int touchNumber)
 	{
-	
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->OnMouseCancel(touchNumber);
+		}
+	}
+
+	void VerticalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			diff += -itemSpacing;
+		}
 	}
 
 	void VerticalLinearLayout::OnKeyPressed(int key)
@@ -705,6 +754,10 @@ namespace SE
 			{
 				children[i]->OnMouseDown(innerRelativePos, touchNumber);
 			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
 
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
@@ -730,6 +783,10 @@ namespace SE
 			{
 				children[i]->OnMouseUp(innerRelativePos, touchNumber);
 			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
 
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
@@ -754,15 +811,50 @@ namespace SE
 			{
 				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
 			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
 
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
 		}
 	}
 
-	void HorizontalLinearLayout::OnMove(Vector2f shift, int touchNumber)
+	void HorizontalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
 
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}
+	}
+
+	void HorizontalLinearLayout::OnMouseCancel(int touchNumber)
+	{
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->OnMouseCancel(touchNumber);
+		}
 	}
 
 	void HorizontalLinearLayout::OnKeyPressed(int key)
@@ -771,6 +863,229 @@ namespace SE
 	}
 
 	void HorizontalLinearLayout::RemoveFocusRecursively()
+	{
+		focused = false;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->focused = false;
+		}
+	}
+
+	//==========================================
+
+	FrameLayout::FrameLayout(WidgetParentInterface& widgetParent)
+		: WidgetAncestor(widgetParent)
+	{
+	}
+
+	float FrameLayout::innerWidth()
+	{
+
+		float result = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			if (!layoutStyleIsMatchParent(children[i]->layoutWidth))
+			{
+				if (result < children[i]->getViewWidth())
+				{
+					result = children[i]->getViewWidth();
+				}
+			}
+		}
+
+		return result;
+	}
+
+	float FrameLayout::innerHeight()
+	{
+
+		float result = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			if (!layoutStyleIsMatchParent(children[i]->layoutHeight))
+			{
+				if (result < children[i]->getViewHeight())
+				{
+					result = children[i]->getViewHeight();
+				}
+			}
+		}
+
+		return result;
+	}
+
+	float FrameLayout::getContentAreaLeftoverHeight()
+	{
+		float originalContentAreaHeight = WidgetAncestor::getContentAreaHeight();
+
+		return originalContentAreaHeight;
+	}
+
+	void FrameLayout::UpdateRenderPair()
+	{
+		if (!inited)
+		{
+			return;
+		}
+
+		WidgetAncestor::UpdateRenderPair();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->UpdateRenderPair();
+		}
+
+	}
+
+
+
+	void FrameLayout::Draw()
+	{
+
+		WidgetAncestor::Draw();
+
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom, 0);
+
+		Renderer->PushMatrix();
+
+		Renderer->TranslateMatrix(shift);
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->Draw();
+		}
+
+		Renderer->PopMatrix();
+	}
+
+	void FrameLayout::Update(size_t dt)
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
+	}
+
+	void FrameLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	{
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff = getContentAreaHeight() - children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+		}
+	}
+
+	void FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff = getContentAreaHeight() - children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+
+		}
+	}
+
+	void FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff = getContentAreaHeight() - children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+
+		}
+	}
+
+	void FrameLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff = getContentAreaHeight() - children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+		}
+	}
+
+	void FrameLayout::OnMouseCancel(int touchNumber)
+	{
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			children[i]->OnMouseCancel(touchNumber);
+		}
+	}
+
+	void FrameLayout::OnKeyPressed(int key)
+	{
+
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
+
+	}
+
+	void FrameLayout::RemoveFocusRecursively()
 	{
 		focused = false;
 
@@ -878,6 +1193,13 @@ namespace SE
 	void Button::setPressedDrawable(boost::variant<std::string, Vector4f> pressedDrawable)
 	{
 		this->pressedDrawable = pressedDrawable;
+
+
+		Visit(pressedDrawable,
+			[this](Vector4f color) {  },
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
+		
+
 		UpdateRenderPair();
 	}
 
@@ -1012,6 +1334,14 @@ namespace SE
 		}
 	}
 
+	void Button::OnMouseCancel(int touchNumber)
+	{
+		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
+		{
+			buttonState = BS_EASING;
+		}
+	}
+
 	//=======================================
 
 	EditText::EditText(WidgetParentInterface& widgetParent)
@@ -1077,8 +1407,6 @@ namespace SE
 
 	void NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
-
 
 		Vector2f relativePos = pos;
 
@@ -1150,9 +1478,9 @@ namespace SE
 		}
 	}
 
-	void NewGuiManager::OnMove(Vector2f shift, int touchNumber)
+	void NewGuiManager::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMove, std::placeholders::_1, shift, touchNumber));
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMove, std::placeholders::_1, pos, shift, touchNumber));
 	}
 
 	void NewGuiManager::OnKeyPressed(int key)
@@ -1246,6 +1574,20 @@ namespace SE
 				}
 
 				widget = horizontalLinearLayout;
+
+			}
+			if (type == "FrameLayout")
+			{
+				auto frameLayout = parentWidget.CreateAndAddChildOfType<FrameLayout>();
+
+				auto child = pWidgetRecord.second.get_child_optional("children");
+
+				if (child)
+				{
+					AddWidgetsRecursively(*frameLayout, frameLayout->children, *child);
+				}
+
+				widget = frameLayout;
 
 			}
 			if (type == "Label")

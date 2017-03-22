@@ -145,10 +145,10 @@ void TApplicationAncestor::OuterOnTapUpAfterMove(Vector2f p, int touchNumber)
 	InnerOnTapUpAfterMove(p);
 }
 
-void TApplicationAncestor::OuterOnMove(Vector2f shift, int touchNumber)
+void TApplicationAncestor::OuterOnMove(Vector2f pos, Vector2f shift, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMove(shift, touchNumber);
-	ResourceManager->newGuiManager.OnMove(shift, touchNumber);
+	ResourceManager->newGuiManager.OnMove(pos, shift, touchNumber);
 	InnerOnMove(shift);
 }
 
