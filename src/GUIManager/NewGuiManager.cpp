@@ -483,7 +483,9 @@ namespace SE
 	void VerticalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
 
 		float diff = getContentAreaHeight();
 
@@ -508,7 +510,9 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -533,7 +537,9 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -567,7 +573,9 @@ namespace SE
 
 	void VerticalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -738,7 +746,9 @@ namespace SE
 	void HorizontalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -767,7 +777,9 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -795,7 +807,9 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -823,7 +837,9 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -970,7 +986,9 @@ namespace SE
 	void FrameLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -995,7 +1013,9 @@ namespace SE
 
 	void FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -1021,7 +1041,9 @@ namespace SE
 
 	void FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -1047,7 +1069,9 @@ namespace SE
 
 	void FrameLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom);
+
 
 		float diff = getContentAreaHeight();
 
@@ -1132,7 +1156,8 @@ namespace SE
 	void VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom - scroll);
+
 
 		float diff = getContentAreaHeight();
 
@@ -1157,7 +1182,8 @@ namespace SE
 
 	void VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom - scroll);
 
 		float diff = getContentAreaHeight();
 
@@ -1182,7 +1208,8 @@ namespace SE
 
 	void VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop - scroll);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginBottom - paddingBottom - scroll);
 
 		float diff = getContentAreaHeight();
 
@@ -1229,31 +1256,6 @@ namespace SE
 			}
 		}
 
-		
-		/*
-
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
-
-		float diff = getContentAreaHeight();
-
-
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			diff += -children[i]->getViewHeight();
-
-			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
-
-			if (pointIsInsideView(innerRelativePos, children[i]))
-			{
-				children[i]->OnMove(innerRelativePos, shift, touchNumber);
-			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
-			}
-
-			diff += -itemSpacing;
-		}*/
 	}
 
 	//========================================
@@ -1270,7 +1272,6 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
 		Vector3f shift = Vector3f(paddingLeft + marginLeft - scroll, parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom, 0);
 
 		Renderer->PushMatrix();
@@ -1294,7 +1295,8 @@ namespace SE
 	void HorizontalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginBottom - paddingBottom);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1323,7 +1325,8 @@ namespace SE
 
 	void HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginBottom - paddingBottom);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1351,7 +1354,8 @@ namespace SE
 
 	void HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginBottom - paddingBottom);
+		//Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll, -marginTop - paddingTop);
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1397,32 +1401,6 @@ namespace SE
 			}
 		}
 
-		/*
-
-		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft, -marginTop - paddingTop);
-
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			float drawHeight = getContentAreaHeight();
-
-			float childViewHeight = children[i]->getViewHeight();
-
-			float localHeightDiff = drawHeight - childViewHeight;
-
-			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
-
-			if (pointIsInsideView(innerRelativePos, children[i]))
-			{
-				children[i]->OnMove(innerRelativePos, shift, touchNumber);
-			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
-			}
-
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
-
-		}*/
 	}
 
 
@@ -1433,7 +1411,7 @@ namespace SE
 	{
 		textParams.BasicTextAreaParams.HorizontalPadding = 0;
 		textParams.BasicTextAreaParams.VerticalPadding = 0;
-		//textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_CENTER;
+
 		textParams.BasicTextAreaParams.Height = 18;
 
 		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_CENTER;
