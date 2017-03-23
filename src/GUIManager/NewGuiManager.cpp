@@ -1211,7 +1211,7 @@ namespace SE
 	{
 		
 
-		float viewHeight = getDrawHeight();
+		float viewHeight = getContentAreaHeight();
 		float contentHeight = innerHeight();
 
 		if (contentHeight > viewHeight)
@@ -1379,7 +1379,7 @@ namespace SE
 
 	void HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		float viewWidth = getDrawWidth();
+		float viewWidth = getContentAreaWidth();
 		float contentWidth = innerWidth();
 
 		if (contentWidth > viewWidth)
