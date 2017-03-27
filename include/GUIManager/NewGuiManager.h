@@ -35,6 +35,8 @@ namespace SE
 			return ptr;
 		}
 
+		std::shared_ptr<WidgetAncestor> findWidgetByName(const std::string& name);
+
 	};
 
 
@@ -64,6 +66,9 @@ namespace SE
 		boost::variant<float, LayoutStyle> layoutWidth;
 		boost::variant<float, LayoutStyle> layoutHeight;
 
+		boost::signals2::signal<void(Vector2f, Vector2f, int)> onMoveSignal;
+		boost::signals2::signal<void(Vector2f, int)> onMouseUpAfterMoveSignal;
+
 		WidgetParentInterface& parent;
 
 		float marginTop;
@@ -75,6 +80,10 @@ namespace SE
 		float paddingBottom;
 		float paddingLeft;
 		float paddingRight;
+
+		Vector2f extraTranslation;
+
+		std::string name;
 
 		bool focused;
 
@@ -111,6 +120,8 @@ namespace SE
 		virtual void setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight);
 		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
 
+		virtual void setExtraTranslation(float extraTranslationX, float extraTranslationY);
+
 		virtual void Update(size_t dt);
 
 		virtual void OnMouseDown(Vector2f pos, int touchNumber);
@@ -119,7 +130,7 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		virtual void OnMouseCancel(int touchNumber);
 
@@ -175,7 +186,7 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		virtual void OnMouseCancel(int touchNumber);
 
@@ -218,7 +229,7 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		virtual void OnMouseCancel(int touchNumber);
 
@@ -255,7 +266,7 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		virtual void OnMouseCancel(int touchNumber);
 
@@ -285,7 +296,7 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 	};
 
 	class HorizontalScrollLayout : public HorizontalLinearLayout
@@ -307,7 +318,7 @@ namespace SE
 
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		virtual void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 	};
 
 
@@ -447,6 +458,8 @@ namespace SE
 
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
+
+
 	};
 
 
