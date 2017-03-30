@@ -2,6 +2,47 @@
 #include "include/Utils/ErrorTypes/ErrorTypes.h"
 
 #include "boost/algorithm/string.hpp"
+
+#ifdef TARGET_ANDROID
+
+//Hack to make Eigen compile in Android NDK
+//See DataTypes.h for definitions
+
+namespace std {
+	/*
+	template<>
+	float round(float arg) {
+		return ::roundf(arg);
+	}
+
+	template<>
+	long double round(long double arg) {
+		return ::roundl(arg);
+	}
+
+	template<>
+	float log1p(float arg) {
+		return ::log1pf(arg);
+	}
+
+	template<>
+	long double log1p(long double arg) {
+		return ::log1pl(arg);
+	}
+
+	template<>
+	float expm1(float arg) {
+		return ::expm1f(arg);
+	}
+
+	template<>
+	long double expm1(long double arg) {
+		return ::expm1l(arg);
+	}*/
+}
+#endif
+
+
 namespace SE
 {
 

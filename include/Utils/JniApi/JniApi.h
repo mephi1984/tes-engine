@@ -43,7 +43,7 @@ See doc for details
 extern const std::string CONST_JAVA_FILESYSTEM_CLASS_NAME;
 
 //All 3 deprecated
-extern cardinal* FileArr;
+extern size_t* FileArr;
 extern int FileSize;
 extern std::string ApkFilePath;
 
@@ -55,11 +55,11 @@ void JniCallOpenFile(const std::string& fileName);
 
 //Deprecated
 template<typename TYPENAME>
-boost::shared_array<TYPENAME> JniCreateMemFromFileOld(const std::string& fileName, cardinal& blockCount)
+boost::shared_array<TYPENAME> JniCreateMemFromFileOld(const std::string& fileName, size_t& blockCount)
 {
     
     //if size is too large - need to do some work
-    cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+    size_t SIZEOF_TYPENAME = sizeof(TYPENAME);
     if (SIZEOF_TYPENAME > 4)
     {
         throw ErrorToLog("ERROR! Size of type too large - file is not properly aligned. Need work!");
@@ -102,14 +102,14 @@ void PrintApkContent();
 
 
 template<typename TYPENAME>
-boost::shared_array<TYPENAME> JniCreateMemFromFile(const std::string& fileName, cardinal& blockCount)
+boost::shared_array<TYPENAME> JniCreateMemFromFile(const std::string& fileName, size_t& blockCount)
 {
 	
 	try
 	{
 
 	//if size is too large - need to do some work
-    cardinal SIZEOF_TYPENAME = sizeof(TYPENAME);
+    size_t SIZEOF_TYPENAME = sizeof(TYPENAME);
     if (SIZEOF_TYPENAME > 4)
     {
         throw ErrorToLog("ERROR! Size of type too large - file is not properly aligned. Need work!");
@@ -119,7 +119,7 @@ boost::shared_array<TYPENAME> JniCreateMemFromFile(const std::string& fileName, 
 	
 	LoadApk(fileName, fileData);
 	
-	cardinal fileSize = fileData.size();
+	size_t fileSize = fileData.size();
 	
 	blockCount = fileSize % SIZEOF_TYPENAME == 0 ? fileSize / SIZEOF_TYPENAME: fileSize / SIZEOF_TYPENAME + 1;
 	

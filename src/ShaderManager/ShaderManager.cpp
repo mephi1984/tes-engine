@@ -92,6 +92,8 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 	int dummySize;			//Dummy
 	int dummyLen;			//Dummy
 	size_t dummyType;		//Dummy
+	GLenum dummyEnum;
+
 
 	//================= Parsing all uniforms ================
 
@@ -104,7 +106,7 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 
 	for (int i = 0; i < activeUniforms; i++)
 	{
-		glGetActiveUniform(ShaderProgram, i, CONST_UNIFORM_NAME_LENGTH, &dummyLen, &dummySize, &dummyType, uniformName);
+		glGetActiveUniform(ShaderProgram, i, CONST_UNIFORM_NAME_LENGTH, &dummyLen, &dummySize, &dummyEnum, uniformName);
 		UniformList[uniformName] = glGetUniformLocation(ShaderProgram, uniformName);
 	}
 
@@ -118,7 +120,7 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 
 	for (int i = 0; i < activeAttribs; i++)
 	{
-		glGetActiveAttrib(ShaderProgram, i, CONST_ATTRIB_NAME_LENGTH, &dummyLen, &dummySize, &dummyType, attribName);
+		glGetActiveAttrib(ShaderProgram, i, CONST_ATTRIB_NAME_LENGTH, &dummyLen, &dummySize, &dummyEnum, attribName);
 		AttribList[attribName] = glGetAttribLocation(ShaderProgram, attribName);
 	}
 

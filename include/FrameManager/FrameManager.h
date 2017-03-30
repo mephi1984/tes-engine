@@ -28,8 +28,8 @@ extern const int CONST_SCREEN_FRAMEBUFFER;
     
 struct TFrame
 {
-	size_t FrameBuffer;
-	size_t DepthRenderBuffer;
+	GLuint FrameBuffer;
+	GLuint DepthRenderBuffer;
 	size_t TexID;
 	size_t Width;
 	size_t Height;

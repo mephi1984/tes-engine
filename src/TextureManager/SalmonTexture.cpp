@@ -61,7 +61,7 @@ size_t TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_
 {
 	AssertIfInMainThread();
 
-	size_t texID;
+	GLuint texID;
 
 	if (TexMap.count(texName) == 0)
 	{
@@ -98,8 +98,8 @@ size_t TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_
 size_t TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
-	
-	size_t texID;
+
+	GLuint texID;
 
 	if (TexMap.count(texName) == 0)
 	{
@@ -484,7 +484,7 @@ size_t TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
 {
 	AssertIfInMainThread();
 
-	size_t TexID = 0;
+	GLuint TexID = 0;
 
 	glGenTextures(1, &TexID);
 	if (TexID == 0)
@@ -510,7 +510,7 @@ size_t TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
 {
 	AssertIfInMainThread();
 
-	size_t TexID;
+	GLuint TexID;
 	glGenTextures(1, &TexID);
 	if (TexID == 0)
 	{
@@ -536,7 +536,7 @@ size_t TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
 {
 	AssertIfInMainThread();
 
-	size_t TexID;
+	GLuint TexID;
 	glGenTextures(1, &TexID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, TexID);
 	

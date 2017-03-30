@@ -86,7 +86,7 @@ JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTap
 	{
 		if (SE::Inited)
 		{
-			SE::App->OuterOnTapDown(SE::vec2(x,y), time);
+			SE::App->OuterOnTapDown(Eigen::Vector2f(x,y), time);
 		}
 	}
 	catch (...)
@@ -104,7 +104,7 @@ JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTap
 	{
 		if (SE::Inited)
 		{
-			SE::App->OuterOnTapUp(SE::vec2(x,y), time);
+			SE::App->OuterOnTapUp(Eigen::Vector2f(x,y), time);
 		}
 	}
 	catch (...)
@@ -122,7 +122,7 @@ JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTap
 	{
 		if (SE::Inited)
 		{
-			SE::App->OuterOnTapUpAfterMove(SE::vec2(x,y), time);
+			SE::App->OuterOnTapUpAfterMove(Eigen::Vector2f(x,y), time);
 		}
 	}
 	catch (...)
@@ -133,14 +133,14 @@ JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTap
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTapMove(JNIEnv * env, jobject obj, float x, float y, long time)
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnTapMove(JNIEnv * env, jobject obj, float posx, float posy, float shiftx, float shifty, long time)
 {
 	SE::InitLock.lock();
 	try
 	{
 		if (SE::Inited)
 		{
-			SE::App->OuterOnMove(SE::vec2(x,y), time);
+			SE::App->OuterOnMove(Eigen::Vector2f(posx,posy), Eigen::Vector2f(shiftx,shifty), time);
 		}
 	}
 	catch (...)
@@ -157,14 +157,15 @@ JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnFli
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnScroll(JNIEnv * env, jobject obj, jfloat distanceX, jfloat distanceY, long time)
+JNIEXPORT void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_OnScroll(JNIEnv * env, jobject obj, float posx, float posy, jfloat distanceX, jfloat distanceY, long time)
 {
 	SE::InitLock.lock();
 	try
 	{
 		if (SE::Inited)
 		{
-			SE::App->OuterOnMove(SE::vec2(distanceX,distanceY), time);
+			//SE::App->OuterOnMove(Eigen::Vector2f(distanceX,distanceY), time);
+			SE::App->OuterOnMove(Eigen::Vector2f(posx,posy), Eigen::Vector2f(distanceX,distanceY), time);
 		}
 	}
 	catch (...)

@@ -54,10 +54,10 @@ size_t TFrameManager::AddFrameRenderBuffer(const std::string& frameName,size_t w
 		
 		std::string texName = frameName + "Texture";
 		size_t texID = ResourceManager->TexList.AddEmptyTexture(texName,width,height);
-	
-		
-		size_t frameBuffer;
-		size_t depthRenderBuffer;
+
+
+		GLuint frameBuffer;
+		GLuint depthRenderBuffer;
 		size_t status;
         
         
@@ -142,10 +142,10 @@ size_t TFrameManager::AddCubemapBuffer(const std::string& frameName,size_t width
 	{
 
 		std::string texName = frameName + "Texture";
-		size_t texID = ResourceManager->TexList.AddEmptyCubemapTexture(texName,width,height);
+		GLuint texID = ResourceManager->TexList.AddEmptyCubemapTexture(texName,width,height);
 
-		size_t frameBuffer;
-		size_t depthRenderBuffer;
+		GLuint frameBuffer;
+		GLuint depthRenderBuffer;
 		size_t status;
 
 
@@ -253,7 +253,7 @@ size_t TFrameManager::AddDepthBuffer(const std::string& frameName, size_t width,
 		std::string texName = frameName + "Texture";
 		size_t depthTexID = ResourceManager->TexList.AddDepthTexture(texName,width,height);
 
-		size_t frameBuffer;
+		GLuint frameBuffer;
 		size_t status;
 
 

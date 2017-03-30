@@ -10,23 +10,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # You can define multiple libraries, and CMake builds it for you.
 # Gradle automatically packages shared libraries with your APK.
 
-
-
-#ENGINE_PATH = $(SalmonEnginePathCygwin)
-
-#BOOST_PATH = $(LibsPathCygwin)/boost_1_52_0
-
-#OGG_PATH = $(LibsPathCygwin)/libogg-1.3.0
-
-#VORBIS_PATH = $(LibsPathCygwin)/libvorbis-1.3.2
-
-#SQUIRREL_PATH = $(LibsPathCygwin)/sqplus
-
-#LIBPNG_PATH = $(LibsPathCygwin)/libpng_1.4.1_android
-
-#LIBJPEG_PATH = $(LibsPathCygwin)/jpeg-9
-
-#ZIP_PATH = $(LibsPathCygwin)/julienr-libzip-android/jni
+set( CMAKE_CXX_STANDARD 14 )
 
 set(BOOST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../boost_1_63_0)
 
@@ -38,14 +22,12 @@ set(LIBPNG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/libpng_1.4.1_android)
 
 set(LIBJPEG_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/jpeg-9")
 
-set(SQUIRREL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/sqplus)
+set(EIGEN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../eigen)
 
-set(OGG_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/libogg-1.3.0)
+set(SOL2_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../sol2)
 
-set(VORBIS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/libvorbis-1.3.2)
+set(LUA_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/lua-5.3.4/src)
 
-
-#include_directories(ZIP_PATH)
 
 add_library(zip
 	${ZIP_PATH}/zip_add.c
@@ -175,49 +157,6 @@ add_library(jpeg
 	)
 
 
-
-#LOCAL_PATH       := $(VORBIS_PATH)/lib
-#LOCAL_C_INCLUDES := $(VORBIS_PATH)/include
-#LOCAL_C_INCLUDES += $(VORBIS_PATH)/include/vorbis
-#LOCAL_C_INCLUDES += $(VORBIS_PATH)/lib/src
-#LOCAL_C_INCLUDES += $(VORBIS_PATH)/lib/books
-#LOCAL_C_INCLUDES += $(VORBIS_PATH)/lib/modes
-#LOCAL_C_INCLUDES += $(OGG_PATH)/include
-#LOCAL_C_INCLUDES += $(OGG_PATH)/include/ogg
-
-include_directories(${OGG_PATH}/include)
-include_directories(${VORBIS_PATH}/include)
-
-add_library(ogg
-	${OGG_PATH}/src/framing.c 
-	${OGG_PATH}/src/bitwise.c
-	)
-
-add_library(vorbis
-	${VORBIS_PATH}/lib/mdct.c
-	${VORBIS_PATH}/lib/smallft.c
-	${VORBIS_PATH}/lib/block.c
-	${VORBIS_PATH}/lib/envelope.c
-	${VORBIS_PATH}/lib/window.c
-	${VORBIS_PATH}/lib/lsp.c
-	${VORBIS_PATH}/lib/lpc.c
-	${VORBIS_PATH}/lib/analysis.c
-	${VORBIS_PATH}/lib/synthesis.c
-	${VORBIS_PATH}/lib/psy.c
-	${VORBIS_PATH}/lib/info.c
-	${VORBIS_PATH}/lib/floor1.c
-	${VORBIS_PATH}/lib/floor0.c
-	${VORBIS_PATH}/lib/res0.c
-	${VORBIS_PATH}/lib/mapping0.c
-	${VORBIS_PATH}/lib/registry.c
-	${VORBIS_PATH}/lib/codebook.c
-	${VORBIS_PATH}/lib/sharedbook.c
-	${VORBIS_PATH}/lib/lookup.c
-	${VORBIS_PATH}/lib/bitrate.c
-	${VORBIS_PATH}/lib/vorbisfile.c
-	)
-
-
 include_directories(${BOOST_PATH})
 
 add_library(boost
@@ -264,6 +203,49 @@ ${BOOST_PATH}/libs/date_time/src/gregorian/date_generators.cpp
 )
 
 
+include_directories(${LUA_PATH})
+
+add_library(lua
+	${LUA_PATH}/lapi.c
+	${LUA_PATH}/lauxlib.c
+	${LUA_PATH}/lbaselib.c
+	${LUA_PATH}/lbitlib.c
+	${LUA_PATH}/lcode.c
+	${LUA_PATH}/lcorolib.c
+	${LUA_PATH}/lctype.c
+	${LUA_PATH}/ldblib.c
+	${LUA_PATH}/ldebug.c
+	${LUA_PATH}/ldo.c
+	${LUA_PATH}/ldump.c
+	${LUA_PATH}/lfunc.c
+	${LUA_PATH}/lgc.c
+	${LUA_PATH}/linit.c
+	${LUA_PATH}/liolib.c
+	${LUA_PATH}/llex.c
+	${LUA_PATH}/lmathlib.c
+	${LUA_PATH}/lmem.c
+	${LUA_PATH}/loadlib.c
+	${LUA_PATH}/lobject.c
+	${LUA_PATH}/lopcodes.c
+	${LUA_PATH}/loslib.c
+	${LUA_PATH}/lparser.c
+	${LUA_PATH}/lstate.c
+	${LUA_PATH}/lstring.c
+	${LUA_PATH}/lstrlib.c
+	${LUA_PATH}/ltable.c
+	${LUA_PATH}/ltablib.c
+	${LUA_PATH}/ltm.c
+	${LUA_PATH}/luac.c
+	${LUA_PATH}/lundump.c
+	${LUA_PATH}/lutf8lib.c
+	${LUA_PATH}/lvm.c
+	${LUA_PATH}/lzio.c
+	)
+
+
+include_directories(${EIGEN_PATH})
+include_directories(${SOL2_PATH})
+
 
 find_library( # Sets the name of the path variable.
               z-lib
@@ -301,6 +283,10 @@ include_directories(${BOOST_GIL_PATH})
 
 
 add_definitions(-DTARGET_ANDROID)
+add_definitions(-DEIGEN_DONT_ALIGN_STATICALLY)
+add_definitions(-DEIGEN_HAS_CXX11_MATH=0)
+
+#NDEBUG
 
 
 add_library( # Sets the name of the library.
@@ -313,15 +299,12 @@ add_library( # Sets the name of the library.
              # Associated headers in the same location as their source
              # file are automatically included.
 
-             #testcpp.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/DataTypes/DataTypes.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/DataTypes/NewDataTypes.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/FileUtils/FileUtils.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/JniApi/JniApi.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/JniApi/JniApplication.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/Console/Console.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/SerializeInterface/SerializeInterface.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/Network/Network.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/PngHelper.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/JpegHelper.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Utils/TgaLoader.cpp
@@ -330,30 +313,20 @@ add_library( # Sets the name of the library.
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/TextureManager/SalmonTexture.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/ShaderManager/ShaderManager.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/FrameManager/FrameManager.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/LightManager/LightManager.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/SoundManager/SoundManagerAndroid.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/SoundManager/SoundManagerDataTypes.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/FontManager/FontManager.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/ScriptManager/ScriptManager.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/SmartValueManager/SmartValueManager.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/GUIManager/GUIManager.cpp
+			 ${CMAKE_CURRENT_SOURCE_DIR}/../../src/GUIManager/NewGuiManager.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/GUIManager/ButtonWidget.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/GUIManager/WidgetXmlParsers.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/HalibutAnimation/HalibutAnimation.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/ModelManager/ModelManager.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/ModelManager/NewModelManager.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/SimpleLand/SimpleLand.cpp
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/PhysicsManager/PhysicsManager.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/RenderMisc.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/RenderParams.cpp
 
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/SalmonRender/BackgroundCubemap.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/SalmonRender/SalmonRenderInterface.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/SalmonRender/SalmonRenderGLES20.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/SalmonRender/SalmonRenderAndroid.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Render/SalmonRender/Cameras.cpp
 
-             ${CMAKE_CURRENT_SOURCE_DIR}/../../src/Animation/SalmonAnimation.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/SalmonEngineAndroid.cpp
              ${CMAKE_CURRENT_SOURCE_DIR}/../../src/SalmonEngineInterface.cpp
              )
@@ -367,6 +340,5 @@ png
 zip
 boost
 jpeg
-ogg
-vorbis
+lua
 )

@@ -12,7 +12,7 @@ const std::string CONST_JAVA_FILESYSTEM_CLASS_NAME = "fishrungames/salmonenginea
 //Private data
 
 //All 3 deprecated
-cardinal* FileArr = NULL;
+size_t* FileArr = NULL;
 int FileSize = 0;
 int filePointer;
 
@@ -67,7 +67,7 @@ extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_Cons
 extern "C" void JNICALL Java_fishrungames_salmonengineandroid_EngineWrapper_CreateFile(JNIEnv* env, jobject thiz, int fileSize)
 {
 	SE::FileSize = fileSize;
-	SE::FileArr =  new SE::cardinal [fileSize % 4 == 0 ? fileSize/4 : fileSize/4 + 1];
+	SE::FileArr =  new size_t [fileSize % 4 == 0 ? fileSize/4 : fileSize/4 + 1];
 	SE::filePointer = 0;
 }
 	

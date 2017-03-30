@@ -27,7 +27,7 @@ struct TTextureInfo
 {
 	size_t Width;
 	size_t Height;
-	size_t TexID;
+	GLuint TexID;
 	size_t RefCount;
 };
 

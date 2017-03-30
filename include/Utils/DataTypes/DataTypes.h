@@ -5,11 +5,55 @@
 This code contains additional data types and some const values to use
 */
 
-#include <math.h>
+
 #include <string>
 #include <sstream>
 #include <stdlib.h>
 #include "boost/lexical_cast.hpp"
+
+#ifdef TARGET_ANDROID
+
+//Hack to make Eigen compile in Android NDK
+
+#include <cmath>
+
+namespace std {
+	/*
+	float round(float arg);
+	
+	double round(double arg);
+	long double round(long double arg);
+	
+	float log1p(float arg);
+	double log1p(double arg);
+	long double log1p(long double arg);
+	
+	float expm1(float arg);
+	double expm1(double arg);
+	long double expm1(long double arg);
+	*/
+	/*
+	template<>
+	float round( float arg );
+	
+	template<>
+	long double round( long double arg );
+	
+	template<>
+	float log1p( float arg );
+	
+	template<>
+	long double log1p( long double arg );
+	
+	template<>
+	float expm1( float arg );
+	
+	template<>
+	long double expm1( long double arg );*/
+	
+}
+
+#endif
 
 
 #include <Eigen/Geometry>

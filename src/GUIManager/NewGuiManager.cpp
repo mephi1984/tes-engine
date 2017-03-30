@@ -1919,12 +1919,16 @@ namespace SE
 
 	float NewGuiManager::getContentAreaWidth()
 	{
-		return Renderer->GetScreenWidth();
+		//return Renderer->GetScreenWidth();
+		//return 480;
+		return Renderer->GetMatrixWidth();
 	}
 
 	float NewGuiManager::getContentAreaHeight()
 	{
-		return Renderer->GetScreenHeight();
+		//return Renderer->GetScreenHeight();
+		//return 320;
+		return Renderer->GetMatrixHeight();
 	}
 
 	float NewGuiManager::getContentAreaLeftoverWidth()

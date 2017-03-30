@@ -231,7 +231,7 @@ TJavaConsole& TJavaConsole::operator<<(const std::string& s)
 
     PrintImmediate(string_with_time_mark);
 
-	History += string_with_time_mark+endl;
+	History += string_with_time_mark+'\n';
 	CutHistory();
 
 
@@ -251,7 +251,7 @@ void TJavaConsole::PrintImmediate(const std::string& s)
     
 	if (file != NULL)
 	{
-		fputs(std::string(s+endl).c_str(), file);
+		fputs(std::string(s+'\n').c_str(), file);
 		fflush(file);
 		fclose(file);
 	}

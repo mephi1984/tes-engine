@@ -337,10 +337,10 @@ public class EngineWrapper {
     public static native void OnTapDown(float x, float y, long time);
     public static native void OnTapUp(float x, float y, long time);
     public static native void OnTapUpAfterMove(float x, float y, long time);
-    public static native void OnTapMove(float x, float y, long time);
+    public static native void OnTapMove(float posx, float posy, float shiftx, float shifty, long time);
     
     public static native void OnFling(float velocityX, float velocityY, long time);
-    public static native void OnScroll(float distanceX, float distanceY, long time);
+    public static native void OnScroll(float posx, float posy, float distanceX, float distanceY, long time);
     
     public static native void OnKeyPress(int keyCode);
     
@@ -401,7 +401,7 @@ public class EngineWrapper {
 			
 			if (Math.abs(shiftX) > 0.001f || Math.abs(shiftY) > 0.001f)
 			{
-				OnScroll(-shiftX, -shiftY, event.getEventTime());
+				OnScroll(800.f*oldX/mView.getWidth(), 480.f*oldY/mView.getHeight(), -800.f*shiftX/mView.getWidth(), -480.f*shiftY/mView.getHeight(), event.getEventTime());
 			}
 			
 			PrevMovePosX = event.getX();
@@ -423,11 +423,11 @@ public class EngineWrapper {
 			if (IsScrolling)
 			{
 				IsScrolling = false;
-				OnTapUpAfterMove(x, y, event.getEventTime());
+				OnTapUpAfterMove(800.f*x/mView.getWidth(), 480.f*y/mView.getHeight(), event.getEventTime());
 			}
 			else
 			{
-				OnTapUp(x, y, event.getEventTime());
+				OnTapUp(800.f*x/mView.getWidth(), 480.f*y/mView.getHeight(), event.getEventTime());
 			}
 
 		}
@@ -440,7 +440,7 @@ public class EngineWrapper {
 			PrevMovePosX = event.getX();
 			PrevMovePosY = event.getY();
 		
-			OnTapDown(x, y, event.getEventTime());
+			OnTapDown(800.f*x/mView.getWidth(), 480.f*y/mView.getHeight(), event.getEventTime());
 
 		}
 	}
