@@ -10,7 +10,7 @@ const std::string CONST_DRAG_SIGNAL_NAME = "OnDrag";
 const std::string CONST_TAPDOWN_SIGNAL_NAME = "OnTapDown";
     
     
-boost::mutex KeyMutex;
+std::mutex KeyMutex;
     
 void GuiManagerSetKeyboardText(std::string newText)
 {
@@ -91,25 +91,25 @@ void TGUIManager::DeleteWidgetGroup(std::string groupName)
 void TGUIManager::DeleteWidgetOnUpdate(const std::string& name)
 {
 	//PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
-	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	PerformInMainThreadAsync(std::bind(&TGUIManager::DeleteWidget, this, name));
 	
 }
 
 void TGUIManager::DeleteWidgetGroupOnUpdate(const std::string& groupName)
 {
 	//PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
-	PerformInMainThreadAsync(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
+	PerformInMainThreadAsync(std::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
 	
 }
 
 void TGUIManager::DeleteWidgetLaterOnUpdate(const std::string& name)
 {
-	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidget, this, name));
+	PerformInMainThreadAsyncLater(std::bind(&TGUIManager::DeleteWidget, this, name));
 }
 
 void TGUIManager::DeleteWidgetGroupLaterOnUpdate(const std::string& groupName)
 {
-	PerformInMainThreadAsyncLater(boost::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));	
+	PerformInMainThreadAsyncLater(std::bind(&TGUIManager::DeleteWidgetGroup, this, groupName));
 }
 
 
@@ -122,7 +122,7 @@ void TGUIManager::AddWidgetTransformTask(TWidgetTransformTask widgetTransformTas
 
 void TGUIManager::Update(size_t dt)
 {
-	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+	std::lock_guard<std::mutex> guard(WidgetListMutex);
 	
 	std::vector<std::shared_ptr<boost::signals2::signal<void (TSignalParam)>>> signalMap; 
 
@@ -293,7 +293,7 @@ void TGUIManager::OnMouseDown(Vector2f pos, int touchNumber)
     
     //*Console<<"OnMouseDown touchNumber == "+tostr(touchNumber)+"\n";
 
-	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+	std::lock_guard<std::mutex> guard(WidgetListMutex);
 	
 	TWidgetArr::reverse_iterator i;
 
@@ -334,7 +334,7 @@ void TGUIManager::OnMouseUp(Vector2f pos, int touchNumber)
     
     //*Console<<"OnMouseUp touchNumber == "+tostr(touchNumber)+"\n";
 
-	boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+	std::lock_guard<std::mutex> guard(WidgetListMutex);
 	
 	TWidgetArr::reverse_iterator i;
 
@@ -372,7 +372,7 @@ void TGUIManager::OnMouseUp(Vector2f pos, int touchNumber)
         
         //*Console<<"OnMouseUpAfterMove touchNumber == "+tostr(touchNumber)+"\n";
         
-        boost::lock_guard<boost::mutex> guard(WidgetListMutex);
+		std::lock_guard<std::mutex> guard(WidgetListMutex);
         
         TWidgetArr::reverse_iterator i;
         

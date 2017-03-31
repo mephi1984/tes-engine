@@ -8,7 +8,7 @@
 #include "include/Utils/Utils.h"
 
 #include "boost/variant.hpp"
-#include "boost/thread.hpp"
+#include <thread>
 
 namespace SE
 {
@@ -137,7 +137,7 @@ protected:
     std::map<int, Vector2f> LastTapPos;
 	std::map<int, Vector2f> TotalShift;
 
-	boost::mutex WidgetListMutex;
+	std::mutex WidgetListMutex;
 public:
     bool KeyboardIsOnScreen;
 

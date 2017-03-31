@@ -31,14 +31,14 @@ TTextureListClass::TTextureListClass()
 
 	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> size_t
 	{
-		boost::function<size_t()> f = boost::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
+		std::function<size_t()> f = std::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
 		return PerformInMainThread<size_t>(f);
 	};
 
 
 	AddFunctionMap["bmp32"] = [this](TTextureData& texData) -> size_t
 	{
-		boost::function<size_t()> f = boost::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
+		std::function<size_t()> f = std::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
 		return PerformInMainThread<size_t>(f);
 	};
 	
@@ -54,7 +54,7 @@ TTextureListClass::~TTextureListClass()
 
 void TTextureListClass::Clear()
 {
-	PerformInMainThreadAsync(boost::bind(&TTextureListClass::InnerClear, this));
+	PerformInMainThreadAsync(std::bind(&TTextureListClass::InnerClear, this));
 }
 
 size_t TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height)
@@ -719,7 +719,7 @@ size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 		//All textures have been inserted into texData[6], lets add them
 
-		boost::function<size_t()> f = boost::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
+		std::function<size_t()> f = std::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
 
 		TexID = PerformInMainThread<size_t>(f);
 
@@ -749,7 +749,7 @@ size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 size_t TTextureListClass::AddEmptyTexture(const std::string& texName, size_t width, size_t height)
 {
-	boost::function<size_t()> f = boost::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
+	std::function<size_t()> f = std::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
 
 	return PerformInMainThread<size_t>(f);
 }
@@ -757,7 +757,7 @@ size_t TTextureListClass::AddEmptyTexture(const std::string& texName, size_t wid
 
 size_t TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
 {
-	boost::function<size_t()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
+	std::function<size_t()> f = std::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
 	return PerformInMainThread<size_t>(f);
 }
@@ -765,7 +765,7 @@ size_t TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, siz
 
 size_t TTextureListClass::AddDepthTexture(const std::string& texName, size_t width, size_t height)
 {
-	boost::function<size_t()> f = boost::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
+	std::function<size_t()> f = std::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
 	return PerformInMainThread<size_t>(f);
 }

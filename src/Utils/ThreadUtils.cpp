@@ -7,18 +7,18 @@ namespace SE
     {
         boost::asio::io_service MainThreadIoService;
         
-        boost::thread::id MainThreadId;
+        std::thread::id MainThreadId;
 
-		boost::condition_variable FunctionFinishedCondition;
+		std::condition_variable FunctionFinishedCondition;
 			
-		boost::mutex FunctionMutex;
+		std::mutex FunctionMutex;
     }
 
 
 #ifndef UTILS_ENGINE
 	void AssertIfInMainThread()
 	{
-		if (boost::this_thread::get_id() != ST::MainThreadId)
+		if (std::this_thread::get_id() != ST::MainThreadId)
 		{
 			throw ErrorToLog("ERROR! AssertIfInMainThread - assert failed!");
 		}
@@ -26,16 +26,16 @@ namespace SE
 
 	void TryUpdateMainThreadId()
 	{
-		if (boost::this_thread::get_id() != ST::MainThreadId)
+		if (std::this_thread::get_id() != ST::MainThreadId)
 		{
-			ST::MainThreadId = boost::this_thread::get_id();
+			ST::MainThreadId = std::this_thread::get_id();
 		}
 	}
 
-	void PerformInMainThreadAsync(boost::function<void()> f)
+	void PerformInMainThreadAsync(std::function<void()> f)
 	{
 		
-		if (boost::this_thread::get_id() == ST::MainThreadId)
+		if (std::this_thread::get_id() == ST::MainThreadId)
 		{
 			f();
 		}
@@ -48,7 +48,7 @@ namespace SE
 		
 	}
 
-	void PerformInMainThreadAsyncLater(boost::function<void()> f)
+	void PerformInMainThreadAsyncLater(std::function<void()> f)
 	{
         ST::MainThreadIoService.post(f);	
 	}

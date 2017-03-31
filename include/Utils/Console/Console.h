@@ -23,7 +23,7 @@ Use global variable Console like that:
 //#include <asm/page.h>
 //#include <limits.h>
 
-#include "boost/thread.hpp"
+#include <thread>
 #endif
 
 #ifdef TARGET_WINDOWS_UNIVERSAL

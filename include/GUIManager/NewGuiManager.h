@@ -5,7 +5,7 @@
 #include "include/Utils/Utils.h"
 
 #include "boost/variant.hpp"
-#include "boost/thread.hpp"
+#include <thread>
 
 namespace SE
 {

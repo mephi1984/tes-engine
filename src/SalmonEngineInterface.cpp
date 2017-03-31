@@ -61,7 +61,7 @@ TApplicationAncestor::~TApplicationAncestor()
 
 void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
-	ST::MainThreadId = boost::this_thread::get_id();
+	ST::MainThreadId = std::this_thread::get_id();
 
 	//ResourceManager->ScriptManager.BindBasicFunctions();
 

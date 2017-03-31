@@ -3,22 +3,24 @@
 
 #include "include/Engine.h"
 
+#include <thread>
+
 
 namespace SE
 {
 
 	namespace ST
 	{
-		extern boost::condition_variable FunctionFinishedCondition;
+		extern std::condition_variable FunctionFinishedCondition;
 			
-		extern boost::mutex FunctionMutex;
+		extern std::mutex FunctionMutex;
 	}
 
 	
 	template<typename RETURNTYPE>
-	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f)
+	RETURNTYPE PerformInMainThread(std::function<RETURNTYPE()> f)
 	{
-		if (boost::this_thread::get_id() == ST::MainThreadId)
+		if (std::this_thread::get_id() == ST::MainThreadId)
 		{
 			return f();
 		}
@@ -28,14 +30,16 @@ namespace SE
 
 			bool functionCalled = false;
 			
-			boost::function<void()> func = 
+			std::function<void()> func =
 				[&] ()
 				{
 					result = f();
                     
 					{   
-						boost::mutex::scoped_lock lock(ST::FunctionMutex);
+						//std::mutex::scoped_lock lock(ST::FunctionMutex);
+						ST::FunctionMutex.lock();
 						functionCalled = true;
+						ST::FunctionMutex.unlock();
 					}
 					ST::FunctionFinishedCondition.notify_one();
 				};
@@ -43,12 +47,19 @@ namespace SE
 
             ST::MainThreadIoService.post(func);
 
-			boost::mutex::scoped_lock lock(ST::FunctionMutex);
+			//std::mutex::scoped_lock lock(ST::FunctionMutex);
+
+			std::unique_lock<std::mutex> lock(ST::FunctionMutex);
+			//ST::FunctionMutex.lock();
+
+			//std::lock(lock);
 
 			while (!functionCalled)
 			{
 				ST::FunctionFinishedCondition.wait(lock);
 			}
+
+			//ST::FunctionMutex.unlock();
             
 			return result;
 

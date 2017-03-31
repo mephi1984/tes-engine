@@ -3,8 +3,9 @@
 
 #include "boost/asio.hpp"
 #include "boost/signals2.hpp"
-#include "boost/thread.hpp"
+#include <thread>
 
+#include <mutex>
 
 namespace SE
 {
@@ -13,7 +14,7 @@ namespace SE
     {
         extern boost::asio::io_service MainThreadIoService;
     
-        extern boost::thread::id MainThreadId;
+        extern std::thread::id MainThreadId;
     }
 
 	#ifndef UTILS_ENGINE
@@ -24,11 +25,11 @@ namespace SE
 	public:
 
 		TFuncToPerform()
-			: LockerPtr(new boost::mutex)
+			: LockerPtr(new std::mutex)
 		{
 		}
 
-		std::shared_ptr<boost::mutex> LockerPtr;
+		std::shared_ptr<std::mutex> LockerPtr;
 
 		boost::function<void()> Func;
 	};	
@@ -36,11 +37,11 @@ namespace SE
 
 	void TryUpdateMainThreadId();
 
-	void PerformInMainThreadAsync(boost::function<void()> f);
-	void PerformInMainThreadAsyncLater(boost::function<void()> f);
+	void PerformInMainThreadAsync(std::function<void()> f);
+	void PerformInMainThreadAsyncLater(std::function<void()> f);
 
 	template<typename RETURNTYPE>
-	RETURNTYPE PerformInMainThread(boost::function<RETURNTYPE()> f);
+	RETURNTYPE PerformInMainThread(std::function<RETURNTYPE()> f);
 
 #endif
 

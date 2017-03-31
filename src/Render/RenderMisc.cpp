@@ -250,7 +250,7 @@ void TTriangleList::RefreshBuffer()
 	if (!NeedRefreshBuffer)
 	{
 		NeedRefreshBuffer = true;
-		PerformInMainThreadAsync(boost::bind(&TTriangleList::InnerRefreshBuffer, this));
+		PerformInMainThreadAsync(std::bind(&TTriangleList::InnerRefreshBuffer, this));
 	}
 }
 
@@ -368,7 +368,7 @@ void TTriangleList::RefreshBuffer()
 	if (!NeedRefreshBuffer)
 	{
 		NeedRefreshBuffer = true;
-		PerformInMainThreadAsync(boost::bind(&TTriangleList::InnerRefreshBuffer, this));
+		PerformInMainThreadAsync(std::bind(&TTriangleList::InnerRefreshBuffer, this));
 	}
 }
 
