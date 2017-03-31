@@ -13,6 +13,9 @@ This code combines all headers for Salmon engine into one header file
 #ifdef TARGET_WIN32
 #include "include/Render/SalmonRender/SalmonRenderWindows.h"
 #endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#include "include/Render/SalmonRender/SalmonRenderWindowsUniversal.h"
+#endif
 #ifdef TARGET_IOS
 #include "include/Render/SalmonRender/SalmonRenderIos.h"
 #endif

@@ -8,14 +8,6 @@ Use global variable ResourceManager to get access to light manager
 
 */
 
-#ifdef TARGET_ANDROID
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#endif
-#ifdef TARGET_WIN32
-#include "include/OpenGlExt/OpenGlExt.h"
-#endif
-
 #include "include/Utils/Utils.h"
 #include "include/TextureManager/SalmonTexture.h"
 

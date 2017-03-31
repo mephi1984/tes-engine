@@ -199,6 +199,13 @@ size_t TTextureListClass::InnerAddDepthTexture(const std::string& texName, size_
 	return 0;
 	
 #endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+
+	throw ErrorToLog("Trying to create depth texture on Windows Universal!!!");
+
+	return 0;
+
+#endif
 
 }
 

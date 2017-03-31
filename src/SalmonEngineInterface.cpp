@@ -17,6 +17,15 @@ TSalmonRenderer* Renderer;
 TIosConsole* Console;
 TSalmonRendererIos* Renderer;
 #endif
+
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+TFileConsole* Console;
+TSalmonRendererWindowsUniversal* Renderer;
+#endif
+
+
+
 TResourceManager* ResourceManager;
 
 

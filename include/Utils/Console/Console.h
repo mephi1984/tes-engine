@@ -26,6 +26,10 @@ Use global variable Console like that:
 #include "boost/thread.hpp"
 #endif
 
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#include <fstream>
+#endif
+
 #include "include/Utils/DataTypes/DataTypes.h"
 
 #ifndef UTILS_ENGINE
@@ -90,6 +94,28 @@ public:
 	TFileConsole& operator<<(const std::string& s);
     
     void PrintImmediate(const std::string& s);
+};
+
+#endif
+
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+
+class TFileConsole : public TSimpleConsole
+{
+protected:
+	std::string filename;
+	std::ofstream f;
+public:
+	TFileConsole();
+
+	TFileConsole(const std::string& Afilename);
+
+	~TFileConsole();
+
+	TFileConsole& operator<<(const std::string& s);
+
+	void PrintImmediate(const std::string& s);
 };
 
 #endif

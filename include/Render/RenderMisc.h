@@ -3,7 +3,6 @@
 
 
 #include "include/Utils/DataTypes/DataTypes.h"
-//#include "include/Utils/SerializeInterface/SerializeInterface.h"
 #include "boost/shared_ptr.hpp"
 #include <vector>
 #include <list>
@@ -114,6 +113,45 @@ class TTriangleList : public TTriangleListAncestor
 	//No difference
 };
 
+#endif
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+
+class VBOObject //Must stay in shared ptr only!
+{
+public:
+	size_t Buffer;
+
+	VBOObject();
+
+	VBOObject(const VBOObject& c);
+
+	VBOObject& operator=(const VBOObject& c);
+
+	~VBOObject();
+};
+
+
+
+class TTriangleList : public TTriangleListAncestor //Implementation differs for Windows and Android
+{
+protected:
+	virtual void InnerRefreshBuffer();
+
+	bool NeedPrepareBufferObjects;
+
+	bool NeedRefreshBuffer; //Dummy for Android, but you need this for PC
+public:
+
+	mutable std::map<std::string, std::shared_ptr<VBOObject>> VertBufferArr;
+
+	TTriangleList();
+
+	~TTriangleList();
+
+	virtual void RefreshBuffer();
+
+};
 #endif
 
    

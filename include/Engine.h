@@ -21,6 +21,11 @@
 #include "include/SalmonEngineIos.h"
 #endif
 
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#include "SalmonEngineWindowsUniversal.h"
+#endif
+
 #endif
 
 #endif //ENGINE_H_INCLUDED

@@ -14,6 +14,14 @@ This code contains texture manager
 #endif
 
 
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#define GL_GLEXT_PROTOTYPES
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+//#include "glext.h"
+//#include "include/OpenGlExt/OpenGlExt.h"
+#endif
+
 #include "include/Utils/Utils.h"
 #include "include/Utils/PngHelper.h"
 #include "include/Utils/JpegHelper.h"

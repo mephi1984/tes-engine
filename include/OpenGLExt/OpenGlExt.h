@@ -6,8 +6,9 @@ This code contains openGL extensions (for them to be called from everywhere)
 Windows only!
 */
 
+#ifdef TARGET_WIN32
 #include "include/Utils/WinApi/WinApi.h"
-
+#endif
 
 namespace SE
 {

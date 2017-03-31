@@ -80,6 +80,9 @@ std::string GetFilePathUserData(const std::string& filename)
 #ifdef TARGET_WIN32
 	std::string realFileName = filename;
 #endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+	std::string realFileName = filename;
+#endif
 #ifdef TARGET_LINUX
 	std::string realFileName = filename;
 #endif

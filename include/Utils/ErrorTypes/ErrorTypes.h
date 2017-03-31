@@ -28,6 +28,10 @@ extern TJavaConsole* Console;
 extern TIosConsole* Console;
 #endif
 
+#ifdef TARGET_WINDOWS_UNIVERSAL
+extern TFileConsole* Console;
+#endif
+
 class ErrorCommon
 {
 public:

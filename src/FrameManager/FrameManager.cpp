@@ -46,6 +46,9 @@ size_t TFrameManager::AddFrameRenderBuffer(const std::string& frameName,size_t w
     #ifdef TARGET_IOS
     #define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE
     #endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE
+#endif
 	
 	if (FrameMap.count(frameName) == 0)
 	{
@@ -78,6 +81,9 @@ size_t TFrameManager::AddFrameRenderBuffer(const std::string& frameName,size_t w
         #ifdef TARGET_IOS
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
         #endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+#endif
         
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         
@@ -124,6 +130,10 @@ size_t TFrameManager::AddFrameRenderBuffer(const std::string& frameName,size_t w
     #ifdef TARGET_IOS
     #undef GL_FRAMEBUFFER_COMPLETE_EXT
     #endif
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#undef GL_FRAMEBUFFER_COMPLETE_EXT
+#endif
     
 }
 
@@ -137,6 +147,9 @@ size_t TFrameManager::AddCubemapBuffer(const std::string& frameName,size_t width
     #ifdef TARGET_IOS  
     #define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE
     #endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#define GL_FRAMEBUFFER_COMPLETE_EXT GL_FRAMEBUFFER_COMPLETE
+#endif
 	
 	if (FrameMap.count(frameName) == 0)
 	{
@@ -164,7 +177,10 @@ size_t TFrameManager::AddCubemapBuffer(const std::string& frameName,size_t width
         #ifdef TARGET_IOS
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
         #endif
-		
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+#endif
+
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
 
 
@@ -222,6 +238,9 @@ size_t TFrameManager::AddCubemapBuffer(const std::string& frameName,size_t width
     #undef GL_FRAMEBUFFER_COMPLETE_EXT
     #endif
 
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#undef GL_FRAMEBUFFER_COMPLETE_EXT
+#endif
 }
 
 void TFrameManager::DeleteFrameRenderBuffer(const std::string& frameName)
