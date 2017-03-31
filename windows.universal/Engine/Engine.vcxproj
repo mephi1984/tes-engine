@@ -38,6 +38,7 @@
     <ClCompile Include="..\..\src\Render\RenderMisc.cpp" />
     <ClCompile Include="..\..\src\Render\RenderParams.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\Cameras.cpp" />
+    <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderGLES20.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderInterface.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderWindowsUniversal.cpp" />
     <ClCompile Include="..\..\src\SalmonEngineInterface.cpp" />

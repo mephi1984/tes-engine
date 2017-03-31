@@ -129,10 +129,21 @@ namespace SE
 	{
 		this->background = background;
 
+
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		Visit(background,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture(textureName); });
+
+
+#else
 		Visit(background,
 			[this](Vector4f color) {},
 			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
 
+
+#endif
 
 		UpdateRenderPair();
 	}
@@ -1613,9 +1624,16 @@ namespace SE
 		this->pressedDrawable = pressedDrawable;
 
 
+#ifdef TARGET_WINDOWS_UNIVERSAL
 		Visit(pressedDrawable,
-			[this](Vector4f color) {  },
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture(textureName); });
+#else
+		Visit(pressedDrawable,
+			[this](Vector4f color) {},
 			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
+#endif
+
 		
 
 		UpdateRenderPair();

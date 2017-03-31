@@ -1,4 +1,4 @@
-#include "include/Render/SalmonRender/SalmonRenderAndroid.h"
+#include "include/Render/SalmonRender/SalmonRenderGLES20.h"
 
 #include "include/Utils/Utils.h"
 #include "include/Engine.h"

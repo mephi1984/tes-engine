@@ -97,6 +97,9 @@
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderWindowsUniversal.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderGLES20.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\FrameManager\FrameManager.h">
