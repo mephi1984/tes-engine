@@ -419,4 +419,31 @@ void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string,
 }
 #endif
 
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr)
+{
+	if (ResourceManager != NULL)
+		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
+			if (vec2CoordArr[attribName].size() > 0)
+				glBufferData(GL_ARRAY_BUFFER, vec2CoordArr[attribName].size() * 8, &(*vec2CoordArr[attribName].begin()), GL_STATIC_DRAW);
+
+}
+
+void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr)
+{
+	if (ResourceManager != NULL)
+		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
+			if (vec3CoordArr[attribName].size() > 0)
+				glBufferData(GL_ARRAY_BUFFER, vec3CoordArr[attribName].size() * 12, &(*vec3CoordArr[attribName].begin()), GL_STATIC_DRAW);
+}
+
+void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr)
+{
+	if (ResourceManager != NULL)
+		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
+			if (vec4CoordArr[attribName].size() > 0)
+				glBufferData(GL_ARRAY_BUFFER, vec4CoordArr[attribName].size() * 16, &(*vec4CoordArr[attribName].begin()), GL_STATIC_DRAW);
+}
+#endif
 } //namespace SE

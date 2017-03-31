@@ -151,6 +151,56 @@ void TFileConsole::PrintImmediate(const std::string& s)
 #endif
 
 
+#ifdef TARGET_WINDOWS_UNIVERSAL
+
+TFileConsole::TFileConsole()
+	: filename("conlog.txt")
+	, f("conlog.txt")
+{
+}
+
+TFileConsole::TFileConsole(const std::string& Afilename)
+	: filename(Afilename)
+	, f(Afilename)
+{
+}
+
+TFileConsole::~TFileConsole()
+{
+	f.close();
+}
+
+TFileConsole& TFileConsole::operator<<(const std::string& s)
+{
+	boost::posix_time::ptime t = boost::posix_time::second_clock::local_time();
+
+	std::string string_with_time_mark;
+
+	string_with_time_mark = to_simple_string(t) + ": " + s;
+
+	PrintImmediate(string_with_time_mark);
+
+	History += string_with_time_mark + "\n";
+	CutHistory();
+
+	return *this;
+}
+
+
+void TFileConsole::PrintImmediate(const std::string& s)
+{
+
+	f << s + "\n";
+	f.flush();
+
+	//OutputDebugString((s + "\n").c_str());
+
+}
+
+
+
+#endif
+
 #ifdef TARGET_LINUX
 
 TFileConsole::TFileConsole() 

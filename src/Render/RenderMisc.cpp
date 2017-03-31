@@ -33,6 +33,37 @@ VBOObject::~VBOObject()
 
 #endif
 
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+
+VBOObject::VBOObject()
+{
+	AssertIfInMainThread();
+
+	glGenBuffers(1, &Buffer);
+}
+
+VBOObject::VBOObject(const VBOObject& c)
+{
+	throw ErrorToLog("Copy constructor for VBOObject called\n");
+}
+
+VBOObject& VBOObject::operator=(const VBOObject& c)
+{
+	throw ErrorToLog("operator= for VBOObject called\n");
+	return *this;
+}
+
+VBOObject::~VBOObject()
+{
+	AssertIfInMainThread();
+
+	glDeleteBuffers(1, &Buffer);
+}
+
+
+#endif
+
 TDataTriangleList& TDataTriangleList::operator+=(const TDataTriangleList& dataTriangleList)
 {
 	BOOST_FOREACH(auto& i, dataTriangleList.Vec4CoordArr)
@@ -200,6 +231,124 @@ void TTriangleList::InnerRefreshBuffer()
 
 	BOOST_FOREACH(auto& i, Data.Vec3CoordArr)
     {
+		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+		RefreshAttribBuffer3fv(i.first, Data.Vec3CoordArr);
+	}
+
+	BOOST_FOREACH(auto& i, Data.Vec4CoordArr)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+		RefreshAttribBuffer4fv(i.first, Data.Vec4CoordArr);
+	}
+
+	NeedRefreshBuffer = false;
+}
+
+
+void TTriangleList::RefreshBuffer()
+{
+	if (!NeedRefreshBuffer)
+	{
+		NeedRefreshBuffer = true;
+		PerformInMainThreadAsync(boost::bind(&TTriangleList::InnerRefreshBuffer, this));
+	}
+}
+
+#endif
+
+
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+
+TTriangleList::TTriangleList()
+	: TTriangleListAncestor()
+	, NeedPrepareBufferObjects(true)
+	, NeedRefreshBuffer(false)
+{
+}
+
+TTriangleList::~TTriangleList()
+{
+}
+
+void TTriangleList::InnerRefreshBuffer()
+{
+	AssertIfInMainThread();
+
+	if (NeedPrepareBufferObjects && Data.Vec2CoordArr.size() > 0 && Data.Vec3CoordArr.size() > 0 && Data.Vec4CoordArr.size() > 0)
+	{
+
+		NeedPrepareBufferObjects = false;
+
+		BOOST_FOREACH(auto& i, Data.Vec2CoordArr)
+		{
+			if (VertBufferArr[i.first] == std::shared_ptr<VBOObject>())
+			{
+				VertBufferArr[i.first] = std::shared_ptr<VBOObject>(new VBOObject);
+				glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+
+				//What to do if buffer becomes empty?
+				if (i.second.size() > 0)
+				{
+					glBufferData(GL_ARRAY_BUFFER, i.second.size() * 8, &i.second[0], GL_STATIC_DRAW);
+				}
+				else
+				{
+					glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STATIC_DRAW);
+				}
+			}
+
+		}
+
+		BOOST_FOREACH(auto& i, Data.Vec3CoordArr)
+		{
+			if (VertBufferArr[i.first] == std::shared_ptr<VBOObject>())
+			{
+				VertBufferArr[i.first] = std::shared_ptr<VBOObject>(new VBOObject);
+				glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+
+				//What to do if buffer becomes empty?
+				if (i.second.size() > 0)
+				{
+					glBufferData(GL_ARRAY_BUFFER, i.second.size() * 12, &i.second[0], GL_STATIC_DRAW);
+				}
+				else
+				{
+					glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STATIC_DRAW);
+				}
+			}
+		}
+
+
+		BOOST_FOREACH(auto& i, Data.Vec4CoordArr)
+		{
+			if (VertBufferArr[i.first] == std::shared_ptr<VBOObject>())
+			{
+				VertBufferArr[i.first] = std::shared_ptr<VBOObject>(new VBOObject);
+				glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+
+				//What to do if buffer becomes empty?
+				if (i.second.size() > 0)
+				{
+					glBufferData(GL_ARRAY_BUFFER, i.second.size() * 16, &i.second[0], GL_STATIC_DRAW);
+				}
+				else
+				{
+					glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_STATIC_DRAW);
+				}
+			}
+		}
+
+	}
+
+	BOOST_FOREACH(auto& i, Data.Vec2CoordArr)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
+		RefreshAttribBuffer2fv(i.first, Data.Vec2CoordArr);
+	}
+
+	BOOST_FOREACH(auto& i, Data.Vec3CoordArr)
+	{
 		glBindBuffer(GL_ARRAY_BUFFER, VertBufferArr[i.first]->Buffer);
 		RefreshAttribBuffer3fv(i.first, Data.Vec3CoordArr);
 	}

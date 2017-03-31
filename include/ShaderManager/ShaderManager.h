@@ -108,6 +108,11 @@ public:
 	friend void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
 	friend void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr);
 	#endif
+#ifdef TARGET_WINDOWS_UNIVERSAL
+	friend void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr);
+	friend void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
+	friend void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr);
+#endif
 	
 	friend class TShaderManager;
 
@@ -160,6 +165,13 @@ void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string,
 void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
 void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr);
 #endif
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+void RefreshAttribBuffer2fv(const std::string& attribName, std::map<std::string, std::vector<Vector2f> >& vec2CoordArr);
+void RefreshAttribBuffer3fv(const std::string& attribName, std::map<std::string, std::vector<Vector3f> >& vec3CoordArr);
+void RefreshAttribBuffer4fv(const std::string& attribName, std::map<std::string, std::vector<Vector4f> >& vec4CoordArr);
+#endif
+
 
 } //namespace SE
 
