@@ -91,6 +91,7 @@ void TApplicationAncestor::OuterDeinit()
 
 void TApplicationAncestor::OuterDraw()
 {
+	
 	TryUpdateMainThreadId();
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -101,10 +102,11 @@ void TApplicationAncestor::OuterDraw()
 	RenderUniform1f("Transparency", 1.f);
 	
 	InnerDraw();
-
+	
 	glDisable(GL_DEPTH_TEST);
 
-	Renderer->SetOrthoProjection();
+	Renderer->PushMatrix();
+	Renderer->PushOrthoProjection();
 	Renderer->LoadIdentity();
 
 	ResourceManager->GUIManager.Draw();
@@ -118,17 +120,21 @@ void TApplicationAncestor::OuterDraw()
 	}
 	
 	Renderer->PopShader();
+
+	Renderer->PopMatrix();
+	Renderer->PopProjectionMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
 
 void TApplicationAncestor::OuterUpdate(size_t timer)
 {
+	
 	TryUpdateMainThreadId();
 
 	ResourceManager->Update(timer);
 
 	InnerUpdate(timer);
-
+	
 	CheckGlError();
 }
 

@@ -77,6 +77,7 @@ public:
 
 	virtual void SetProjectionMatrix(float width, float height);
     virtual void PushProjectionMatrix(float width, float height);
+	virtual void PushProjectionMatrix(const Matrix4f& m);
     virtual void PopProjectionMatrix();
 
 	virtual void SetFrameViewport(const std::string& frameName);
@@ -87,6 +88,7 @@ public:
 
 	void SetPerspectiveProjection(float angle = pi/6.f, float zNear = 1.f, float zFar = 100.f);
 	void SetOrthoProjection();
+	void PushOrthoProjection();
 
 	Matrix4f GetModelviewMatrix();
 

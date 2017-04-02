@@ -328,6 +328,7 @@ void RenderUniformMatrix3fv(const std::string& uniformName,bool transpose, const
 
 void RenderUniformMatrix4fv(const std::string& uniformName,bool transpose, const float* value)
 {
+	
 	if (ResourceManager != NULL)	
 			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
 				glUniformMatrix4fv(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],1,transpose,value);

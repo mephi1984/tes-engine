@@ -7,6 +7,8 @@ namespace SE
 
 class TSalmonRendererWindowsUniversal : public TSalmonRendererGLES20
 {
+public:
+	void DrawTriangleList(const TTriangleList& triangleList);
 };
 
 

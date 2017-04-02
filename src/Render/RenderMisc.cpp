@@ -275,7 +275,7 @@ void TTriangleList::InnerRefreshBuffer()
 {
 	AssertIfInMainThread();
 
-	if (NeedPrepareBufferObjects && Data.Vec2CoordArr.size() > 0 && Data.Vec3CoordArr.size() > 0 && Data.Vec4CoordArr.size() > 0)
+	if (NeedPrepareBufferObjects && (Data.Vec2CoordArr.size() > 0 || Data.Vec3CoordArr.size() > 0 || Data.Vec4CoordArr.size() > 0))
 	{
 
 		NeedPrepareBufferObjects = false;

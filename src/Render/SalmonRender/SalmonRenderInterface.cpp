@@ -210,6 +210,12 @@ void TSalmonRendererInterface::SetOrthoFullScreenViewport()
 	SetProjectionMatrix(static_cast<float>(MatrixWidth), static_cast<float>(MatrixHeight));
 }
 
+void TSalmonRendererInterface::PushOrthoProjection()
+{
+	PushProjectionMatrix(static_cast<float>(MatrixWidth), static_cast<float>(MatrixHeight));
+}
+
+
 void TSalmonRendererInterface::SetOrthoProjection()
 {
 	SetProjectionMatrix(static_cast<float>(MatrixWidth), static_cast<float>(MatrixHeight));
@@ -378,6 +384,17 @@ void TSalmonRendererInterface::PushProjectionMatrix(float width, float height)
     {
         throw ErrorToLog("Projection matrix stack overflow!!!!");
     }
+}
+
+void TSalmonRendererInterface::PushProjectionMatrix(const Matrix4f& m)
+{
+	ProjectionMatrixStack.push(m);
+	SetUniforms();
+
+	if (ProjectionMatrixStack.size() > 64)
+	{
+		throw ErrorToLog("Projection matrix stack overflow!!!!");
+	}
 }
 
 void TSalmonRendererInterface::PopProjectionMatrix()
