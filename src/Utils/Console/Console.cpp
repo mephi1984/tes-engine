@@ -256,8 +256,7 @@ void TFileConsole::PrintImmediate(const std::string& s)
 
 TJavaConsole::TJavaConsole()
 {
-	boost::mutex::scoped_lock scoped_lock(ConsoleMutex);
-
+	ConsoleMutex.lock();
     AppDir = JniGetApplicationDir();
     LogFilename = AppDir + "/fishrungames-log.txt";
 
@@ -267,11 +266,13 @@ TJavaConsole::TJavaConsole()
 	{
 		fclose(file);
 	}
+
+	ConsoleMutex.unlock();
 }
 
 TJavaConsole& TJavaConsole::operator<<(const std::string& s) 
-{ 
-    boost::mutex::scoped_lock scoped_lock(ConsoleMutex);
+{
+	ConsoleMutex.lock();
 
 	boost::posix_time::ptime t = boost::posix_time::second_clock::local_time();
 	
@@ -281,10 +282,11 @@ TJavaConsole& TJavaConsole::operator<<(const std::string& s)
 
     PrintImmediate(string_with_time_mark);
 
-	History += string_with_time_mark+'\n';
+	History += (string_with_time_mark + '\n');
 	CutHistory();
 
 
+	ConsoleMutex.unlock();
 	//__android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "%s", string_with_time_mark.c_str());
 
 

@@ -4,7 +4,10 @@
 #include "include/Engine.h"
 
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 
+//#include "boost/thread/condition_variable.hpp"
 
 namespace SE
 {

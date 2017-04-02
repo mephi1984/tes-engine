@@ -401,7 +401,8 @@ public class EngineWrapper {
 			
 			if (Math.abs(shiftX) > 0.001f || Math.abs(shiftY) > 0.001f)
 			{
-				OnScroll(800.f*oldX/mView.getWidth(), 480.f*oldY/mView.getHeight(), -800.f*shiftX/mView.getWidth(), -480.f*shiftY/mView.getHeight(), event.getEventTime());
+				//OnScroll(800.f*oldX/mView.getWidth(), 480.f*oldY/mView.getHeight(), -800.f*shiftX/mView.getWidth(), -480.f*shiftY/mView.getHeight(), event.getEventTime());
+				OnScroll(oldX, oldY, -shiftX, -shiftY, event.getEventTime());
 			}
 			
 			PrevMovePosX = event.getX();
@@ -423,11 +424,11 @@ public class EngineWrapper {
 			if (IsScrolling)
 			{
 				IsScrolling = false;
-				OnTapUpAfterMove(800.f*x/mView.getWidth(), 480.f*y/mView.getHeight(), event.getEventTime());
+				OnTapUpAfterMove(x, y, event.getEventTime());
 			}
 			else
 			{
-				OnTapUp(800.f*x/mView.getWidth(), 480.f*y/mView.getHeight(), event.getEventTime());
+				OnTapUp(x, y, event.getEventTime());
 			}
 
 		}
@@ -440,7 +441,7 @@ public class EngineWrapper {
 			PrevMovePosX = event.getX();
 			PrevMovePosY = event.getY();
 		
-			OnTapDown(800.f*x/mView.getWidth(), 480.f*y/mView.getHeight(), event.getEventTime());
+			OnTapDown(x, y, event.getEventTime());
 
 		}
 	}

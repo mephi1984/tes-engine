@@ -1,5 +1,9 @@
 #include "include/Engine.h"
 
+//#include "boost/thread/condition_variable.hpp"
+
+#include <condition_variable>
+
 namespace SE
 {
 

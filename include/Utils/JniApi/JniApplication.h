@@ -9,15 +9,15 @@
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
-#include "boost/thread.hpp"
-
+#include <thread>
+#include <mutex> 
 
 namespace SE
 {
 
 extern TApplication* App;
 
-extern boost::mutex InitLock;
+extern std::mutex InitLock;
 
 extern bool Inited;
 

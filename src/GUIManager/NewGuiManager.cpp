@@ -1855,6 +1855,8 @@ namespace SE
 	void NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
+		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
+		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
 		Vector2f relativePos = pos;
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -1881,6 +1883,9 @@ namespace SE
 
 	void NewGuiManager::OnMouseUp(Vector2f pos, int touchNumber)
 	{
+		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
+		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
+
 		Vector2f relativePos = pos;
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -1904,6 +1909,9 @@ namespace SE
 
 	void NewGuiManager::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
+		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
+		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
+
 		Vector2f relativePos = pos;
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -1927,6 +1935,12 @@ namespace SE
 
 	void NewGuiManager::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
+		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
+		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
+
+		shift(0) = shift(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
+		shift(1) = shift(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
+
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMove, std::placeholders::_1, pos, shift, touchNumber));
 	}
 

@@ -5,7 +5,7 @@ namespace SE {
 
 	TApplication *App = NULL;
 
-	boost::mutex InitLock;
+	std::mutex InitLock;
 
 	bool Inited = false;
 } // namespace SE

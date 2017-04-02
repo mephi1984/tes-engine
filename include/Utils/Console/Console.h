@@ -22,8 +22,6 @@ Use global variable Console like that:
 #ifdef TARGET_ANDROID
 //#include <asm/page.h>
 //#include <limits.h>
-
-#include <thread>
 #endif
 
 #ifdef TARGET_WINDOWS_UNIVERSAL
@@ -36,6 +34,8 @@ Use global variable Console like that:
 #include "include/Render/RenderMisc.h"
 #endif
 
+#include <thread>
+#include <mutex>
 namespace SE
 {
 
@@ -148,7 +148,7 @@ public:
 class TJavaConsole : public TSimpleConsole
 {
 protected:
-    boost::mutex ConsoleMutex;
+    std::mutex ConsoleMutex;
     std::string AppDir;
     std::string LogFilename;
 public:
