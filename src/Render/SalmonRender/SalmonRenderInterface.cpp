@@ -221,6 +221,14 @@ void TSalmonRendererInterface::SetOrthoProjection()
 	SetProjectionMatrix(static_cast<float>(MatrixWidth), static_cast<float>(MatrixHeight));
 }
 
+Matrix4f TSalmonRendererInterface::GetProjectionMatrix()
+{
+	if (ProjectionMatrixStack.size() == 0)
+	{
+		throw ErrorToLog("ProjectionMatrix matrix stack underflow!!!!");
+	}
+	return ProjectionMatrixStack.top();
+}
 
 Matrix4f TSalmonRendererInterface::GetModelviewMatrix()
 {
@@ -230,6 +238,8 @@ Matrix4f TSalmonRendererInterface::GetModelviewMatrix()
 	}
     return ModelviewMatrixStack.top();
 }
+
+
 
 
 void TSalmonRendererInterface::PushMatrix()

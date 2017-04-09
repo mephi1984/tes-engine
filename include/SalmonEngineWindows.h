@@ -40,6 +40,7 @@ public:
 	virtual void OnKeyPress(size_t key); //Try not to override this. But if you need to override, call ancestor!
 
 	virtual void InnerOnKeyPress(size_t key) { }
+
 };
 
 bool CreateEngine(int width, int height, int x = 0, int y = 0, std::string windowName = "Salmon Engine App", std::string logFileName = "log.txt");

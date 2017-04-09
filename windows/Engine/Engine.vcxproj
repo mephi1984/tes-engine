@@ -154,7 +154,6 @@
     <ClCompile Include="..\..\src\Utils\WinApi\WinApi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Animation\SalmonAnimation.h" />
     <ClInclude Include="..\..\include\Engine.h" />
     <ClInclude Include="..\..\include\FontManager\FontManager.h" />
     <ClInclude Include="..\..\include\FrameManager\FrameManager.h" />
@@ -166,9 +165,7 @@
     <ClInclude Include="..\..\include\GUIManager\WidgetTemplatesImpl.h" />
     <ClInclude Include="..\..\include\GUIManager\WidgetXmlParsers.h" />
     <ClInclude Include="..\..\include\LightManager\LightManager.h" />
-    <ClInclude Include="..\..\include\ModelManager\ModelManager.h" />
     <ClInclude Include="..\..\include\OpenGLExt\OpenGlExt.h" />
-    <ClInclude Include="..\..\include\PhysicsManager\PhysicsManager.h" />
     <ClInclude Include="..\..\include\Render\RenderMisc.h" />
     <ClInclude Include="..\..\include\Render\RenderParams.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\Cameras.h" />

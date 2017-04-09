@@ -164,7 +164,17 @@ void TApplicationAncestor::OuterOnMove(Vector2f pos, Vector2f shift, int touchNu
 {
 	ResourceManager->GUIManager.OnMove(shift, touchNumber);
 	ResourceManager->newGuiManager.OnMove(pos, shift, touchNumber);
-	InnerOnMove(shift);
+	InnerOnMove(pos, shift);
+}
+
+void TApplicationAncestor::OnMouseMove(TMouseState& mouseState) //Windows only
+{
+	if (!mouseState.LeftButtonPressed && !mouseState.RightButtonPressed && !mouseState.MiddleButtonPressed)
+	{
+		ResourceManager->newGuiManager.OnMouseMove(Vector2f(mouseState.X, SE::Renderer->GetMatrixHeight() - mouseState.Y));
+	}
+
+	InnerOnMouseMove(mouseState);
 }
 
 } //namespace SE

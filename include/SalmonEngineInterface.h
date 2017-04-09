@@ -117,11 +117,13 @@ public:
 
 	virtual void InnerOnTapUpAfterMove(Vector2f p) { }
 	
-	virtual void InnerOnMove(Vector2f shift) { }
+	virtual void InnerOnMove(Vector2f pos, Vector2f shift) { }
 
 
 
-	virtual void OnMouseMove(TMouseState& mouseState) { } //Windows only
+	virtual void OnMouseMove(TMouseState& mouseState); //Windows only
+
+	virtual void InnerOnMouseMove(TMouseState& mouseState) { } //Windows only
 
 	virtual void OnMouseWheel(short int delta) { }
 	//To do on mouse wheel move

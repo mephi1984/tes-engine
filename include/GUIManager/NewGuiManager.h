@@ -136,6 +136,9 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
+		virtual void OnMouseMove(Vector2f pos);
+		virtual void OnMouseMoveOutside();
+
 		virtual void RemoveFocusRecursively();
 
 	};
@@ -192,6 +195,9 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
+		virtual void OnMouseMove(Vector2f pos);
+		virtual void OnMouseMoveOutside();
+
 		virtual void RemoveFocusRecursively();
 
 	};
@@ -235,6 +241,9 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
+		virtual void OnMouseMove(Vector2f pos);
+		virtual void OnMouseMoveOutside();
+
 		virtual void RemoveFocusRecursively();
 
 	};
@@ -272,6 +281,9 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
+		virtual void OnMouseMove(Vector2f pos);
+		virtual void OnMouseMoveOutside();
+
 		virtual void RemoveFocusRecursively();
 
 	};
@@ -297,6 +309,9 @@ namespace SE
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual void OnMouseMoveOutside();
+
+		virtual void OnMouseMove(Vector2f pos);
 	};
 
 	class HorizontalScrollLayout : public HorizontalLinearLayout
@@ -319,6 +334,9 @@ namespace SE
 		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+
+		virtual void OnMouseMove(Vector2f pos);
+		virtual void OnMouseMoveOutside();
 	};
 
 
@@ -353,6 +371,7 @@ namespace SE
 	protected:
 
 		boost::variant<std::string, Vector4f> pressedDrawable;
+		boost::variant<std::string, Vector4f> hoverDrawable;
 
 		static const float CONST_BUTTON_PRESS_TIME;
 
@@ -365,16 +384,20 @@ namespace SE
 		};
 
 		ButtonState buttonState;
+		ButtonState hoverButtonState;
 
 		float buttonTimer;
+		float hoverButtonTimer;
 
 	public:
 
 		TRenderPair pressedRenderPair;
+		TRenderPair hoverRenderPair;
 
 		Button(WidgetParentInterface& widgetParent);
 
 		void setPressedDrawable(boost::variant<std::string, Vector4f> pressedDrawable);
+		void setHoverDrawable(boost::variant<std::string, Vector4f> hoverDrawable);
 
 		float innerWidth();
 
@@ -395,6 +418,9 @@ namespace SE
 		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual void OnMouseCancel(int touchNumber);
+
+		virtual void OnMouseMove(Vector2f pos);
+		virtual void OnMouseMoveOutside();
 
 		
 	};
@@ -420,7 +446,6 @@ namespace SE
 
 		TRenderPair BackgroundRenderPair;
 
-
 	public:
 
 		NewGuiManager();
@@ -443,6 +468,8 @@ namespace SE
 		void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		void OnKeyPressed(int key);
+
+		void OnMouseMove(Vector2f pos);
 
 		virtual float getContentAreaWidth();
 		virtual float getContentAreaHeight();

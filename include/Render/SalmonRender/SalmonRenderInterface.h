@@ -90,6 +90,7 @@ public:
 	void SetOrthoProjection();
 	void PushOrthoProjection();
 
+	Matrix4f GetProjectionMatrix();
 	Matrix4f GetModelviewMatrix();
 
 	void SetPerspectiveProjectionMatrix(float angle, float aspect, float zNear, float zFar);
@@ -119,6 +120,7 @@ public:
 	virtual void DrawRect(const Vector2f& p1, const Vector2f& p2);
 	virtual void DrawRect(const Vector2f& p1, const Vector2f& p2, const Vector2f& t1, const Vector2f& t2);
 	virtual void DrawTriangleList(const TTriangleList& triangleList) = 0;
+	virtual void DrawTriangleList(const TTriangleList& triangleList, GLenum mode) = 0;
 
 	void DrawFrameFullScreen(const std::string& frameName);
 	void DrawFramePartScreen(const std::string& frameName, Vector2f posFrom, Vector2f posTo); //To draw water. posFrom and posTo goes from 0 to 1

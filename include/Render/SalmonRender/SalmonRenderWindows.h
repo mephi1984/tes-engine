@@ -45,6 +45,7 @@ public:
 	Vector4f GetFogColor();
 
 	void DrawTriangleList(const TTriangleList& triangleList);
+	void DrawTriangleList(const TTriangleList& triangleList, GLenum mode);
 	
 
 };

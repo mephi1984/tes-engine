@@ -2,6 +2,7 @@
 #define RENDER_MISC_H_INCLUDED
 
 
+
 #include "include/Utils/DataTypes/DataTypes.h"
 #include "boost/shared_ptr.hpp"
 #include <vector>
@@ -14,6 +15,26 @@
 
 #include "include/OpenGLExt/OpenGlExt.h"
 
+#endif
+
+#ifdef TARGET_ANDROID
+#include <GLES/gl.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#endif
+
+#ifdef TARGET_IOS
+//#include <OpenGLES/AEGL.h>
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#include <OpenGLES/ES2/glext.h>
+#endif
+
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+#define GL_GLEXT_PROTOTYPES
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 #endif
 
 namespace SE
@@ -120,7 +141,7 @@ class TTriangleList : public TTriangleListAncestor
 class VBOObject //Must stay in shared ptr only!
 {
 public:
-	size_t Buffer;
+	GLuint Buffer;
 
 	VBOObject();
 

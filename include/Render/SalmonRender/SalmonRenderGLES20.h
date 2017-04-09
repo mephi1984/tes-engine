@@ -21,8 +21,6 @@
 #define GL_GLEXT_PROTOTYPES
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
-//#include "glext.h"
-//#include "include/OpenGlExt/OpenGlExt.h"
 #endif
 
 namespace SE
@@ -36,6 +34,7 @@ protected:
 public:
 
 	void DrawTriangleList(const TTriangleList& triangleList);
+	void DrawTriangleList(const TTriangleList& triangleList, GLenum mode);
 
 	
 };

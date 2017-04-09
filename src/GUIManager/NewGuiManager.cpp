@@ -375,6 +375,15 @@ namespace SE
 	void WidgetAncestor::OnKeyPressed(int key)
 	{
 
+
+	}
+
+	void WidgetAncestor::OnMouseMove(Vector2f pos)
+	{
+	}
+
+	void WidgetAncestor::OnMouseMoveOutside()
+	{
 	}
 
 
@@ -676,6 +685,39 @@ namespace SE
 		}
 	}
 
+	void VerticalLinearLayout::OnMouseMove(Vector2f pos)
+	{
+		
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
+
+		float diff = getContentAreaHeight();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseMove(innerRelativePos);
+			}
+			else
+			{
+				children[i]->OnMouseMoveOutside();
+			}
+
+			diff += -itemSpacing;
+		}
+
+		WidgetAncestor::OnMouseMove(pos);
+	}
+
+	void VerticalLinearLayout::OnMouseMoveOutside()
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
+	}
+
 	//========================================
 
 
@@ -951,6 +993,45 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
 	}
 
+	void HorizontalLinearLayout::OnMouseMove(Vector2f pos)
+	{
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+
+				children[i]->OnMouseMove(innerRelativePos);
+			}
+			else
+			{
+				children[i]->OnMouseMoveOutside();
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}
+
+		WidgetAncestor::OnMouseMove(pos);
+		
+	}
+
+	void HorizontalLinearLayout::OnMouseMoveOutside()
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
+	}
+
 	void HorizontalLinearLayout::RemoveFocusRecursively()
 	{
 		focused = false;
@@ -1193,6 +1274,40 @@ namespace SE
 
 	}
 
+	void FrameLayout::OnMouseMove(Vector2f pos)
+	{
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
+
+
+		float diff = getContentAreaHeight();
+
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff = getContentAreaHeight() - children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseMove(innerRelativePos);
+			}
+			else
+			{
+				children[i]->OnMouseMoveOutside();
+			}
+
+		}
+
+		WidgetAncestor::OnMouseMove(pos);
+	}
+
+	void FrameLayout::OnMouseMoveOutside()
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
+	}
+
 	void FrameLayout::RemoveFocusRecursively()
 	{
 		focused = false;
@@ -1356,6 +1471,37 @@ namespace SE
 		
 	}
 
+	void VerticalScrollLayout::OnMouseMove(Vector2f pos)
+	{
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - scroll - extraTranslation(1));
+
+		float diff = getContentAreaHeight();
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseMove(innerRelativePos);
+			}
+			else
+			{
+				children[i]->OnMouseMoveOutside();
+			}
+
+			diff += -itemSpacing;
+		}
+
+	}
+
+	void VerticalScrollLayout::OnMouseMoveOutside()
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
+	}
+
 	//========================================
 
 
@@ -1514,6 +1660,42 @@ namespace SE
 		return true;
 	}
 
+	void HorizontalScrollLayout::OnMouseMove(Vector2f pos)
+	{
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			float drawHeight = getContentAreaHeight();
+
+			float childViewHeight = children[i]->getViewHeight();
+
+			float localHeightDiff = drawHeight - childViewHeight;
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				children[i]->OnMouseMove(innerRelativePos);
+			}
+			else
+			{
+				children[i]->OnMouseMoveOutside();
+			}
+
+			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+
+		}
+
+	}
+
+
+	void HorizontalScrollLayout::OnMouseMoveOutside()
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
+	}
+
 
 	//=======================================
 
@@ -1614,7 +1796,9 @@ namespace SE
 	Button::Button(WidgetParentInterface& widgetParent)
 		: Label(widgetParent)
 		, buttonState(BS_NONE)
+		, hoverButtonState(BS_NONE)
 		, buttonTimer(0.f)
+		, hoverButtonTimer(0.f)
 	{
 
 	}
@@ -1635,6 +1819,26 @@ namespace SE
 #endif
 
 		
+
+		UpdateRenderPair();
+	}
+
+	void Button::setHoverDrawable(boost::variant<std::string, Vector4f> hoverDrawable)
+	{
+		this->hoverDrawable = hoverDrawable;
+
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		Visit(hoverDrawable,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture(textureName); });
+#else
+		Visit(hoverDrawable,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
+#endif
+
+
 
 		UpdateRenderPair();
 	}
@@ -1692,6 +1896,27 @@ namespace SE
 		}
 
 		pressedRenderPair.second.RefreshBuffer();
+
+
+
+		std::string hoverTextureName = Visit(hoverDrawable,
+			[this](Vector4f color) { return "white.bmp"; },
+			[this](std::string textureName) { return textureName; });
+
+		Vector4f hoverColor = Visit(hoverDrawable,
+			[this](Vector4f color) { return  color; },
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 0); });
+
+
+		hoverRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = hoverTextureName;
+		hoverRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+		for (auto& colorVec : hoverRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = hoverColor;
+		}
+
+		hoverRenderPair.second.RefreshBuffer();
 	}
 
 	void Button::Draw()
@@ -1703,14 +1928,17 @@ namespace SE
 		Renderer->PushMatrix();
 		Renderer->TranslateMatrix(Vector3f(extraTranslation(0), extraTranslation(1), 0.f));
 
+		TRenderParamsSetter render2(hoverRenderPair.first);
 
-		
+		Renderer->DrawTriangleList(hoverRenderPair.second);
+
+
 		TRenderParamsSetter render1(pressedRenderPair.first);
 
 		Renderer->DrawTriangleList(pressedRenderPair.second);
 
 
-		TRenderParamsSetter render2(textRenderPair.first);
+		TRenderParamsSetter render3(textRenderPair.first);
 
 		Renderer->DrawTriangleList(textRenderPair.second);
 
@@ -1721,6 +1949,9 @@ namespace SE
 
 	void Button::Update(size_t dt)
 	{
+
+		float oldButtonTimer = buttonTimer;
+		float oldHoverButtonTimer = hoverButtonTimer;
 
 		if (buttonState == ButtonState::BS_PRESSING)
 		{
@@ -1744,12 +1975,49 @@ namespace SE
 			}
 		}
 
+
+		if (hoverButtonState == ButtonState::BS_PRESSING)
+		{
+			hoverButtonTimer += dt / 1000.f;
+
+			if (hoverButtonTimer >= CONST_BUTTON_PRESS_TIME)
+			{
+				hoverButtonTimer = CONST_BUTTON_PRESS_TIME;
+				hoverButtonState = ButtonState::BS_PRESSED;
+			}
+		}
+
+		if (hoverButtonState == ButtonState::BS_EASING)
+		{
+			hoverButtonTimer -= dt / 1000.f;
+
+			if (hoverButtonTimer <= 0)
+			{
+				hoverButtonTimer = 0;
+				hoverButtonState = ButtonState::BS_NONE;
+			}
+		}
+
 		for (auto& color : pressedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
 		{
 			color(3) = buttonTimer / CONST_BUTTON_PRESS_TIME;
 		}
+
+		for (auto& color : hoverRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			color(3) = hoverButtonTimer * (1.f - buttonTimer / CONST_BUTTON_PRESS_TIME) / (CONST_BUTTON_PRESS_TIME);
+		}
+
+		if (oldHoverButtonTimer != hoverButtonTimer || oldButtonTimer != buttonTimer)
+		{
+			hoverRenderPair.second.RefreshBuffer();
+		}
+
+		if (oldButtonTimer != buttonTimer)
+		{
+			pressedRenderPair.second.RefreshBuffer();
+		}
 		
-		pressedRenderPair.second.RefreshBuffer();
 
 	}
 
@@ -1786,6 +2054,22 @@ namespace SE
 		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
 		{
 			buttonState = BS_EASING;
+		}
+	}
+
+	void Button::OnMouseMove(Vector2f pos)
+	{
+		if (hoverButtonState == ButtonState::BS_NONE || hoverButtonState == ButtonState::BS_EASING)
+		{
+			hoverButtonState = BS_PRESSING;
+		}
+	}
+
+	void Button::OnMouseMoveOutside()
+	{
+		if (hoverButtonState == ButtonState::BS_PRESSING || hoverButtonState == ButtonState::BS_PRESSED)
+		{
+			hoverButtonState = BS_EASING;
 		}
 	}
 
@@ -1949,6 +2233,11 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
 	}
 
+	void NewGuiManager::OnMouseMove(Vector2f pos)
+	{
+		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMove, std::placeholders::_1, pos));
+	}
+
 	float NewGuiManager::getContentAreaWidth()
 	{
 		//return Renderer->GetScreenWidth();
@@ -2110,6 +2399,7 @@ namespace SE
 
 				button->setText(pWidgetRecord.second.get<std::string>("text", ""));
 				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "")));
+				button->setHoverDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("hoverDrawable", "")));
 
 				widget = button;
 			}

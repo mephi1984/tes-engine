@@ -308,6 +308,12 @@ Vector4f TSalmonRenderer::GetFogColor()
 
 void TSalmonRenderer::DrawTriangleList(const TTriangleList& triangleList)
 {
+	DrawTriangleList(triangleList, GL_TRIANGLES);
+
+}
+
+void TSalmonRenderer::DrawTriangleList(const TTriangleList& triangleList, GLenum mode)
+{
 	AssertIfInMainThread();
 
 	BOOST_FOREACH(auto& i, triangleList.Data.Vec2CoordArr)
@@ -315,7 +321,7 @@ void TSalmonRenderer::DrawTriangleList(const TTriangleList& triangleList)
 		glBindBuffer(GL_ARRAY_BUFFER, triangleList.VertBufferArr[i.first]->Buffer);
 		VertexAttribPointer2fv(i.first, 0, NULL);
 	}
-	
+
 	BOOST_FOREACH(auto& i, triangleList.Data.Vec3CoordArr)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, triangleList.VertBufferArr[i.first]->Buffer);
@@ -330,7 +336,7 @@ void TSalmonRenderer::DrawTriangleList(const TTriangleList& triangleList)
 
 	if (!triangleList.Data.Vec3CoordArr.empty())
 	{
-		glDrawArrays(GL_TRIANGLES,0,triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].size());
+		glDrawArrays(mode, 0, triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].size());
 	}
 
 }
