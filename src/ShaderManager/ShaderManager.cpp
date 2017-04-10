@@ -357,6 +357,15 @@ void VertexAttrib3fv(const std::string& attribName, const float* value)
 				glVertexAttrib3fv(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], value);
 }
 
+
+void VertexAttrib4fv(const std::string& attribName, const float* value)
+{
+	if (ResourceManager != NULL)
+		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
+			glVertexAttrib4fv(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], value);
+}
+
+
 void VertexAttribPointer2fv(const std::string& attribName,int stride, const char* pointer)
 {
 	if (ResourceManager != NULL)

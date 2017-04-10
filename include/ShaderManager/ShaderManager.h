@@ -95,6 +95,7 @@ public:
 
 	friend void VertexAttrib2fv(const std::string& attribName, const float* value);
 	friend void VertexAttrib3fv(const std::string& attribName, const float* value);
+	friend void VertexAttrib4fv(const std::string& attribName, const float* value);
 	friend void VertexAttribPointer2fv(const std::string& attribName,int stride, const char* pointer);
 	friend void VertexAttribPointer3fv(const std::string& attribName,int stride, const char* pointer);
 	friend void VertexAttribPointer4fv(const std::string& attribName, int stride, const char* pointer);
