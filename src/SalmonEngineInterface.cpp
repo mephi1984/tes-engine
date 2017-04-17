@@ -94,14 +94,22 @@ void TApplicationAncestor::OuterDraw()
 	
 	TryUpdateMainThreadId();
 
+	CheckGlError();
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	CheckGlError();
 
 	glActiveTexture(GL_TEXTURE0);
 	RenderUniform1i("Texture", 0);
 	RenderUniform1f("Transparency", 1.f);
+
+	CheckGlError();
 	
 	InnerDraw();
+
+	CheckGlError();
 	
 	glDisable(GL_DEPTH_TEST);
 
@@ -109,10 +117,19 @@ void TApplicationAncestor::OuterDraw()
 	Renderer->PushOrthoProjection();
 	Renderer->LoadIdentity();
 
+	CheckGlError();
+
 	ResourceManager->GUIManager.Draw();
+
+	CheckGlError();
+
 	ResourceManager->newGuiManager.Draw();
 
+	CheckGlError();
+
 	Renderer->PushShader("DefaultShader");
+
+	CheckGlError();
 	
 	if (IsConsoleOut) 
 	{
@@ -121,9 +138,13 @@ void TApplicationAncestor::OuterDraw()
 	
 	Renderer->PopShader();
 
+	CheckGlError();
+
 	Renderer->PopMatrix();
 	Renderer->PopProjectionMatrix();
 	glEnable(GL_DEPTH_TEST);
+
+	CheckGlError();
 }
 
 void TApplicationAncestor::OuterUpdate(size_t timer)
@@ -131,7 +152,11 @@ void TApplicationAncestor::OuterUpdate(size_t timer)
 	
 	TryUpdateMainThreadId();
 
+	CheckGlError();
+
 	ResourceManager->Update(timer);
+
+	CheckGlError();
 
 	InnerUpdate(timer);
 	
