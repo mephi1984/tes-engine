@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src0"/>
+	<classpathentry kind="src" path="src1"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Android/android-sdk/platforms/android-24/android.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Dev/Projects/TES/tes-engine/android/EngineWrapper/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

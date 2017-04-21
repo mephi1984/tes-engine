@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Dev\Projects\TES\tes-engine\android\Engine\.workspace\.metadata\.plugins\org.eclipse.jdt.core
+2025227265.index

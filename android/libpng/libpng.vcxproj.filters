@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{dae7392f-a55d-467f-8715-51cee92daa51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\zlib">
+      <UniqueIdentifier>{42a0ac78-3672-4713-8d22-0f94889ad21a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\adler32.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\compress.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\crc32.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\deflate.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\infback.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\inffast.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\inflate.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\inftrees.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\trees.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\uncompr.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\zlib-1.2.8\zutil.c">
+      <Filter>src\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\png.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngerror.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngget.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngmem.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngpread.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngread.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngrio.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngrtran.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngrutil.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngset.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngtrans.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngwio.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngwrite.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngwtran.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\libpng_1.4.1_android\pngwutil.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

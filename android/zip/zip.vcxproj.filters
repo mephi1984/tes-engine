@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{9e0d1ae9-1805-4c9c-a18d-5fda52014989}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_add.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_add_dir.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_close.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_delete.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_dirent.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_entry_free.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_entry_new.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_err_str.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_error.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_error_clear.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_error_get.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_error_get_sys_type.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_error_strerror.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_error_to_str.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_fclose.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_file_error_clear.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_file_error_get.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_file_get_offset.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_file_strerror.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_filerange_crc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_fopen.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_fopen_index.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_fread.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_free.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_get_archive_comment.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_get_archive_flag.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_get_file_comment.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_get_name.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_get_num_files.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_memdup.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_name_locate.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_new.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_open.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_rename.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_replace.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_set_archive_comment.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_set_archive_flag.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_set_file_comment.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_set_name.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_source_buffer.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_source_file.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_source_filep.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_source_free.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_source_function.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_source_zip.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_stat.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_stat_index.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_stat_init.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_strerror.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_unchange.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_unchange_all.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_unchange_archive.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libs\julienr-libzip-android\jni\zip_unchange_data.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

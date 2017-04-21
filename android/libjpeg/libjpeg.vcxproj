@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\libs\jpeg-9\jaricom.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcapimin.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcapistd.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcarith.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jccoefct.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jccolor.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcdctmgr.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jchuff.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcinit.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcmainct.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcmarker.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcmaster.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcomapi.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcparam.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcprepct.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jcsample.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jctrans.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdapimin.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdapistd.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdarith.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdatadst.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdatasrc.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdcoefct.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdcolor.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jddctmgr.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdhuff.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdinput.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdmainct.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdmarker.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdmaster.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdmerge.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdpostct.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdsample.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jdtrans.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jerror.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jfdctflt.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jfdctfst.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jfdctint.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jidctflt.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jidctfst.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jidctint.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jmemmgr.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jmemnobs.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jquant1.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jquant2.c" />
+    <ClCompile Include="..\..\..\libs\jpeg-9\jutils.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2e1f3f77-0b6d-4226-ac83-d3b5f73ca07c}</ProjectGuid>
+    <Keyword>Android</Keyword>
+    <RootNamespace>libjpeg</RootNamespace>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_static</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

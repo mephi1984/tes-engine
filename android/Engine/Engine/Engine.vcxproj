@@ -1,0 +1,343 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x86">
+      <Configuration>Debug</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Engine.h" />
+    <ClInclude Include="..\..\..\include\FontManager\FontManager.h" />
+    <ClInclude Include="..\..\..\include\FrameManager\FrameManager.h" />
+    <ClInclude Include="..\..\..\include\GlobalConst.h" />
+    <ClInclude Include="..\..\..\include\GUIManager\ButtonWidget.h" />
+    <ClInclude Include="..\..\..\include\GUIManager\GUIManager.h" />
+    <ClInclude Include="..\..\..\include\GUIManager\KeyboardWidget.h" />
+    <ClInclude Include="..\..\..\include\GUIManager\NewGuiManager.h" />
+    <ClInclude Include="..\..\..\include\GUIManager\WidgetTemplatesImpl.h" />
+    <ClInclude Include="..\..\..\include\GUIManager\WidgetXmlParsers.h" />
+    <ClInclude Include="..\..\..\include\LightManager\LightManager.h" />
+    <ClInclude Include="..\..\..\include\Render\RenderMisc.h" />
+    <ClInclude Include="..\..\..\include\Render\RenderParams.h" />
+    <ClInclude Include="..\..\..\include\Render\SalmonRender\Cameras.h" />
+    <ClInclude Include="..\..\..\include\Render\SalmonRender\SalmonRenderAndroid.h" />
+    <ClInclude Include="..\..\..\include\Render\SalmonRender\SalmonRenderGLES20.h" />
+    <ClInclude Include="..\..\..\include\Render\SalmonRender\SalmonRenderInterface.h" />
+    <ClInclude Include="..\..\..\include\SalmonEngineAndroid.h" />
+    <ClInclude Include="..\..\..\include\SalmonEngineInterface.h" />
+    <ClInclude Include="..\..\..\include\ShaderManager\ShaderManager.h" />
+    <ClInclude Include="..\..\..\include\SmartValueManager\SmartValueManager.h" />
+    <ClInclude Include="..\..\..\include\TextureManager\SalmonTexture.h" />
+    <ClInclude Include="..\..\..\include\Utils\BindableVar.h" />
+    <ClInclude Include="..\..\..\include\Utils\Console\Console.h" />
+    <ClInclude Include="..\..\..\include\Utils\DataTypes\DataTypes.h" />
+    <ClInclude Include="..\..\..\include\Utils\ErrorTypes\ErrorTypes.h" />
+    <ClInclude Include="..\..\..\include\Utils\FileUtils\FileUtils.h" />
+    <ClInclude Include="..\..\..\include\Utils\JniApi\JniApi.h" />
+    <ClInclude Include="..\..\..\include\Utils\JpegHelper.h" />
+    <ClInclude Include="..\..\..\include\Utils\PngHelper.h" />
+    <ClInclude Include="..\..\..\include\Utils\SerializeInterface\SerializeInterface.h" />
+    <ClInclude Include="..\..\..\include\Utils\SimpleTimer.h" />
+    <ClInclude Include="..\..\..\include\Utils\TgaLoader.h" />
+    <ClInclude Include="..\..\..\include\Utils\ThreadUtils.h" />
+    <ClInclude Include="..\..\..\include\Utils\ThreadUtilsImpl.h" />
+    <ClInclude Include="..\..\..\include\Utils\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\FontManager\FontManager.cpp" />
+    <ClCompile Include="..\..\..\src\FrameManager\FrameManager.cpp" />
+    <ClCompile Include="..\..\..\src\GlobalConst.cpp" />
+    <ClCompile Include="..\..\..\src\GUIManager\ButtonWidget.cpp" />
+    <ClCompile Include="..\..\..\src\GUIManager\GUIManager.cpp" />
+    <ClCompile Include="..\..\..\src\GUIManager\KeyboardWidget.cpp" />
+    <ClCompile Include="..\..\..\src\GUIManager\NewGuiManager.cpp" />
+    <ClCompile Include="..\..\..\src\GUIManager\WidgetXmlParsers.cpp" />
+    <ClCompile Include="..\..\..\src\Render\RenderMisc.cpp" />
+    <ClCompile Include="..\..\..\src\Render\RenderParams.cpp" />
+    <ClCompile Include="..\..\..\src\Render\SalmonRender\Cameras.cpp" />
+    <ClCompile Include="..\..\..\src\Render\SalmonRender\SalmonRenderAndroid.cpp" />
+    <ClCompile Include="..\..\..\src\Render\SalmonRender\SalmonRenderGLES20.cpp" />
+    <ClCompile Include="..\..\..\src\Render\SalmonRender\SalmonRenderInterface.cpp" />
+    <ClCompile Include="..\..\..\src\SalmonEngineAndroid.cpp" />
+    <ClCompile Include="..\..\..\src\SalmonEngineInterface.cpp" />
+    <ClCompile Include="..\..\..\src\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="..\..\..\src\SmartValueManager\SmartValueManager.cpp" />
+    <ClCompile Include="..\..\..\src\TextureManager\SalmonTexture.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\Console\Console.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\DataTypes\DataTypes.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\FileUtils\FileUtils.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\JniApi\JniApi.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\JpegHelper.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\PngHelper.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\SimpleTimer.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\TgaLoader.cpp" />
+    <ClCompile Include="..\..\..\src\Utils\ThreadUtils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\libjpeg\libjpeg.vcxproj">
+      <Project>{2e1f3f77-0b6d-4226-ac83-d3b5f73ca07c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libpng\libpng.vcxproj">
+      <Project>{4a08d45b-6fed-4d03-9766-460b20c10cc9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\zip\zip.vcxproj">
+      <Project>{44f0b166-2569-4018-a86a-d82105e18338}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{b137c152-41d6-4752-ba72-b5a239ff199c}</ProjectGuid>
+    <Keyword>Android</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+    <ThumbMode>Disabled</ThumbMode>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_3_8</PlatformToolset>
+    <AndroidAPILevel>android-24</AndroidAPILevel>
+    <UseOfStl>c++_shared</UseOfStl>
+    <ThumbMode>Disabled</ThumbMode>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <IncludePath>$(VS_NdkRoot)\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+    <TargetName>lib$(RootNamespace)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <IncludePath>C:\ProgramData\Microsoft\AndroidNDK64\android-ndk-r13b\sources\cxx-stl\llvm-libc++\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>
+      </UndefinePreprocessorDefinitions>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>-Wno-reorder  -Wno-error=c++11-narrowing %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>m;GLESv2;z;boost_date_time-clang-mt-d-1_63;boost_system-clang-mt-d-1_63;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(Sysroot)\usr\include;C:\Dev\Projects\TES\tes-engine;C:\Dev\Projects\TES\boost_1_63_0;C:\Dev\Projects\TES\eigen;C:\Dev\Projects\TES\libs\jpeg-9;C:\Dev\Projects\TES\libs\jpeg-9\vc10;C:\Dev\Projects\TES\libs\boost-gil-extension;C:\Dev\Projects\TES\libs\libpng_1.4.1_android;C:\Dev\Projects\TES\libs\julienr-libzip-android\jni;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;TARGET_ANDROID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs\$(Configuration)\$(Platform)\</AdditionalLibraryDirectories>
+      <LibraryDependencies>boost;m;GLESv2;z;libpng;libjpeg;zip;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
