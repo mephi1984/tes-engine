@@ -348,11 +348,12 @@ namespace SE
 	void WidgetAncestor::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 		focused = true;
+		onMouseDownSignal(pos, touchNumber);
 	}
 
 	void WidgetAncestor::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-
+		onMouseUpSignal(pos, touchNumber);
 	}
 
 	void WidgetAncestor::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -566,6 +567,8 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
+
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
 
 	void VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -593,6 +596,8 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
+
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
 	void VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -622,6 +627,8 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
+
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 	void VerticalLinearLayout::OnMouseCancel(int touchNumber)
@@ -876,6 +883,8 @@ namespace SE
 
 		}
 
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
+
 	}
 
 	void HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -906,6 +915,8 @@ namespace SE
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
 		}
+
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
 	void HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -938,6 +949,8 @@ namespace SE
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
 		}
+
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 	bool HorizontalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1164,6 +1177,8 @@ namespace SE
 			}
 
 		}
+
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
 
 	void FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -1192,6 +1207,8 @@ namespace SE
 
 
 		}
+
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
 	void FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -1222,6 +1239,8 @@ namespace SE
 
 
 		}
+
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 	bool FrameLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1378,6 +1397,8 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
+
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
 
 	void VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -1404,6 +1425,8 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
+
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
 	void VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -1433,6 +1456,8 @@ namespace SE
 
 			diff += -itemSpacing;
 		}
+
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 
@@ -1564,6 +1589,8 @@ namespace SE
 
 		}
 
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
+
 	}
 
 	void HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -1593,6 +1620,8 @@ namespace SE
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
 		}
+
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
 	void HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -1623,6 +1652,8 @@ namespace SE
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 
 		}
+
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 	bool HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -2028,7 +2059,7 @@ namespace SE
 			buttonState = BS_PRESSING;
 		}
 			
-		
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
 
 	void Button::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2037,6 +2068,8 @@ namespace SE
 		{
 			buttonState = BS_EASING;
 		}
+
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
 	void Button::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -2047,6 +2080,8 @@ namespace SE
 		{
 			buttonState = BS_EASING;
 		}
+
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 	void Button::OnMouseCancel(int touchNumber)
@@ -2163,6 +2198,7 @@ namespace SE
 
 		}
 
+
 	}
 
 	void NewGuiManager::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2189,6 +2225,7 @@ namespace SE
 
 
 		}
+
 	}
 
 	void NewGuiManager::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -2215,6 +2252,7 @@ namespace SE
 
 
 		}
+
 	}
 
 	void NewGuiManager::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -2398,8 +2436,8 @@ namespace SE
 				auto button = parentWidget.CreateAndAddChildOfType<Button>();
 
 				button->setText(pWidgetRecord.second.get<std::string>("text", ""));
-				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "")));
-				button->setHoverDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("hoverDrawable", "")));
+				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "#00000000")));
+				button->setHoverDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("hoverDrawable", "#00000000")));
 
 				widget = button;
 			}
@@ -2422,7 +2460,7 @@ namespace SE
 
 			widget->setLayoutHeight(layoutDimentionFromConfigValue(pWidgetRecord.second.get<std::string>("height", "wrap_content")));
 
-			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "")));
+			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "#00000000")));
 
 			widget->setExtraTranslation(pWidgetRecord.second.get<float>("extraTranslationX", 0.f), pWidgetRecord.second.get<float>("extraTranslationY", 0.f));
 

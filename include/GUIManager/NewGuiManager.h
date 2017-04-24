@@ -69,6 +69,10 @@ namespace SE
 		boost::signals2::signal<void(Vector2f, Vector2f, int)> onMoveSignal;
 		boost::signals2::signal<void(Vector2f, int)> onMouseUpAfterMoveSignal;
 
+
+		boost::signals2::signal<void(Vector2f, int)> onMouseDownSignal;
+		boost::signals2::signal<void(Vector2f, int)> onMouseUpSignal;
+
 		WidgetParentInterface& parent;
 
 		float marginTop;

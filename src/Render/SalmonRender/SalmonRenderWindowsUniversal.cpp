@@ -8,6 +8,13 @@ namespace SE
 
 	void TSalmonRendererWindowsUniversal::DrawTriangleList(const TTriangleList& triangleList)
 	{
+
+		DrawTriangleList(triangleList, GL_TRIANGLES);
+		
+	}
+
+	void TSalmonRendererWindowsUniversal::DrawTriangleList(const TTriangleList& triangleList, GLenum mode)
+	{
 		AssertIfInMainThread();
 
 		BOOST_FOREACH(auto& i, triangleList.Data.Vec2CoordArr)
@@ -30,7 +37,7 @@ namespace SE
 
 		if (!triangleList.Data.Vec3CoordArr.empty())
 		{
-			glDrawArrays(GL_TRIANGLES, 0, triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].size());
+			glDrawArrays(mode, 0, triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].size());
 		}
 
 	}

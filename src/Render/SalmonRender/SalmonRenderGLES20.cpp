@@ -29,6 +29,7 @@ void TSalmonRendererGLES20::DrawTriangleList(const TTriangleList& triangleList)
 	DrawTriangleList(triangleList, GL_TRIANGLES);
 }
 
+
 void TSalmonRendererGLES20::DrawTriangleList(const TTriangleList& triangleList, GLenum mode)
 {
 	AssertIfInMainThread();
