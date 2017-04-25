@@ -210,7 +210,7 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_WIN32_WINNT=0x0A00;TARGET_WINDOWS_UNIVERSAL;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_WIN32_WINNT=0x0A00;TARGET_WINDOWS_UNIVERSAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -252,7 +252,7 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_WIN32_WINNT=0x0A00;TARGET_WINDOWS_UNIVERSAL;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_WIN32_WINNT=0x0A00;TARGET_WINDOWS_UNIVERSAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -266,7 +266,7 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_WIN32_WINNT=0x0A00;TARGET_WINDOWS_UNIVERSAL;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_WIN32_WINNT=0x0A00;TARGET_WINDOWS_UNIVERSAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
