@@ -91,6 +91,9 @@ namespace SE
 
 		bool focused;
 
+		bool disabled;
+
+
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
 
@@ -145,6 +148,7 @@ namespace SE
 
 		virtual void RemoveFocusRecursively();
 
+		
 	};
 
 
