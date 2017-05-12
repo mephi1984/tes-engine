@@ -156,10 +156,10 @@ namespace SE
 			return;
 		}
 
-		Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
-
-		Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
-
+		//Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
+		//Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
+		Vector2f posFrom(0, 0);
+		Vector2f posTo(getDrawWidth(), getDrawHeight());
 
 		std::string textureName = Visit(background,
 			[this](Vector4f color) { return "white.bmp"; },
@@ -197,6 +197,11 @@ namespace SE
 			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
 	}
 
+	Vector3f WidgetAncestor::getTranslateVector()
+	{
+		return { marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + extraTranslation(1), 0.f };
+	}
+
 	void WidgetAncestor::Draw()
 	{
 		if (disabled)
@@ -206,9 +211,7 @@ namespace SE
 
 		Renderer->PushMatrix();
 
-		
-
-		Renderer->TranslateMatrix(Vector3f(extraTranslation(0), extraTranslation(1), 0.f));
+		Renderer->TranslateMatrix(getTranslateVector());
 
 		TRenderParamsSetter render(renderPair.first);
 
@@ -266,8 +269,6 @@ namespace SE
 
 	float WidgetAncestor::getContentAreaWidth()
 	{
-
-
 		return getDrawWidth() - (paddingLeft + paddingRight);
 	}
 
@@ -2269,8 +2270,6 @@ namespace SE
 			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
 #endif
 
-		
-
 		UpdateRenderPair();
 	}
 
@@ -2600,6 +2599,270 @@ namespace SE
 		}
 	}
 
+	HorizontalSlider::HorizontalSlider(WidgetParentInterface& widgetParent) :
+		WidgetAncestor(widgetParent)
+	{ }
+
+	HorizontalSlider::~HorizontalSlider() {}
+
+	void HorizontalSlider::UpdateRenderPair()
+	{
+		if (!inited)
+		{
+			return;
+		}
+
+		WidgetAncestor::UpdateRenderPair();
+		UpdateSkinRenderPairs();
+	}
+
+	void HorizontalSlider::UpdateSkinRenderPairs()
+	{
+
+		bool isTexture = Visit(trackSkin,
+			[this](Vector4f color) { return false; },
+			[this](std::string textureName) { return true; });
+
+		Vector4f color = Visit(trackSkin,
+			[this](Vector4f color) { return color; },
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
+
+		std::string textureName = Visit(trackSkin,
+			[this](Vector4f color) { return "white.png"; },
+			[this](std::string textureName) { return textureName; });
+
+		Vector2f
+			from_point(paddingLeft + sidesPadding, paddingBottom + trackPadding),
+			to_point(getDrawWidth() - paddingRight - sidesPadding, getDrawHeight() - paddingTop - trackPadding);
+
+		if (from_point(0) > to_point(0)) from_point(0) = to_point(0);
+		if (!isTexture)// || to_point(1) - from_point(1) + 1 < MIN_TRACK_HEIGHT)
+		{
+			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_TRACK_HEIGHT / 2.f;
+			to_point(1) = paddingBottom + getContentAreaHeight() / 2.f + MIN_TRACK_HEIGHT / 2.f;
+		}
+				
+		trackRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
+		trackRenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
+
+		for (auto& colorVec : trackRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = color;
+		}
+
+		trackRenderPair.second.RefreshBuffer();
+
+		isTexture = Visit(trackSkin,
+			[this](Vector4f color) { return false; },
+			[this](std::string textureName) { return true; });
+
+		textureName = Visit(buttonSkin,
+			[this](Vector4f color) { return "white.bmp"; },
+			[this](std::string textureName) { return textureName; });
+
+		color = Visit(buttonSkin,
+			[this](Vector4f color) { return  color; },
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
+
+		from_point = { paddingLeft + sidesPadding, paddingBottom + buttonPadding };
+		to_point = { buttonWidth - 1 + paddingLeft + sidesPadding, getDrawHeight() - paddingTop - buttonPadding };
+
+		if (!isTexture)// || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
+		{
+			from_point(0) = paddingLeft + getContentAreaWidth() / 2.f - MIN_BUTTON_WIDTH / 2.f;
+			to_point(0) = paddingLeft + getContentAreaWidth() / 2.f + MIN_BUTTON_WIDTH / 2.f;
+		}
+		if (!isTexture) //|| to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
+		{
+			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_BUTTON_HEIGHT / 2.f;
+			to_point(1) = paddingBottom + getContentAreaHeight() / 2.f + MIN_BUTTON_HEIGHT / 2.f;
+		}
+
+		buttonRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
+		buttonRenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
+
+		for (auto& colorVec : buttonRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = color;
+		}
+
+		buttonRenderPair.second.RefreshBuffer();
+	}
+
+	void HorizontalSlider::setPosition(int position)
+	{
+		if (position < minValue) position = minValue;
+		if (position > maxValue) position = maxValue;
+		if (this->position != position)
+		{
+			this->position = position;
+			onValueChanged((position - minValue) / (float)(maxValue- minValue));
+			Draw();
+		}
+	}
+
+	void HorizontalSlider::setMinValue(int minValue)
+	{
+		if (minValue > maxValue) minValue = maxValue;
+		this->minValue = minValue;
+		setPosition(position);
+	}
+
+	void HorizontalSlider::setMaxValue(int maxValue)
+	{
+		if (maxValue < minValue) maxValue = minValue;
+		this->maxValue = maxValue;
+		setPosition(position);
+	}
+
+	void HorizontalSlider::setButtonWidth(float width)
+	{
+		if (width < MIN_BUTTON_WIDTH) width = MIN_BUTTON_WIDTH;
+		buttonWidth = width;
+		sidesPadding = width / 2.f;
+	}
+
+	void HorizontalSlider::setButtonPadding(float padding)
+	{
+		if (getContentAreaHeight() - padding * 2 < MIN_BUTTON_HEIGHT) padding = (getContentAreaHeight() - MIN_BUTTON_HEIGHT) / 2.f;
+		buttonPadding = padding;
+	}
+
+	void HorizontalSlider::setTrackPadding(float padding)
+	{
+		if (getContentAreaHeight() - padding * 2 < MIN_TRACK_HEIGHT) padding = (getContentAreaHeight() - MIN_TRACK_HEIGHT) / 2.f;
+		trackPadding = padding;
+	}
+
+	void HorizontalSlider::setButtonSkin(boost::variant<std::string, Vector4f> buttonSkin)
+	{
+		this->buttonSkin = buttonSkin;
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		Visit(buttonSkin,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture(textureName); });
+#else
+		Visit(buttonSkin,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
+#endif
+
+		UpdateRenderPair();
+	}
+
+	void HorizontalSlider::setTrackSkin(boost::variant<std::string, Vector4f> trackSkin)
+	{
+		this->trackSkin = trackSkin;
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		Visit(trackSkin,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture(textureName); });
+#else
+		Visit(trackSkin,
+			[this](Vector4f color) {},
+			[this](std::string textureName) { ResourceManager->TexList.AddTexture("ui/" + textureName); });
+#endif
+
+		UpdateRenderPair();
+	}
+
+	void HorizontalSlider::Draw()
+	{
+		if (disabled)
+		{
+			return;
+		}
+
+		WidgetAncestor::Draw();
+
+		Renderer->PushMatrix();
+
+		Renderer->TranslateMatrix(getTranslateVector());
+		
+		TRenderParamsSetter render1(trackRenderPair.first);
+		Renderer->DrawTriangleList(trackRenderPair.second);
+
+		Renderer->TranslateMatrix(Vector3f( (position - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - 2 * sidesPadding) - buttonWidth / 2.f, 0, 0));
+		TRenderParamsSetter render2(buttonRenderPair.first);
+		Renderer->DrawTriangleList(buttonRenderPair.second);
+				
+		Renderer->PopMatrix();
+	}
+
+	bool HorizontalSlider::isPointAboveTrack(Vector2f point)
+	{
+		return (point(0) >= -sidesPadding && point(0) < getDrawWidth() - marginRight + sidesPadding &&
+			point(1) >= 0 && point(1) <  getDrawHeight() - paddingTop);
+	}
+
+	int HorizontalSlider::getTrackPositionFromPoint(Vector2f point)
+	{
+		return (int)(point(0) / (getContentAreaWidth() - 2 * sidesPadding) * (maxValue - minValue)) + minValue;
+	}
+
+	void HorizontalSlider::OnMouseDown(Vector2f pos, int touchNumber)
+	{
+		if (disabled)
+		{
+			return;
+		}
+		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+		if (!isPointAboveTrack(pos)) return;
+		isTouched = true;
+		setPosition(getTrackPositionFromPoint(pos));
+		WidgetAncestor::OnMouseDown(pos, touchNumber);
+	}
+
+	bool HorizontalSlider::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		if (disabled)
+		{
+			return false;
+		}
+		if (isTouched)
+		{
+			pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+			setPosition(getTrackPositionFromPoint(pos));
+		}
+		return WidgetAncestor::OnMove(pos, shift, touchNumber);
+	}
+
+	void HorizontalSlider::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		if (disabled)
+		{
+			return;
+		}
+		isTouched = false;
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
+	}
+
+	void HorizontalSlider::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		if (disabled)
+		{
+			return;
+		}
+		isTouched = false;
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+	}
+
+	void HorizontalSlider::OnMouseCancel(int touchNumber)
+	{
+		if (disabled)
+		{
+			return;
+		}
+	}
+
+	void HorizontalSlider::OnMouseMoveOutside()
+	{
+		if (disabled)
+		{
+			return;
+		}
+	}
+
 
 	//======================================
 	
@@ -2682,10 +2945,10 @@ namespace SE
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
-			{
+			//if (pointIsInsideView(innerRelativePos, children[i]))
+			//{
 				children[i]->OnMouseUp(innerRelativePos, touchNumber);
-			}
+			//}
 
 
 		}
@@ -2709,10 +2972,10 @@ namespace SE
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
-			{
+			//if (pointIsInsideView(innerRelativePos, children[i]))
+			//{
 				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
-			}
+			//}
 
 
 		}
@@ -2911,10 +3174,25 @@ namespace SE
 
 				widget = imageView;
 			}
+			if (type == "HorizontalSlider")
+			{
+				auto slider = parentWidget.CreateAndAddChildOfType<HorizontalSlider>();
 
+				float width = slider->getContentAreaWidth(), height = slider->getContentAreaHeight();
+
+				slider->setMaxValue(pWidgetRecord.second.get<int>("maxValue", 100));
+				slider->setMinValue(pWidgetRecord.second.get<int>("minValue", 0));
+				slider->setPosition(pWidgetRecord.second.get<int>("position", 50));
+				slider->setButtonWidth(pWidgetRecord.second.get<int>("buttonWidth", 40));
+				slider->setButtonPadding(pWidgetRecord.second.get<int>("buttonPadding", 10));
+				slider->setTrackPadding(pWidgetRecord.second.get<int>("trackPadding", 20));
+				slider->setButtonSkin(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("buttonSkin", "#000000FF")));
+				slider->setTrackSkin(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("trackSkin", "#C0C0C0FF")));
+
+				widget = slider;
+			}
 			
 			widget->name = pWidgetRecord.second.get<std::string>("name", "");
-
 
 			widget->setPadding(pWidgetRecord.second.get<float>("paddingTop", 0.f), pWidgetRecord.second.get<float>("paddingBottom", 0.f), pWidgetRecord.second.get<float>("paddingLeft", 0.f), pWidgetRecord.second.get<float>("paddingRight", 0.f));
 
@@ -2927,13 +3205,10 @@ namespace SE
 			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "#00000000")));
 
 			widget->setExtraTranslation(pWidgetRecord.second.get<float>("extraTranslationX", 0.f), pWidgetRecord.second.get<float>("extraTranslationY", 0.f));
-
-
-			widget->disabled = pWidgetRecord.second.get<int>("disabled", 0) == 0 ? false : true;
-
-
-			widget->inited = true;
 			
+			widget->disabled = pWidgetRecord.second.get<int>("disabled", 0) == 0 ? false : true;
+			
+			widget->inited = true;			
 
 		}
 

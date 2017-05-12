@@ -93,7 +93,6 @@ namespace SE
 
 		bool disabled;
 
-
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
 
@@ -117,6 +116,8 @@ namespace SE
 
 		virtual float getViewWidth();
 		virtual float getViewHeight();
+
+		Vector3f WidgetAncestor::getTranslateVector();
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -429,8 +430,6 @@ namespace SE
 
 		virtual void OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
-
-		
 	};
 
 
@@ -447,6 +446,51 @@ namespace SE
 
 	};
 
+	class HorizontalSlider : public WidgetAncestor
+	{
+	protected:		
+		int minValue, maxValue, position;
+		float buttonWidth, buttonPadding, trackPadding, sidesPadding;
+		TRenderPair buttonRenderPair, trackRenderPair;
+		bool isTouched;
+
+		boost::variant<std::string, Vector4f> buttonSkin;
+		boost::variant<std::string, Vector4f> trackSkin;
+
+		void UpdateSkinRenderPairs();
+
+	public:
+
+		const int MIN_TRACK_HEIGHT = 2, MIN_BUTTON_HEIGHT = 6, MIN_BUTTON_WIDTH = 2;
+
+		boost::signals2::signal<void(float)> onValueChanged;
+
+		HorizontalSlider(WidgetParentInterface& widgetParent);
+		virtual ~HorizontalSlider();
+
+		void UpdateRenderPair();
+		virtual void Draw();
+
+		void setPosition(int position);
+		void setMinValue(int minValue);
+		void setMaxValue(int maxValue);
+		void setButtonPadding(float padding);
+		void setTrackPadding(float padding);
+		void setButtonWidth(float width);
+		void setButtonSkin(boost::variant<std::string, Vector4f> buttonSkin);
+		void setTrackSkin(boost::variant<std::string, Vector4f> trackSkin);
+
+		bool isPointAboveTrack(Vector2f point);
+		int getTrackPositionFromPoint(Vector2f point);
+
+		void OnMouseDown(Vector2f pos, int touchNumber);
+		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		void OnMouseUp(Vector2f pos, int touchNumber);
+		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual void OnMouseCancel(int touchNumber);
+		virtual void OnMouseMoveOutside();
+
+	};
 
 	class NewGuiManager : public WidgetParentInterface
 	{
