@@ -71,18 +71,23 @@ void TSalmonRendererInterface::SetUniforms()
 }
 
 
-void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
+void TSalmonRendererInterface::ChangeWidthHeight(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
-	AssertIfInMainThread();
-	
-	ModelviewMatrixStack.push(Matrix4f::Identity());
-	ProjectionMatrixStack.push(Matrix4f::Identity());
-
 	ScreenWidth = screenWidth;
 	ScreenHeight = screenHeight;
 
 	MatrixWidth = matrixWidth;
 	MatrixHeight = matrixHeight;
+}
+
+void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
+{
+
+	ChangeWidthHeight(screenWidth, screenHeight, matrixWidth, matrixHeight);
+	AssertIfInMainThread();
+	
+	ModelviewMatrixStack.push(Matrix4f::Identity());
+	ProjectionMatrixStack.push(Matrix4f::Identity());
 
 	glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

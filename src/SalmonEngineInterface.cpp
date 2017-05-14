@@ -59,6 +59,40 @@ TApplicationAncestor::~TApplicationAncestor()
 {
 }
 
+void TApplicationAncestor::ChangeWidthHeight(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
+{
+	
+	bool changed = false;
+
+	if (screenWidth != Renderer->GetScreenWidth()
+		|| screenHeight != Renderer->GetScreenHeight()
+		|| matrixWidth != Renderer->GetMatrixWidth()
+		|| matrixHeight != Renderer->GetMatrixHeight())
+	{
+		changed = true;
+	}
+
+	Renderer->ChangeWidthHeight(screenWidth, screenHeight, matrixWidth, matrixHeight);
+
+	if (changed)
+	{
+		if (ResourceManager->newGuiManager.IsInited())
+		{
+			ResourceManager->newGuiManager.UpdateAllRenderPair();
+		}
+
+		InnerChangeWidthHeight(screenWidth, screenHeight, matrixWidth, matrixHeight);
+	}
+
+	
+}
+
+void TApplicationAncestor::InnerChangeWidthHeight(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
+{
+
+}
+
+
 void TApplicationAncestor::OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight)
 {
 	ST::MainThreadId = std::this_thread::get_id();
@@ -98,6 +132,8 @@ void TApplicationAncestor::OuterDraw()
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	glViewport(0, 0, Renderer->GetScreenWidth(), Renderer->GetScreenHeight());
 
 	CheckGlError();
 

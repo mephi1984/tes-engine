@@ -44,6 +44,9 @@ public:
 	TCamera Camera;
 
 	TSalmonRendererInterface();
+
+
+	virtual void ChangeWidthHeight(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
 	
 	virtual void InitOpenGL(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
 

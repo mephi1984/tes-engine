@@ -142,6 +142,14 @@ void TApplication::OnKeyPress(size_t key)
 
 void DrawScene()
 {
+	RECT clientRect;
+
+
+	if (GetClientRect(Hwnd, &clientRect))
+	{
+		App->ChangeWidthHeight(clientRect.right, clientRect.bottom, clientRect.right, clientRect.bottom);
+	}
+
 	App->OuterDraw();
     SwapBuffers(hDC);
 }
@@ -185,6 +193,8 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		break;
 	case WM_PAINT: 
+
+		
 		DrawScene();
 		BeginPaint(hWnd, &ps);
 		EndPaint(hWnd, &ps);

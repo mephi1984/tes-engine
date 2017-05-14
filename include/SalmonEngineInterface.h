@@ -77,6 +77,11 @@ public:
 
 	virtual ~TApplicationAncestor();
 
+
+	virtual void ChangeWidthHeight(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
+
+	virtual void InnerChangeWidthHeight(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
+
 	virtual void OuterInit(int screenWidth, int screenHeight, float matrixWidth, float matrixHeight);
 
 	

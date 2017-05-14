@@ -2867,6 +2867,7 @@ namespace SE
 	//======================================
 	
 	NewGuiManager::NewGuiManager()
+		: inited(false)
 	{
 
 	}
@@ -2878,12 +2879,17 @@ namespace SE
 
 	void NewGuiManager::Init()
 	{
-
+		inited = true;
 	}
 
 	void NewGuiManager::Deinit()
 	{
 
+	}
+
+	bool NewGuiManager::IsInited()
+	{
+		return inited;
 	}
 
 	void NewGuiManager::Update(size_t dt)

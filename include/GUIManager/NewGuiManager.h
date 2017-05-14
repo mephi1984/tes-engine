@@ -496,6 +496,8 @@ namespace SE
 	{
 	protected:
 
+		bool inited;
+
 		TRenderPair BackgroundRenderPair;
 
 	public:
@@ -506,6 +508,8 @@ namespace SE
 
 		void Init();
 		void Deinit();
+
+		bool IsInited();
 
 		void Update(size_t dt);
 
