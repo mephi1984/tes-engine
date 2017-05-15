@@ -116,14 +116,19 @@ namespace SE
 		, disabled(false)
 	{
 		extraTranslation << 0.f, 0.f;
-
 		background = Vector4f(1, 1, 1, 1);
+
 		UpdateRenderPair();
 	}
 
 	WidgetAncestor::~WidgetAncestor()
 	{
 
+	}
+
+	void WidgetAncestor::setBordersColor(Vector4f color)
+	{
+		bordersColor = color;
 	}
 
 	void WidgetAncestor::setBackground(boost::variant<std::string, Vector4f> background)
@@ -147,6 +152,78 @@ namespace SE
 #endif
 
 		UpdateRenderPair();
+	}
+
+	std::vector<Vector2f> MakeTexCoordVecOfBorders(Vector2f posFrom = {0.f, 0.f}, Vector2f posTo = {1.f, 1.f})
+	{
+		std::vector<Vector2f> result;
+		result.resize(8);
+
+		Vector2f pos1 = posFrom;
+		Vector2f pos2 = Vector2f(posFrom(0), posTo(1));
+		Vector2f pos3 = posTo;
+		Vector2f pos4 = Vector2f(posTo(0), posFrom(1));
+
+		result[0] << pos1;
+		result[1] << pos2;
+		result[2] << pos2;
+		result[3] << pos3;
+		result[4] << pos3;
+		result[5] << pos4;
+		result[6] << pos4;
+		result[7] << pos1;
+
+		return result;
+	}
+
+	std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo)
+	{
+		std::vector<Vector3f> result;
+		result.resize(8);
+
+		Vector2f pos1 = posFrom;
+		Vector2f pos2 = Vector2f(posFrom(0), posTo(1));
+		Vector2f pos3 = posTo;
+		Vector2f pos4 = Vector2f(posTo(0), posFrom(1));
+
+		result[0] << pos1, 0;
+		result[1] << pos2, 0;
+		result[2] << pos2, 0;
+		result[3] << pos3, 0;
+		result[4] << pos3, 0;
+		result[5] << pos4, 0;
+		result[6] << pos4, 0;
+		result[7] << pos1, 0;
+
+		return result;
+	}
+
+	std::vector<Vector4f> MakeColorCoordVecOfBorders(Vector4f color)
+	{
+		std::vector<Vector4f> result;
+		result.resize(8);
+
+		result[0] = color;
+		result[1] = color;
+		result[2] = color;
+		result[3] = color;
+		result[4] = color;
+		result[5] = color;
+		result[6] = color;
+		result[7] = color;
+
+		return result;
+	}
+
+	TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
+	{
+		TDataTriangleList triangleList;
+
+		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVecOfBorders(color);
+		triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo);
+		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec();
+
+		return triangleList;
 	}
 
 	void WidgetAncestor::UpdateRenderPair()
@@ -179,6 +256,13 @@ namespace SE
 		}
 
 		renderPair.second.RefreshBuffer();
+
+		//////////////////////////
+
+		bordersRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.png";
+		bordersRenderPair.second.Data = MakeDataTriangleListOfBorders(posFrom, posTo, bordersColor);
+		
+		bordersRenderPair.second.RefreshBuffer();
 	}
 
 	float WidgetAncestor::innerWidth()
@@ -213,9 +297,11 @@ namespace SE
 
 		Renderer->TranslateMatrix(getTranslateVector());
 
-		TRenderParamsSetter render(renderPair.first);
-
+		TRenderParamsSetter render1(renderPair.first);
 		Renderer->DrawTriangleList(renderPair.second);
+		
+		TRenderParamsSetter render2(bordersRenderPair.first);
+		Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
 
 		Renderer->PopMatrix();
 	}
@@ -717,6 +803,7 @@ namespace SE
 
 	bool VerticalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
+
 		if (disabled)
 		{
 			return false;
@@ -786,6 +873,7 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseMove(Vector2f pos)
 	{
+
 		if (disabled)
 		{
 			return;
@@ -1799,37 +1887,67 @@ namespace SE
 			return false;
 		}
 
+		bool childMoved = false;
+
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
 		
-		WidgetAncestor::OnMove(pos, shift, touchNumber);
+		float diff = getContentAreaHeight();
 
-		float viewHeight = getContentAreaHeight();
-		float contentHeight = innerHeight();
-
-		if (contentHeight > viewHeight)
+		for (size_t i = 0; i < children.size(); i++)
 		{
-			scroll -= shift(1);
-
-			if (scroll < 0)
+			if (children[i]->disabled)
 			{
-				scroll = 0;
+				continue;
 			}
 
-			if (scroll > contentHeight - viewHeight)
+			diff += -children[i]->getViewHeight();
+
+			Vector2f innerRelativePos = relativePos - Vector2f(0, diff - scroll);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				scroll = contentHeight - viewHeight;
+				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
+			}
+
+			diff += -itemSpacing;
+		}
+
+		if (!childMoved)
+		{
+			WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+			float viewHeight = getContentAreaHeight();
+			float contentHeight = innerHeight();
+
+			if (contentHeight > viewHeight)
+			{
+				scroll -= shift(1);
+
+				if (scroll < 0)
+				{
+					scroll = 0;
+				}
+
+				if (scroll > contentHeight - viewHeight)
+				{
+					scroll = contentHeight - viewHeight;
+				}
+			}
+
+			if (std::abs(shift(0)) < std::abs(shift(1)))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
-
-		if (std::abs(shift(0)) < std::abs(shift(1)))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
-		
+		return true; // childmoved
 	}
 
 	void VerticalScrollLayout::OnMouseMove(Vector2f pos)
@@ -1838,7 +1956,6 @@ namespace SE
 		{
 			return;
 		}
-
 
 		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - scroll - extraTranslation(1));
 
@@ -1930,7 +2047,6 @@ namespace SE
 		{
 			return;
 		}
-
 
 		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft + scroll - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
 	
@@ -2057,37 +2173,67 @@ namespace SE
 			return false;
 		}
 
-		WidgetAncestor::OnMove(pos, shift, touchNumber);
+		bool childMoved = false;
 
-		float viewWidth = getContentAreaWidth();
-		float contentWidth = innerWidth();
+		Vector2f relativePos = pos + Vector2f(-paddingLeft - marginLeft - extraTranslation(0), -marginBottom - paddingBottom - extraTranslation(1));
 
-		if (contentWidth > viewWidth)
+		float diff = 0;
+
+		for (size_t i = 0; i < children.size(); i++)
 		{
-			scroll += shift(0);
-
-			if (scroll < 0)
+			if (children[i]->disabled)
 			{
-				scroll = 0;
+				continue;
+			}
+			
+			Vector2f innerRelativePos = relativePos - Vector2f(diff - scroll, 0);
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+			}
+			else
+			{
+				children[i]->OnMouseCancel(touchNumber);
 			}
 
-			if (scroll > contentWidth - viewWidth)
-			{
-				scroll = contentWidth - viewWidth;
-			}
+			diff += children[i]->getViewWidth() + itemSpacing;
 		}
 
-		/*
-		if (std::abs(shift(0)) > std::abs(shift(1)))
+		if (!childMoved)
 		{
+			WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+			float viewWidth = getContentAreaWidth();
+			float contentWidth = innerWidth();
+
+			if (contentWidth > viewWidth)
+			{
+				scroll += shift(0);
+
+				if (scroll < 0)
+				{
+					scroll = 0;
+				}
+
+				if (scroll > contentWidth - viewWidth)
+				{
+					scroll = contentWidth - viewWidth;
+				}
+			}
+
+			if (std::abs(shift(0)) > std::abs(shift(1)))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
 			return true;
 		}
-		else
-		{
-			return false;
-		}*/
-
-		return true;
+		return true; // childmoved
 	}
 
 	void HorizontalScrollLayout::OnMouseMove(Vector2f pos)
@@ -2623,20 +2769,20 @@ namespace SE
 			[this](Vector4f color) { return false; },
 			[this](std::string textureName) { return true; });
 
-		Vector4f color = Visit(trackSkin,
-			[this](Vector4f color) { return color; },
-			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
-
 		std::string textureName = Visit(trackSkin,
 			[this](Vector4f color) { return "white.png"; },
 			[this](std::string textureName) { return textureName; });
+
+		Vector4f color = Visit(trackSkin,
+			[this](Vector4f color) { return color; },
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
 		Vector2f
 			from_point(paddingLeft + sidesPadding, paddingBottom + trackPadding),
 			to_point(getDrawWidth() - paddingRight - sidesPadding, getDrawHeight() - paddingTop - trackPadding);
 
 		if (from_point(0) > to_point(0)) from_point(0) = to_point(0);
-		if (!isTexture)// || to_point(1) - from_point(1) + 1 < MIN_TRACK_HEIGHT)
+		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_TRACK_HEIGHT)
 		{
 			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_TRACK_HEIGHT / 2.f;
 			to_point(1) = paddingBottom + getContentAreaHeight() / 2.f + MIN_TRACK_HEIGHT / 2.f;
@@ -2652,7 +2798,7 @@ namespace SE
 
 		trackRenderPair.second.RefreshBuffer();
 
-		isTexture = Visit(trackSkin,
+		isTexture = Visit(buttonSkin,
 			[this](Vector4f color) { return false; },
 			[this](std::string textureName) { return true; });
 
@@ -2664,15 +2810,15 @@ namespace SE
 			[this](Vector4f color) { return  color; },
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
-		from_point = { paddingLeft + sidesPadding, paddingBottom + buttonPadding };
-		to_point = { buttonWidth - 1 + paddingLeft + sidesPadding, getDrawHeight() - paddingTop - buttonPadding };
+		from_point = { paddingLeft, paddingBottom + buttonPadding };
+		to_point = { buttonWidth - 1 + paddingLeft, getDrawHeight() - paddingTop - buttonPadding };
 
-		if (!isTexture)// || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
+		if (!isTexture || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
 		{
-			from_point(0) = paddingLeft + getContentAreaWidth() / 2.f - MIN_BUTTON_WIDTH / 2.f;
-			to_point(0) = paddingLeft + getContentAreaWidth() / 2.f + MIN_BUTTON_WIDTH / 2.f;
+			from_point(0) = paddingLeft;
+			to_point(0) = paddingLeft + MIN_BUTTON_WIDTH;
 		}
-		if (!isTexture) //|| to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
+		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
 		{
 			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_BUTTON_HEIGHT / 2.f;
 			to_point(1) = paddingBottom + getContentAreaHeight() / 2.f + MIN_BUTTON_HEIGHT / 2.f;
@@ -2722,9 +2868,6 @@ namespace SE
 
 			UpdateRenderPair();
 		}
-
-		
-
 	}
 
 	void HorizontalSlider::setMinValue(int minValue)
@@ -2750,13 +2893,11 @@ namespace SE
 
 	void HorizontalSlider::setButtonPadding(float padding)
 	{
-		if (getContentAreaHeight() - padding * 2 < MIN_BUTTON_HEIGHT) padding = (getContentAreaHeight() - MIN_BUTTON_HEIGHT) / 2.f;
 		buttonPadding = padding;
 	}
 
 	void HorizontalSlider::setTrackPadding(float padding)
 	{
-		if (getContentAreaHeight() - padding * 2 < MIN_TRACK_HEIGHT) padding = (getContentAreaHeight() - MIN_TRACK_HEIGHT) / 2.f;
 		trackPadding = padding;
 	}
 
@@ -2808,7 +2949,7 @@ namespace SE
 		TRenderParamsSetter render1(trackRenderPair.first);
 		Renderer->DrawTriangleList(trackRenderPair.second);
 
-		Renderer->TranslateMatrix(Vector3f( (position - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - 2 * sidesPadding) - buttonWidth / 2.f, 0, 0));
+		Renderer->TranslateMatrix(Vector3f((position - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - buttonWidth), 0, 0));
 		TRenderParamsSetter render2(buttonRenderPair.first);
 		Renderer->DrawTriangleList(buttonRenderPair.second);
 				
@@ -2823,7 +2964,7 @@ namespace SE
 
 	int HorizontalSlider::getTrackPositionFromPoint(Vector2f point)
 	{
-		return (int)(point(0) / (getContentAreaWidth() - 2 * sidesPadding) * (maxValue - minValue)) + minValue;
+		return (int)(point(0) / (getContentAreaWidth() - buttonWidth) * (maxValue - minValue) + 0.5f) + minValue;
 	}
 
 	void HorizontalSlider::OnMouseDown(Vector2f pos, int touchNumber)
@@ -2834,7 +2975,6 @@ namespace SE
 		}
 		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
 		if (!isPointAboveTrack(pos)) return;
-		isTouched = true;
 		setPosition(getTrackPositionFromPoint(pos));
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
@@ -2845,12 +2985,13 @@ namespace SE
 		{
 			return false;
 		}
-		if (isTouched)
-		{
-			pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
-			setPosition(getTrackPositionFromPoint(pos));
-		}
-		return WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+		WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+		setPosition(getTrackPositionFromPoint(pos));
+		
+		return true;
 	}
 
 	void HorizontalSlider::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2859,7 +3000,6 @@ namespace SE
 		{
 			return;
 		}
-		isTouched = false;
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
 	}
 
@@ -2869,26 +3009,8 @@ namespace SE
 		{
 			return;
 		}
-		isTouched = false;
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
-
-	void HorizontalSlider::OnMouseCancel(int touchNumber)
-	{
-		if (disabled)
-		{
-			return;
-		}
-	}
-
-	void HorizontalSlider::OnMouseMoveOutside()
-	{
-		if (disabled)
-		{
-			return;
-		}
-	}
-
 
 	//======================================
 	
@@ -2953,11 +3075,9 @@ namespace SE
 			{
 				children[i]->OnMouseDown(innerRelativePos, touchNumber);
 			}
-
-
+			
 		}
-
-
+		
 	}
 
 	void NewGuiManager::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2977,10 +3097,10 @@ namespace SE
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-			//if (pointIsInsideView(innerRelativePos, children[i]))
-			//{
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
 				children[i]->OnMouseUp(innerRelativePos, touchNumber);
-			//}
+			}
 
 
 		}
@@ -3004,10 +3124,10 @@ namespace SE
 
 			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
 
-			//if (pointIsInsideView(innerRelativePos, children[i]))
-			//{
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
 				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
-			//}
+			}
 
 
 		}
@@ -3219,7 +3339,7 @@ namespace SE
 				slider->setButtonPadding(pWidgetRecord.second.get<int>("buttonPadding", 10));
 				slider->setTrackPadding(pWidgetRecord.second.get<int>("trackPadding", 20));
 				slider->setButtonSkin(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("buttonSkin", "#000000FF")));
-				slider->setTrackSkin(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("trackSkin", "#C0C0C0FF")));
+				slider->setTrackSkin(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("trackSkin", "#000000FF")));
 
 				widget = slider;
 			}
@@ -3235,6 +3355,8 @@ namespace SE
 			widget->setLayoutHeight(layoutDimentionFromConfigValue(pWidgetRecord.second.get<std::string>("height", "wrap_content")));
 
 			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "#00000000")));
+
+			widget->setBordersColor(layoutColorFromConfigValue(pWidgetRecord.second.get<std::string>("bordersColor", "#FF0000FF")));
 
 			widget->setExtraTranslation(pWidgetRecord.second.get<float>("extraTranslationX", 0.f), pWidgetRecord.second.get<float>("extraTranslationY", 0.f));
 			
@@ -3273,6 +3395,25 @@ namespace SE
 
 	}
 
+	Vector4f NewGuiManager::layoutColorFromConfigValue(std::string configValue)
+	{
+		unsigned int color;
+		std::stringstream ss;
+		ss << std::hex << configValue;
+		ss >> color;
+
+		Vector4f result;
+
+		result(3) = (color % 256) / 255.f;
+
+		result(2) = ((color >> 8) % 256) / 255.f;
+
+		result(1) = ((color >> 16) % 256) / 255.f;
+
+		result(0) = ((color >> 24) % 256) / 255.f;
+
+		return result;
+	}
 
 	boost::variant<std::string, Vector4f> NewGuiManager::layoutBackgroundFromConfigValue(std::string configValue)
 	{

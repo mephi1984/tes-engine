@@ -46,8 +46,9 @@ namespace SE
 	protected:
 
 		boost::variant<std::string, Vector4f> background;
+		Vector4f bordersColor;
 
-		TRenderPair renderPair;
+		TRenderPair renderPair, bordersRenderPair;
 
 
 	public:
@@ -121,6 +122,8 @@ namespace SE
 
 		virtual float innerWidth();
 		virtual float innerHeight();
+
+		virtual void setBordersColor(Vector4f color);
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
@@ -452,7 +455,6 @@ namespace SE
 		int minValue, maxValue, position;
 		float buttonWidth, buttonPadding, trackPadding, sidesPadding;
 		TRenderPair buttonRenderPair, trackRenderPair;
-		bool isTouched;
 
 		boost::variant<std::string, Vector4f> buttonSkin;
 		boost::variant<std::string, Vector4f> trackSkin;
@@ -461,7 +463,7 @@ namespace SE
 
 	public:
 
-		const int MIN_TRACK_HEIGHT = 2, MIN_BUTTON_HEIGHT = 6, MIN_BUTTON_WIDTH = 2;
+		const int MIN_TRACK_HEIGHT = 2, MIN_BUTTON_HEIGHT = 8, MIN_BUTTON_WIDTH = 2;
 
 		boost::signals2::signal<void(float)> onValueChanged;
 
@@ -488,8 +490,6 @@ namespace SE
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 		void OnMouseUp(Vector2f pos, int touchNumber);
 		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
-		virtual void OnMouseCancel(int touchNumber);
-		virtual void OnMouseMoveOutside();
 
 	};
 
@@ -542,6 +542,7 @@ namespace SE
 
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
+		Vector4f NewGuiManager::layoutColorFromConfigValue(std::string configValue);
 
 
 	};
