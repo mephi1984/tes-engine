@@ -471,6 +471,7 @@ namespace SE
 		void UpdateRenderPair();
 		virtual void Draw();
 
+		void changeValue(float t);
 		void setPosition(int position);
 		void setMinValue(int minValue);
 		void setMaxValue(int maxValue);

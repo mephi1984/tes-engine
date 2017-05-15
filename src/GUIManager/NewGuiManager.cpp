@@ -2701,6 +2701,32 @@ namespace SE
 		}
 	}
 
+
+	void HorizontalSlider::changeValue(float t)
+	{
+		if (t < 0)
+		{
+			t = 0;
+		}
+
+		if (t > 1)
+		{
+			t = 1;
+		}
+
+		int newPosition = minValue + t * (maxValue - minValue);
+
+		if (newPosition != this->position)
+		{
+			this->position = newPosition;
+
+			UpdateRenderPair();
+		}
+
+		
+
+	}
+
 	void HorizontalSlider::setMinValue(int minValue)
 	{
 		if (minValue > maxValue) minValue = maxValue;
