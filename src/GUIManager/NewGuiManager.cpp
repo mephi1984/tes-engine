@@ -221,7 +221,7 @@ namespace SE
 
 		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVecOfBorders(color);
 		triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo);
-		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec();
+		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVecOfBorders();
 
 		return triangleList;
 	}
@@ -2327,16 +2327,12 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-
 		//+extraTranslation(0)
 
-
 		Renderer->PushMatrix();
-		Renderer->TranslateMatrix(Vector3f(extraTranslation(0), extraTranslation(1), 0.f));
+		Renderer->TranslateMatrix(getTranslateVector());
 
-		
 		TRenderParamsSetter render(textRenderPair.first);
-
 		Renderer->DrawTriangleList(textRenderPair.second);
 
 		Renderer->PopMatrix();
@@ -2363,7 +2359,6 @@ namespace SE
 		{
 			return;
 		}
-		//TTriangleList triangleList;
 
 		if (textParams.FontName == "")
 		{
@@ -2372,14 +2367,18 @@ namespace SE
 
 		ResourceManager->FontManager.PushFont(textParams.FontName);
 
-		Vector2f posFrom(marginLeft + paddingLeft, parent.getContentAreaHeight() - getContentAreaHeight() - marginTop - paddingTop);
-
-		Vector2f posTo(marginLeft + paddingLeft + getContentAreaWidth(), parent.getContentAreaHeight() - marginTop - paddingTop);
-
-		textRenderPair.second = ResourceManager->FontManager.DrawTextInBoxToVBO(posFrom, posTo, textParams.BasicTextAreaParams, textParams.Text, true);
+		Vector2f posFrom(paddingLeft, paddingBottom);
+		Vector2f posTo(getDrawWidth() - paddingRight, getDrawHeight() - paddingTop);
 
 		textRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = ResourceManager->FontManager.GetCurrentFontTextureName();
+		
+		///////////////////////////////
+		textParams.BasicTextAreaParams.Height = 12;
+		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_LEFT;
+		textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_TOP;
+		///////////////////////////////
 
+		textRenderPair.second = ResourceManager->FontManager.DrawTextInBoxToVBO(posFrom, posTo, textParams.BasicTextAreaParams, textParams.Text, true);
 		
 		textRenderPair.second.RefreshBuffer();
 
@@ -3422,22 +3421,7 @@ namespace SE
 		{
 			configValue.erase(configValue.begin(), configValue.begin() + 1);
 
-			unsigned int color;
-			std::stringstream ss;
-			ss << std::hex << configValue;
-			ss >> color;
-
-			Vector4f result;
-
-			result(3) = (color % 256) / 255.f;
-
-			result(2) = ((color >> 8) % 256) / 255.f;
-
-			result(1) = ((color >> 16) % 256) / 255.f;
-
-			result(0) = ((color >> 24) % 256) / 255.f;
-
-			return result;
+			return layoutColorFromConfigValue(configValue);
 		}
 		else
 		{

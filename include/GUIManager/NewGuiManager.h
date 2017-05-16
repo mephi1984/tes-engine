@@ -452,8 +452,14 @@ namespace SE
 	class HorizontalSlider : public WidgetAncestor
 	{
 	protected:		
-		int minValue, maxValue, position;
-		float buttonWidth, buttonPadding, trackPadding, sidesPadding;
+		int minValue;
+		int maxValue;
+		int position;
+		float buttonWidth;
+		float buttonPadding;
+		float trackPadding;
+		float sidesPadding;
+
 		TRenderPair buttonRenderPair, trackRenderPair;
 
 		boost::variant<std::string, Vector4f> buttonSkin;
@@ -463,7 +469,9 @@ namespace SE
 
 	public:
 
-		const int MIN_TRACK_HEIGHT = 2, MIN_BUTTON_HEIGHT = 8, MIN_BUTTON_WIDTH = 2;
+		const int MIN_TRACK_HEIGHT = 2;
+		const int MIN_BUTTON_HEIGHT = 8;
+		const int MIN_BUTTON_WIDTH = 2;
 
 		boost::signals2::signal<void(float)> onValueChanged;
 
@@ -542,7 +550,7 @@ namespace SE
 
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
-		Vector4f NewGuiManager::layoutColorFromConfigValue(std::string configValue);
+		Vector4f layoutColorFromConfigValue(std::string configValue);
 
 
 	};
