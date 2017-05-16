@@ -174,10 +174,15 @@ float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList&
 	float height = scale_y*fontParams.BitmapHeight;
 
 	float width = scale_x*fontParams.BitmapWidth;
-	
-	Vector2f p1 = pos + Vector2f(+ scale_x*fontParams.InternalShiftX, -height - scale_y*fontParams.InternalShiftY);
-	Vector2f p2 = pos + Vector2f(width + scale_x*fontParams.InternalShiftX, - scale_y* fontParams.InternalShiftY);
 
+	//Vector2f p1 = pos;
+	//Vector2f p2 = pos + Vector2f(width - scale_x * fontParams.InternalShiftX, height);
+
+	Vector2f p1 = pos + Vector2f(scale_x * fontParams.InternalShiftX, 0);
+	Vector2f p2 = pos + Vector2f(width + scale_x * fontParams.InternalShiftX, height);
+
+	//Vector2f p1 = pos + Vector2f(scale_x * fontParams.InternalShiftX, -height - scale_y * fontParams.InternalShiftY);
+	//Vector2f p2 = pos + Vector2f(width + scale_x * fontParams.InternalShiftX, -scale_y * fontParams.InternalShiftY);
 	
 	Vector2f t1 = Vector2f(fontParams.ShiftX,
 		1 - fontParams.ShiftY - fontParams.BitmapHeight - fontParams.InternalShiftY);
@@ -186,7 +191,7 @@ float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList&
 
 	triangleList.Data += MakeDataTriangleList(p1, p2, t1, t2);
 	
-	return fontParams.Advance*scale_x;
+	return fontParams.Advance * scale_x;
 }
 
 
@@ -348,7 +353,9 @@ TTriangleList TFontManager::DrawStringToVBO(Vector2f pos, TTextBasicAreaParams p
                 realPos(1) = realPos(1) + rowsHeight*0.5f;
 				realPos(1) = floorf(realPos(1));
             }
-            
+
+            // No TVA_BOTTOM/TVA_TOP branch
+
             width = DrawCharToVBO(realPos, rowStr[i], triangleList);
             
             pos += Vector2f(width, 0);
