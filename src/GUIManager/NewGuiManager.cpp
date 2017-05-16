@@ -300,8 +300,8 @@ namespace SE
 		TRenderParamsSetter render1(renderPair.first);
 		Renderer->DrawTriangleList(renderPair.second);
 		
-		TRenderParamsSetter render2(bordersRenderPair.first);
-		Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
+		//TRenderParamsSetter render2(bordersRenderPair.first);
+		//Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
 
 		Renderer->PopMatrix();
 	}
