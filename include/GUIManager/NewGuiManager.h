@@ -43,18 +43,7 @@ namespace SE
 	
 	class WidgetAncestor : public WidgetParentInterface
 	{
-	protected:
-
-		boost::variant<std::string, Vector4f> background;
-		Vector4f bordersColor;
-
-		TRenderPair renderPair, bordersRenderPair;
-
-
 	public:
-
-		bool inited;
-
 		enum LayoutStyle
 		{
 			LS_FIXED,
@@ -63,6 +52,26 @@ namespace SE
 			LS_RELATIVE_SIZE
 		};
 
+		enum BorderType
+		{
+			BT_NONE,
+			BT_LINE
+		};
+
+	protected:
+
+		boost::variant<std::string, Vector4f> background;
+		
+		Vector4f bordersColor;
+		
+		BorderType borderType;
+
+		TRenderPair renderPair, bordersRenderPair;
+
+
+	public:
+
+		bool inited;
 		
 		boost::variant<float, LayoutStyle> layoutWidth;
 		boost::variant<float, LayoutStyle> layoutHeight;
@@ -124,6 +133,8 @@ namespace SE
 		virtual float innerHeight();
 
 		virtual void setBordersColor(Vector4f color);
+
+		virtual void setBorderType(BorderType newBorderType);
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
@@ -542,7 +553,8 @@ namespace SE
 
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
-		Vector4f NewGuiManager::layoutColorFromConfigValue(std::string configValue);
+		Vector4f layoutColorFromConfigValue(std::string configValue);
+		WidgetAncestor::BorderType borderTypeFromConfigValue(std::string configValue);
 
 
 	};

@@ -131,6 +131,13 @@ namespace SE
 		bordersColor = color;
 	}
 
+	void WidgetAncestor::setBorderType(BorderType newBorderType)
+	{
+		borderType = newBorderType;
+
+		UpdateRenderPair();
+	}
+
 	void WidgetAncestor::setBackground(boost::variant<std::string, Vector4f> background)
 	{
 		this->background = background;
@@ -153,29 +160,7 @@ namespace SE
 
 		UpdateRenderPair();
 	}
-
-	std::vector<Vector2f> MakeTexCoordVecOfBorders(Vector2f posFrom = {0.f, 0.f}, Vector2f posTo = {1.f, 1.f})
-	{
-		std::vector<Vector2f> result;
-		result.resize(8);
-
-		Vector2f pos1 = posFrom;
-		Vector2f pos2 = Vector2f(posFrom(0), posTo(1));
-		Vector2f pos3 = posTo;
-		Vector2f pos4 = Vector2f(posTo(0), posFrom(1));
-
-		result[0] << pos1;
-		result[1] << pos2;
-		result[2] << pos2;
-		result[3] << pos3;
-		result[4] << pos3;
-		result[5] << pos4;
-		result[6] << pos4;
-		result[7] << pos1;
-
-		return result;
-	}
-
+	
 	std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo)
 	{
 		std::vector<Vector3f> result;
@@ -198,7 +183,7 @@ namespace SE
 		return result;
 	}
 
-	std::vector<Vector4f> MakeColorCoordVecOfBorders(Vector4f color)
+	std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color)
 	{
 		std::vector<Vector4f> result;
 		result.resize(8);
@@ -215,13 +200,30 @@ namespace SE
 		return result;
 	}
 
+	std::vector<Vector2f> MakeTexCoordVecOfBorders()
+	{
+		std::vector<Vector2f> result;
+		result.resize(8);
+
+		result[0] = { 0,0 };
+		result[1] = { 0,0 };
+		result[2] = { 0,0 };
+		result[3] = { 0,0 };
+		result[4] = { 0,0 };
+		result[5] = { 0,0 };
+		result[6] = { 0,0 };
+		result[7] = { 0,0 };
+
+		return result;
+	}
+
 	TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
 	{
 		TDataTriangleList triangleList;
 
-		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVecOfBorders(color);
+		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorVecOfBorders(color);
 		triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo);
-		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec();
+		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVecOfBorders();
 
 		return triangleList;
 	}
@@ -299,9 +301,12 @@ namespace SE
 
 		TRenderParamsSetter render1(renderPair.first);
 		Renderer->DrawTriangleList(renderPair.second);
-		
-		//TRenderParamsSetter render2(bordersRenderPair.first);
-		//Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
+
+		if (borderType == BorderType::BT_LINE)
+		{
+			TRenderParamsSetter render2(bordersRenderPair.first);
+			Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
+		}
 
 		Renderer->PopMatrix();
 	}
@@ -3357,6 +3362,8 @@ namespace SE
 			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "#00000000")));
 
 			widget->setBordersColor(layoutColorFromConfigValue(pWidgetRecord.second.get<std::string>("bordersColor", "#FF0000FF")));
+			
+			widget->setBorderType(borderTypeFromConfigValue(pWidgetRecord.second.get<std::string>("borderType", "none")));
 
 			widget->setExtraTranslation(pWidgetRecord.second.get<float>("extraTranslationX", 0.f), pWidgetRecord.second.get<float>("extraTranslationY", 0.f));
 			
@@ -3413,6 +3420,18 @@ namespace SE
 		result(0) = ((color >> 24) % 256) / 255.f;
 
 		return result;
+	}
+
+	WidgetAncestor::BorderType NewGuiManager::borderTypeFromConfigValue(std::string configValue)
+	{
+		if (configValue == "line")
+		{
+			return WidgetAncestor::BorderType::BT_LINE;
+		}
+		else
+		{
+			return WidgetAncestor::BorderType::BT_NONE;
+		}
 	}
 
 	boost::variant<std::string, Vector4f> NewGuiManager::layoutBackgroundFromConfigValue(std::string configValue)
