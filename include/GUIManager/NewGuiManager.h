@@ -368,8 +368,11 @@ namespace SE
 	protected:
 
 		TRenderPair textRenderPair;
+		float textLineHeight;
 
 	public:
+
+		static const int DEFAULT_TEXT_LINE_HEIGHT = 18;
 
 		TTextParams textParams;
 
@@ -384,8 +387,7 @@ namespace SE
 		void setText(const std::string& text);
 
 		virtual void UpdateRenderPair();
-
-		void UpdateTextRenderPair();
+		virtual void UpdateTextRenderPair();
 	};
 
 
@@ -452,9 +454,18 @@ namespace SE
 	{
 	protected:
 
+		TRenderPair cursorRenderPair;
+
 	public:
 
+		const int DEFAULT_CURSOR_WIDTH = 2;
+
 		EditText(WidgetParentInterface& widgetParent);
+
+		virtual void Draw();
+		virtual void UpdateRenderPair();
+		virtual void UpdateCursorRenderPair();
+		Vector2f getCursorPos();
 
 		virtual void OnKeyPressed(int key);
 
@@ -480,9 +491,9 @@ namespace SE
 
 	public:
 
-		const int MIN_TRACK_HEIGHT = 2;
-		const int MIN_BUTTON_HEIGHT = 8;
-		const int MIN_BUTTON_WIDTH = 2;
+		static const int MIN_TRACK_HEIGHT = 2;
+		static const int MIN_BUTTON_HEIGHT = 8;
+		static const int MIN_BUTTON_WIDTH = 2;
 
 		boost::signals2::signal<void(float)> onValueChanged;
 

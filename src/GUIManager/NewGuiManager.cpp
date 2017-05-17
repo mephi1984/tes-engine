@@ -185,36 +185,7 @@ namespace SE
 
 	std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color)
 	{
-		std::vector<Vector4f> result;
-		result.resize(8);
-
-		result[0] = color;
-		result[1] = color;
-		result[2] = color;
-		result[3] = color;
-		result[4] = color;
-		result[5] = color;
-		result[6] = color;
-		result[7] = color;
-
-		return result;
-	}
-
-	std::vector<Vector2f> MakeTexCoordVecOfBorders()
-	{
-		std::vector<Vector2f> result;
-		result.resize(8);
-
-		result[0] = { 0,0 };
-		result[1] = { 0,0 };
-		result[2] = { 0,0 };
-		result[3] = { 0,0 };
-		result[4] = { 0,0 };
-		result[5] = { 0,0 };
-		result[6] = { 0,0 };
-		result[7] = { 0,0 };
-
-		return result;
+		return std::vector<Vector4f> (8, color);
 	}
 
 	TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
@@ -223,7 +194,6 @@ namespace SE
 
 		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorVecOfBorders(color);
 		triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo);
-		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVecOfBorders();
 
 		return triangleList;
 	}
@@ -261,7 +231,7 @@ namespace SE
 
 		//////////////////////////
 
-		bordersRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.png";
+		bordersRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
 		bordersRenderPair.second.Data = MakeDataTriangleListOfBorders(posFrom, posTo, bordersColor);
 		
 		bordersRenderPair.second.RefreshBuffer();
@@ -2301,7 +2271,7 @@ namespace SE
 		textParams.BasicTextAreaParams.HorizontalPadding = 0;
 		textParams.BasicTextAreaParams.VerticalPadding = 0;
 
-		textParams.BasicTextAreaParams.Height = 18;
+		textParams.BasicTextAreaParams.Height = DEFAULT_TEXT_LINE_HEIGHT;
 
 		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_CENTER;
 
@@ -2332,9 +2302,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		//+extraTranslation(0)
-
 		Renderer->PushMatrix();
+
 		Renderer->TranslateMatrix(getTranslateVector());
 
 		TRenderParamsSetter render(textRenderPair.first);
@@ -2376,15 +2345,8 @@ namespace SE
 		Vector2f posTo(getDrawWidth() - paddingRight, getDrawHeight() - paddingTop);
 
 		textRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = ResourceManager->FontManager.GetCurrentFontTextureName();
-		
-		///////////////////////////////
-		textParams.BasicTextAreaParams.Height = 12;
-		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_LEFT;
-		textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_TOP;
-		///////////////////////////////
 
 		textRenderPair.second = ResourceManager->FontManager.DrawTextInBoxToVBO(posFrom, posTo, textParams.BasicTextAreaParams, textParams.Text, true);
-		
 		textRenderPair.second.RefreshBuffer();
 
 		ResourceManager->FontManager.PopFont();
@@ -2724,6 +2686,75 @@ namespace SE
 		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_LEFT;
 	}
 
+	void EditText::UpdateRenderPair()
+	{
+		Label::UpdateRenderPair();
+		UpdateCursorRenderPair();
+	}
+	
+	void EditText::UpdateCursorRenderPair()
+	{
+		if (!inited)
+		{
+			return;
+		}
+
+		Vector2f posFrom(0, 0);
+		Vector2f posTo(DEFAULT_CURSOR_WIDTH, textParams.BasicTextAreaParams.Height);
+
+		cursorRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
+
+		cursorRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+		cursorRenderPair.second.RefreshBuffer();
+	}
+
+	void EditText::Draw()
+	{
+		if (disabled)
+		{
+			return;
+		}
+
+		Label::Draw();
+
+		Renderer->PushMatrix();
+
+		Renderer->TranslateMatrix(getTranslateVector());
+
+		TRenderParamsSetter render(cursorRenderPair.first);
+		Renderer->DrawTriangleList(cursorRenderPair.second);
+
+		Renderer->PopMatrix();
+	}
+
+	Vector2f EditText::getCursorPos()
+	{
+		// the bottom side of the cursor relativly the left top corner of the rectangle containing the text
+
+		std::string str = textParams.Text;
+		int lines = std::count(str.begin(), str.end(), "\n");
+
+		Vector2f result;
+
+		if (textParams.BasicTextAreaParams.TextHorizontalAlignment == THA_RIGHT)
+		{
+			result(0) = getContentAreaWidth() - textParams.BasicTextAreaParams.HorizontalPadding;
+		}
+		else if (textParams.BasicTextAreaParams.TextHorizontalAlignment == THA_LEFT)
+		{
+			int advance = 0;
+			auto i = str.length - 1;
+			while (str[i] != '\n')
+			{
+				advance += str[i]
+			}
+		}
+
+
+		= { 0, getContentAreaHeight() - textParams.BasicTextAreaParams.Height * lines };
+	}
+
 	void EditText::OnKeyPressed(int key)
 	{
 		if (disabled)
@@ -2774,7 +2805,7 @@ namespace SE
 			[this](std::string textureName) { return true; });
 
 		std::string textureName = Visit(trackSkin,
-			[this](Vector4f color) { return "white.png"; },
+			[this](Vector4f color) { return "white.bmp"; },
 			[this](std::string textureName) { return textureName; });
 
 		Vector4f color = Visit(trackSkin,
@@ -2815,7 +2846,7 @@ namespace SE
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
 		from_point = { paddingLeft, paddingBottom + buttonPadding };
-		to_point = { buttonWidth - 1 + paddingLeft, getDrawHeight() - paddingTop - buttonPadding };
+		to_point = { buttonWidth + paddingLeft, getDrawHeight() - paddingTop - buttonPadding };
 
 		if (!isTexture || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
 		{
@@ -2846,7 +2877,10 @@ namespace SE
 		if (this->position != position)
 		{
 			this->position = position;
-			onValueChanged((position - minValue) / (float)(maxValue- minValue));
+			if (maxValue != minValue)
+			{
+				onValueChanged((position - minValue) / (float)(maxValue- minValue));
+			}
 			Draw();
 		}
 	}
@@ -2876,21 +2910,30 @@ namespace SE
 
 	void HorizontalSlider::setMinValue(int minValue)
 	{
-		if (minValue > maxValue) minValue = maxValue;
+		if (minValue > maxValue)
+		{
+			minValue = maxValue;
+		}
 		this->minValue = minValue;
 		setPosition(position);
 	}
 
 	void HorizontalSlider::setMaxValue(int maxValue)
 	{
-		if (maxValue < minValue) maxValue = minValue;
+		if (maxValue < minValue)
+		{
+			maxValue = minValue;
+		}
 		this->maxValue = maxValue;
 		setPosition(position);
 	}
 
 	void HorizontalSlider::setButtonWidth(float width)
 	{
-		if (width < MIN_BUTTON_WIDTH) width = MIN_BUTTON_WIDTH;
+		if (width < MIN_BUTTON_WIDTH)
+		{
+			width = MIN_BUTTON_WIDTH;
+		}
 		buttonWidth = width;
 		sidesPadding = width / 2.f;
 	}
@@ -2949,14 +2992,22 @@ namespace SE
 		Renderer->PushMatrix();
 
 		Renderer->TranslateMatrix(getTranslateVector());
-		
+
 		TRenderParamsSetter render1(trackRenderPair.first);
 		Renderer->DrawTriangleList(trackRenderPair.second);
 
-		Renderer->TranslateMatrix(Vector3f((position - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - buttonWidth), 0, 0));
+		if (maxValue != minValue)
+		{
+			Renderer->TranslateMatrix(Vector3f((position - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - buttonWidth), 0, 0));
+		}
+		else
+		{
+			Renderer->TranslateMatrix(Vector3f(0.5f * (getContentAreaWidth() - buttonWidth), 0, 0));
+		}
+
 		TRenderParamsSetter render2(buttonRenderPair.first);
 		Renderer->DrawTriangleList(buttonRenderPair.second);
-				
+
 		Renderer->PopMatrix();
 	}
 
@@ -3302,13 +3353,31 @@ namespace SE
 			{
 				auto label = parentWidget.CreateAndAddChildOfType<Label>();
 
-				label->setText(pWidgetRecord.second.get<std::string>("text", ""));
+				if (pWidgetRecord.second.count("TextParams") != 0)
+				{
+					label->textParams.Serialize(pWidgetRecord.second.find("TextParams")->second);
+				}
+				else
+				{
+					label->textParams = TTextParams("", ResourceManager->FontManager.GetCurrentFontName(),
+						Label::DEFAULT_TEXT_LINE_HEIGHT, 0, 0, THA_LEFT, TVA_BOTTOM);
+				}
 
 				widget = label;
 			}
 			if (type == "EditText")
 			{
 				auto editText = parentWidget.CreateAndAddChildOfType<EditText>();
+
+				if (pWidgetRecord.second.count("TextParams") != 0)
+				{
+					editText->textParams.Serialize(pWidgetRecord.second.find("TextParams")->second);
+				}
+				else
+				{
+					editText->textParams = TTextParams("", ResourceManager->FontManager.GetCurrentFontName(),
+						Label::DEFAULT_TEXT_LINE_HEIGHT, 0, 0, THA_LEFT, TVA_TOP);
+				}
 
 				editText->setText(pWidgetRecord.second.get<std::string>("text", ""));
 
@@ -3317,6 +3386,16 @@ namespace SE
 			if (type == "Button")
 			{
 				auto button = parentWidget.CreateAndAddChildOfType<Button>();
+
+				if (pWidgetRecord.second.count("TextParams") != 0)
+				{
+					button->textParams.Serialize(pWidgetRecord.second.find("TextParams")->second);
+				}
+				else
+				{
+					button->textParams = TTextParams("", ResourceManager->FontManager.GetCurrentFontName(),
+						Label::DEFAULT_TEXT_LINE_HEIGHT, 0, 0, THA_CENTER, TVA_CENTER);
+				}
 
 				button->setText(pWidgetRecord.second.get<std::string>("text", ""));
 				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "#00000000")));
@@ -3401,7 +3480,7 @@ namespace SE
 
 	}
 
-	Vector4f NewGuiManager::layoutColorFromConfigValue(std::string configValue)
+	Vector4f layoutColorFromConfigValue(std::string configValue)
 	{
 		unsigned int color;
 		std::stringstream ss;

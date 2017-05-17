@@ -41,11 +41,11 @@ struct TTextBasicAreaParams : public TSerializeInterface
     
     virtual void Serialize(boost::property_tree::ptree& propertyTree)
 	{
-		Height = propertyTree.get<int>("<xmlattr>.height");
-		HorizontalPadding = propertyTree.get<float>("<xmlattr>.horizontalPadding");
-		VerticalPadding = propertyTree.get<float>("<xmlattr>.verticalPadding");
+		Height = propertyTree.get<int>("height", 18);
+		HorizontalPadding = propertyTree.get<float>("horizontalPadding", 0);
+		VerticalPadding = propertyTree.get<float>("verticalPadding", 0);
         
-		std::string textHorizontalAlignment = propertyTree.get<std::string>("<xmlattr>.textHorizontalAlignment");
+		std::string textHorizontalAlignment = propertyTree.get<std::string>("textHorizontalAlignment", "THA_LEFT");
 		
 		if (textHorizontalAlignment == "THA_RIGHT")
 		{
@@ -60,7 +60,7 @@ struct TTextBasicAreaParams : public TSerializeInterface
 			TextHorizontalAlignment = THA_LEFT;
 		}
         
-		std::string textVerticalAlignment = propertyTree.get<std::string>("<xmlattr>.textVerticalAlignment");
+		std::string textVerticalAlignment = propertyTree.get<std::string>("textVerticalAlignment", "TVA_BOTTOM");
 		
         
 		if (textVerticalAlignment == "TVA_TOP")
@@ -77,6 +77,47 @@ struct TTextBasicAreaParams : public TSerializeInterface
 		}
 		
         
+	}
+
+
+	virtual void SerializeXml(boost::property_tree::ptree& propertyTree)
+	{
+		Height = propertyTree.get<int>("<xmlattr>.height");
+		HorizontalPadding = propertyTree.get<float>("<xmlattr>.horizontalPadding");
+		VerticalPadding = propertyTree.get<float>("<xmlattr>.verticalPadding");
+
+		std::string textHorizontalAlignment = propertyTree.get<std::string>("<xmlattr>.textHorizontalAlignment");
+
+		if (textHorizontalAlignment == "THA_RIGHT")
+		{
+			TextHorizontalAlignment = THA_RIGHT;
+		}
+		else if (textHorizontalAlignment == "THA_CENTER")
+		{
+			TextHorizontalAlignment = THA_CENTER;
+		}
+		else
+		{
+			TextHorizontalAlignment = THA_LEFT;
+		}
+
+		std::string textVerticalAlignment = propertyTree.get<std::string>("<xmlattr>.textVerticalAlignment");
+
+
+		if (textVerticalAlignment == "TVA_TOP")
+		{
+			TextVerticalAlignment = TVA_TOP;
+		}
+		else if (textVerticalAlignment == "TVA_CENTER")
+		{
+			TextVerticalAlignment = TVA_CENTER;
+		}
+		else
+		{
+			TextVerticalAlignment = TVA_BOTTOM;
+		}
+
+
 	}
 };
 
