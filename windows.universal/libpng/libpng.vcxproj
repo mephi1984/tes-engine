@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\..\libs\zlib-1.2.8\uncompr.c" />
     <ClCompile Include="..\..\..\libs\zlib-1.2.8\zutil.c" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0c641d55-9176-4671-9894-a1ea0f725cef}</ProjectGuid>
     <Keyword>StaticLibrary</Keyword>
@@ -150,6 +153,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../../libs/lpng1510;../../../libs/zlib-1.2.8;$(ProjectDir);$(GeneratedFilesDir);$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>WIN32;_Windows;_WINDOWS;_WIN32;__WIN32__</UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -233,5 +237,12 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\tes-demo\proj.windows-universal\packages\ANGLE.WindowsStore.2.1.2\build\native\ANGLE.WindowsStore.targets" Condition="Exists('..\..\..\tes-demo\proj.windows-universal\packages\ANGLE.WindowsStore.2.1.2\build\native\ANGLE.WindowsStore.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\tes-demo\proj.windows-universal\packages\ANGLE.WindowsStore.2.1.2\build\native\ANGLE.WindowsStore.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\tes-demo\proj.windows-universal\packages\ANGLE.WindowsStore.2.1.2\build\native\ANGLE.WindowsStore.targets'))" />
+  </Target>
 </Project>
