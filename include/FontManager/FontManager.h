@@ -30,7 +30,7 @@ struct TTextBasicAreaParams : public TSerializeInterface
 	TTextHorizontalAlignment TextHorizontalAlignment;
 	TTextVerticalAlignment TextVerticalAlignment;
     
-    TTextBasicAreaParams(int height = 12, float horizontalPadding = 2, float verticalPadding = 2, TTextHorizontalAlignment textHorizontalAlignment = THA_LEFT, TTextVerticalAlignment textVerticalAlignment = TVA_BOTTOM)
+    TTextBasicAreaParams(int height = 18, float horizontalPadding = 2, float verticalPadding = 2, TTextHorizontalAlignment textHorizontalAlignment = THA_LEFT, TTextVerticalAlignment textVerticalAlignment = TVA_BOTTOM)
     : Height(height)
     , HorizontalPadding(horizontalPadding)
     , VerticalPadding(verticalPadding)

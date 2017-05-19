@@ -64,7 +64,7 @@ struct TTextParams : public TSerializeInterface
 	{
 		Text = propertyTree.get<std::string>("Text", "");
         
-        FontName = propertyTree.get<std::string>("Font", "");
+        FontName = propertyTree.get<std::string>("Font","");
 
 		if (propertyTree.count("TextAreaParams") != 0)
 		{

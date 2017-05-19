@@ -127,7 +127,7 @@ namespace SE
 		virtual float getViewWidth();
 		virtual float getViewHeight();
 
-		Vector3f WidgetAncestor::getTranslateVector();
+		Vector2f WidgetAncestor::getTranslateVector();
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -455,19 +455,25 @@ namespace SE
 	protected:
 
 		TRenderPair cursorRenderPair;
+		Vector3f cursorRenderPos;
+		size_t editTextTimer;
+		bool cursorAppeared;
 
 	public:
 
-		const int DEFAULT_CURSOR_WIDTH = 2;
+		static const size_t CURSOR_WIDTH = 2;
+		static const size_t CURSOR_FLASHING_HALFPERIOD_MS = 500;
 
 		EditText(WidgetParentInterface& widgetParent);
 
 		virtual void Draw();
 		virtual void UpdateRenderPair();
 		virtual void UpdateCursorRenderPair();
-		Vector2f getCursorPos();
+
+		Vector3f getCursorPos();
 
 		virtual void OnKeyPressed(int key);
+		virtual void Update (size_t dt);
 
 	};
 
@@ -491,9 +497,9 @@ namespace SE
 
 	public:
 
-		static const int MIN_TRACK_HEIGHT = 2;
-		static const int MIN_BUTTON_HEIGHT = 8;
-		static const int MIN_BUTTON_WIDTH = 2;
+		static const size_t MIN_TRACK_HEIGHT = 2;
+		static const size_t MIN_BUTTON_HEIGHT = 8;
+		static const size_t MIN_BUTTON_WIDTH = 2;
 
 		boost::signals2::signal<void(float)> onValueChanged;
 
