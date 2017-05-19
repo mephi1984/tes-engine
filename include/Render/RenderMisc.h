@@ -189,7 +189,7 @@ void FillVertexCoordVec_4Points(std::vector<Vector3f>& coordVec, int pos, Vector
 void FillTexCoordVec_4Points(std::vector<Vector2f>& coordVec, int pos, Vector2f texCoord1 = Vector2f(0,0), Vector2f texCoord2 = Vector2f(1,0), Vector2f texCoord3 = Vector2f(1,1), Vector2f texCoord4 = Vector2f(0,1));
 //Adds rect points (6 tex coords) into coordVec
 
-//std::vector<Vector4f> MakeColorCoordVec(Vector4f color);
+std::vector<Vector4f> MakeColorCoordVec(Vector4f color);
 //Creates array of rect (6 colors)
 
 std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo);
