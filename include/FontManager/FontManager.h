@@ -154,7 +154,6 @@ protected:
 	float DrawChar(Vector2f pos, size_t character);
 	float DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList);
 
-	Vector2f FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str);
 public:
 	TFontManager() { }
 	~TFontManager();
@@ -165,6 +164,8 @@ public:
 	
 	void PushFont(const std::string& fontName);
 	void PopFont();
+
+	Vector2f FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str);
 
 	void DrawString(Vector2f pos, TTextBasicAreaParams params, const std::string& str);
 	

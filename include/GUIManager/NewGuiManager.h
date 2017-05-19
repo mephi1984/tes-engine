@@ -62,7 +62,7 @@ namespace SE
 
 		boost::variant<std::string, Vector4f> background;
 		
-		Vector4f bordersColor;
+		Vector4f borderColor;
 		
 		BorderType borderType;
 
@@ -132,7 +132,7 @@ namespace SE
 		virtual float innerWidth();
 		virtual float innerHeight();
 
-		virtual void setBordersColor(Vector4f color);
+		virtual void setBorderColor(Vector4f color);
 
 		virtual void setBorderType(BorderType newBorderType);
 
@@ -369,6 +369,7 @@ namespace SE
 
 		TRenderPair textRenderPair;
 		float textLineHeight;
+		std::string wrapped_text;
 
 	public:
 
@@ -457,6 +458,7 @@ namespace SE
 		TRenderPair cursorRenderPair;
 		Vector3f cursorRenderPos;
 		size_t editTextTimer;
+		size_t symbolLimit;
 		bool cursorAppeared;
 
 	public:
@@ -471,6 +473,7 @@ namespace SE
 		virtual void UpdateCursorRenderPair();
 
 		Vector3f getCursorPos();
+		void setSymbolLimit(size_t limit);
 
 		virtual void OnKeyPressed(int key);
 		virtual void Update (size_t dt);

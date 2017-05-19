@@ -126,9 +126,9 @@ namespace SE
 
 	}
 
-	void WidgetAncestor::setBordersColor(Vector4f color)
+	void WidgetAncestor::setBorderColor(Vector4f color)
 	{
-		bordersColor = color;
+		borderColor = color;
 	}
 
 	void WidgetAncestor::setBorderType(BorderType newBorderType)
@@ -231,7 +231,7 @@ namespace SE
 		renderPair.second.RefreshBuffer();
 
 		bordersRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
-		bordersRenderPair.second.Data = MakeDataTriangleListOfBorders(posFrom, posTo, bordersColor);
+		bordersRenderPair.second.Data = MakeDataTriangleListOfBorders(posFrom, posTo, borderColor);
 		
 		bordersRenderPair.second.RefreshBuffer();
 	}
@@ -2344,7 +2344,14 @@ namespace SE
 
 		textRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = ResourceManager->FontManager.GetCurrentFontTextureName();
 
-		textRenderPair.second = ResourceManager->FontManager.DrawTextInBoxToVBO(posFrom, posTo, textParams.BasicTextAreaParams, textParams.Text, true);
+		wrapped_text = textParams.Text;
+
+		Vector2f realPosFrom =
+			ResourceManager->FontManager.FitStringToBoxWithWordWrap(posFrom, posTo, textParams.BasicTextAreaParams, wrapped_text);
+
+		textRenderPair.second =
+			ResourceManager->FontManager.DrawStringToVBO(realPosFrom, textParams.BasicTextAreaParams, wrapped_text);
+
 		textRenderPair.second.RefreshBuffer();
 
 		ResourceManager->FontManager.PopFont();
@@ -2681,6 +2688,7 @@ namespace SE
 	EditText::EditText(WidgetParentInterface& widgetParent)
 		: Label(widgetParent),
 		editTextTimer(0),
+		symbolLimit(0),
 		cursorAppeared(false)
 	{
 		textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_LEFT;
@@ -2709,7 +2717,7 @@ namespace SE
 
 		cursorRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
 
-		cursorRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVec(Vector4f(1, 0, 0, 1));
+		cursorRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVec(Vector4f(0, 0, 0, 1));
 		cursorRenderPair.second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVec(posFrom, posTo);
 		cursorRenderPair.second.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec(Vector2f(0,0), Vector2f(1, 1));
 
@@ -2738,9 +2746,13 @@ namespace SE
 		}
 	}
 
+	void EditText::setSymbolLimit(size_t limit)
+	{
+		symbolLimit = limit;
+	}
+
 	Vector3f EditText::getCursorPos()
 	{
-		std::string str = textParams.Text;
 		Vector3f result;
 
 		if (textParams.FontName != "")
@@ -2759,12 +2771,12 @@ namespace SE
 		else
 		{
 			float advance = 0;
-			if (str.length() > 0)
+			if (wrapped_text.length() > 0)
 			{
-				size_t i = str.length() - 1;
-				while (i != UINT32_MAX && str[i] != '\n')
+				size_t i = wrapped_text.length() - 1;
+				while (i != UINT32_MAX && wrapped_text[i] != '\n')
 				{
-					advance += ResourceManager->FontManager.GetCharAdvance(str[i--]);
+					advance += ResourceManager->FontManager.GetCharAdvance(wrapped_text[i--]);
 				}
 			}
 
@@ -2784,7 +2796,7 @@ namespace SE
 		}
 		else
 		{
-			int lines = std::count(str.begin(), str.end(), '\n') + 1;
+			int lines = std::count(wrapped_text.begin(), wrapped_text.end(), '\n') + 1;
 
 			if (textParams.BasicTextAreaParams.TextVerticalAlignment == TVA_TOP)
 			{
@@ -2822,7 +2834,10 @@ namespace SE
 			}
 			else if (key >= 32 && key <= 255) //ASCII
 			{
-				textParams.Text += static_cast<char>(key);
+				if (symbolLimit == 0 || textParams.Text.length() < symbolLimit)
+				{
+					textParams.Text += static_cast<char>(key);
+				}
 			}
 
 			UpdateRenderPair();
@@ -3439,6 +3454,8 @@ namespace SE
 			{
 				auto editText = parentWidget.CreateAndAddChildOfType<EditText>();
 
+				editText->setSymbolLimit(pWidgetRecord.second.get<size_t>("symbolLimit", 0));
+
 				// NEED TO REMOVE setText
 				if (pWidgetRecord.second.count("TextParams") != 0)
 				{
@@ -3511,7 +3528,7 @@ namespace SE
 
 			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "#00000000")));
 
-			widget->setBordersColor(layoutColorFromConfigValue(pWidgetRecord.second.get<std::string>("bordersColor", "#FF0000FF")));
+			widget->setBorderColor(layoutColorFromConfigValue(pWidgetRecord.second.get<std::string>("borderColor", "#FF0000FF")));
 			
 			widget->setBorderType(borderTypeFromConfigValue(pWidgetRecord.second.get<std::string>("borderType", "none")));
 
