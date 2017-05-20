@@ -48,4 +48,11 @@ void DestroyEngine()
     }
 }
 
+void TApplication::OnKeyPress(size_t key)
+{
+	ResourceManager->GUIManager.KeyPressedSignal(static_cast<int>(key));
+	ResourceManager->newGuiManager.OnKeyPressed(static_cast<int>(key));
+	InnerOnKeyPress(key);
+}
+
 } //namespace SE

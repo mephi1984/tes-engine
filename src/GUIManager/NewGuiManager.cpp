@@ -252,7 +252,7 @@ namespace SE
 			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
 	}
 
-	Vector2f WidgetAncestor::getTranslateVector()
+	inline Vector2f WidgetAncestor::getTranslateVector()
 	{
 		return { marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + extraTranslation(1) };
 	}
