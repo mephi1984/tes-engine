@@ -107,7 +107,11 @@ namespace SE
 		virtual ~WidgetAncestor();
 
 		void setBackground(boost::variant<std::string, Vector4f> background);
-
+		
+		std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo);
+		std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color);
+		TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color);
+			
 		virtual void UpdateRenderPair();
 
 		virtual void Draw();
@@ -133,7 +137,6 @@ namespace SE
 		virtual float innerHeight();
 
 		virtual void setBorderColor(Vector4f color);
-
 		virtual void setBorderType(BorderType newBorderType);
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
@@ -385,7 +388,7 @@ namespace SE
 
 		virtual void Draw();
 
-		void setText(const std::string& text);
+		virtual void setText(const std::string& text);
 
 		virtual void UpdateRenderPair();
 		virtual void UpdateTextRenderPair();
@@ -473,7 +476,9 @@ namespace SE
 		virtual void UpdateCursorRenderPair();
 
 		Vector3f getCursorPos();
+
 		void setSymbolLimit(size_t limit);
+		virtual void setText(const std::string& text);
 
 		virtual void OnKeyPressed(int key);
 		virtual void Update (size_t dt);

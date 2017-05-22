@@ -129,6 +129,8 @@ namespace SE
 	void WidgetAncestor::setBorderColor(Vector4f color)
 	{
 		borderColor = color;
+
+		UpdateRenderPair();
 	}
 
 	void WidgetAncestor::setBorderType(BorderType newBorderType)
@@ -160,11 +162,10 @@ namespace SE
 
 		UpdateRenderPair();
 	}
-	
-	std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo)
+
+	std::vector<Vector3f> WidgetAncestor::MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo)
 	{
-		std::vector<Vector3f> result;
-		result.resize(8);
+		std::vector<Vector3f> result(8);
 
 		Vector2f pos1 = posFrom;
 		Vector2f pos2 = Vector2f(posFrom(0), posTo(1));
@@ -183,12 +184,12 @@ namespace SE
 		return result;
 	}
 
-	std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color)
+	std::vector<Vector4f> WidgetAncestor::MakeColorVecOfBorders(Vector4f color)
 	{
 		return std::vector<Vector4f> (8, color);
 	}
 
-	TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
+	TDataTriangleList WidgetAncestor::MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
 	{
 		TDataTriangleList triangleList;
 
@@ -2746,6 +2747,13 @@ namespace SE
 		}
 	}
 
+	void EditText::setText(const std::string& text)
+	{
+		Label::setText(text);
+	
+		UpdateCursorRenderPair();
+	}
+
 	void EditText::setSymbolLimit(size_t limit)
 	{
 		symbolLimit = limit;
@@ -3438,10 +3446,9 @@ namespace SE
 			{
 				auto label = parentWidget.CreateAndAddChildOfType<Label>();
 
-				// NEED TO REMOVE setText
-				if (pWidgetRecord.second.count("TextParams") != 0)
+				if (pWidgetRecord.second.count("textParams") != 0)
 				{
-					label->textParams.Serialize(pWidgetRecord.second.find("TextParams")->second);
+					label->textParams.Serialize(pWidgetRecord.second.find("textParams")->second);
 				}
 				else
 				{
@@ -3456,17 +3463,14 @@ namespace SE
 
 				editText->setSymbolLimit(pWidgetRecord.second.get<size_t>("symbolLimit", 0));
 
-				// NEED TO REMOVE setText
-				if (pWidgetRecord.second.count("TextParams") != 0)
+				if (pWidgetRecord.second.count("textParams") != 0)
 				{
-					editText->textParams.Serialize(pWidgetRecord.second.find("TextParams")->second);
+					editText->textParams.Serialize(pWidgetRecord.second.find("textParams")->second);
 				}
 				else
 				{
 					editText->textParams = TTextParams();
 				}
-
-				editText->setText(pWidgetRecord.second.get<std::string>("text", ""));
 
 				widget = editText;
 			}
@@ -3474,10 +3478,10 @@ namespace SE
 			{
 				auto button = parentWidget.CreateAndAddChildOfType<Button>();
 
-				// NEED TO REMOVE setText
-				if (pWidgetRecord.second.count("TextParams") != 0)
+				if (pWidgetRecord.second.count("textParams") != 0)
 				{
-					button->textParams.Serialize(pWidgetRecord.second.find("TextParams")->second);
+					button->textParams = TTextParams();
+					button->textParams.Serialize(pWidgetRecord.second.find("textParams")->second);
 				}
 				else
 				{
@@ -3486,7 +3490,6 @@ namespace SE
 					button->textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_CENTER;
 				}
 
-				button->setText(pWidgetRecord.second.get<std::string>("text", ""));
 				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "#00000000")));
 				button->setHoverDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("hoverDrawable", "#00000000")));
 
@@ -3528,7 +3531,7 @@ namespace SE
 
 			widget->setBackground(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("background", "#00000000")));
 
-			widget->setBorderColor(layoutColorFromConfigValue(pWidgetRecord.second.get<std::string>("borderColor", "#FF0000FF")));
+			widget->setBorderColor(layoutColorFromConfigValue(pWidgetRecord.second.get<std::string>("borderColor", "#000000FF")));
 			
 			widget->setBorderType(borderTypeFromConfigValue(pWidgetRecord.second.get<std::string>("borderType", "none")));
 
@@ -3571,6 +3574,8 @@ namespace SE
 
 	Vector4f NewGuiManager::layoutColorFromConfigValue(std::string configValue)
 	{
+		configValue.erase(configValue.begin(), configValue.begin() + 1);
+
 		unsigned int color;
 		std::stringstream ss;
 		ss << std::hex << configValue;
@@ -3606,8 +3611,6 @@ namespace SE
 
 		if (boost::starts_with(configValue, "#"))
 		{
-			configValue.erase(configValue.begin(), configValue.begin() + 1);
-
 			return layoutColorFromConfigValue(configValue);
 		}
 		else

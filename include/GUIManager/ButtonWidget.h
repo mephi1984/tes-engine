@@ -62,13 +62,13 @@ struct TTextParams : public TSerializeInterface
 
 	virtual void Serialize(boost::property_tree::ptree& propertyTree)
 	{
-		Text = propertyTree.get<std::string>("Text", "");
+		Text = propertyTree.get<std::string>("text", "");
         
-        FontName = propertyTree.get<std::string>("Font","");
+        FontName = propertyTree.get<std::string>("font","");
 
-		if (propertyTree.count("TextAreaParams") != 0)
+		if (propertyTree.count("textAreaParams") != 0)
 		{
-			BasicTextAreaParams.Serialize(propertyTree.find("TextAreaParams")->second);
+			BasicTextAreaParams.Serialize(propertyTree.find("textAreaParams")->second);
 		}
 		else
 		{
