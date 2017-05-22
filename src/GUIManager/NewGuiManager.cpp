@@ -189,12 +189,18 @@ namespace SE
 		return std::vector<Vector4f> (8, color);
 	}
 
+	std::vector<Vector2f> WidgetAncestor::MakeTexCoordVecOfBorders()
+	{
+		return std::vector<Vector2f>(8, Vector2f(0,0));
+	}
+
 	TDataTriangleList WidgetAncestor::MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
 	{
 		TDataTriangleList triangleList;
 
 		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorVecOfBorders(color);
 		triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo);
+		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVecOfBorders();
 
 		return triangleList;
 	}
@@ -260,6 +266,7 @@ namespace SE
 
 	void WidgetAncestor::Draw()
 	{
+		
 		if (disabled)
 		{
 			return;
@@ -270,13 +277,19 @@ namespace SE
 		TRenderParamsSetter render1(renderPair.first);
 		Renderer->DrawTriangleList(renderPair.second);
 
+		CheckGlError();
+		
 		if (borderType == BorderType::BT_LINE)
 		{
 			TRenderParamsSetter render2(bordersRenderPair.first);
 			Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
-		}
 
+			CheckGlError();
+		}
+		
 		Renderer->PopMatrix();
+
+		
 	}
 
 	float WidgetAncestor::calcWidthForLayoutStyle(LayoutStyle layoutStyle)
@@ -631,6 +644,8 @@ namespace SE
 		}
 
 		Renderer->PopMatrix();
+
+		CheckGlError();
 	}
 
 	void VerticalLinearLayout::Update(size_t dt)
@@ -1025,6 +1040,8 @@ namespace SE
 			Renderer->TranslateMatrix(Vector3f(children[i]->getViewWidth() + itemSpacing, 0, 0));
 
 		}
+
+		CheckGlError();
 
 		Renderer->PopMatrix();
 
@@ -1423,6 +1440,9 @@ namespace SE
 		}
 
 		Renderer->PopMatrix();
+
+		CheckGlError();
+
 	}
 
 	void FrameLayout::Update(size_t dt)
@@ -1731,6 +1751,9 @@ namespace SE
 		}
 
 		Renderer->PopMatrix();
+
+		CheckGlError();
+
 	}
 
 
@@ -2009,6 +2032,9 @@ namespace SE
 		}
 
 		Renderer->PopMatrix();
+
+		CheckGlError();
+
 
 	}
 
@@ -2293,6 +2319,7 @@ namespace SE
 
 	void Label::Draw()
 	{
+		
 		if (disabled)
 		{
 			return;
@@ -2304,6 +2331,8 @@ namespace SE
 
 		TRenderParamsSetter render(textRenderPair.first);
 		Renderer->DrawTriangleList(textRenderPair.second);
+
+		CheckGlError();
 
 		Renderer->PopMatrix();
 	}
@@ -2492,7 +2521,7 @@ namespace SE
 
 	void Button::Draw()
 	{
-
+		
 		if (disabled)
 		{
 			return;
@@ -2508,15 +2537,24 @@ namespace SE
 
 		Renderer->DrawTriangleList(hoverRenderPair.second);
 
+		CheckGlError();
+
+
 
 		TRenderParamsSetter render1(pressedRenderPair.first);
 
 		Renderer->DrawTriangleList(pressedRenderPair.second);
 
+		CheckGlError();
+
+
 
 		TRenderParamsSetter render3(textRenderPair.first);
 
 		Renderer->DrawTriangleList(textRenderPair.second);
+
+		CheckGlError();
+
 
 
 		Renderer->PopMatrix();
@@ -2727,12 +2765,14 @@ namespace SE
 
 	void EditText::Draw()
 	{
+		
 		if (disabled)
 		{
 			return;
 		}
 
 		Label::Draw();
+
 
 		if (focused && cursorAppeared)
 		{
@@ -2744,6 +2784,8 @@ namespace SE
 			Renderer->DrawTriangleList(cursorRenderPair.second);
 
 			Renderer->PopMatrix();
+
+			CheckGlError();
 		}
 	}
 
@@ -3077,6 +3119,7 @@ namespace SE
 
 	void HorizontalSlider::Draw()
 	{
+		
 		if (disabled)
 		{
 			return;
@@ -3088,6 +3131,9 @@ namespace SE
 
 		TRenderParamsSetter render1(trackRenderPair.first);
 		Renderer->DrawTriangleList(trackRenderPair.second);
+
+		CheckGlError();
+
 
 		if (maxValue != minValue)
 		{
@@ -3102,6 +3148,9 @@ namespace SE
 		Renderer->DrawTriangleList(buttonRenderPair.second);
 
 		Renderer->PopMatrix();
+
+		CheckGlError();
+
 	}
 
 	bool HorizontalSlider::isPointAboveTrack(Vector2f point)

@@ -110,6 +110,7 @@ namespace SE
 		
 		std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo);
 		std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color);
+		std::vector<Vector2f> MakeTexCoordVecOfBorders();
 		TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color);
 			
 		virtual void UpdateRenderPair();
