@@ -506,9 +506,9 @@ namespace SE
 
 	public:
 
-		static const size_t MIN_TRACK_HEIGHT = 2;
-		static const size_t MIN_BUTTON_HEIGHT = 8;
-		static const size_t MIN_BUTTON_WIDTH = 2;
+		static const size_t MIN_TRACK_HEIGHT = 4;
+		static const size_t MIN_BUTTON_HEIGHT = 10;
+		static const size_t MIN_BUTTON_WIDTH = 4;
 
 		boost::signals2::signal<void(float)> onValueChanged;
 
@@ -533,8 +533,62 @@ namespace SE
 
 		void OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
-		void OnMouseUp(Vector2f pos, int touchNumber);
-		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+	};
+	
+	class HorizontalDoubleSlider : public WidgetAncestor
+	{
+	protected:
+		int minValue;
+		int maxValue;
+		int position1;
+		int position2;
+		float buttonWidth;
+		float buttonPadding;
+		float trackPadding;
+		float sidesPadding;
+
+		TRenderPair button1RenderPair, button2RenderPair, trackRenderPair;
+
+		boost::variant<std::string, Vector4f> button1Skin;
+		boost::variant<std::string, Vector4f> button2Skin;
+		boost::variant<std::string, Vector4f> trackSkin;
+
+		void UpdateSkinRenderPairs();
+
+	public:
+
+		static const size_t MIN_TRACK_HEIGHT = 4;
+		static const size_t MIN_BUTTON_HEIGHT = 10;
+		static const size_t MIN_BUTTON_WIDTH = 4;
+
+		boost::signals2::signal<void(float, float)> onValueChanged;
+
+		HorizontalDoubleSlider(WidgetParentInterface& widgetParent);
+		virtual ~HorizontalDoubleSlider();
+
+		void UpdateRenderPair();
+		virtual void Draw();
+
+		void changeValue1(float t);
+		void changeValue2(float t);
+		void setPosition1(int position);
+		void setPosition2(int position);
+		void setMinValue(int minValue);
+		void setMaxValue(int maxValue);
+		void setButtonPadding(float padding);
+		void setTrackPadding(float padding);
+		void setButtonWidth(float width);
+		void setButton1Skin(boost::variant<std::string, Vector4f> buttonSkin);
+		void setButton2Skin(boost::variant<std::string, Vector4f> buttonSkin);
+		void setTrackSkin(boost::variant<std::string, Vector4f> trackSkin);
+
+		inline bool isPointAboveTrack(Vector2f point);
+		inline int getTrackPositionFromPoint(Vector2f point);
+		inline int getButtonNumberFromPosition(int position);
+
+		void OnMouseDown(Vector2f pos, int touchNumber);
+		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 	};
 
