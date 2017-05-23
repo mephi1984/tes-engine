@@ -547,6 +547,7 @@ namespace SE
 		float buttonPadding;
 		float trackPadding;
 		float sidesPadding;
+		int movingButton;
 
 		TRenderPair button1RenderPair, button2RenderPair, trackRenderPair;
 
@@ -589,6 +590,8 @@ namespace SE
 
 		void OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		void OnMouseUp(Vector2f pos, int touchNumber);
+		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 	};
 

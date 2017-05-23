@@ -3196,12 +3196,13 @@ namespace SE
 		position2(0),
 		buttonWidth(MIN_BUTTON_WIDTH),
 		buttonPadding(0),
-		trackPadding(0)
+		trackPadding(0),
+		movingButton(0)
 	{}
 
 	HorizontalDoubleSlider::~HorizontalDoubleSlider() { }
 
-	void HorizontalDoubleSlider::UpdateSkinRenderPairs()
+	void HorizontalDoubleSlider::UpdateRenderPair()
 	{
 		if (!inited)
 		{
@@ -3212,7 +3213,7 @@ namespace SE
 		UpdateSkinRenderPairs();
 	}
 
-	void HorizontalDoubleSlider::UpdateRenderPair()
+	void HorizontalDoubleSlider::UpdateSkinRenderPairs()
 	{
 
 		bool isTexture = Visit(trackSkin,
@@ -3425,6 +3426,7 @@ namespace SE
 	{
 		if (position < minValue) position = minValue;
 		if (position > maxValue) position = maxValue;
+		if (position > position2) position = position2;
 		if (this->position1 != position)
 		{
 			this->position1 = position;
@@ -3444,6 +3446,7 @@ namespace SE
 	{
 		if (position < minValue) position = minValue;
 		if (position > maxValue) position = maxValue;
+		if (position < position1) position = position1;
 		if (this->position2 != position)
 		{
 			this->position2 = position;
@@ -3564,7 +3567,7 @@ namespace SE
 	inline int HorizontalDoubleSlider::getButtonNumberFromPosition(int position)
 	{
 		float middle = (position1 + position2) / 2.f;
-		return (position < middle) == (position1 < position2) ? 1 : 2;
+		return position < middle ? 1 : 2;
 	}
 
 	void HorizontalDoubleSlider::OnMouseDown(Vector2f pos, int touchNumber)
@@ -3576,13 +3579,16 @@ namespace SE
 		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
 		if (!isPointAboveTrack(pos)) return;
 		int position = getTrackPositionFromPoint(pos);
-		if (getButtonNumberFromPosition(position) == 1)
+		if ((movingButton = getButtonNumberFromPosition(position)) > 0)
 		{
-			setPosition1(position);
-		}
-		else
-		{
-			setPosition2(position);
+			if (movingButton == 1)
+			{
+				setPosition1(position);
+			}
+			else
+			{
+				setPosition2(position);
+			}
 		}
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
@@ -3594,10 +3600,10 @@ namespace SE
 			return false;
 		}
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
+		if (movingButton == 0) return false;
 		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
-		if (!isPointAboveTrack(pos)) return false;
 		int position = getTrackPositionFromPoint(pos);
-		if (getButtonNumberFromPosition(position) == 1)
+		if (movingButton == 1)
 		{
 			setPosition1(position);
 		}
@@ -3606,6 +3612,26 @@ namespace SE
 			setPosition2(position);
 		}
 		return true;
+	}
+	
+	void HorizontalDoubleSlider::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		if (disabled)
+		{
+			return;
+		}
+		movingButton = 0;
+		WidgetAncestor::OnMouseUp(pos, touchNumber);
+	}
+
+	void HorizontalDoubleSlider::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		if (disabled)
+		{
+			return;
+		}
+		movingButton = 0;
+		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 	}
 
 	//======================================
