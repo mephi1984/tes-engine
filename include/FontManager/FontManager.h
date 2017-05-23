@@ -165,7 +165,7 @@ public:
 	void PushFont(const std::string& fontName);
 	void PopFont();
 
-	Vector2f FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str);
+	Vector2f FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str, const std::string& fontName = "");
 
 	void DrawString(Vector2f pos, TTextBasicAreaParams params, const std::string& str);
 	
@@ -179,17 +179,17 @@ public:
 	TTriangleList DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
 
 
-	template<typename CHARTYPE>
-float GetCharAdvance(CHARTYPE character)
+template<typename CHARTYPE>
+float GetCharAdvance(CHARTYPE character, const std::string &fontName = "")
 {
-	std::string fontName = GetCurrentFontName();
+	std::string fontName_ = fontName.size() > 0 ? fontName : GetCurrentFontName();
 
-	if (FontMap.count(fontName) == 0)
+	if (FontMap.count(fontName_) == 0)
 	{
-		throw ErrorToLog("Trying to use unknown font! " + fontName);
+		throw ErrorToLog("Trying to use unknown font! " + fontName_);
 	}
 
-	TFont& currentFont = FontMap[fontName];
+	TFont& currentFont = FontMap[fontName_];
 
 	static_assert(sizeof(CHARTYPE) <= 4, "LOL, we have to implement more than 4-byte character!"); // LOL, we have to implement more than 4-byte character!
 		
@@ -203,8 +203,9 @@ float GetCharAdvance(CHARTYPE character)
 }
 
 template<typename STRINGTYPE>
-float GetTextAdvance(STRINGTYPE text)
+float GetTextAdvance(STRINGTYPE text, const std::string &fontName = "")
 {
+	std::string fontName_ = fontName.size() > 0 ? fontName : GetCurrentFontName();
 
 	boost::erase_all(text, "\n"); //that is easier
 
@@ -212,7 +213,7 @@ float GetTextAdvance(STRINGTYPE text)
 
 	for (size_t i=0; i<text.size(); i++)
 	{
-		advance += GetCharAdvance(text[i]);
+		advance += GetCharAdvance(text[i], fontName_);
 	}
 
 	return advance;

@@ -188,10 +188,9 @@ float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList&
 }
 
 
-Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str)
+Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str, const std::string& fontName)
 {
-
-	std::string fontName = GetCurrentFontName();
+	std::string fontName_ = fontName.size() > 0 ? fontName : GetCurrentFontName();
 
 	float intervalY = CONST_HEIGHT_COEF * params.Height;
 
@@ -229,26 +228,26 @@ Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f pos
 		{
 			std::string s = explodedByWord[j];
 
-			float adv = GetTextAdvance(s);
+			float adv = GetTextAdvance(s, fontName_);
 
 			if (adv + cursor <= maxWidth)
 			{
 				result += s + " ";
-				cursor += adv + GetCharAdvance(' ');
+				cursor += adv + GetCharAdvance(' ', fontName_);
 			}
 			else
 			{
 				if (adv <= maxWidth)
 				{
 					result += "\n" + s + " "; 
-					cursor = adv + GetCharAdvance(' ');
+					cursor = adv + GetCharAdvance(' ', fontName_);
 				}
 				else
 				{
 					for (int k=0; k<s.size(); k++)
 					{
 						result += s[k];
-						cursor += GetCharAdvance(s[k]);
+						cursor += GetCharAdvance(s[k], fontName_);
 						if (cursor > maxWidth)
 						{
 							cursor = 0;
@@ -368,7 +367,7 @@ void TFontManager::DrawTextInBox(Vector2f posFrom, Vector2f posTo, TTextBasicAre
 	Vector2f realPosFrom;
 	if (wordWrap)
 	{
-		realPosFrom = FitStringToBoxWithWordWrap(posFrom, posTo, params, str);
+		realPosFrom = FitStringToBoxWithWordWrap(posFrom, posTo, params, str, GetCurrentFontName());
 	}
 	else
 	{
@@ -385,7 +384,7 @@ TTriangleList TFontManager::DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo,
 	Vector2f realPosFrom;
 	if (wordWrap)
 	{
-		realPosFrom = FitStringToBoxWithWordWrap(posFrom, posTo, params, str);
+		realPosFrom = FitStringToBoxWithWordWrap(posFrom, posTo, params, str, GetCurrentFontName());
 	}
 	else
 	{

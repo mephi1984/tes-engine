@@ -2308,7 +2308,7 @@ namespace SE
 	{
 
 		//return ResourceManager->FontManager.GetTextAdvance(textParams.Text);
-		return ResourceManager->FontManager.GetTextAdvance(textParams.Text) + 2 //To prevent wrong word wrap
+		return ResourceManager->FontManager.GetTextAdvance(textParams.Text, textParams.FontName) + 2 //To prevent wrong word wrap
 			+ 2 * textParams.BasicTextAreaParams.HorizontalPadding;
 	}
 
@@ -2377,7 +2377,7 @@ namespace SE
 		wrapped_text = textParams.Text;
 
 		Vector2f realPosFrom =
-			ResourceManager->FontManager.FitStringToBoxWithWordWrap(posFrom, posTo, textParams.BasicTextAreaParams, wrapped_text);
+			ResourceManager->FontManager.FitStringToBoxWithWordWrap(posFrom, posTo, textParams.BasicTextAreaParams, wrapped_text, textParams.FontName);
 
 		textRenderPair.second =
 			ResourceManager->FontManager.DrawStringToVBO(realPosFrom, textParams.BasicTextAreaParams, wrapped_text);
@@ -2472,9 +2472,7 @@ namespace SE
 	void Button::UpdatePressedRenderPair()
 	{
 		Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
-
 		Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
-
 
 		std::string textureName = Visit(pressedDrawable,
 			[this](Vector4f color) { return "white.bmp"; },
@@ -2824,7 +2822,7 @@ namespace SE
 				size_t i = wrapped_text.length() - 1;
 				while (i != UINT32_MAX && wrapped_text[i] != '\n')
 				{
-					advance += ResourceManager->FontManager.GetCharAdvance(wrapped_text[i--]);
+					advance += ResourceManager->FontManager.GetCharAdvance(wrapped_text[i--], textParams.FontName);
 				}
 			}
 
