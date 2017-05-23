@@ -15,6 +15,16 @@ namespace SE
 	class WidgetParentInterface
 	{
 	public:
+
+		float paddingTop = 0;
+		float paddingBottom = 0;
+		float paddingLeft = 0;
+		float paddingRight = 0;
+
+		float calculatedLayoutWidth;
+		float calculatedLayoutHeight;
+
+		WidgetParentInterface();
 		virtual ~WidgetParentInterface();
 
 		virtual float getContentAreaWidth() = 0;
@@ -22,6 +32,13 @@ namespace SE
 
 		virtual float getContentAreaLeftoverWidth() = 0;
 		virtual float getContentAreaLeftoverHeight() = 0;
+
+		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void shareLeftoverHeightBetweenChildren();		
+
+		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
+
+		virtual void UpdateRenderPair() = 0;
 
 		std::vector<std::shared_ptr<WidgetAncestor>> children;
 
@@ -90,11 +107,6 @@ namespace SE
 		float marginLeft;
 		float marginRight;
 
-		float paddingTop;
-		float paddingBottom;
-		float paddingLeft;
-		float paddingRight;
-
 		Vector2f extraTranslation;
 
 		std::string name;
@@ -116,9 +128,6 @@ namespace SE
 		virtual void UpdateRenderPair();
 
 		virtual void Draw();
-
-		float calcWidthForLayoutStyle(LayoutStyle layoutStyle);
-		float calcHeightForLayoutStyle(LayoutStyle layoutStyle);
 
 		virtual float getContentAreaWidth();
 		virtual float getContentAreaHeight();
@@ -144,7 +153,6 @@ namespace SE
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
 		virtual void setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight);
-		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
 
 		virtual void setExtraTranslation(float extraTranslationX, float extraTranslationY);
 
@@ -194,7 +202,8 @@ namespace SE
 
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
 
-		
+		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void shareLeftoverHeightBetweenChildren();
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -243,6 +252,9 @@ namespace SE
 
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
 
+		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void shareLeftoverHeightBetweenChildren();
+
 		virtual float innerWidth();
 		virtual float innerHeight();
 
@@ -284,6 +296,9 @@ namespace SE
 	public:
 
 		FrameLayout(WidgetParentInterface& widgetParent);
+
+		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void shareLeftoverHeightBetweenChildren();
 
 		virtual float innerWidth();
 		virtual float innerHeight();
@@ -636,6 +651,7 @@ namespace SE
 		virtual float getContentAreaLeftoverWidth();
 		virtual float getContentAreaLeftoverHeight();
 
+		void UpdateRenderPair(){}
 		virtual void UpdateAllRenderPair();
 
 		void LoadFromConfig(const std::string& configFileName);
