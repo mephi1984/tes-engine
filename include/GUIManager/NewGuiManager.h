@@ -58,6 +58,21 @@ namespace SE
 			BT_LINE
 		};
 
+		enum childrenHorizontalAlignment
+		{
+			HA_LEFT,
+			HA_CENTER,
+			HA_RIGHT
+		};
+
+
+		enum childrenVerticalAlignment
+		{
+			VA_TOP,
+			VA_CENTER,
+			VA_BOTTOM
+		};
+
 	protected:
 
 		boost::variant<std::string, Vector4f> background;
@@ -72,6 +87,9 @@ namespace SE
 	public:
 
 		bool inited;
+
+		childrenHorizontalAlignment childrenHA;
+		childrenVerticalAlignment childrenVA;
 		
 		boost::variant<float, LayoutStyle> layoutWidth;
 		boost::variant<float, LayoutStyle> layoutHeight;
@@ -120,6 +138,10 @@ namespace SE
 		float calcWidthForLayoutStyle(LayoutStyle layoutStyle);
 		float calcHeightForLayoutStyle(LayoutStyle layoutStyle);
 
+		virtual Vector2f getContentStart();
+		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
+		inline Vector2f getDrawTranslate();
+
 		virtual float getContentAreaWidth();
 		virtual float getContentAreaHeight();
 
@@ -132,8 +154,6 @@ namespace SE
 		virtual float getViewWidth();
 		virtual float getViewHeight();
 
-		Vector2f WidgetAncestor::getTranslateVector();
-
 		virtual float innerWidth();
 		virtual float innerHeight();
 
@@ -145,6 +165,9 @@ namespace SE
 
 		virtual void setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight);
 		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
+
+		virtual void setChildrenHorizontalAlignment(childrenHorizontalAlignment childrenHA);
+		virtual void setChildrenVerticalAlignment(childrenVerticalAlignment childrenHA);
 
 		virtual void setExtraTranslation(float extraTranslationX, float extraTranslationY);
 
@@ -243,6 +266,9 @@ namespace SE
 
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
 
+		virtual Vector2f getContentTranslate();
+		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
+
 		virtual float innerWidth();
 		virtual float innerHeight();
 
@@ -327,6 +353,8 @@ namespace SE
 
 		VerticalScrollLayout(WidgetParentInterface& widgetParent);
 
+		virtual Vector2f getContentStartPosition();
+
 		void Draw();
 
 		virtual void OnMouseDown(Vector2f pos, int touchNumber);
@@ -351,6 +379,8 @@ namespace SE
 		float scroll;
 
 		HorizontalScrollLayout(WidgetParentInterface& widgetParent);
+
+		virtual Vector2f getContentStartPosition();
 
 		void Draw();
 
@@ -645,7 +675,8 @@ namespace SE
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
 		Vector4f layoutColorFromConfigValue(std::string configValue);
-
+		WidgetAncestor::childrenHorizontalAlignment layoutHorizontalAlignmentFromConfigValue(std::string configValue);
+		WidgetAncestor::childrenVerticalAlignment layoutVerticalAlignmentFromConfigValue(std::string configValue);
 		WidgetAncestor::BorderType borderTypeFromConfigValue(std::string configValue);
 
 
