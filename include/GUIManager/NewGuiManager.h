@@ -138,7 +138,7 @@ namespace SE
 		float calcWidthForLayoutStyle(LayoutStyle layoutStyle);
 		float calcHeightForLayoutStyle(LayoutStyle layoutStyle);
 
-		virtual Vector2f getContentStart();
+		virtual Vector2f getContentTranslate();
 		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
 		inline Vector2f getDrawTranslate();
 
@@ -217,17 +217,17 @@ namespace SE
 
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
 
-		
-
 		virtual float innerWidth();
 		virtual float innerHeight();
+
+		virtual Vector2f getContentTranslate();
+		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
 
 		virtual float getContentAreaLeftoverHeight();
 
 		void setItemSpacing(float newItemSpacing);
 
 		virtual void UpdateRenderPair();
-
 
 		virtual void Draw();
 
@@ -353,8 +353,6 @@ namespace SE
 
 		VerticalScrollLayout(WidgetParentInterface& widgetParent);
 
-		virtual Vector2f getContentStartPosition();
-
 		void Draw();
 
 		virtual void OnMouseDown(Vector2f pos, int touchNumber);
@@ -379,8 +377,6 @@ namespace SE
 		float scroll;
 
 		HorizontalScrollLayout(WidgetParentInterface& widgetParent);
-
-		virtual Vector2f getContentStartPosition();
 
 		void Draw();
 
