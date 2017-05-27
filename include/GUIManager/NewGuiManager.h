@@ -59,6 +59,21 @@ namespace SE
 			BT_LINE
 		};
 
+		enum childrenHorizontalAlignment
+		{
+			HA_LEFT,
+			HA_CENTER,
+			HA_RIGHT
+		};
+
+
+		enum childrenVerticalAlignment
+		{
+			VA_TOP,
+			VA_CENTER,
+			VA_BOTTOM
+		};
+
 	protected:
 
 		boost::variant<std::string, Vector4f> background;
@@ -78,6 +93,9 @@ namespace SE
 		float calculatedInnerHeight;
 
 		bool inited;
+
+		childrenHorizontalAlignment childrenHA;
+		childrenVerticalAlignment childrenVA;
 		
 		boost::variant<float, LayoutStyle> layoutWidth;
 		boost::variant<float, LayoutStyle> layoutHeight;
@@ -91,10 +109,10 @@ namespace SE
 
 		WidgetParentInterface& parent;
 
-		float paddingTop = 0;
-		float paddingBottom = 0;
-		float paddingLeft = 0;
-		float paddingRight = 0;
+		float paddingTop;
+		float paddingBottom;
+		float paddingLeft;
+		float paddingRight;
 
 		float marginTop;
 		float marginBottom;
@@ -130,6 +148,10 @@ namespace SE
 		inline virtual float getDrawWidth();
 		inline virtual float getDrawHeight();
 
+		virtual Vector2f getContentTranslate();
+		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
+		inline Vector2f getDrawTranslate();
+
 		inline virtual float getViewWidth();
 		inline virtual float getViewHeight();
 
@@ -139,20 +161,22 @@ namespace SE
 		virtual float calcInnerWidth();
 		virtual float calcInnerHeight();
 
-		Vector2f WidgetAncestor::getTranslateVector();
-
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
 
 		virtual void setBackground(boost::variant<std::string, Vector4f> background);
 		virtual void setBorderColor(Vector4f color);
 		virtual void setBorderType(BorderType newBorderType);
+		virtual void setVisibility(bool visible);
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
 		virtual void setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight);
 		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
+
+		virtual void setChildrenHorizontalAlignment(childrenHorizontalAlignment childrenHA);
+		virtual void setChildrenVerticalAlignment(childrenVerticalAlignment childrenHA);
 
 		virtual void setExtraTranslation(float extraTranslationX, float extraTranslationY);
 
@@ -207,10 +231,12 @@ namespace SE
 		virtual float calcInnerWidth();
 		virtual float calcInnerHeight();
 
+		virtual Vector2f getContentTranslate();
+		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
+
 		void setItemSpacing(float newItemSpacing);
 
 		virtual void UpdateRenderPair();
-
 
 		virtual void Draw();
 
@@ -249,7 +275,11 @@ namespace SE
 
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
 
+
 		virtual void shareLeftoverWidthBetweenChildren();
+
+		virtual Vector2f getContentTranslate();
+		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
 
 		virtual float calcInnerWidth();
 		virtual float calcInnerHeight();
@@ -419,6 +449,9 @@ namespace SE
 		ButtonState buttonState;
 		ButtonState hoverButtonState;
 
+		float pressedMaxAlpha;
+		float hoverMaxAlpha;
+
 		float buttonTimer;
 		float hoverButtonTimer;
 
@@ -548,7 +581,6 @@ namespace SE
 		float buttonWidth;
 		float buttonPadding;
 		float trackPadding;
-		float sidesPadding;
 		int movingButton;
 
 		TRenderPair button1RenderPair, button2RenderPair, trackRenderPair;
@@ -647,7 +679,8 @@ namespace SE
 		boost::variant<float, WidgetAncestor::LayoutStyle> layoutDimentionFromConfigValue(std::string configValue);
 		boost::variant<std::string, Vector4f> layoutBackgroundFromConfigValue(std::string configValue);
 		Vector4f layoutColorFromConfigValue(std::string configValue);
-
+		WidgetAncestor::childrenHorizontalAlignment layoutHorizontalAlignmentFromConfigValue(std::string configValue);
+		WidgetAncestor::childrenVerticalAlignment layoutVerticalAlignmentFromConfigValue(std::string configValue);
 		WidgetAncestor::BorderType borderTypeFromConfigValue(std::string configValue);
 
 
