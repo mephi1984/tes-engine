@@ -64,47 +64,9 @@ namespace SE
 	//===================================
 
 	WidgetParentInterface::WidgetParentInterface()
-		: paddingTop(0)
-		, paddingBottom(0)
-		, paddingLeft(0)
-		, paddingRight(0)
 	{ }
 
 	WidgetParentInterface::~WidgetParentInterface() { }
-	
-	void WidgetParentInterface::shareLeftoverWidthBetweenChildren()
-	{
-		for (auto &child : children)
-		{
-			if (getLayoutStyle(child->layoutWidth) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
-			{
-				child->calculatedLayoutWidth = getContentAreaLeftoverWidth() - paddingLeft - paddingRight;
-				child->shareLeftoverWidthBetweenChildren();
-			}
-		}
-	}
-
-	void WidgetParentInterface::shareLeftoverHeightBetweenChildren()
-	{
-		for (auto &child : children)
-		{
-			if (getLayoutStyle(child->layoutHeight) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
-			{
-				child->calculatedLayoutHeight = getContentAreaLeftoverHeight() - paddingBottom - paddingTop;
-				child->shareLeftoverHeightBetweenChildren();
-			}
-		}
-	}
-
-	void WidgetParentInterface::setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight)
-	{
-		paddingTop = newPaddingTop;
-		paddingBottom = newPaddingBottom;
-		paddingLeft = newPaddingLeft;
-		paddingRight = newPaddingRight;
-
-		UpdateRenderPair();
-	}
 
 	std::shared_ptr<WidgetAncestor> WidgetParentInterface::findWidgetByName(const std::string& name)
 	{
@@ -241,8 +203,8 @@ namespace SE
 			return;
 		}
 
-		//Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
-		//Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
+		//Vector2f posFrom(marginLeft, getDrawHeight() - marginTop);
+		//Vector2f posTo(marginLeft + getDrawWidth(), marginTop);
 		Vector2f shift = getTranslateVector();
 		Vector2f posFrom = shift;
 		Vector2f posTo = shift + Vector2f(getDrawWidth(), getDrawHeight());
@@ -274,7 +236,7 @@ namespace SE
 
 	inline Vector2f WidgetAncestor::getTranslateVector()
 	{
-		return { marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + extraTranslation(1) };
+		return { marginLeft + extraTranslation(0), getDrawHeight() - marginTop + extraTranslation(1) };
 	}
 
 	void WidgetAncestor::Draw()
@@ -301,23 +263,54 @@ namespace SE
 		}
 		
 		Renderer->PopMatrix();
-
-		
+	}
+	
+	void WidgetAncestor::shareLeftoverWidthBetweenChildren()
+	{
+		for (auto &child : children)
+		{
+			if (getLayoutStyle(child->layoutWidth) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
+			{
+				child->calculatedLayoutWidth = getContentAreaLeftoverWidth() - paddingLeft - paddingRight;
+				child->shareLeftoverWidthBetweenChildren();
+			}
+		}
 	}
 
-	float WidgetAncestor::innerWidth()
+	void WidgetAncestor::shareLeftoverHeightBetweenChildren()
+	{
+		for (auto &child : children)
+		{
+			if (getLayoutStyle(child->layoutHeight) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
+			{
+				child->calculatedLayoutHeight = getContentAreaLeftoverHeight() - paddingBottom - paddingTop;
+				child->shareLeftoverHeightBetweenChildren();
+			}
+		}
+	}
+
+	float WidgetAncestor::calcInnerWidth()
 	{
 		return Visit(background,
 			[this](Vector4f color) { return 0.f; },
 			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); });
 	}
 
-	float WidgetAncestor::innerHeight()
+	float WidgetAncestor::calcInnerHeight()
 	{
-
 		return Visit(background,
 			[this](Vector4f color) { return 0.f; },
 			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
+	}
+
+	float WidgetAncestor::getInnerWidth()
+	{
+		return calculatedInnerWidth;
+	}
+
+	float WidgetAncestor::getInnerHeight()
+	{
+		return calculatedInnerHeight;
 	}
 
 	float WidgetAncestor::getContentAreaWidth()
@@ -333,12 +326,12 @@ namespace SE
 
 	float WidgetAncestor::getContentAreaLeftoverWidth()
 	{
-		return getContentAreaWidth() - innerWidth();
+		return getContentAreaWidth() - getInnerWidth();
 	}
 
 	float WidgetAncestor::getContentAreaLeftoverHeight()
 	{
-		return getContentAreaHeight() - innerHeight();
+		return getContentAreaHeight() - getInnerHeight();
 	}
 
 	float WidgetAncestor::getDrawWidth()
@@ -369,16 +362,16 @@ namespace SE
 
 		if (style == LS_FIXED || style == LS_WRAP_CONTENT)
 		{
-			calculatedLayoutWidth = Visit(layoutWidth,
+			calculatedInnerWidth = Visit(layoutWidth,
 				[this](float width) { return width; },
-				[this](LayoutStyle layoutStyle) { return innerWidth(); });
+				[this](LayoutStyle layoutStyle) { return calcInnerWidth(); });
 		}
 		else
 		{
-			calculatedLayoutWidth = 0;
+			calculatedInnerWidth = 0;
 		}
 
-		calculatedLayoutWidth += paddingLeft + paddingRight;
+		calculatedInnerWidth += paddingLeft + paddingRight;
 
 		UpdateRenderPair();
 	}
@@ -390,16 +383,26 @@ namespace SE
 
 		if (style == LS_FIXED || style == LS_WRAP_CONTENT)
 		{
-			calculatedLayoutHeight = Visit(layoutHeight,
+			calculatedInnerHeight = Visit(layoutHeight,
 				[this](float height) { return height; },
-				[this](LayoutStyle layoutStyle) { return innerHeight(); });
+				[this](LayoutStyle layoutStyle) { return calcInnerHeight(); });
 		}
 		else
 		{
-			calculatedLayoutHeight = 0;
+			calculatedInnerHeight = 0;
 		}
 
-		calculatedLayoutHeight += paddingBottom + paddingTop;
+		calculatedInnerHeight += paddingBottom + paddingTop;
+
+		UpdateRenderPair();
+	}
+
+	void WidgetAncestor::setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight)
+	{
+		paddingTop = newPaddingTop;
+		paddingBottom = newPaddingBottom;
+		paddingLeft = newPaddingLeft;
+		paddingRight = newPaddingRight;
 
 		UpdateRenderPair();
 	}
@@ -523,13 +526,13 @@ namespace SE
 			float childHeight = (getContentAreaLeftoverHeight() - paddingBottom - paddingTop) / matchCount;
 			for (auto &child : matchChildren)
 			{
-				child->calculatedLayoutHeight += childHeight;
+				child->calculatedLayoutHeight = child->calculatedInnerHeight + childHeight;
 				child->shareLeftoverHeightBetweenChildren();
 			}
 		}
 	}
 
-	float VerticalLinearLayout::innerWidth()
+	float VerticalLinearLayout::calcInnerWidth()
 	{
 		float result = 0;
 
@@ -538,9 +541,9 @@ namespace SE
 
 			if (getLayoutStyle(children[i]->layoutWidth) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
-				if (result < children[i]->getViewWidth())
+				if (result < children[i]->getInnerWidth())
 				{
-					result = children[i]->getViewWidth();
+					result = children[i]->getInnerWidth();
 				}
 			}
 		}
@@ -548,14 +551,14 @@ namespace SE
 		return result;
 	}
 
-	float VerticalLinearLayout::innerHeight()
+	float VerticalLinearLayout::calcInnerHeight()
 	{
 
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			result += children[i]->getViewHeight();
+			result += children[i]->getInnerHeight();
 			
 			if (i > 0)
 			{
@@ -565,35 +568,6 @@ namespace SE
 
 
 		return result;
-	}
-
-	float VerticalLinearLayout::getContentAreaLeftoverHeight()
-	{
-
-		float originalContentAreaHeight = WidgetAncestor::getContentAreaHeight();
-
-		float sizeToRemove = 0;
-
-		int activeCount = 0;
-
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			if (!children[i]->disabled)
-			{
-				++activeCount;
-				if (getLayoutStyle(children[i]->layoutHeight) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
-				{
-					sizeToRemove += children[i]->getViewHeight();
-				}
-			}
-		}
-
-		if (activeCount > 1)
-		{
-			sizeToRemove += (activeCount - 1) * itemSpacing;
-		}
-
-		return originalContentAreaHeight - sizeToRemove;
 	}
 
 	void VerticalLinearLayout::setItemSpacing(float newItemSpacing)
@@ -630,8 +604,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + padding(1), 0);
-		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom + extraTranslation(0), 0);
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, getDrawHeight() - marginTop + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), getDrawHeight() - marginTop + paddingBottom + extraTranslation(0), 0);
 
 
 		Renderer->PushMatrix();
@@ -947,13 +921,13 @@ namespace SE
 			float childWidth = (getContentAreaLeftoverWidth() - paddingLeft - paddingRight) / matchCount;
 			for (auto &child : matchChildren)
 			{
-				child->calculatedLayoutWidth += childWidth;
+				child->calculatedLayoutWidth = child->calculatedInnerWidth + childWidth;
 				child->shareLeftoverWidthBetweenChildren();
 			}
 		}
 	}
 
-	float HorizontalLinearLayout::innerHeight()
+	float HorizontalLinearLayout::calcInnerHeight()
 	{
 
 		float result = 0;
@@ -963,9 +937,9 @@ namespace SE
 
 			if (getLayoutStyle(children[i]->layoutHeight) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
-				if (result < children[i]->getViewHeight())
+				if (result < children[i]->getInnerHeight())
 				{
-					result = children[i]->getViewHeight();
+					result = children[i]->getInnerHeight();
 				}
 			}
 		}
@@ -973,7 +947,7 @@ namespace SE
 		return result;
 	}
 
-	float HorizontalLinearLayout::innerWidth()
+	float HorizontalLinearLayout::calcInnerWidth()
 	{
 
 		float result = 0;
@@ -981,7 +955,7 @@ namespace SE
 		for (size_t i = 0; i < children.size(); i++)
 		{
 
-			result += children[i]->getViewWidth();
+			result += children[i]->getInnerWidth();
 
 			if (i > 0)
 			{
@@ -991,31 +965,6 @@ namespace SE
 
 
 		return result;
-	}
-
-	float HorizontalLinearLayout::getContentAreaLeftoverWidth()
-	{
-		float sizeToRemove = 0;
-		int activeCount = 0;
-
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			if (!children[i]->disabled)
-			{
-				++activeCount;
-				if (getLayoutStyle(children[i]->layoutWidth) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
-				{
-					sizeToRemove += children[i]->getViewWidth();
-				}
-			}
-		}
-
-		if (activeCount > 1)
-		{
-			sizeToRemove += (activeCount - 1) * itemSpacing;
-		}
-
-		return getContentAreaWidth() - sizeToRemove;
 	}
 
 	void HorizontalLinearLayout::setItemSpacing(float newItemSpacing)
@@ -1053,8 +1002,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - margin(1) + padding(1), 0);
-		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom + extraTranslation(1), 0);
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, getDrawHeight() - margin(1) + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), getDrawHeight() - marginTop + paddingBottom + extraTranslation(1), 0);
 
 	
 		Renderer->PushMatrix();
@@ -1368,7 +1317,7 @@ namespace SE
 	{
 	}
 
-	float FrameLayout::innerWidth()
+	float FrameLayout::calcInnerWidth()
 	{
 		if (disabled)
 		{
@@ -1399,7 +1348,7 @@ namespace SE
 		return result;
 	}
 
-	float FrameLayout::innerHeight()
+	float FrameLayout::calcInnerHeight()
 	{
 
 		float result = 0;
@@ -1418,11 +1367,6 @@ namespace SE
 		}
 
 		return result;
-	}
-
-	float FrameLayout::getContentAreaLeftoverHeight()
-	{
-		return getContentAreaHeight();
 	}
 
 	void FrameLayout::UpdateRenderPair()
@@ -1454,8 +1398,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + padding(1), 0);
-		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom + extraTranslation(1), 0);
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, getDrawHeight() - marginTop + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), getDrawHeight() - marginTop + paddingBottom + extraTranslation(1), 0);
 
 
 		Renderer->PushMatrix();
@@ -1761,8 +1705,8 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		//Vector3f shift = Vector3f(paddingLeft + marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop + padding(1), 0);
-		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom + scroll + extraTranslation(1), 0);
+		//Vector3f shift = Vector3f(paddingLeft + marginLeft, getDrawHeight() - marginTop + padding(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft + extraTranslation(0), getDrawHeight() - marginTop + paddingBottom + scroll + extraTranslation(1), 0);
 
 	
 		Renderer->PushMatrix();
@@ -1950,7 +1894,7 @@ namespace SE
 			WidgetAncestor::OnMove(pos, shift, touchNumber);
 
 			float viewHeight = getContentAreaHeight();
-			float contentHeight = innerHeight();
+			float contentHeight = calcInnerHeight();
 
 			if (contentHeight > viewHeight)
 			{
@@ -2045,7 +1989,7 @@ namespace SE
 
 		WidgetAncestor::Draw();
 
-		Vector3f shift = Vector3f(paddingLeft + marginLeft - scroll + extraTranslation(0), parent.getContentAreaHeight() - getDrawHeight() - marginTop + paddingBottom + extraTranslation(1), 0);
+		Vector3f shift = Vector3f(paddingLeft + marginLeft - scroll + extraTranslation(0), getDrawHeight() - marginTop + paddingBottom + extraTranslation(1), 0);
 
 		Renderer->PushMatrix();
 
@@ -2237,7 +2181,7 @@ namespace SE
 			WidgetAncestor::OnMove(pos, shift, touchNumber);
 
 			float viewWidth = getContentAreaWidth();
-			float contentWidth = innerWidth();
+			float contentWidth = calcInnerWidth();
 
 			if (contentWidth > viewWidth)
 			{
@@ -2336,15 +2280,13 @@ namespace SE
 	}
 
 
-	float Label::innerWidth()
+	float Label::calcInnerWidth()
 	{
-
-		//return ResourceManager->FontManager.GetTextAdvance(textParams.Text);
-		return ResourceManager->FontManager.GetTextAdvance(textParams.Text, textParams.FontName) + 2 //To prevent wrong word wrap
-			+ 2 * textParams.BasicTextAreaParams.HorizontalPadding;
+		return ResourceManager->FontManager.GetTextAdvance(textParams.Text, textParams.FontName)
+			+ 2 * textParams.BasicTextAreaParams.HorizontalPadding + 1; //To prevent wrong word wrap
 	}
 
-	float Label::innerHeight()
+	float Label::calcInnerHeight()
 	{
 
 		return textParams.BasicTextAreaParams.Height + 2 * textParams.BasicTextAreaParams.VerticalPadding;
@@ -2472,19 +2414,19 @@ namespace SE
 		UpdateRenderPair();
 	}
 
-	float Button::innerWidth()
+	float Button::calcInnerWidth()
 	{
-		float backgroundWidth = WidgetAncestor::innerWidth();
-		float textWidth = Label::innerWidth();
+		float backgroundWidth = WidgetAncestor::calcInnerWidth();
+		float textWidth = Label::calcInnerWidth();
 
 		return backgroundWidth > textWidth ? backgroundWidth : textWidth;
 	}
 
-	float Button::innerHeight()
+	float Button::calcInnerHeight()
 	{
 
-		float backgroundHeight = WidgetAncestor::innerHeight();
-		float textHeight = Label::innerHeight();
+		float backgroundHeight = WidgetAncestor::calcInnerHeight();
+		float textHeight = Label::calcInnerHeight();
 
 		return backgroundHeight > textHeight ? backgroundHeight : textHeight;
 	}
@@ -2503,8 +2445,8 @@ namespace SE
 
 	void Button::UpdatePressedRenderPair()
 	{
-		Vector2f posFrom(marginLeft, parent.getContentAreaHeight() - getDrawHeight() - marginTop);
-		Vector2f posTo(marginLeft + getDrawWidth(), parent.getContentAreaHeight() - marginTop);
+		Vector2f posFrom(marginLeft, getDrawHeight() - marginTop);
+		Vector2f posTo(marginLeft + getDrawWidth(), marginTop);
 
 		std::string textureName = Visit(pressedDrawable,
 			[this](Vector4f color) { return "white.bmp"; },
@@ -3671,8 +3613,8 @@ namespace SE
 	NewGuiManager::NewGuiManager()
 		: inited(false)
 	{
-		calculatedLayoutWidth = 0;
-		calculatedLayoutHeight = 0;
+		width = 0;
+		height = 0;
 	}
 
 	NewGuiManager::~NewGuiManager()
@@ -3683,6 +3625,8 @@ namespace SE
 	void NewGuiManager::Init()
 	{
 		inited = true;
+		width = Renderer->GetMatrixWidth();
+		height = Renderer->GetMatrixHeight();
 	}
 
 	void NewGuiManager::Deinit()
@@ -3693,8 +3637,6 @@ namespace SE
 	bool NewGuiManager::IsInited()
 	{
 		return inited;
-		calculatedLayoutWidth = Renderer->GetMatrixWidth();
-		calculatedLayoutHeight = Renderer->GetMatrixHeight();
 	}
 
 	void NewGuiManager::Update(size_t dt)
@@ -3714,27 +3656,19 @@ namespace SE
 
 		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
 		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
-		Vector2f relativePos = pos;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			children[i]->RemoveFocusRecursively();
 
-			float drawHeight = getContentAreaHeight();
-
-			float childViewHeight = children[i]->getViewHeight();
-
-			float localHeightDiff = drawHeight - childViewHeight;
-
-			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+			Vector2f innerRelativePos = pos;
+			innerRelativePos(1) -= height - children[i]->getViewHeight();
 		
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
 				children[i]->OnMouseDown(innerRelativePos, touchNumber);
 			}
-			
 		}
-		
 	}
 
 	void NewGuiManager::OnMouseUp(Vector2f pos, int touchNumber)
@@ -3746,22 +3680,14 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			float drawHeight = getContentAreaHeight();
-
-			float childViewHeight = children[i]->getViewHeight();
-
-			float localHeightDiff = drawHeight - childViewHeight;
-
-			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+			Vector2f innerRelativePos = pos;
+			innerRelativePos(1) -= height - children[i]->getViewHeight();
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
 				children[i]->OnMouseUp(innerRelativePos, touchNumber);
 			}
-
-
 		}
-
 	}
 
 	void NewGuiManager::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -3773,22 +3699,14 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			float drawHeight = getContentAreaHeight();
-
-			float childViewHeight = children[i]->getViewHeight();
-
-			float localHeightDiff = drawHeight - childViewHeight;
-
-			Vector2f innerRelativePos = relativePos - Vector2f(0, localHeightDiff);
+			Vector2f innerRelativePos = pos;
+			innerRelativePos(1) -= height - children[i]->getViewHeight();
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
 				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
 			}
-
-
 		}
-
 	}
 
 	void NewGuiManager::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -3812,28 +3730,28 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMove, std::placeholders::_1, pos));
 	}
 
-	float NewGuiManager::getContentAreaWidth()
+	void NewGuiManager::shareLeftoverWidthBetweenChildren()
 	{
-		//return Renderer->GetScreenWidth();
-		//return 480;
-		return Renderer->GetMatrixWidth();
+		for (auto &child : children)
+		{
+			if (getLayoutStyle(child->layoutWidth) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
+			{
+				child->calculatedLayoutWidth = width;
+				child->shareLeftoverWidthBetweenChildren();
+			}
+		}
 	}
 
-	float NewGuiManager::getContentAreaHeight()
+	void NewGuiManager::shareLeftoverHeightBetweenChildren()
 	{
-		//return Renderer->GetScreenHeight();
-		//return 320;
-		return Renderer->GetMatrixHeight();
-	}
-
-	float NewGuiManager::getContentAreaLeftoverWidth()
-	{
-		return getContentAreaWidth();
-	}
-
-	float NewGuiManager::getContentAreaLeftoverHeight()
-	{
-		return getContentAreaHeight();
+		for (auto &child : children)
+		{
+			if (getLayoutStyle(child->layoutHeight) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
+			{
+				child->calculatedLayoutHeight = height;
+				child->shareLeftoverHeightBetweenChildren();
+			}
+		}
 	}
 
 	void NewGuiManager::UpdateAllRenderPair()

@@ -16,27 +16,11 @@ namespace SE
 	{
 	public:
 
-		float paddingTop = 0;
-		float paddingBottom = 0;
-		float paddingLeft = 0;
-		float paddingRight = 0;
-
-		float calculatedLayoutWidth;
-		float calculatedLayoutHeight;
-
 		WidgetParentInterface();
 		virtual ~WidgetParentInterface();
 
-		virtual float getContentAreaWidth() = 0;
-		virtual float getContentAreaHeight() = 0;
-
-		virtual float getContentAreaLeftoverWidth() = 0;
-		virtual float getContentAreaLeftoverHeight() = 0;
-
-		virtual void shareLeftoverWidthBetweenChildren();
-		virtual void shareLeftoverHeightBetweenChildren();		
-
-		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
+		virtual void shareLeftoverWidthBetweenChildren() = 0;
+		virtual void shareLeftoverHeightBetweenChildren() = 0;		
 
 		virtual void UpdateRenderPair() = 0;
 
@@ -85,8 +69,13 @@ namespace SE
 
 		TRenderPair renderPair, bordersRenderPair;
 
-
 	public:
+
+		float calculatedLayoutWidth;
+		float calculatedLayoutHeight;
+
+		float calculatedInnerWidth;
+		float calculatedInnerHeight;
 
 		bool inited;
 		
@@ -101,6 +90,11 @@ namespace SE
 		boost::signals2::signal<void(Vector2f, int)> onMouseUpSignal;
 
 		WidgetParentInterface& parent;
+
+		float paddingTop = 0;
+		float paddingBottom = 0;
+		float paddingLeft = 0;
+		float paddingRight = 0;
 
 		float marginTop;
 		float marginBottom;
@@ -117,8 +111,6 @@ namespace SE
 
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
-
-		void setBackground(boost::variant<std::string, Vector4f> background);
 		
 		std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo);
 		std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color);
@@ -129,23 +121,30 @@ namespace SE
 
 		virtual void Draw();
 
-		virtual float getContentAreaWidth();
-		virtual float getContentAreaHeight();
+		inline virtual float getContentAreaWidth();
+		inline virtual float getContentAreaHeight();
 
-		virtual float getContentAreaLeftoverWidth();
-		virtual float getContentAreaLeftoverHeight();
+		inline virtual float getContentAreaLeftoverWidth();
+		inline virtual float getContentAreaLeftoverHeight();
 
-		virtual float getDrawWidth();
-		virtual float getDrawHeight();
+		inline virtual float getDrawWidth();
+		inline virtual float getDrawHeight();
 
-		virtual float getViewWidth();
-		virtual float getViewHeight();
+		inline virtual float getViewWidth();
+		inline virtual float getViewHeight();
+
+		inline virtual float getInnerWidth();
+		inline virtual float getInnerHeight();
+
+		virtual float calcInnerWidth();
+		virtual float calcInnerHeight();
 
 		Vector2f WidgetAncestor::getTranslateVector();
 
-		virtual float innerWidth();
-		virtual float innerHeight();
+		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void shareLeftoverHeightBetweenChildren();
 
+		virtual void setBackground(boost::variant<std::string, Vector4f> background);
 		virtual void setBorderColor(Vector4f color);
 		virtual void setBorderType(BorderType newBorderType);
 
@@ -153,6 +152,7 @@ namespace SE
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
 
 		virtual void setMargin(float newMarginTop, float newMarginBottom, float newMarginLeft, float newMarginRight);
+		virtual void setPadding(float newPaddingTop, float newPaddingBottom, float newPaddingLeft, float newPaddingRight);
 
 		virtual void setExtraTranslation(float extraTranslationX, float extraTranslationY);
 
@@ -202,13 +202,10 @@ namespace SE
 
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
 
-		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
 
-		virtual float innerWidth();
-		virtual float innerHeight();
-
-		virtual float getContentAreaLeftoverHeight();
+		virtual float calcInnerWidth();
+		virtual float calcInnerHeight();
 
 		void setItemSpacing(float newItemSpacing);
 
@@ -253,12 +250,9 @@ namespace SE
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
 
 		virtual void shareLeftoverWidthBetweenChildren();
-		virtual void shareLeftoverHeightBetweenChildren();
 
-		virtual float innerWidth();
-		virtual float innerHeight();
-
-		virtual float getContentAreaLeftoverWidth();
+		virtual float calcInnerWidth();
+		virtual float calcInnerHeight();
 
 		void setItemSpacing(float itemSpacing);
 
@@ -297,13 +291,8 @@ namespace SE
 
 		FrameLayout(WidgetParentInterface& widgetParent);
 
-		virtual void shareLeftoverWidthBetweenChildren();
-		virtual void shareLeftoverHeightBetweenChildren();
-
-		virtual float innerWidth();
-		virtual float innerHeight();
-
-		virtual float getContentAreaLeftoverHeight();
+		virtual float calcInnerWidth();
+		virtual float calcInnerHeight();
 
 		virtual void UpdateRenderPair();
 
@@ -398,9 +387,8 @@ namespace SE
 
 		Label(WidgetParentInterface& widgetParent);
 
-		float innerWidth();
-
-		float innerHeight();
+		virtual float calcInnerWidth();
+		virtual float calcInnerHeight();
 
 		virtual void Draw();
 
@@ -444,9 +432,8 @@ namespace SE
 		void setPressedDrawable(boost::variant<std::string, Vector4f> pressedDrawable);
 		void setHoverDrawable(boost::variant<std::string, Vector4f> hoverDrawable);
 
-		float innerWidth();
-
-		float innerHeight();
+		virtual float calcInnerWidth();
+		virtual float calcInnerHeight();
 
 		virtual void UpdateRenderPair();
 
@@ -493,7 +480,7 @@ namespace SE
 
 		Vector3f getCursorPos();
 
-		void setSymbolLimit(size_t limit);
+		virtual void setSymbolLimit(size_t limit);
 		virtual void setText(const std::string& text);
 
 		virtual void OnKeyPressed(int key);
@@ -528,10 +515,10 @@ namespace SE
 		boost::signals2::signal<void(float)> onValueChanged;
 
 		HorizontalSlider(WidgetParentInterface& widgetParent);
-		virtual ~HorizontalSlider();
+		~HorizontalSlider();
 
 		void UpdateRenderPair();
-		virtual void Draw();
+		void Draw();
 
 		void changeValue(float t);
 		void setPosition(int position);
@@ -581,10 +568,10 @@ namespace SE
 		boost::signals2::signal<void(float, float)> onValueChanged;
 
 		HorizontalDoubleSlider(WidgetParentInterface& widgetParent);
-		virtual ~HorizontalDoubleSlider();
+		~HorizontalDoubleSlider();
 
 		void UpdateRenderPair();
-		virtual void Draw();
+		void Draw();
 
 		void changeValue1(float t);
 		void changeValue2(float t);
@@ -620,6 +607,8 @@ namespace SE
 
 	public:
 
+		float height, width;
+
 		NewGuiManager();
 
 		~NewGuiManager();
@@ -645,11 +634,8 @@ namespace SE
 
 		void OnMouseMove(Vector2f pos);
 
-		virtual float getContentAreaWidth();
-		virtual float getContentAreaHeight();
-
-		virtual float getContentAreaLeftoverWidth();
-		virtual float getContentAreaLeftoverHeight();
+		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void shareLeftoverHeightBetweenChildren();
 
 		void UpdateRenderPair(){}
 		virtual void UpdateAllRenderPair();
