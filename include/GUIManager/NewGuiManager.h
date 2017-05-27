@@ -125,6 +125,7 @@ namespace SE
 		virtual ~WidgetAncestor();
 
 		void setBackground(boost::variant<std::string, Vector4f> background);
+		void setVisibility(bool visible);
 		
 		std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo);
 		std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color);

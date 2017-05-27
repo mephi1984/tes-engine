@@ -128,6 +128,12 @@ namespace SE
 
 	}
 
+	void WidgetAncestor::setVisibility(bool visible)
+	{
+		this->disabled = !visible; // temporary
+		UpdateRenderPair();
+	}
+
 	void WidgetAncestor::setBorderColor(Vector4f color)
 	{
 		borderColor = color;
