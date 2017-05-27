@@ -443,6 +443,9 @@ namespace SE
 		ButtonState buttonState;
 		ButtonState hoverButtonState;
 
+		float pressedMaxAlpha;
+		float hoverMaxAlpha;
+
 		float buttonTimer;
 		float hoverButtonTimer;
 

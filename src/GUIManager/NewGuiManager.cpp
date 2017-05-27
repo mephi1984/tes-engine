@@ -2571,18 +2571,17 @@ namespace SE
 			[this](Vector4f color) { return  color; },
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 0); });
 
+		pressedMaxAlpha = color(3);
 
 		pressedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		pressedRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
 
 		for (auto& colorVec : pressedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
 		{
-			colorVec = color;
+			colorVec << color(0), color(1), color(2), 0;
 		}
 
 		pressedRenderPair.second.RefreshBuffer();
-
-
 
 		std::string hoverTextureName = Visit(hoverDrawable,
 			[this](Vector4f color) { return "white.bmp"; },
@@ -2592,13 +2591,14 @@ namespace SE
 			[this](Vector4f color) { return  color; },
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 0); });
 
+		hoverMaxAlpha = color(3);
 
 		hoverRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = hoverTextureName;
 		hoverRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
 
 		for (auto& colorVec : hoverRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
 		{
-			colorVec = hoverColor;
+			colorVec << hoverColor(0), hoverColor(1), hoverColor(2), 0;
 		}
 
 		hoverRenderPair.second.RefreshBuffer();
@@ -2697,12 +2697,13 @@ namespace SE
 
 		for (auto& color : pressedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
 		{
-			color(3) = buttonTimer / CONST_BUTTON_PRESS_TIME;
+			color(3) = buttonTimer / CONST_BUTTON_PRESS_TIME * pressedMaxAlpha;
 		}
 
 		for (auto& color : hoverRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
 		{
-			color(3) = hoverButtonTimer * (1.f - buttonTimer / CONST_BUTTON_PRESS_TIME) / (CONST_BUTTON_PRESS_TIME);
+			color(3) = hoverButtonTimer * (1.f - buttonTimer / CONST_BUTTON_PRESS_TIME) / 
+				CONST_BUTTON_PRESS_TIME * hoverMaxAlpha;
 		}
 
 		if (oldHoverButtonTimer != hoverButtonTimer || oldButtonTimer != buttonTimer)
