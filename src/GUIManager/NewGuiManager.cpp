@@ -807,6 +807,7 @@ namespace SE
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+		relativePos(1) -= itemSpacing;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -840,6 +841,7 @@ namespace SE
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+		relativePos(1) -= itemSpacing;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -875,6 +877,7 @@ namespace SE
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+		relativePos(1) -= itemSpacing;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -930,6 +933,7 @@ namespace SE
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+		relativePos(1) -= itemSpacing;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -990,6 +994,7 @@ namespace SE
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+		relativePos(1) -= itemSpacing;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1879,7 +1884,7 @@ namespace SE
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-		relativePos(1) += itemSpacing - scroll;
+		relativePos(1) -= itemSpacing + scroll;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1914,7 +1919,7 @@ namespace SE
 
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-		relativePos(1) += itemSpacing - scroll;
+		relativePos(1) -= itemSpacing + scroll;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1950,7 +1955,7 @@ namespace SE
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-		relativePos(1) += itemSpacing - scroll;
+		relativePos(1) -= itemSpacing + scroll;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1987,7 +1992,7 @@ namespace SE
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-		relativePos(1) += itemSpacing - scroll;
+		relativePos(1) -= itemSpacing + scroll;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2052,7 +2057,7 @@ namespace SE
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-		relativePos(1) += itemSpacing - scroll;
+		relativePos(1) -= itemSpacing + scroll;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -3225,8 +3230,8 @@ namespace SE
 
 	inline bool HorizontalSlider::isPointAboveTrack(Vector2f point)
 	{
-		return (point(0) >= -sidesPadding && point(0) < getDrawWidth() - paddingLeft + sidesPadding &&
-			point(1) >= 0 && point(1) < getDrawHeight() - paddingBottom);
+		return (point(0) >= -sidesPadding && point(0) < getContentAreaWidth() - sidesPadding &&
+			point(1) >= 0 && point(1) < getContentAreaHeight());
 	}
 
 	inline int HorizontalSlider::getTrackPositionFromPoint(Vector2f point)
@@ -3240,7 +3245,7 @@ namespace SE
 		{
 			return;
 		}
-		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
 		if (!isPointAboveTrack(pos)) return;
 		setPosition(getTrackPositionFromPoint(pos));
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
@@ -3255,7 +3260,7 @@ namespace SE
 
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
 
-		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
 		setPosition(getTrackPositionFromPoint(pos));
 		
 		return true;
@@ -3305,8 +3310,8 @@ namespace SE
 
 		Vector2f
 			shift = getDrawTranslate(),
-			from_point(paddingLeft + sidesPadding, paddingBottom + trackPadding),
-			to_point(getDrawWidth() - paddingRight - sidesPadding, getDrawHeight() - paddingTop - trackPadding);
+			from_point(paddingLeft + buttonWidth, paddingBottom + trackPadding),
+			to_point(getDrawWidth() - paddingRight - buttonWidth, getDrawHeight() - paddingTop - trackPadding);
 
 		if (from_point(0) > to_point(0)) from_point(0) = to_point(0);
 		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_TRACK_HEIGHT)
@@ -3341,17 +3346,17 @@ namespace SE
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
 		from_point = { paddingLeft, paddingBottom + buttonPadding };
-		to_point = { buttonWidth + paddingLeft, getDrawHeight() - paddingTop - buttonPadding };
+		to_point = { paddingLeft + buttonWidth, getDrawHeight() - paddingTop - buttonPadding };
 
 		if (!isTexture || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
 		{
-			from_point(0) = paddingLeft;
-			to_point(0) = paddingLeft + MIN_BUTTON_WIDTH;
+			from_point(0) = paddingLeft - MIN_BUTTON_WIDTH;
+			to_point(0) = paddingLeft;
 		}
 		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
 		{
-			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f;
-			to_point(1) = paddingBottom + getContentAreaHeight() / 2.f + MIN_BUTTON_HEIGHT / 2.f;
+			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_BUTTON_HEIGHT;
+			to_point(1) = paddingBottom + getContentAreaHeight()/ 2.f + MIN_BUTTON_HEIGHT;
 		}
 
 		from_point += shift;
@@ -3379,8 +3384,8 @@ namespace SE
 			[this](Vector4f color) { return  color; },
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
-		from_point = { paddingLeft, paddingBottom + buttonPadding };
-		to_point = { buttonWidth + paddingLeft, getDrawHeight() - paddingTop - buttonPadding };
+		from_point = { paddingLeft + buttonWidth, paddingBottom + buttonPadding };
+		to_point = { paddingLeft + buttonWidth * 2, getDrawHeight() - paddingTop - buttonPadding };
 
 		if (!isTexture || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
 		{
@@ -3389,8 +3394,8 @@ namespace SE
 		}
 		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
 		{
-			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_BUTTON_HEIGHT / 2.f;
-			to_point(1) = paddingBottom + getContentAreaHeight() / 2.f;
+			from_point(1) = paddingBottom + (getContentAreaHeight() - MIN_BUTTON_HEIGHT) / 2.f;
+			to_point(1) = paddingBottom + (getContentAreaHeight() + MIN_BUTTON_HEIGHT) / 2.f;
 		}
 
 		from_point += shift;
@@ -3425,11 +3430,11 @@ namespace SE
 
 		if (maxValue != minValue)
 		{
-			Renderer->TranslateMatrix(Vector3f((position1 - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - buttonWidth), 0, 0));
+			Renderer->TranslateMatrix(Vector3f((position1 - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - 2 * buttonWidth), 0, 0));
 		}
 		else
 		{
-			Renderer->TranslateMatrix(Vector3f(0.5f * (getContentAreaWidth() - buttonWidth), 0, 0));
+			Renderer->TranslateMatrix(Vector3f(0.5f * (getContentAreaWidth() - 2 * buttonWidth), 0, 0));
 		}
 
 		TRenderParamsSetter render2(button1RenderPair.first);
@@ -3440,11 +3445,11 @@ namespace SE
 
 		if (maxValue != minValue)
 		{
-			Renderer->TranslateMatrix(Vector3f((position2 - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - buttonWidth), 0, 0));
+			Renderer->TranslateMatrix(Vector3f((position2 - minValue) / (float)(maxValue - minValue) * (getContentAreaWidth() - 2 * buttonWidth), 0, 0));
 		}
 		else
 		{
-			Renderer->TranslateMatrix(Vector3f(0.5f * (getContentAreaWidth() - buttonWidth), 0, 0));
+			Renderer->TranslateMatrix(Vector3f(0.5f * (getContentAreaWidth() - 2 * buttonWidth), 0, 0));
 		}
 
 		TRenderParamsSetter render3(button2RenderPair.first);
@@ -3567,7 +3572,6 @@ namespace SE
 			width = MIN_BUTTON_WIDTH;
 		}
 		buttonWidth = width;
-		sidesPadding = width / 2.f;
 	}
 
 	void HorizontalDoubleSlider::setButtonPadding(float padding)
@@ -3630,13 +3634,13 @@ namespace SE
 
 	inline int HorizontalDoubleSlider::getTrackPositionFromPoint(Vector2f point)
 	{
-		return (int)(point(0) / (getContentAreaWidth() - buttonWidth) * (maxValue - minValue) + 0.5f) + minValue;
+		return (int)(point(0) / (getContentAreaWidth() - 2 * buttonWidth) * (maxValue - minValue) + 0.5f) + minValue;
 	}
 	
 	inline bool HorizontalDoubleSlider::isPointAboveTrack(Vector2f point)
 	{
-		return (point(0) >= -sidesPadding && point(0) < getDrawWidth() - paddingLeft + sidesPadding &&
-			point(1) >= 0 && point(1) < getDrawHeight() - paddingBottom);
+		return (point(0) >= -buttonWidth && point(0) < getContentAreaWidth() - buttonWidth &&
+			point(1) >= 0 && point(1) < getContentAreaHeight());
 	}
 
 	inline int HorizontalDoubleSlider::getButtonNumberFromPosition(int position)
@@ -3651,7 +3655,7 @@ namespace SE
 		{
 			return;
 		}
-		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+		pos -= Vector2f(paddingLeft + buttonWidth, paddingBottom) + getDrawTranslate();
 		if (!isPointAboveTrack(pos)) return;
 		int position = getTrackPositionFromPoint(pos);
 		if ((movingButton = getButtonNumberFromPosition(position)) > 0)
@@ -3676,7 +3680,7 @@ namespace SE
 		}
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
 		if (movingButton == 0) return false;
-		pos -= Vector2f(marginLeft + paddingLeft + sidesPadding, marginBottom + paddingBottom);
+		pos -= Vector2f(paddingLeft + buttonWidth, paddingBottom) + getDrawTranslate();
 		int position = getTrackPositionFromPoint(pos);
 		if (movingButton == 1)
 		{

@@ -572,7 +572,6 @@ namespace SE
 		float buttonWidth;
 		float buttonPadding;
 		float trackPadding;
-		float sidesPadding;
 		int movingButton;
 
 		TRenderPair button1RenderPair, button2RenderPair, trackRenderPair;
