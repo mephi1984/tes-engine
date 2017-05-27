@@ -3350,13 +3350,13 @@ namespace SE
 
 		if (!isTexture || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
 		{
-			from_point(0) = paddingLeft - MIN_BUTTON_WIDTH;
-			to_point(0) = paddingLeft;
+			from_point(0) = paddingLeft;
+			to_point(0) = paddingLeft + MIN_BUTTON_WIDTH;
 		}
 		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
 		{
-			from_point(1) = paddingBottom + getContentAreaHeight() / 2.f - MIN_BUTTON_HEIGHT;
-			to_point(1) = paddingBottom + getContentAreaHeight()/ 2.f + MIN_BUTTON_HEIGHT;
+			from_point(1) = paddingBottom + (getContentAreaHeight() - MIN_BUTTON_HEIGHT) / 2.f;
+			to_point(1) = paddingBottom + (getContentAreaHeight() + MIN_BUTTON_HEIGHT) / 2.f;
 		}
 
 		from_point += shift;
@@ -3389,8 +3389,8 @@ namespace SE
 
 		if (!isTexture || to_point(0) - from_point(0) + 1 < MIN_BUTTON_WIDTH)
 		{
-			from_point(0) = paddingLeft;
-			to_point(0) = paddingLeft + MIN_BUTTON_WIDTH;
+			from_point(0) = paddingLeft + MIN_BUTTON_WIDTH;
+			to_point(0) = paddingLeft + 2 * MIN_BUTTON_WIDTH;
 		}
 		if (!isTexture || to_point(1) - from_point(1) + 1 < MIN_BUTTON_HEIGHT)
 		{
