@@ -142,8 +142,8 @@ namespace SE
 		inline virtual float getContentAreaWidth();
 		inline virtual float getContentAreaHeight();
 
-		inline virtual float getContentAreaLeftoverWidth();
-		inline virtual float getContentAreaLeftoverHeight();
+		virtual float getContentAreaLeftoverWidth();
+		virtual float getContentAreaLeftoverHeight();
 
 		inline virtual float getDrawWidth();
 		inline virtual float getDrawHeight();
@@ -567,8 +567,8 @@ namespace SE
 		void setButtonSkin(boost::variant<std::string, Vector4f> buttonSkin);
 		void setTrackSkin(boost::variant<std::string, Vector4f> trackSkin);
 
-		bool isPointAboveTrack(Vector2f point);
-		int getTrackPositionFromPoint(Vector2f point);
+		inline bool isPointAboveTrack(Vector2f point);
+		inline int getTrackPositionFromPoint(Vector2f point);
 
 		void OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
