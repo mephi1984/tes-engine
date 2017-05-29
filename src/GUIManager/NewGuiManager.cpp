@@ -411,7 +411,7 @@ namespace SE
 		{
 			result(1) = -child->getViewHeight();
 		}
-		else if (childrenHA == VA_CENTER)
+		else if (childrenVA == VA_CENTER)
 		{
 			result(1) = child->getViewHeight() <= height ? result(1) = -child->getViewHeight() / 2.f
 				: height / 2.f - child->getViewHeight();
@@ -631,12 +631,17 @@ namespace SE
 
 		if (matchCount > 0)
 		{
+			heightIsFilled = true;
 			float childHeight = getContentAreaLeftoverHeight() / matchCount;
 			for (auto &child : matchChildren)
 			{
 				child->calculatedLayoutHeight = childHeight;
 				child->calculatedInnerHeight = child->calcInnerHeight();
 			}
+		}
+		else
+		{
+			heightIsFilled = false;
 		}
 
 		for (auto &child : children)
@@ -725,17 +730,17 @@ namespace SE
 
 		float diff = getContentAreaHeight() - getInnerHeight();
 
-		if (childrenVA == VA_TOP)
+		if (childrenVA == VA_TOP || heightIsFilled)
 		{
 			result(1) = getDrawHeight() - paddingTop;
 		}
-		else if (childrenHA == VA_CENTER)
+		else if (childrenVA == VA_CENTER)
 		{
-			result(1) = (diff > 0 ? diff / 2.f : 0) + paddingBottom;
+			result(1) = (diff > 0 ? (getContentAreaHeight() + getInnerHeight()) / 2.f : getContentAreaHeight()) + paddingBottom;
 		}
 		else
 		{
-			result(1) = (diff > 0 ? 0 : diff) + paddingBottom;
+			result(1) = (diff > 0 ? getInnerHeight() : getContentAreaHeight()) + paddingBottom;
 		}
 
 		return result;
@@ -758,8 +763,7 @@ namespace SE
 		}
 		else
 		{
-			result(0) = -child->getViewWidth();
-			if (result(0) < -width) result(0) = -width;
+			result(0) =  child->getViewWidth() <= width ? -child->getViewWidth() : result(0) = -width;
 		}
 
 		return result;
@@ -1072,12 +1076,17 @@ namespace SE
 
 		if (matchCount > 0)
 		{
+			widthIsFilled = true;
 			float childWidth = getContentAreaLeftoverWidth() / matchCount;
 			for (auto &child : matchChildren)
 			{
 				child->calculatedLayoutWidth = childWidth;
 				child->calculatedInnerWidth = child->calcInnerWidth();
 			}
+		}
+		else
+		{
+			widthIsFilled = false;
 		}
 
 		for (auto &child : children)
@@ -1155,7 +1164,7 @@ namespace SE
 
 		float diff = getContentAreaWidth() - getInnerWidth();
 
-		if (childrenHA == HA_LEFT)
+		if (childrenHA == HA_LEFT || widthIsFilled)
 		{
 			result(0) = paddingLeft;
 		}
@@ -1172,7 +1181,7 @@ namespace SE
 		{
 			result(1) = getDrawHeight() - paddingTop;
 		}
-		else if (childrenHA == VA_CENTER)
+		else if (childrenVA == VA_CENTER)
 		{
 			result(1) = getContentAreaHeight() / 2.f + paddingBottom;
 		}
@@ -1195,7 +1204,7 @@ namespace SE
 		{
 			result(1) = -child->getViewHeight();
 		}
-		else if (childrenHA == VA_CENTER)
+		else if (childrenVA == VA_CENTER)
 		{
 			result(1) = child->getViewHeight() <= height ? result(1) = -child->getViewHeight() / 2.f
 				: height / 2.f - child->getViewHeight();

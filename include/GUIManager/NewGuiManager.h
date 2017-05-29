@@ -224,6 +224,8 @@ namespace SE
 
 		float itemSpacing;
 
+		bool heightIsFilled;
+
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
 
 		virtual void shareLeftoverHeightBetweenChildren();
@@ -268,6 +270,8 @@ namespace SE
 
 
 	public:
+
+		bool widthIsFilled;
 
 		float itemSpacing;
 
