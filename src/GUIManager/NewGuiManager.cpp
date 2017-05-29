@@ -631,12 +631,17 @@ namespace SE
 
 		if (matchCount > 0)
 		{
+			heightIsFilled = true;
 			float childHeight = getContentAreaLeftoverHeight() / matchCount;
 			for (auto &child : matchChildren)
 			{
 				child->calculatedLayoutHeight = childHeight;
 				child->calculatedInnerHeight = child->calcInnerHeight();
 			}
+		}
+		else
+		{
+			heightIsFilled = false;
 		}
 
 		for (auto &child : children)
@@ -725,13 +730,13 @@ namespace SE
 
 		float diff = getContentAreaHeight() - getInnerHeight();
 
-		if (childrenVA == VA_TOP)
+		if (childrenVA == VA_TOP || heightIsFilled)
 		{
 			result(1) = getDrawHeight() - paddingTop;
 		}
 		else if (childrenVA == VA_CENTER)
 		{
-			result(1) = (diff > 0 ? (getContentAreaHeight() + getInnerHeight() / 2.f) : getContentAreaHeight()) + paddingBottom;
+			result(1) = (diff > 0 ? (getContentAreaHeight() + getInnerHeight()) / 2.f : getContentAreaHeight()) + paddingBottom;
 		}
 		else
 		{
@@ -1071,12 +1076,17 @@ namespace SE
 
 		if (matchCount > 0)
 		{
+			widthIsFilled = true;
 			float childWidth = getContentAreaLeftoverWidth() / matchCount;
 			for (auto &child : matchChildren)
 			{
 				child->calculatedLayoutWidth = childWidth;
 				child->calculatedInnerWidth = child->calcInnerWidth();
 			}
+		}
+		else
+		{
+			widthIsFilled = false;
 		}
 
 		for (auto &child : children)
@@ -1154,7 +1164,7 @@ namespace SE
 
 		float diff = getContentAreaWidth() - getInnerWidth();
 
-		if (childrenHA == HA_LEFT)
+		if (childrenHA == HA_LEFT || widthIsFilled)
 		{
 			result(0) = paddingLeft;
 		}
