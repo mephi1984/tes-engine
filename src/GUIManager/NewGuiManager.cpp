@@ -274,6 +274,40 @@ namespace SE
 		Renderer->PopMatrix();
 	}
 	
+	float WidgetAncestor::getContentAreaLeftoverWidth()
+	{
+		float occupiedWidth = 0.f;
+		LayoutStyle style;
+		
+		for (auto &child : children)
+		{
+			style = getLayoutStyle(child->layoutWidth);
+			if (style != LS_MATCH_PARENT)
+			{
+				occupiedWidth += child->calculatedLayoutWidth;
+			}
+		}
+
+		return getContentAreaWidth() - occupiedWidth;
+	}
+
+	float WidgetAncestor::getContentAreaLeftoverHeight()
+	{
+		float occupiedHeight = 0.f;
+		LayoutStyle style;
+
+		for (auto &child : children)
+		{
+			style = getLayoutStyle(child->layoutHeight);
+			if (style != LS_MATCH_PARENT)
+			{
+				occupiedHeight += child->calculatedLayoutHeight;
+			}
+		}
+
+		return getContentAreaHeight() - occupiedHeight;
+	}
+	
 	void WidgetAncestor::shareLeftoverWidthBetweenChildren()
 	{
 		if (children.size() == 0) return;
@@ -308,14 +342,16 @@ namespace SE
 	{
 		return Visit(background,
 			[this](Vector4f color) { return 0.f; },
-			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); });
+			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); }) +
+			paddingLeft + paddingRight + marginLeft + marginRight;
 	}
 
 	float WidgetAncestor::calcInnerHeight()
 	{
 		return Visit(background,
 			[this](Vector4f color) { return 0.f; },
-			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); });
+			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); }) +
+			paddingBottom + paddingTop + marginTop + marginBottom;
 	}
 
 	float WidgetAncestor::getInnerWidth()
@@ -335,21 +371,10 @@ namespace SE
 
 	float WidgetAncestor::getContentAreaHeight()
 	{
-
 		return getDrawHeight() - (paddingTop + paddingBottom);
 	}
 
-	float WidgetAncestor::getContentAreaLeftoverWidth()
-	{
-		return getContentAreaWidth() - getInnerWidth();
-	}
-
-	float WidgetAncestor::getContentAreaLeftoverHeight()
-	{
-		return getContentAreaHeight() - getInnerHeight();
-	}
-
-	inline Vector2f WidgetAncestor::getDrawTranslate()
+	Vector2f WidgetAncestor::getDrawTranslate()
 	{
 		return Vector2f(extraTranslation(0) + marginLeft, extraTranslation(1) + marginBottom);
 	}
@@ -451,19 +476,20 @@ namespace SE
 		LayoutStyle style = getLayoutStyle(layoutWidth);
 
 		calculatedInnerWidth = calcInnerWidth();
-		
+
 		calculatedLayoutWidth = Visit(layoutWidth,
 			[this](float width) { return width; },
 			[this, style](LayoutStyle layoutStyle)
 		{
-			if (style == LS_WRAP_CONTENT)
+			return calculatedInnerWidth - marginLeft - marginRight;
+			/*if (style == LS_WRAP_CONTENT)
 			{
-				return calculatedInnerWidth + paddingLeft + paddingRight;
+				return calculatedInnerWidth - marginLeft - marginRight;
 			}
 			if (style == LS_MATCH_PARENT)
 			{
 				return 0.f;
-			}
+			}*/
 		});
 
 		UpdateRenderPair();
@@ -480,14 +506,15 @@ namespace SE
 			[this](float height) { return height; },
 			[this, style](LayoutStyle layoutStyle)
 		{
-			if (style == LS_WRAP_CONTENT)
+			return calculatedInnerHeight - marginBottom - marginTop;
+			/*if (style == LS_WRAP_CONTENT)
 			{
-				return calculatedInnerHeight + paddingBottom + paddingTop;
+				return calculatedInnerHeight - marginBottom - marginTop;
 			}
 			if (style == LS_MATCH_PARENT)
 			{
 				return 0.f;
-			}
+			}*/
 		});
 
 		UpdateRenderPair();
@@ -666,7 +693,7 @@ namespace SE
 			}
 		}
 
-		return result;
+		return result + paddingLeft + paddingRight + marginLeft + marginRight;
 	}
 
 	float VerticalLinearLayout::calcInnerHeight()
@@ -685,7 +712,7 @@ namespace SE
 		}
 
 
-		return result;
+		return result + paddingBottom + paddingTop + marginBottom + marginTop;
 	}
 
 	void VerticalLinearLayout::setItemSpacing(float newItemSpacing)
@@ -1112,7 +1139,7 @@ namespace SE
 			}
 		}
 
-		return result;
+		return result + paddingBottom + paddingTop + marginBottom + marginTop;
 	}
 
 	float HorizontalLinearLayout::calcInnerWidth()
@@ -1132,7 +1159,7 @@ namespace SE
 		}
 
 
-		return result;
+		return result + paddingLeft + paddingRight + marginLeft + marginRight;
 	}
 
 	void HorizontalLinearLayout::setItemSpacing(float newItemSpacing)
@@ -1535,7 +1562,7 @@ namespace SE
 			}
 		}
 
-		return result;
+		return result + paddingLeft + paddingRight + marginLeft + marginRight;
 	}
 
 	float FrameLayout::calcInnerHeight()
@@ -1556,7 +1583,7 @@ namespace SE
 			}
 		}
 
-		return result;
+		return result + paddingBottom + paddingTop + marginBottom + marginTop;
 	}
 
 	void FrameLayout::UpdateRenderPair()
@@ -2042,7 +2069,7 @@ namespace SE
 			WidgetAncestor::OnMove(pos, shift, touchNumber);
 
 			float viewHeight = getContentAreaHeight();
-			float contentHeight = calcInnerHeight();
+			float contentHeight = getInnerHeight();
 
 			if (contentHeight > viewHeight)
 			{
@@ -2314,7 +2341,7 @@ namespace SE
 			WidgetAncestor::OnMove(pos, shift, touchNumber);
 
 			float viewWidth = getContentAreaWidth();
-			float contentWidth = calcInnerWidth();
+			float contentWidth = getInnerWidth();
 
 			if (contentWidth > viewWidth)
 			{
@@ -2411,13 +2438,14 @@ namespace SE
 	float Label::calcInnerWidth()
 	{
 		return ResourceManager->FontManager.GetTextAdvance(textParams.Text, textParams.FontName)
-			+ 2 * textParams.BasicTextAreaParams.HorizontalPadding + 1; //To prevent wrong word wrap
+			+ 2 * textParams.BasicTextAreaParams.HorizontalPadding + 1 + //To prevent wrong word wrap
+			+ paddingLeft + paddingRight + marginLeft + marginRight;
 	}
 
 	float Label::calcInnerHeight()
 	{
-
-		return textParams.BasicTextAreaParams.Height + 2 * textParams.BasicTextAreaParams.VerticalPadding;
+		return textParams.BasicTextAreaParams.Height + 2 * textParams.BasicTextAreaParams.VerticalPadding +
+			paddingBottom + paddingTop + marginBottom + marginTop;
 	}
 
 
@@ -3253,13 +3281,13 @@ namespace SE
 
 	}
 
-	inline bool HorizontalSlider::isPointAboveTrack(Vector2f point)
+	bool HorizontalSlider::isPointAboveTrack(Vector2f point)
 	{
 		return (point(0) >= -sidesPadding && point(0) < getContentAreaWidth() - sidesPadding &&
 			point(1) >= 0 && point(1) < getContentAreaHeight());
 	}
 
-	inline int HorizontalSlider::getTrackPositionFromPoint(Vector2f point)
+	int HorizontalSlider::getTrackPositionFromPoint(Vector2f point)
 	{
 		return (int)(point(0) / (getContentAreaWidth() - buttonWidth) * (maxValue - minValue) + 0.5f) + minValue;
 	}
@@ -3657,18 +3685,18 @@ namespace SE
 		UpdateRenderPair();
 	}
 
-	inline int HorizontalDoubleSlider::getTrackPositionFromPoint(Vector2f point)
+	int HorizontalDoubleSlider::getTrackPositionFromPoint(Vector2f point)
 	{
 		return (int)(point(0) / (getContentAreaWidth() - 2 * buttonWidth) * (maxValue - minValue) + 0.5f) + minValue;
 	}
 	
-	inline bool HorizontalDoubleSlider::isPointAboveTrack(Vector2f point)
+	bool HorizontalDoubleSlider::isPointAboveTrack(Vector2f point)
 	{
 		return (point(0) >= -buttonWidth && point(0) < getContentAreaWidth() - buttonWidth &&
 			point(1) >= 0 && point(1) < getContentAreaHeight());
 	}
 
-	inline int HorizontalDoubleSlider::getButtonNumberFromPosition(int position)
+	int HorizontalDoubleSlider::getButtonNumberFromPosition(int position)
 	{
 		float middle = (position1 + position2) / 2.f;
 		return position < middle ? 1 : 2;
