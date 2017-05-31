@@ -78,7 +78,7 @@ void TApplicationAncestor::ChangeWidthHeight(int screenWidth, int screenHeight, 
 	{
 		if (ResourceManager->newGuiManager.IsInited())
 		{
-			ResourceManager->newGuiManager.UpdateAllRenderPair();
+			ResourceManager->newGuiManager.UpdateOnWindowResize();
 		}
 
 		InnerChangeWidthHeight(screenWidth, screenHeight, matrixWidth, matrixHeight);

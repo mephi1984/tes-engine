@@ -643,11 +643,14 @@ namespace SE
 
 	public:
 
-		float height, width;
-
+		
 		NewGuiManager();
 
 		~NewGuiManager();
+
+
+		float getHeight();
+		float getWidth();
 
 		void Init();
 		void Deinit();
@@ -673,8 +676,8 @@ namespace SE
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
 
-		void UpdateRenderPair(){}
-		virtual void UpdateAllRenderPair();
+		virtual void UpdateRenderPair();
+		virtual void UpdateOnWindowResize();
 
 		void LoadFromConfig(const std::string& configFileName);
 

@@ -3771,8 +3771,6 @@ namespace SE
 	NewGuiManager::NewGuiManager()
 		: inited(false)
 	{
-		width = 0;
-		height = 0;
 	}
 
 	NewGuiManager::~NewGuiManager()
@@ -3780,11 +3778,21 @@ namespace SE
 
 	}
 
+	float NewGuiManager::getHeight()
+	{
+		return Renderer->GetMatrixHeight();
+	}
+
+
+	float NewGuiManager::getWidth()
+	{
+		return Renderer->GetMatrixWidth();
+	}
+
+
 	void NewGuiManager::Init()
 	{
 		inited = true;
-		width = Renderer->GetMatrixWidth();
-		height = Renderer->GetMatrixHeight();
 	}
 
 	void NewGuiManager::Deinit()
@@ -3820,7 +3828,7 @@ namespace SE
 			children[i]->RemoveFocusRecursively();
 
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= height - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
 		
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
@@ -3839,7 +3847,7 @@ namespace SE
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= height - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
@@ -3858,7 +3866,7 @@ namespace SE
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= height - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
@@ -3896,7 +3904,7 @@ namespace SE
 		{
 			if (getLayoutStyle(child->layoutWidth) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
-				child->calculatedLayoutWidth = width;
+				child->calculatedLayoutWidth = getWidth();
 				child->calculatedInnerWidth = child->calcInnerWidth();
 			}
 			child->shareLeftoverWidthBetweenChildren();
@@ -3911,20 +3919,27 @@ namespace SE
 		{
 			if (getLayoutStyle(child->layoutHeight) == WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
-				child->calculatedLayoutHeight = height;
+				child->calculatedLayoutHeight = getHeight();
 				child->calculatedInnerHeight = child->calcInnerHeight();
 			}
 			child->shareLeftoverHeightBetweenChildren();
 		}
 	}
 
-	void NewGuiManager::UpdateAllRenderPair()
+	void NewGuiManager::UpdateOnWindowResize()
+	{
+		shareLeftoverWidthBetweenChildren();
+		shareLeftoverHeightBetweenChildren();
+
+		UpdateRenderPair();
+	}
+
+	void NewGuiManager::UpdateRenderPair()
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			children[i]->UpdateRenderPair();
 		}
-
 	}
 
 	void NewGuiManager::LoadFromConfig(const std::string& configFileName)
@@ -3942,10 +3957,8 @@ namespace SE
 
 		AddWidgetsRecursively(*this, children, ptree.get_child("widgets"));
 
-		shareLeftoverWidthBetweenChildren();
-		shareLeftoverHeightBetweenChildren();
+		UpdateOnWindowResize();
 
-		UpdateAllRenderPair();
 	}
 
 	void NewGuiManager::AddWidgetsRecursively(WidgetParentInterface& parentWidget, std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree)
@@ -4098,8 +4111,6 @@ namespace SE
 			{
 				auto slider = parentWidget.CreateAndAddChildOfType<HorizontalSlider>();
 
-				float width = slider->getContentAreaWidth(), height = slider->getContentAreaHeight();
-
 				slider->setMaxValue(pWidgetRecord.second.get<int>("maxValue", 100));
 				slider->setMinValue(pWidgetRecord.second.get<int>("minValue", 0));
 				slider->setPosition(pWidgetRecord.second.get<int>("position", 0));
@@ -4114,8 +4125,6 @@ namespace SE
 			if (type == "HorizontalDoubleSlider")
 			{
 				auto slider = parentWidget.CreateAndAddChildOfType<HorizontalDoubleSlider>();
-
-				float width = slider->getContentAreaWidth(), height = slider->getContentAreaHeight();
 
 				slider->setMaxValue(pWidgetRecord.second.get<int>("maxValue", 100));
 				slider->setMinValue(pWidgetRecord.second.get<int>("minValue", 0));
