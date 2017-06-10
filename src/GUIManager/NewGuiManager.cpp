@@ -84,7 +84,6 @@ namespace SE
 		}
 
 		return nullptr;
-
 	}
 
 	//====================================
@@ -126,6 +125,8 @@ namespace SE
 	{
 		this->disabled = !visible; // temporary
 		UpdateRenderPair();
+		parent.recalculateInnerWidth();
+		parent.recalculateInnerHeight();
 	}
 
 	void WidgetAncestor::setBorderColor(Vector4f color)
@@ -325,6 +326,38 @@ namespace SE
 			}
 			child->shareLeftoverHeightBetweenChildren();
 		}
+	}
+
+	void WidgetAncestor::recalculateInnerWidth()
+	{
+		calculatedInnerWidth = calcInnerWidth();
+
+		LayoutStyle style = getLayoutStyle(layoutWidth);
+
+		calculatedLayoutWidth = Visit(layoutWidth,
+			[this](float width) { return width; },
+			[this, style](LayoutStyle layoutStyle)
+		{
+			return calculatedInnerWidth - marginLeft - marginRight;
+		});
+
+		parent.recalculateInnerWidth();
+	}
+
+	void WidgetAncestor::recalculateInnerHeight()
+	{
+		calculatedInnerHeight = calcInnerHeight();
+
+		LayoutStyle style = getLayoutStyle(layoutHeight);
+
+		calculatedLayoutHeight = Visit(layoutHeight,
+			[this](float height) { return height; },
+			[this, style](LayoutStyle layoutStyle)
+		{
+			return calculatedInnerHeight - marginBottom - marginTop;
+		});
+
+		parent.recalculateInnerHeight();
 	}
 
 	float WidgetAncestor::calcInnerWidth()
@@ -553,19 +586,19 @@ namespace SE
 	{
 		focused = true;
 		onMouseDownSignal(pos, touchNumber);
-		return false;
+		return true;
 	}
 
 	bool WidgetAncestor::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		onMouseUpSignal(pos, touchNumber);
-		return false;
+		return true;
 	}
 
 	bool WidgetAncestor::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		onMouseUpAfterMoveSignal(pos, touchNumber);
-		return false;
+		return true;
 	}
 
 	bool WidgetAncestor::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1900,9 +1933,9 @@ namespace SE
 				children[i]->OnMouseCancel(touchNumber);
 			}
 		}
-		return handled;
-
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
+
+		return handled;
 	}
 
 	bool VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2006,38 +2039,36 @@ namespace SE
 			}
 		}
 
-		if (!childMoved)
+		if (childMoved) return true;
+		
+		WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+		float viewHeight = getContentAreaHeight();
+		float contentHeight = getInnerHeight();
+
+		if (contentHeight > viewHeight)
 		{
-			WidgetAncestor::OnMove(pos, shift, touchNumber);
+			scroll -= shift(1);
 
-			float viewHeight = getContentAreaHeight();
-			float contentHeight = getInnerHeight();
-
-			if (contentHeight > viewHeight)
+			if (scroll < 0)
 			{
-				scroll -= shift(1);
-
-				if (scroll < 0)
-				{
-					scroll = 0;
-				}
-
-				if (scroll > contentHeight - viewHeight)
-				{
-					scroll = contentHeight - viewHeight;
-				}
+				scroll = 0;
 			}
 
-			if (std::abs(shift(0)) < std::abs(shift(1)))
+			if (scroll > contentHeight - viewHeight)
 			{
-				return true;
-			}
-			else
-			{
-				return false;
+				scroll = contentHeight - viewHeight;
 			}
 		}
-		return true; // childmoved
+
+		if (std::abs(shift(0)) < std::abs(shift(1)))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	void VerticalScrollLayout::OnMouseMove(Vector2f pos)
@@ -2266,40 +2297,36 @@ namespace SE
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 		}
 
-		if (!childMoved)
+		if (childMoved) return true;
+
+		WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+		float viewWidth = getContentAreaWidth();
+		float contentWidth = getInnerWidth();
+
+		if (contentWidth > viewWidth)
 		{
-			WidgetAncestor::OnMove(pos, shift, touchNumber);
+			scroll += shift(0);
 
-			float viewWidth = getContentAreaWidth();
-			float contentWidth = getInnerWidth();
-
-			if (contentWidth > viewWidth)
+			if (scroll < 0)
 			{
-				scroll += shift(0);
-
-				if (scroll < 0)
-				{
-					scroll = 0;
-				}
-
-				if (scroll > contentWidth - viewWidth)
-				{
-					scroll = contentWidth - viewWidth;
-				}
+				scroll = 0;
 			}
 
-			if (std::abs(shift(0)) > std::abs(shift(1)))
+			if (scroll > contentWidth - viewWidth)
 			{
-				return true;
+				scroll = contentWidth - viewWidth;
 			}
-			else
-			{
-				return false;
-			}
+		}
 
+		if (std::abs(shift(0)) > std::abs(shift(1)))
+		{
 			return true;
 		}
-		return true; // childmoved
+		else
+		{
+			return false;
+		}
 	}
 
 	void HorizontalScrollLayout::OnMouseMove(Vector2f pos)
@@ -2737,6 +2764,121 @@ namespace SE
 			hoverButtonState = BS_EASING;
 		}
 	}
+
+	//=======================================
+
+	CheckBox::CheckBox(WidgetParentInterface& widgetParent)
+		: WidgetAncestor(widgetParent)
+		, checked(false)
+	{ }
+
+	void CheckBox::setCheckState(bool checked)
+	{
+		this->checked = checked;
+		if (checked)
+		{
+			onChecked();
+		}
+		else
+		{
+			onUnchecked();
+		}
+	}
+
+	void CheckBox::setCheckedSkin(const std::string &checkedSkin)
+	{
+		this->checkedSkin = checkedSkin.empty() ? CHECKED_DEFAULT_TEXTURE : checkedSkin;
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		ResourceManager->TexList.AddTexture(this->checkedSkin);
+#else
+		ResourceManager->TexList.AddTexture("ui/" + this->checkedSkin);
+#endif
+
+		UpdateCheckedRenderPair();
+	}
+
+	void CheckBox::setUncheckedSkin(const std::string &uncheckedSkin)
+	{
+		this->uncheckedSkin = uncheckedSkin.empty() ? UNCHECKED_DEFAULT_TEXTURE : uncheckedSkin;
+
+#ifdef TARGET_WINDOWS_UNIVERSAL
+		ResourceManager->TexList.AddTexture(this->uncheckedSkin);
+#else
+		ResourceManager->TexList.AddTexture("ui/" + this->uncheckedSkin);
+#endif
+
+		UpdateCheckedRenderPair();
+	}
+
+	void CheckBox::UpdateRenderPair()
+	{
+		if (!inited)
+		{
+			return;
+		}
+
+		WidgetAncestor::UpdateRenderPair();
+		UpdateCheckedRenderPair();
+	}
+
+	void CheckBox::UpdateCheckedRenderPair()
+	{
+		Vector2f shift = getDrawTranslate();
+		Vector2f posFrom = shift;
+		Vector2f posTo = shift + Vector2f(getDrawWidth(), getDrawHeight());
+
+		checkedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = checkedSkin;
+		checkedRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+		for (auto& colorVec : checkedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = { 1, 1, 1, 1 };
+		}
+
+		checkedRenderPair.second.RefreshBuffer();
+
+		uncheckedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = uncheckedSkin;
+		uncheckedRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+
+		for (auto& colorVec : uncheckedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
+		{
+			colorVec = { 1, 1, 1, 1 };
+		}
+
+		uncheckedRenderPair.second.RefreshBuffer();
+	}
+
+	void CheckBox::Draw()
+	{
+		WidgetAncestor::Draw();
+
+		if (checked)
+		{
+			TRenderParamsSetter render(checkedRenderPair.first);
+			Renderer->DrawTriangleList(checkedRenderPair.second);
+		}
+		else
+		{
+			TRenderParamsSetter render(uncheckedRenderPair.first);
+			Renderer->DrawTriangleList(uncheckedRenderPair.second);
+		}
+
+		CheckGlError();
+	}
+
+	bool CheckBox::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		setCheckState(!checked);
+		return true;
+	}
+
+	bool CheckBox::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		setCheckState(!checked);
+		return true;
+	}
+
 
 	//=======================================
 
@@ -3835,6 +3977,16 @@ namespace SE
 		}
 	}
 
+	void NewGuiManager::recalculateInnerWidth()
+	{
+		shareLeftoverWidthBetweenChildren();
+	}
+
+	void NewGuiManager::recalculateInnerHeight()
+	{
+		shareLeftoverHeightBetweenChildren();
+	}
+
 	void NewGuiManager::shareLeftoverHeightBetweenChildren()
 	{
 		if (children.size() == 0) return;
@@ -4003,6 +4155,16 @@ namespace SE
 				}
 
 				widget = editText;
+			}
+			if (type == "CheckBox")
+			{
+				auto checkBox = parentWidget.CreateAndAddChildOfType<CheckBox>();
+
+				checkBox->setCheckedSkin(pWidgetRecord.second.get<std::string>("pressedDrawable", ""));
+				checkBox->setUncheckedSkin(pWidgetRecord.second.get<std::string>("hoverDrawable", ""));
+				checkBox->setCheckState(pWidgetRecord.second.get<int>("checked", 0));
+
+				widget = checkBox;
 			}
 			if (type == "Button")
 			{

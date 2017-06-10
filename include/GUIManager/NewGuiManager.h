@@ -19,6 +19,9 @@ namespace SE
 		WidgetParentInterface();
 		virtual ~WidgetParentInterface();
 
+		virtual void recalculateInnerWidth() = 0;
+		virtual void recalculateInnerHeight() = 0;
+
 		virtual void shareLeftoverWidthBetweenChildren() = 0;
 		virtual void shareLeftoverHeightBetweenChildren() = 0;		
 
@@ -160,6 +163,9 @@ namespace SE
 
 		virtual float calcInnerWidth();
 		virtual float calcInnerHeight();
+
+		virtual void recalculateInnerWidth();
+		virtual void recalculateInnerHeight();
 
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
@@ -492,7 +498,40 @@ namespace SE
 		virtual void OnMouseMoveOutside();
 	};
 
+	class CheckBox : public WidgetAncestor
+	{
+	protected:
 
+		bool checked;
+
+		std::string checkedSkin;
+		std::string uncheckedSkin;
+
+	public:
+
+		const std::string UNCHECKED_DEFAULT_TEXTURE = "checkboxNormal.png";
+		const std::string CHECKED_DEFAULT_TEXTURE = "checkboxPressed.png";
+
+		TRenderPair checkedRenderPair;
+		TRenderPair uncheckedRenderPair;
+
+		boost::signals2::signal<void()> onChecked;
+		boost::signals2::signal<void()> onUnchecked;
+
+		CheckBox(WidgetParentInterface& widgetParent);
+
+		void setCheckedSkin(const std::string &checkedSkin);
+		void setUncheckedSkin(const std::string &uncheckedSkin);
+		void setCheckState(bool checked);
+
+		void UpdateRenderPair() override;
+		void UpdateCheckedRenderPair();
+
+		void Draw() override;
+
+		bool OnMouseUp(Vector2f pos, int touchNumber) override;
+		bool OnMouseUpAfterMove(Vector2f pos, int touchNumber) override;
+	};
 
 	class EditText : public Label
 	{
@@ -672,6 +711,9 @@ namespace SE
 		void OnKeyPressed(int key);
 
 		void OnMouseMove(Vector2f pos);
+
+		virtual void recalculateInnerWidth();
+		virtual void recalculateInnerHeight();
 
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
