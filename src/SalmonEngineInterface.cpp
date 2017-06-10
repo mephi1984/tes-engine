@@ -203,29 +203,41 @@ void TApplicationAncestor::OuterUpdate(size_t timer)
 void TApplicationAncestor::OuterOnTapDown(Vector2f p, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMouseDown(p, touchNumber);
-	ResourceManager->newGuiManager.OnMouseDown(p, touchNumber);
-	InnerOnTapDown(p);
+
+	if (!ResourceManager->newGuiManager.OnMouseDown(p, touchNumber))
+	{
+		InnerOnTapDown(p);
+	}
 }
 
 void TApplicationAncestor::OuterOnTapUp(Vector2f p, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMouseUp(p, touchNumber);
-	ResourceManager->newGuiManager.OnMouseUp(p, touchNumber);
-	InnerOnTapUp(p);
+
+	if (!ResourceManager->newGuiManager.OnMouseUp(p, touchNumber))
+	{
+		InnerOnTapUp(p);
+	}
 }
 
 void TApplicationAncestor::OuterOnTapUpAfterMove(Vector2f p, int touchNumber)
 {
     ResourceManager->GUIManager.OnMouseUpAfterMove(p, touchNumber);
-	ResourceManager->newGuiManager.OnMouseUpAfterMove(p, touchNumber);
-	InnerOnTapUpAfterMove(p);
+
+	if (!ResourceManager->newGuiManager.OnMouseUpAfterMove(p, touchNumber))
+	{
+		InnerOnTapUpAfterMove(p);
+	}
 }
 
 void TApplicationAncestor::OuterOnMove(Vector2f pos, Vector2f shift, int touchNumber)
 {
 	ResourceManager->GUIManager.OnMove(shift, touchNumber);
-	ResourceManager->newGuiManager.OnMove(pos, shift, touchNumber);
-	InnerOnMove(pos, shift);
+
+	if (!ResourceManager->newGuiManager.OnMove(pos, shift, touchNumber))
+	{
+		InnerOnMove(pos, shift);
+	}
 }
 
 void TApplicationAncestor::OnMouseMove(TMouseState& mouseState) //Windows only
