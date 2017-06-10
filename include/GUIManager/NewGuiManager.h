@@ -182,11 +182,11 @@ namespace SE
 
 		virtual void Update(size_t dt);
 
-		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+		virtual bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
@@ -244,11 +244,11 @@ namespace SE
 
 		virtual void Update(size_t dt);
 
-		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+		virtual bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
@@ -296,11 +296,11 @@ namespace SE
 
 		virtual void Update(size_t dt);
 
-		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+		virtual bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
@@ -334,11 +334,11 @@ namespace SE
 
 		virtual void Update(size_t dt);
 
-		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+		virtual bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
@@ -367,11 +367,11 @@ namespace SE
 
 		void Draw();
 
-		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+		virtual bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 		virtual void OnMouseMoveOutside();
@@ -392,11 +392,11 @@ namespace SE
 
 		void Draw();
 
-		virtual void OnMouseDown(Vector2f pos, int touchNumber);
+		virtual bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUp(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		virtual void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
@@ -480,11 +480,11 @@ namespace SE
 
 		void Update(size_t dt);
 
-		void OnMouseDown(Vector2f pos, int touchNumber);
+		bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		void OnMouseUp(Vector2f pos, int touchNumber);
+		bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 		virtual void OnMouseCancel(int touchNumber);
 
@@ -570,7 +570,7 @@ namespace SE
 		inline bool isPointAboveTrack(Vector2f point);
 		inline int getTrackPositionFromPoint(Vector2f point);
 
-		void OnMouseDown(Vector2f pos, int touchNumber);
+		bool OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 	};
@@ -626,10 +626,10 @@ namespace SE
 		inline int getTrackPositionFromPoint(Vector2f point);
 		inline int getButtonNumberFromPosition(int position);
 
-		void OnMouseDown(Vector2f pos, int touchNumber);
+		bool OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
-		void OnMouseUp(Vector2f pos, int touchNumber);
-		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		bool OnMouseUp(Vector2f pos, int touchNumber);
+		bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
 	};
 
@@ -661,13 +661,13 @@ namespace SE
 
 		void Draw();
 
-		void OnMouseDown(Vector2f pos, int touchNumber);
+		bool OnMouseDown(Vector2f pos, int touchNumber);
 
-		void OnMouseUp(Vector2f pos, int touchNumber);
+		bool OnMouseUp(Vector2f pos, int touchNumber);
 
-		void OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+		bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
-		void OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
 		void OnKeyPressed(int key);
 

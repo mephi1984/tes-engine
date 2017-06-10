@@ -42,23 +42,18 @@ namespace SE
 
 	//==============================================
 
-	WidgetAncestor::LayoutStyle getLayoutStyle(boost::variant<float, WidgetAncestor::LayoutStyle> layoutStyle)
+	inline WidgetAncestor::LayoutStyle getLayoutStyle(boost::variant<float, WidgetAncestor::LayoutStyle> layoutStyle)
 	{
 		return Visit(layoutStyle,
 			[](float width) { return WidgetAncestor::LayoutStyle::LS_FIXED; },
 			[](WidgetAncestor::LayoutStyle layoutStyle) { return layoutStyle; });
 	};
 
-	bool pointIsInsideView(Vector2f point, std::shared_ptr<WidgetAncestor> widget)
+	inline bool pointIsInsideView(Vector2f point, std::shared_ptr<WidgetAncestor> widget)
 	{
 		float viewWidth = widget->getViewWidth();
 		float viewHeight = widget->getViewHeight();
-		if ((point(0) >= 0) && (point(1) >= 0) && (point(0) <= viewWidth) && (point(1) <= viewHeight))
-		{
-			return true;
-		}
-
-		return false;
+		return (point(0) >= 0) && (point(1) >= 0) && (point(0) <= viewWidth) && (point(1) <= viewHeight);
 	}
 
 	//===================================
@@ -560,38 +555,37 @@ namespace SE
 
 	}
 
-	void WidgetAncestor::OnMouseDown(Vector2f pos, int touchNumber)
+	bool WidgetAncestor::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 		focused = true;
 		onMouseDownSignal(pos, touchNumber);
+		return false;
 	}
 
-	void WidgetAncestor::OnMouseUp(Vector2f pos, int touchNumber)
+	bool WidgetAncestor::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		onMouseUpSignal(pos, touchNumber);
+		return false;
 	}
 
-	void WidgetAncestor::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool WidgetAncestor::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		onMouseUpAfterMoveSignal(pos, touchNumber);
+		return false;
 	}
 
 	bool WidgetAncestor::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
 		onMoveSignal(pos, shift, touchNumber);
 		return false;
-		
 	}
 
 	void WidgetAncestor::OnMouseCancel(int touchNumber)
 	{
-
 	}
 
 	void WidgetAncestor::OnKeyPressed(int key)
 	{
-
-
 	}
 
 	void WidgetAncestor::OnMouseMove(Vector2f pos)
@@ -843,15 +837,17 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
 	}
 
-	void VerticalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	bool VerticalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -866,7 +862,10 @@ namespace SE
 			
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -875,17 +874,21 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
+
+		return handled;
 	}
 
-	void VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	bool VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -900,7 +903,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -909,19 +915,23 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+
+		return handled;
 	}
 
-	void VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -936,7 +946,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -945,6 +958,8 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+
+		return handled;
 	}
 
 	void VerticalLinearLayout::OnMouseCancel(int touchNumber)
@@ -1292,15 +1307,17 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
 	}
 
-	void HorizontalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	bool HorizontalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1313,7 +1330,10 @@ namespace SE
 	
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -1326,17 +1346,20 @@ namespace SE
 
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
 
+		return handled;
 	}
 
-	void HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	bool HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1361,18 +1384,22 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+
+		return handled;
 	}
 
-	void HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1385,7 +1412,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -1397,6 +1427,8 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+
+		return handled;
 	}
 
 	bool HorizontalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1650,15 +1682,17 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
 	}
 
-	void FrameLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	bool FrameLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1671,7 +1705,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -1681,16 +1718,20 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
+
+		return handled;
 	}
 
-	void FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	bool FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1703,7 +1744,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -1713,19 +1757,23 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+
+		return handled;
 	}
 
-	void FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1738,17 +1786,20 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
 				children[i]->OnMouseCancel(touchNumber);
 			}
-
-
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+
+		return handled;
 	}
 
 	bool FrameLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1924,16 +1975,18 @@ namespace SE
 
 	}
 
-	void VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	bool VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1948,27 +2001,32 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
 				children[i]->OnMouseCancel(touchNumber);
 			}
 		}
+		return handled;
 
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
 	}
 
-	void VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	bool VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
-
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1983,7 +2041,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -1992,19 +2053,23 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+
+		return handled;
 	}
 
-	void VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2019,7 +2084,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -2028,6 +2096,8 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+
+		return handled;
 	}
 
 
@@ -2194,16 +2264,18 @@ namespace SE
 
 	}
 
-	void HorizontalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
+	bool HorizontalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2216,7 +2288,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -2229,17 +2304,20 @@ namespace SE
 
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
 
+		return handled;
 	}
 
-	void HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
+	bool HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2252,7 +2330,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -2264,19 +2345,23 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+
+		return handled;
 	}
 
-	void HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2289,7 +2374,10 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
@@ -2301,6 +2389,8 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+
+		return handled;
 	}
 
 	bool HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -2765,11 +2855,11 @@ namespace SE
 
 	}
 
-	void Button::OnMouseDown(Vector2f pos, int touchNumber)
+	bool Button::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 
 		if (buttonState == ButtonState::BS_NONE || buttonState == ButtonState::BS_EASING)
@@ -2778,15 +2868,16 @@ namespace SE
 		}
 			
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
+
+		return true;
 	}
 
-	void Button::OnMouseUp(Vector2f pos, int touchNumber)
+	bool Button::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
-
 
 		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
 		{
@@ -2794,16 +2885,16 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+
+		return true;
 	}
 
-	void Button::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool Button::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
-
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 
 		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
 		{
@@ -2811,6 +2902,8 @@ namespace SE
 		}
 
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+
+		return true;
 	}
 
 	void Button::OnMouseCancel(int touchNumber)
@@ -3292,16 +3385,17 @@ namespace SE
 		return (int)(point(0) / (getContentAreaWidth() - buttonWidth) * (maxValue - minValue) + 0.5f) + minValue;
 	}
 
-	void HorizontalSlider::OnMouseDown(Vector2f pos, int touchNumber)
+	bool HorizontalSlider::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
-		if (!isPointAboveTrack(pos)) return;
+		if (!isPointAboveTrack(pos)) return false;
 		setPosition(getTrackPositionFromPoint(pos));
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
+		return true;
 	}
 
 	bool HorizontalSlider::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -3702,14 +3796,14 @@ namespace SE
 		return position < middle ? 1 : 2;
 	}
 
-	void HorizontalDoubleSlider::OnMouseDown(Vector2f pos, int touchNumber)
+	bool HorizontalDoubleSlider::OnMouseDown(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 		pos -= Vector2f(paddingLeft + buttonWidth, paddingBottom) + getDrawTranslate();
-		if (!isPointAboveTrack(pos)) return;
+		if (!isPointAboveTrack(pos)) return false;
 		int position = getTrackPositionFromPoint(pos);
 		if ((movingButton = getButtonNumberFromPosition(position)) > 0)
 		{
@@ -3723,6 +3817,7 @@ namespace SE
 			}
 		}
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
+		return true;
 	}
 
 	bool HorizontalDoubleSlider::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -3746,24 +3841,26 @@ namespace SE
 		return true;
 	}
 	
-	void HorizontalDoubleSlider::OnMouseUp(Vector2f pos, int touchNumber)
+	bool HorizontalDoubleSlider::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 		movingButton = 0;
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
+		return true;
 	}
 
-	void HorizontalDoubleSlider::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool HorizontalDoubleSlider::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		if (disabled)
 		{
-			return;
+			return false;
 		}
 		movingButton = 0;
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		return true;
 	}
 
 	//======================================
@@ -3817,11 +3914,12 @@ namespace SE
 		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Draw, std::placeholders::_1));
 	}
 
-	void NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
+	bool NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
 		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
 		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -3832,17 +3930,24 @@ namespace SE
 		
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseDown(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 		}
+
+		return handled;
 	}
 
-	void NewGuiManager::OnMouseUp(Vector2f pos, int touchNumber)
+	bool NewGuiManager::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
 		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
 
 		Vector2f relativePos = pos;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -3851,17 +3956,24 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUp(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 		}
+
+		return handled;
 	}
 
-	void NewGuiManager::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	bool NewGuiManager::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
 		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
 
 		Vector2f relativePos = pos;
+
+		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -3870,12 +3982,17 @@ namespace SE
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
 			{
-				children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber);
+				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
 			}
 		}
+
+		return handled;
 	}
 
-	void NewGuiManager::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	bool NewGuiManager::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
 		pos(0) = pos(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
 		pos(1) = pos(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
@@ -3883,7 +4000,23 @@ namespace SE
 		shift(0) = shift(0) * Renderer->GetMatrixWidth() / Renderer->GetScreenWidth();
 		shift(1) = shift(1) * Renderer->GetMatrixHeight() / Renderer->GetScreenHeight();
 
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMove, std::placeholders::_1, pos, shift, touchNumber));
+		bool handled = false;
+
+		for (size_t i = 0; i < children.size(); i++)
+		{
+			Vector2f innerRelativePos = pos;
+			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
+
+			if (pointIsInsideView(innerRelativePos, children[i]))
+			{
+				if (children[i]->OnMove(innerRelativePos, shift, touchNumber))
+				{
+					handled = true;
+				}
+			}
+		}
+
+		return handled;
 	}
 
 	void NewGuiManager::OnKeyPressed(int key)
