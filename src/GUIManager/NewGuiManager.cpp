@@ -245,12 +245,6 @@ namespace SE
 
 	void WidgetAncestor::Draw()
 	{
-		
-		if (disabled)
-		{
-			return;
-		}
-
 		Renderer->PushMatrix();
 
 		TRenderParamsSetter render1(renderPair.first);
@@ -616,11 +610,6 @@ namespace SE
 
 	void ImageView::Draw()
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 	}
 
@@ -677,6 +666,10 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
 
 			if (getLayoutStyle(children[i]->layoutWidth) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
@@ -697,6 +690,11 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
+
 			result += children[i]->getViewHeight();
 			
 			if (i > 0)
@@ -792,11 +790,6 @@ namespace SE
 
 	void VerticalLinearLayout::Draw()
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		Vector3f shift, childShift;
@@ -834,16 +827,18 @@ namespace SE
 
 	void VerticalLinearLayout::Update(size_t dt)
 	{
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->Update(dt);
+		}
 	}
 
 	bool VerticalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
@@ -880,11 +875,6 @@ namespace SE
 
 	bool VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
@@ -921,13 +911,6 @@ namespace SE
 
 	bool VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
@@ -964,11 +947,6 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseCancel(int touchNumber)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			if (children[i]->disabled)
@@ -982,13 +960,6 @@ namespace SE
 
 	bool VerticalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
-
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
@@ -1024,14 +995,14 @@ namespace SE
 
 	void VerticalLinearLayout::OnKeyPressed(int key)
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnKeyPressed(key);
 		}
-
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
-
 	}
 
 	void VerticalLinearLayout::RemoveFocusRecursively()
@@ -1046,12 +1017,6 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseMove(Vector2f pos)
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
@@ -1081,13 +1046,14 @@ namespace SE
 
 	void VerticalLinearLayout::OnMouseMoveOutside()
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnMouseMoveOutside();
 		}
-
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
 	}
 
 	//========================================
@@ -1144,6 +1110,10 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
 
 			if (getLayoutStyle(children[i]->layoutHeight) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
@@ -1159,11 +1129,14 @@ namespace SE
 
 	float HorizontalLinearLayout::calcInnerWidth()
 	{
-
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
 
 			result += children[i]->getViewWidth();
 
@@ -1261,12 +1234,6 @@ namespace SE
 
 	void HorizontalLinearLayout::Draw()
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		Vector3f shift, childShift;
@@ -1304,17 +1271,18 @@ namespace SE
 
 	void HorizontalLinearLayout::Update(size_t dt)
 	{
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->Update(dt);
+		}
 	}
 
 	bool HorizontalLinearLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		bool handled = false;
@@ -1351,12 +1319,6 @@ namespace SE
 
 	bool HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		bool handled = false;
@@ -1390,24 +1352,12 @@ namespace SE
 
 	bool HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		bool handled = false;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
-			{
-				continue;
-			}
-
 			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
 
 			if (pointIsInsideView(innerRelativePos, children[i]))
@@ -1433,12 +1383,6 @@ namespace SE
 
 	bool HorizontalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
-		//WidgetAncestor::OnMove(pos, shift, touchNumber);
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
@@ -1475,11 +1419,6 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseCancel(int touchNumber)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			if (children[i]->disabled)
@@ -1493,24 +1432,19 @@ namespace SE
 
 	void HorizontalLinearLayout::OnKeyPressed(int key)
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnKeyPressed(key);
 		}
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
 	}
 
 	void HorizontalLinearLayout::OnMouseMove(Vector2f pos)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1541,12 +1475,14 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseMoveOutside()
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnMouseMoveOutside();
 		}
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
 	}
 
 	void HorizontalLinearLayout::RemoveFocusRecursively()
@@ -1568,12 +1504,6 @@ namespace SE
 
 	float FrameLayout::calcInnerWidth()
 	{
-		if (disabled)
-		{
-			return 0;
-		}
-
-
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -1599,11 +1529,15 @@ namespace SE
 
 	float FrameLayout::calcInnerHeight()
 	{
-
 		float result = 0;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
+
 			LayoutStyle style = getLayoutStyle(children[i]->layoutHeight);
 
 			if (style == LS_FIXED || style == LS_WRAP_CONTENT)
@@ -1638,13 +1572,6 @@ namespace SE
 
 	void FrameLayout::Draw()
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
-
 		WidgetAncestor::Draw();
 
 		Vector3f shift, childShift;
@@ -1679,17 +1606,18 @@ namespace SE
 
 	void FrameLayout::Update(size_t dt)
 	{
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->Update(dt);
+		}
 	}
 
 	bool FrameLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		bool handled = false;
@@ -1724,11 +1652,6 @@ namespace SE
 
 	bool FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		bool handled = false;
@@ -1763,14 +1686,6 @@ namespace SE
 
 	bool FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		bool handled = false;
@@ -1804,11 +1719,6 @@ namespace SE
 
 	bool FrameLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
@@ -1842,11 +1752,6 @@ namespace SE
 
 	void FrameLayout::OnMouseCancel(int touchNumber)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		for (size_t i = 0; i < children.size(); i++)
 		{
 			if (children[i]->disabled)
@@ -1860,24 +1765,18 @@ namespace SE
 
 	void FrameLayout::OnKeyPressed(int key)
 	{
-
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnKeyPressed(key);
 		}
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
-
 	}
 
 	void FrameLayout::OnMouseMove(Vector2f pos)
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
 		for (size_t i = 0; i < children.size(); i++)
@@ -1905,12 +1804,14 @@ namespace SE
 
 	void FrameLayout::OnMouseMoveOutside()
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnMouseMoveOutside();
 		}
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
 	}
 
 	void FrameLayout::RemoveFocusRecursively()
@@ -1933,12 +1834,6 @@ namespace SE
 	
 	void VerticalScrollLayout::Draw()
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		Vector3f shift, shift_child;
@@ -1977,12 +1872,6 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -2018,11 +1907,6 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -2059,13 +1943,6 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -2103,11 +1980,6 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
@@ -2170,11 +2042,6 @@ namespace SE
 
 	void VerticalScrollLayout::OnMouseMove(Vector2f pos)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -2203,12 +2070,14 @@ namespace SE
 
 	void VerticalScrollLayout::OnMouseMoveOutside()
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnMouseMoveOutside();
 		}
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
 	}
 
 	//========================================
@@ -2222,12 +2091,6 @@ namespace SE
 
 	void HorizontalScrollLayout::Draw()
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		Vector3f shift, shift_child;
@@ -2266,12 +2129,6 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2309,11 +2166,6 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2351,13 +2203,6 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2395,11 +2240,6 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
@@ -2464,12 +2304,6 @@ namespace SE
 
 	void HorizontalScrollLayout::OnMouseMove(Vector2f pos)
 	{
-
-		if (disabled)
-		{
-			return;
-		}
-
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2500,12 +2334,14 @@ namespace SE
 
 	void HorizontalScrollLayout::OnMouseMoveOutside()
 	{
-		if (disabled)
+		for (auto &child : children)
 		{
-			return;
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnMouseMoveOutside();
 		}
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMoveOutside, std::placeholders::_1));
 	}
 
 
@@ -2541,12 +2377,6 @@ namespace SE
 
 	void Label::Draw()
 	{
-		
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		Renderer->PushMatrix();
@@ -2670,7 +2500,6 @@ namespace SE
 
 	float Button::calcInnerHeight()
 	{
-
 		float backgroundHeight = WidgetAncestor::calcInnerHeight();
 		float textHeight = Label::calcInnerHeight();
 
@@ -2742,12 +2571,6 @@ namespace SE
 
 	void Button::Draw()
 	{
-		
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 		
 
@@ -2857,11 +2680,6 @@ namespace SE
 
 	bool Button::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		if (buttonState == ButtonState::BS_NONE || buttonState == ButtonState::BS_EASING)
 		{
 			buttonState = BS_PRESSING;
@@ -2874,11 +2692,6 @@ namespace SE
 
 	bool Button::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
 		{
 			buttonState = BS_EASING;
@@ -2891,11 +2704,6 @@ namespace SE
 
 	bool Button::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
 		{
 			buttonState = BS_EASING;
@@ -2908,11 +2716,6 @@ namespace SE
 
 	void Button::OnMouseCancel(int touchNumber)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		if (buttonState == ButtonState::BS_PRESSING || buttonState == ButtonState::BS_PRESSED)
 		{
 			buttonState = BS_EASING;
@@ -2921,11 +2724,6 @@ namespace SE
 
 	void Button::OnMouseMove(Vector2f pos)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		if (hoverButtonState == ButtonState::BS_NONE || hoverButtonState == ButtonState::BS_EASING)
 		{
 			hoverButtonState = BS_PRESSING;
@@ -2934,11 +2732,6 @@ namespace SE
 
 	void Button::OnMouseMoveOutside()
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		if (hoverButtonState == ButtonState::BS_PRESSING || hoverButtonState == ButtonState::BS_PRESSED)
 		{
 			hoverButtonState = BS_EASING;
@@ -2987,14 +2780,7 @@ namespace SE
 
 	void EditText::Draw()
 	{
-		
-		if (disabled)
-		{
-			return;
-		}
-
 		Label::Draw();
-
 
 		if (focused && cursorAppeared)
 		{
@@ -3090,11 +2876,6 @@ namespace SE
 
 	void EditText::OnKeyPressed(int key)
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		if (focused)
 		{
 			if (key == 8) //Backspace
@@ -3340,12 +3121,6 @@ namespace SE
 
 	void HorizontalSlider::Draw()
 	{
-		
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		Renderer->PushMatrix();
@@ -3387,10 +3162,6 @@ namespace SE
 
 	bool HorizontalSlider::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
 		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
 		if (!isPointAboveTrack(pos)) return false;
 		setPosition(getTrackPositionFromPoint(pos));
@@ -3400,11 +3171,6 @@ namespace SE
 
 	bool HorizontalSlider::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
-
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
 
 		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
@@ -3561,11 +3327,6 @@ namespace SE
 
 	void HorizontalDoubleSlider::Draw()
 	{
-		if (disabled)
-		{
-			return;
-		}
-
 		WidgetAncestor::Draw();
 
 		TRenderParamsSetter render1(trackRenderPair.first);
@@ -3798,10 +3559,6 @@ namespace SE
 
 	bool HorizontalDoubleSlider::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
 		pos -= Vector2f(paddingLeft + buttonWidth, paddingBottom) + getDrawTranslate();
 		if (!isPointAboveTrack(pos)) return false;
 		int position = getTrackPositionFromPoint(pos);
@@ -3822,10 +3579,6 @@ namespace SE
 
 	bool HorizontalDoubleSlider::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
 		if (movingButton == 0) return false;
 		pos -= Vector2f(paddingLeft + buttonWidth, paddingBottom) + getDrawTranslate();
@@ -3843,10 +3596,6 @@ namespace SE
 	
 	bool HorizontalDoubleSlider::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
 		movingButton = 0;
 		WidgetAncestor::OnMouseUp(pos, touchNumber);
 		return true;
@@ -3854,10 +3603,6 @@ namespace SE
 
 	bool HorizontalDoubleSlider::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		if (disabled)
-		{
-			return false;
-		}
 		movingButton = 0;
 		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
 		return true;
@@ -3904,14 +3649,26 @@ namespace SE
 
 	void NewGuiManager::Update(size_t dt)
 	{
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Update, std::placeholders::_1, dt));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->Update(dt);
+		}
 	}
 
 	void NewGuiManager::Draw()
 	{
-
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::Draw, std::placeholders::_1));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->Draw();
+		}
 	}
 
 	bool NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
@@ -3923,6 +3680,11 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
+
 			children[i]->RemoveFocusRecursively();
 
 			Vector2f innerRelativePos = pos;
@@ -3951,6 +3713,11 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
+
 			Vector2f innerRelativePos = pos;
 			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
 
@@ -3977,6 +3744,11 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
+
 			Vector2f innerRelativePos = pos;
 			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
 
@@ -4004,6 +3776,11 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
+			if (children[i]->disabled)
+			{
+				continue;
+			}
+
 			Vector2f innerRelativePos = pos;
 			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
 
@@ -4021,12 +3798,26 @@ namespace SE
 
 	void NewGuiManager::OnKeyPressed(int key)
 	{
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnKeyPressed, std::placeholders::_1, key));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnKeyPressed(key);
+		}
 	}
 
 	void NewGuiManager::OnMouseMove(Vector2f pos)
 	{
-		std::for_each(children.begin(), children.end(), std::bind(&WidgetAncestor::OnMouseMove, std::placeholders::_1, pos));
+		for (auto &child : children)
+		{
+			if (child->disabled)
+			{
+				continue;
+			}
+			child->OnMouseMove(pos);
+		}
 	}
 
 	void NewGuiManager::shareLeftoverWidthBetweenChildren()
