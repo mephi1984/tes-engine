@@ -107,7 +107,7 @@ namespace SE
 		, calculatedInnerWidth(0)
 		, calculatedInnerHeight(0)
 		, focused(false)
-		, disabled(false)
+		, visible(true)
 		, childrenHA(HA_LEFT)
 		, childrenVA(VA_TOP)
 	{
@@ -124,7 +124,7 @@ namespace SE
 
 	void WidgetAncestor::setVisibility(bool visible)
 	{
-		this->disabled = !visible; // temporary
+		this->visible = visible; // temporary
 		UpdateRenderPair();
 		parent.recalculateInnerWidth();
 		parent.recalculateInnerHeight();
@@ -700,7 +700,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -724,7 +724,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -836,7 +836,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -863,7 +863,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -880,7 +880,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -916,7 +916,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -952,7 +952,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -983,7 +983,7 @@ namespace SE
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1001,7 +1001,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1031,7 +1031,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1056,7 +1056,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1082,7 +1082,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1144,7 +1144,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1167,7 +1167,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1279,7 +1279,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1307,7 +1307,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1323,7 +1323,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1359,7 +1359,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1423,7 +1423,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1455,7 +1455,7 @@ namespace SE
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1468,7 +1468,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1482,7 +1482,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1511,7 +1511,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1542,7 +1542,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1567,7 +1567,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1617,7 +1617,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1642,7 +1642,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1658,7 +1658,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1692,7 +1692,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1726,7 +1726,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1759,7 +1759,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1788,7 +1788,7 @@ namespace SE
 	{
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1801,7 +1801,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1815,7 +1815,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1840,7 +1840,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -1880,7 +1880,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1913,7 +1913,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1948,7 +1948,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -1984,7 +1984,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2021,7 +2021,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2079,7 +2079,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2104,7 +2104,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -2135,7 +2135,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2168,7 +2168,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2205,7 +2205,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2242,7 +2242,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2279,7 +2279,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2337,7 +2337,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -2364,7 +2364,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -3798,7 +3798,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -3810,7 +3810,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -3827,7 +3827,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -3860,7 +3860,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -3891,7 +3891,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -3923,7 +3923,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			if (children[i]->disabled)
+			if (!children[i]->visible)
 			{
 				continue;
 			}
@@ -3947,7 +3947,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -3959,7 +3959,7 @@ namespace SE
 	{
 		for (auto &child : children)
 		{
-			if (child->disabled)
+			if (!child->visible)
 			{
 				continue;
 			}
@@ -4250,7 +4250,7 @@ namespace SE
 
 			widget->setChildrenVerticalAlignment(layoutVerticalAlignmentFromConfigValue(pWidgetRecord.second.get<std::string>("verticalAlignment", "VA_TOP")));
 			
-			widget->disabled = pWidgetRecord.second.get<int>("disabled", 0) == 0 ? false : true;
+			widget->visible = pWidgetRecord.second.get<int>("visible", 1);
 			
 			widget->inited = true;			
 

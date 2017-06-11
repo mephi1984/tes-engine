@@ -128,7 +128,7 @@ namespace SE
 
 		bool focused;
 
-		bool disabled;
+		bool visible;
 
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
