@@ -51,6 +51,7 @@ namespace SE
 
 	inline bool pointIsInsideView(Vector2f point, std::shared_ptr<WidgetAncestor> widget)
 	{
+		point -= widget->extraTranslation;
 		float viewWidth = widget->getViewWidth();
 		float viewHeight = widget->getViewHeight();
 		return (point(0) >= 0) && (point(1) >= 0) && (point(0) <= viewWidth) && (point(1) <= viewHeight);
@@ -1044,7 +1045,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			children[i]->focused = false;
+			children[i]->RemoveFocusRecursively();;
 		}
 	}
 
@@ -1524,7 +1525,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			children[i]->focused = false;
+			children[i]->RemoveFocusRecursively();;
 		}
 	}
 
@@ -1853,7 +1854,7 @@ namespace SE
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
-			children[i]->focused = false;
+			children[i]->RemoveFocusRecursively();;
 		}
 	}
 
@@ -2575,22 +2576,26 @@ namespace SE
 
 		pressedRenderPair.second.RefreshBuffer();
 
-		std::string hoverTextureName = Visit(hoverDrawable,
+		isTexture = Visit(hoverDrawable,
+			[this](Vector4f color) { return false; },
+			[this](std::string textureName) { return true; });
+
+		textureName = Visit(hoverDrawable,
 			[this](Vector4f color) { return "white.bmp"; },
 			[this](std::string textureName) { return textureName; });
 
-		Vector4f hoverColor = Visit(hoverDrawable,
+		color = Visit(hoverDrawable,
 			[this](Vector4f color) { return  color; },
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 0); });
 
 		hoverMaxAlpha = isTexture ? 1.f : color(3);
 
-		hoverRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = hoverTextureName;
+		hoverRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		hoverRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
 
 		for (auto& colorVec : hoverRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
 		{
-			colorVec << hoverColor(0), hoverColor(1), hoverColor(2), 0;
+			colorVec << color(0), color(1), color(2), 0;
 		}
 
 		hoverRenderPair.second.RefreshBuffer();
@@ -4172,14 +4177,11 @@ namespace SE
 
 				if (pWidgetRecord.second.count("textParams") != 0)
 				{
-					button->textParams = TTextParams();
 					button->textParams.Serialize(pWidgetRecord.second.find("textParams")->second);
 				}
 				else
 				{
 					button->textParams = TTextParams();
-					button->textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_CENTER;
-					button->textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_CENTER;
 				}
 
 				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "#00000000")));
