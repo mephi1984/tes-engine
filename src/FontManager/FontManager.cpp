@@ -188,6 +188,7 @@ float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList&
 }
 
 
+
 Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string& str, const std::string& fontName)
 {
 	std::string fontName_ = fontName.size() > 0 ? fontName : GetCurrentFontName();
@@ -207,47 +208,53 @@ Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f pos
 	float maxWidth = posTo(0) - posFrom(0);
 
 
-	//size_t p = 0;
 	float cursor = 0;
 
-
 	std::vector<std::string> explodedByParagraph;
+	boost::split(explodedByParagraph, str, boost::is_any_of("\n"));
 
-	boost::split(explodedByParagraph, str, boost::is_any_of("\n"), boost::token_compress_on);
+	std::string result, substr;
 
-	std::string result;
+	float ws_adv = GetCharAdvance(' ', fontName_);
 
-
-	for (size_t i=0; i<explodedByParagraph.size(); i++)
+	for (auto &paragraph : explodedByParagraph)
 	{
-		std::vector<std::string> explodedByWord;
-
-		boost::split(explodedByWord, explodedByParagraph[i], boost::is_space(), boost::token_compress_on);
-
-		for (size_t j=0; j< explodedByWord.size(); j++)
+		for (auto iter = paragraph.begin(); iter != paragraph.end(); ++iter)
 		{
-			std::string s = explodedByWord[j];
+			float adv;
 
-			float adv = GetTextAdvance(s, fontName_);
+			if (*iter != ' ')
+			{
+				auto end = iter + 1;
+				while (end != paragraph.end() && *end != ' ') ++end;
+				substr = std::string(iter, end);
+				adv = GetTextAdvance(substr, fontName_);
+				iter = end - 1;
+			}
+			else
+			{
+				adv = ws_adv;
+				substr = " ";
+			}
 
 			if (adv + cursor <= maxWidth)
 			{
-				result += s + " ";
-				cursor += adv + GetCharAdvance(' ', fontName_);
+				result += substr;
+				cursor += adv;
 			}
 			else
 			{
 				if (adv <= maxWidth)
 				{
-					result += "\n" + s + " "; 
-					cursor = adv + GetCharAdvance(' ', fontName_);
+					result += "\n" + substr;
+					cursor = adv;
 				}
 				else
 				{
-					for (int k=0; k<s.size(); k++)
+					for (auto iter = substr.begin(); iter != substr.end(); ++iter)
 					{
-						result += s[k];
-						cursor += GetCharAdvance(s[k], fontName_);
+						result += *iter;
+						cursor += GetCharAdvance(*iter, fontName_);
 						if (cursor > maxWidth)
 						{
 							cursor = 0;
@@ -257,11 +264,10 @@ Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f pos
 				}
 			}
 		}
-
 		result += "\n";
-		cursor = 0;
-
 	}
+
+	cursor = 0;
 
 	//Erase last symbol \n
 	result.erase(result.end()-1, result.end());
