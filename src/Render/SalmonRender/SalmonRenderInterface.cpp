@@ -21,31 +21,32 @@ TSalmonRendererInterface::TSalmonRendererInterface()
 
 }
 
+void TSalmonRendererInterface::SetMatrix()
+{
+	if (ProjectionMatrixStack.size() <= 0)
+	{
+		throw ErrorToLog("Projection matrix stack out!");
+	}
+
+	if (ModelviewMatrixStack.size() <= 0)
+	{
+		throw ErrorToLog("Modelview matrix stack out!");
+	}
+
+	ProjectionModelviewMatrix = ProjectionMatrixStack.top() * ModelviewMatrixStack.top();
+
+	RenderUniformMatrix4fv(CONST_STRING_HALIBUT_PROJECTION_MATRIX_UNIFORM, false, ProjectionModelviewMatrix.data());
+
+	//TODO: Make a new name =(
+	RenderUniformMatrix4fv("ProjectionMatrix1", false, ProjectionMatrixStack.top().data());
+}
 
 void TSalmonRendererInterface::SetUniforms()
 {
 	AssertIfInMainThread();
 	//Refactoring!
-	
 
-	if (ProjectionMatrixStack.size() <=0)
-	{
-		throw ErrorToLog("Projection matrix stack out!");
-	}
-	
-	if (ModelviewMatrixStack.size() <=0)
-	{
-		throw ErrorToLog("Modelview matrix stack out!");
-	}
-	
-	//ProjectionModelviewMatrix = MultMatrixMatrix(ProjectionMatrixStack.top(), ModelviewMatrixStack.top());
-	ProjectionModelviewMatrix = ProjectionMatrixStack.top() * ModelviewMatrixStack.top();
-
-
-	RenderUniformMatrix4fv(CONST_STRING_HALIBUT_PROJECTION_MATRIX_UNIFORM, false, ProjectionModelviewMatrix.data());
-
-		//TODO: Make a new name =(
-	RenderUniformMatrix4fv("ProjectionMatrix1", false, ProjectionMatrixStack.top().data());
+	SetMatrix();
 
 	RenderUniform1i(CONST_STRING_TEXTURE_UNIFORM,0);
 	RenderUniform1i(CONST_STRING_NORMALMAP_UNIFORM,1);
@@ -272,7 +273,7 @@ void TSalmonRendererInterface::LoadIdentity()
     ModelviewMatrixStack.pop();
     ModelviewMatrixStack.push(Matrix4f::Identity());
     
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::TranslateMatrix(const Vector3f& p)
@@ -294,7 +295,7 @@ void TSalmonRendererInterface::TranslateMatrix(const Vector3f& p)
     ModelviewMatrixStack.pop();
     ModelviewMatrixStack.push(m);
     
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::ScaleMatrix(float scale)
@@ -314,7 +315,7 @@ void TSalmonRendererInterface::ScaleMatrix(float scale)
     ModelviewMatrixStack.pop();
     ModelviewMatrixStack.push(m);
     
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::ScaleMatrix(const Vector3f& scale)
@@ -334,7 +335,7 @@ void TSalmonRendererInterface::ScaleMatrix(const Vector3f& scale)
     ModelviewMatrixStack.pop();
     ModelviewMatrixStack.push(m);
     
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::RotateMatrix(const Vector4f& q)
@@ -364,7 +365,7 @@ void TSalmonRendererInterface::RotateMatrix(const Vector4f& q)
     ModelviewMatrixStack.pop();
     ModelviewMatrixStack.push(m);
     */
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::PushSpecialMatrix(const Matrix4f& m)
@@ -374,7 +375,7 @@ void TSalmonRendererInterface::PushSpecialMatrix(const Matrix4f& m)
         throw ErrorToLog("Modelview matrix stack overflow!!!!");
     }
     ModelviewMatrixStack.push(m);
-    SetUniforms();
+	SetMatrix();
 }
 
 
@@ -386,14 +387,14 @@ void TSalmonRendererInterface::PopMatrix()
 	}
     ModelviewMatrixStack.pop();
     
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::PushProjectionMatrix(float width, float height)
 {
     Matrix4f m = MakeOrthoMatrix(width, height);
     ProjectionMatrixStack.push(m);
-    SetUniforms();
+	SetMatrix();
     
     if (ProjectionMatrixStack.size() > 64)
     {
@@ -404,7 +405,7 @@ void TSalmonRendererInterface::PushProjectionMatrix(float width, float height)
 void TSalmonRendererInterface::PushProjectionMatrix(const Matrix4f& m)
 {
 	ProjectionMatrixStack.push(m);
-	SetUniforms();
+	SetMatrix();
 
 	if (ProjectionMatrixStack.size() > 64)
 	{
@@ -419,7 +420,7 @@ void TSalmonRendererInterface::PopProjectionMatrix()
 		throw ErrorToLog("Projection matrix stack underflow!!!!");
 	}
     ProjectionMatrixStack.pop();
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::SetProjectionMatrix(float width, float height)
@@ -431,7 +432,7 @@ void TSalmonRendererInterface::SetProjectionMatrix(float width, float height)
 	}
     ProjectionMatrixStack.pop();
     ProjectionMatrixStack.push(m);
-    SetUniforms();
+	SetMatrix();
 
 }
 
@@ -479,7 +480,7 @@ void TSalmonRendererInterface::SetPerspectiveProjectionMatrix(float angle, float
 	}
     ProjectionMatrixStack.pop();
     ProjectionMatrixStack.push(m);
-    SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::PushPerspectiveProjectionMatrix(float angle, float aspect, float zNear, float zFar)
@@ -493,7 +494,7 @@ void TSalmonRendererInterface::PushPerspectiveProjectionMatrix(float angle, floa
         throw ErrorToLog("Projection matrix stack overflow!!!!");
     }
 
-    SetUniforms();
+	SetMatrix();
 }
 
 
@@ -510,7 +511,7 @@ void TSalmonRendererInterface::SetGLCamView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse();//InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::SetGlIdentityView()
@@ -521,7 +522,7 @@ void TSalmonRendererInterface::SetGlIdentityView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse(); //InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::SetGlPosXView()
@@ -536,7 +537,7 @@ void TSalmonRendererInterface::SetGlPosXView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse();//InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 
 }
 
@@ -553,7 +554,7 @@ void TSalmonRendererInterface::SetGlNegXView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse();//InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::SetGlPosYView()
@@ -567,7 +568,7 @@ void TSalmonRendererInterface::SetGlPosYView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse();// InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 
 }
 
@@ -582,7 +583,7 @@ void TSalmonRendererInterface::SetGlNegYView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse();//InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::SetGlPosZView()
@@ -598,7 +599,7 @@ void TSalmonRendererInterface::SetGlPosZView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse(); //InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 }
 
 void TSalmonRendererInterface::SetGlNegZView()
@@ -613,7 +614,7 @@ void TSalmonRendererInterface::SetGlNegZView()
 	CamModelViewMatrix = ModelviewMatrixStack.top();
 	CamInversedModelViewMatrix = CamModelViewMatrix.inverse(); //InverseModelViewMatrix(CamModelViewMatrix);
 
-	SetUniforms();
+	SetMatrix();
 
 }
 

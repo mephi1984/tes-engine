@@ -247,8 +247,6 @@ namespace SE
 
 	void WidgetAncestor::Draw()
 	{
-		Renderer->PushMatrix();
-
 		TRenderParamsSetter render1(renderPair.first);
 		Renderer->DrawTriangleList(renderPair.second);
 
@@ -261,8 +259,6 @@ namespace SE
 
 			CheckGlError();
 		}
-		
-		Renderer->PopMatrix();
 	}
 	
 	float WidgetAncestor::getContentAreaLeftoverWidth()
@@ -2407,14 +2403,10 @@ namespace SE
 	{
 		WidgetAncestor::Draw();
 
-		Renderer->PushMatrix();
-
 		TRenderParamsSetter render(textRenderPair.first);
 		Renderer->DrawTriangleList(textRenderPair.second);
 
 		CheckGlError();
-
-		Renderer->PopMatrix();
 	}
 
 
@@ -2604,15 +2596,11 @@ namespace SE
 	void Button::Draw()
 	{
 		WidgetAncestor::Draw();
-		
-
-		Renderer->PushMatrix();
 
 		TRenderParamsSetter render2(hoverRenderPair.first);
 		Renderer->DrawTriangleList(hoverRenderPair.second);
 
 		CheckGlError();
-
 
 
 		TRenderParamsSetter render1(pressedRenderPair.first);
@@ -2622,17 +2610,11 @@ namespace SE
 		CheckGlError();
 
 
-
 		TRenderParamsSetter render3(textRenderPair.first);
 
 		Renderer->DrawTriangleList(textRenderPair.second);
 
 		CheckGlError();
-
-
-
-		Renderer->PopMatrix();
-
 	}
 
 	void Button::Update(size_t dt)

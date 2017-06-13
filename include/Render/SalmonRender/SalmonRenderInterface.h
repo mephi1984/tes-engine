@@ -59,6 +59,7 @@ public:
 	void CalcCamPos();
 
 	virtual void SetUniforms();
+	virtual void SetMatrix();
 
 	virtual int GetScreenWidth();
 	virtual int GetScreenHeight();

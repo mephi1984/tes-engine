@@ -93,7 +93,7 @@ public:
 
 	size_t operator[](const std::string& s)
 	{
-		if (TexMap.count(s) != 0)
+		if (TexMap.find(s) != TexMap.end())
 			return TexMap[s].TexID;
 		else
 			return 0;
