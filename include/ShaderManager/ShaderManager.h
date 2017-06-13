@@ -6,6 +6,7 @@ This code contains shader manager
 */
 
 #include <stack>
+#include <unordered_map>
 
 #ifdef TARGET_WIN32
 #include "../OpenGlExt/OpenGlExt.h"
@@ -73,8 +74,8 @@ class TShaderResource
 protected:
 	size_t ShaderProgram;
 
-	std::map<std::string,size_t,std::less<std::string> >  UniformList;
-	std::map<std::string,size_t,std::less<std::string> >  AttribList;
+	std::unordered_map<std::string,size_t>  UniformList;
+	std::map<std::string,size_t>  AttribList;
 
 public:
 	TShaderResource();
@@ -122,9 +123,9 @@ public:
 class TShaderManager : public TSerializeInterface
 {
 protected:
-	std::map<std::string, std::shared_ptr<TShaderResource>, std::less<std::string> >  ShaderList;
-	
+	std::unordered_map<std::string, std::shared_ptr<TShaderResource>> ShaderList;
 	std::stack<std::string> ShaderNameStack;
+	std::shared_ptr<TShaderResource> currentShader;
 	
 	//To be called only by SalmonRander/HalibutRender!!!
 	void PushShader(const std::string& shaderName);

@@ -184,7 +184,7 @@ std::shared_ptr<TShaderResource> TShaderManager::GetCurrentShader()
 		throw ErrorToLog("GetCurrentShader: Shader is not selected!");
 	}
 	
-	return ShaderList[ShaderNameStack.top()]; 
+	return currentShader; 
 }
 
 void TShaderManager::Serialize(boost::property_tree::ptree& propertyTree)
@@ -269,7 +269,8 @@ void TShaderManager::PushShader(const std::string& shaderName)
 	
 	if (ShaderNameStack.size() == 0 || ShaderNameStack.top() != shaderName)
 	{
-		glUseProgram(ShaderList[shaderName]->ShaderProgram);
+		currentShader = ShaderList[shaderName];
+		glUseProgram(currentShader->ShaderProgram);
 	}
 
 	ShaderNameStack.push(shaderName);
@@ -282,13 +283,14 @@ void TShaderManager::PopShader()
 	{
 		throw ErrorToLog("Shader stack underflow!!");
 	}
-	std::string oldShaderName = ShaderNameStack.top();
+	std::string& oldShaderName = ShaderNameStack.top();
 
 	ShaderNameStack.pop();
-	std::string shaderName = ShaderNameStack.top();
+	std::string& shaderName = ShaderNameStack.top();
 	if (oldShaderName != shaderName)
 	{
-		glUseProgram(ShaderList[shaderName]->ShaderProgram);
+		currentShader = ShaderList[shaderName];
+		glUseProgram(currentShader->ShaderProgram);
 	}
 }
 
@@ -299,106 +301,145 @@ void TShaderManager::PopShader()
 void RenderUniform1f(const std::string& uniformName, const float value)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
-				glUniform1fv(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],1,&value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
+				glUniform1fv(shader->UniformList[uniformName],1,&value);
+	}
 }
 
 void RenderUniform3fv(const std::string& uniformName, const float* value)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
-				glUniform3fv(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],1,value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
+			glUniform3fv(shader->UniformList[uniformName], 1, value);
+	}
 }
 
 void RenderUniform4fv(const std::string& uniformName, const float* value)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
-				glUniform4fv(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],1,value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
+			glUniform4fv(shader->UniformList[uniformName], 1, value);
+	}
 }
 
 
 void RenderUniformMatrix3fv(const std::string& uniformName,bool transpose, const float* value)
 {
-	if (ResourceManager != NULL)	
-			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
-				glUniformMatrix3fv(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],1,transpose,value);
-			
+	if (ResourceManager != NULL)
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
+			glUniformMatrix3fv(shader->UniformList[uniformName], 1, transpose, value);
+	}
 }
 
 void RenderUniformMatrix4fv(const std::string& uniformName,bool transpose, const float* value)
 {
-	
-	if (ResourceManager != NULL)	
-			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
-				glUniformMatrix4fv(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],1,transpose,value);
-			
+	if (ResourceManager != NULL)
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
+			glUniformMatrix4fv(shader->UniformList[uniformName], 1, transpose, value);
+	}
 }
 
 
 void RenderUniform1i(const std::string& uniformName, const int value)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->UniformList.count(uniformName) > 0)
-				glUniform1i(ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName],value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
+			glUniform1i(shader->UniformList[uniformName], value);
+	}
 }
 
 void VertexAttrib2fv(const std::string& attribName, const float* value)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-				glVertexAttrib2fv(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) != shader->AttribList.end())
+			glVertexAttrib2fv(shader->AttribList[attribName], value);
+	}
 }
 
 void VertexAttrib3fv(const std::string& attribName, const float* value)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-				glVertexAttrib3fv(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) != shader->AttribList.end())
+			glVertexAttrib3fv(shader->AttribList[attribName], value);
+	}
 }
 
 
 void VertexAttrib4fv(const std::string& attribName, const float* value)
 {
 	if (ResourceManager != NULL)
-		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-			glVertexAttrib4fv(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], value);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) != shader->AttribList.end())
+			glVertexAttrib4fv(shader->AttribList[attribName], value);
+	}
 }
 
 
 void VertexAttribPointer2fv(const std::string& attribName,int stride, const char* pointer)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-				glVertexAttribPointer(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], 2, GL_FLOAT, GL_FALSE, stride, pointer);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) !=	shader->AttribList.end())
+			glVertexAttribPointer(shader->AttribList[attribName], 2, GL_FLOAT, GL_FALSE, stride, pointer);
+	}
 }
 
 void VertexAttribPointer3fv(const std::string& attribName,int stride, const char* pointer)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-				glVertexAttribPointer(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], 3, GL_FLOAT, GL_FALSE, stride, pointer);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) !=shader->AttribList.end())
+			glVertexAttribPointer(shader->AttribList[attribName], 3, GL_FLOAT, GL_FALSE, stride, pointer);
+	}
 }
 
 void VertexAttribPointer4fv(const std::string& attribName, int stride, const char* pointer)
 {
 	if (ResourceManager != NULL)
-		if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-			glVertexAttribPointer(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName], 4, GL_FLOAT, GL_FALSE, stride, pointer);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) != shader->AttribList.end())
+			glVertexAttribPointer(shader->AttribList[attribName], 4, GL_FLOAT, GL_FALSE, stride, pointer);
+	}
 }
 
 void EnableVertexAttribArray(const std::string& attribName)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-				glEnableVertexAttribArray(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName]);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) != shader->AttribList.end())
+			glEnableVertexAttribArray(shader->AttribList[attribName]);
+	}
 }
 
 void DisableVertexAttribArray(const std::string& attribName)
 {
 	if (ResourceManager != NULL)
-			if (ResourceManager->ShaderManager.GetCurrentShader()->AttribList.count(attribName) > 0)
-				glDisableVertexAttribArray(ResourceManager->ShaderManager.GetCurrentShader()->AttribList[attribName]);
+	{
+		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
+		if (shader->AttribList.find(attribName) != shader->AttribList.end())
+			glDisableVertexAttribArray(shader->AttribList[attribName]);
+	}
 }
 
 
