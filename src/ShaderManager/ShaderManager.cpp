@@ -136,6 +136,8 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 
 	glGetProgramiv(ShaderProgram, GL_ACTIVE_UNIFORMS, &activeUniforms);
 
+	InitUniformsTable();
+
 	for (int i = 0; i < activeUniforms; i++)
 	{
 		glGetActiveUniform(ShaderProgram, i, CONST_UNIFORM_NAME_LENGTH, &dummyLen, &dummySize, &dummyEnum, uniformName);
