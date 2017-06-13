@@ -74,13 +74,14 @@ class TShaderResource
 protected:
 	size_t ShaderProgram;
 
-	std::unordered_map<std::string,size_t>  UniformList;
+	std::unordered_map<std::string, std::pair<bool, size_t>>  UniformList;
 	std::map<std::string,size_t>  AttribList;
 
 public:
 	TShaderResource();
 	~TShaderResource();
 
+	void InitUniformsTable();
 	bool CompileShader(boost::shared_array<char> vertexCode, boost::shared_array<char> fragmentCode);
 	void FreeShader();
 

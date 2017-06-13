@@ -25,6 +25,38 @@ TShaderResource::~TShaderResource()
 	
 }
 
+void TShaderResource::InitUniformsTable()
+{
+	// Uniforms
+	UniformList[CONST_STRING_TEXTURE_UNIFORM].first = false;
+	UniformList[CONST_STRING_NORMALMAP_UNIFORM].first = false;
+	UniformList[CONST_STRING_SHADOWMAPGLOBAL_UNIFORM].first = false;
+	UniformList[CONST_STRING_SHADOWMAPLOCAL_UNIFORM].first = false;
+	UniformList[CONST_STRING_ENV_UNIFORM].first = false;
+	UniformList[CONST_STRING_NORMALMAPEXISTS_UNIFORM].first = false;
+
+	UniformList[CONST_STRING_LIGHT_POS_UNIFORM].first = false;
+	UniformList[CONST_STRING_LIGHT_DIRECTION_UNIFORM].first = false;
+	UniformList[CONST_STRING_LIGHT_COLOR_UNIFORM].first = false;
+
+	UniformList[CONST_STRING_CAMPOS_UNIFORM].first = false;
+	UniformList[CONST_STRING_SHADOWCLAMPVALUE_UNIFORM].first = false;
+
+	UniformList[CONST_STRING_FOG_BEGIN_DISTANCE_UNIFORM].first = false;
+	UniformList[CONST_STRING_FOG_END_DISTANCE_UNIFORM].first = false;
+	UniformList[CONST_STRING_FOG_COLOR_UNIFORM].first = false;
+
+	UniformList[CONST_STRING_MATERIAL_COLOR_UNIFORM].first = false;
+	UniformList[CONST_STRING_TRANSPARENCY_UNIFORM].first = false;
+
+	//For Halibut Render
+	UniformList[CONST_STRING_HALIBUT_PROJECTION_MATRIX_UNIFORM].first = false;
+
+	//Local uniforms (need to be setup before each draw)
+	UniformList[CONST_STRING_MODELROTATEMATRIX_UNIFORM].first = false;
+	UniformList[CONST_STRING_MODELTRANSLATEVECTOR_UNIFORM].first = false;
+}
+
 bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost::shared_array<char> fragmentCode)
 {
 
@@ -107,7 +139,7 @@ bool TShaderResource::CompileShader(boost::shared_array<char> vertexCode, boost:
 	for (int i = 0; i < activeUniforms; i++)
 	{
 		glGetActiveUniform(ShaderProgram, i, CONST_UNIFORM_NAME_LENGTH, &dummyLen, &dummySize, &dummyEnum, uniformName);
-		UniformList[uniformName] = glGetUniformLocation(ShaderProgram, uniformName);
+		UniformList[uniformName] = { true, glGetUniformLocation(ShaderProgram, uniformName) };
 	}
 
 	//================= Parsing all attributes ================
@@ -157,8 +189,9 @@ int TShaderResource::GetAttribIndex(const std::string& attribName)
 
 int TShaderResource::GetUniformIndex(const std::string& uniformName)
 {
-	if (UniformList.count(uniformName) > 0)
-		return UniformList[uniformName];
+	auto uniform = UniformList[uniformName];
+	if (uniform.first)
+		return uniform.second;
 	else
 		return -1;
 }
@@ -302,9 +335,9 @@ void RenderUniform1f(const std::string& uniformName, const float value)
 {
 	if (ResourceManager != NULL)
 	{
-		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
-		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
-				glUniform1fv(shader->UniformList[uniformName],1,&value);
+		auto uniform = ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName];
+		if (uniform.first)
+				glUniform1fv(uniform.second,1,&value);
 	}
 }
 
@@ -312,9 +345,9 @@ void RenderUniform3fv(const std::string& uniformName, const float* value)
 {
 	if (ResourceManager != NULL)
 	{
-		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
-		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
-			glUniform3fv(shader->UniformList[uniformName], 1, value);
+		auto uniform = ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName];
+		if (uniform.first)
+			glUniform3fv(uniform.second, 1, value);
 	}
 }
 
@@ -322,9 +355,9 @@ void RenderUniform4fv(const std::string& uniformName, const float* value)
 {
 	if (ResourceManager != NULL)
 	{
-		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
-		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
-			glUniform4fv(shader->UniformList[uniformName], 1, value);
+		auto uniform = ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName];
+		if (uniform.first)
+			glUniform4fv(uniform.second, 1, value);
 	}
 }
 
@@ -333,9 +366,9 @@ void RenderUniformMatrix3fv(const std::string& uniformName,bool transpose, const
 {
 	if (ResourceManager != NULL)
 	{
-		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
-		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
-			glUniformMatrix3fv(shader->UniformList[uniformName], 1, transpose, value);
+		auto uniform = ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName];
+		if (uniform.first)
+			glUniformMatrix3fv(uniform.second, 1, transpose, value);
 	}
 }
 
@@ -343,9 +376,9 @@ void RenderUniformMatrix4fv(const std::string& uniformName,bool transpose, const
 {
 	if (ResourceManager != NULL)
 	{
-		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
-		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
-			glUniformMatrix4fv(shader->UniformList[uniformName], 1, transpose, value);
+		auto uniform = ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName];
+		if (uniform.first)
+			glUniformMatrix4fv(uniform.second, 1, transpose, value);
 	}
 }
 
@@ -354,9 +387,9 @@ void RenderUniform1i(const std::string& uniformName, const int value)
 {
 	if (ResourceManager != NULL)
 	{
-		auto shader = ResourceManager->ShaderManager.GetCurrentShader();
-		if (shader->UniformList.find(uniformName) != shader->UniformList.end())
-			glUniform1i(shader->UniformList[uniformName], value);
+		auto uniform = ResourceManager->ShaderManager.GetCurrentShader()->UniformList[uniformName];
+		if (uniform.first)
+			glUniform1i(uniform.second, value);
 	}
 }
 
