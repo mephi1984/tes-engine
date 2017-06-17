@@ -337,7 +337,7 @@ TIosConsole& TIosConsole::operator<<(const std::string& s)
     
 	PrintImmediate(string_with_time_mark);
     
-	History += string_with_time_mark+endl;
+	History += string_with_time_mark+'\n';
 	CutHistory();
     
 	return *this;
@@ -345,7 +345,7 @@ TIosConsole& TIosConsole::operator<<(const std::string& s)
 
 void TIosConsole::PrintImmediate(const std::string& s)
 {
-    printf("%s", std::string(s+endl).c_str());
+    printf("%s", std::string(s+'\n').c_str());
     
 }
 

@@ -75,25 +75,25 @@ void DestroyEngine()
     
     void AppOnTapDown(int posx, int posy, int touchNumber)
     {
-        App->OuterOnTapDown(vec2(posx, posy), touchNumber);
+        App->OuterOnTapDown(Eigen::Vector2f(posx, posy), touchNumber);
     }
     
     
     void AppOnTapUp(int posx, int posy, int touchNumber)
     {
-        App->OuterOnTapUp(vec2(posx, posy), touchNumber);
+        App->OuterOnTapUp(Eigen::Vector2f(posx, posy), touchNumber);
     }
     
     
     void AppOnTapUpAfterMove(int posx, int posy, int touchNumber)
     {
-        App->OuterOnTapUpAfterMove(vec2(posx, posy), touchNumber);
+        App->OuterOnTapUpAfterMove(Eigen::Vector2f(posx, posy), touchNumber);
     }
     
     
-    void AppOnScroll(int shiftx, int shifty, int touchNumber)
+    void AppOnScroll(int posx, int posy, int shiftx, int shifty, int touchNumber)
     {
-        App->OuterOnMove(vec2(shiftx, shifty), touchNumber);
+        App->OuterOnMove(Eigen::Vector2f(posx, posy), Eigen::Vector2f(shiftx, shifty), touchNumber);
     }
     
     

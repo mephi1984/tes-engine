@@ -106,7 +106,7 @@ void ShowKeyboard(std::string text);
             touchHash[aTouch].second = true;
         }
     
-        SE::AppOnScroll(prevLocation.x - location.x, -(prevLocation.y - location.y), touchHash[aTouch].number);
+        SE::AppOnScroll(location.x,  - location.y, prevLocation.x - location.x, -(prevLocation.y - location.y), touchHash[aTouch].number);
     }
 }
 

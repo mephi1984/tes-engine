@@ -10,6 +10,10 @@
 namespace SE
 {
 
+    
+    const size_t EditText::CURSOR_WIDTH = 2;
+    const size_t EditText::CURSOR_FLASHING_HALFPERIOD_MS = 500;
+    
 
 	//==== Simple visitor solution from Habrahabr's user 0xd34df00d =======
 

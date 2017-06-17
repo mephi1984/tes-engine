@@ -545,8 +545,8 @@ namespace SE
 
 	public:
 
-		static const size_t CURSOR_WIDTH = 2;
-		static const size_t CURSOR_FLASHING_HALFPERIOD_MS = 500;
+        static const size_t CURSOR_WIDTH;
+        static const size_t CURSOR_FLASHING_HALFPERIOD_MS;
 
 		EditText(WidgetParentInterface& widgetParent);
 

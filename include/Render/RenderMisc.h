@@ -74,6 +74,8 @@ public:
 	TTriangleListAncestor& operator=(const TDataTriangleList& dataTriangleList);
 
 	virtual ~TTriangleListAncestor();
+    
+    virtual bool VertBufferArrEmpty(); //For iOS and Android is always false, but should be overriden in Windows
 };
 
 
@@ -122,6 +124,7 @@ public:
 class TTriangleList : public TTriangleListAncestor
 {
 	//No difference
+    
 };
 
 #endif
@@ -132,6 +135,8 @@ class TTriangleList : public TTriangleListAncestor
 class TTriangleList : public TTriangleListAncestor
 {
 	//No difference
+    
+
 };
 
 #endif
@@ -171,6 +176,8 @@ public:
 	~TTriangleList();
 
 	virtual void RefreshBuffer();
+    
+    virtual bool VertBufferArrEmpty();
 
 };
 #endif

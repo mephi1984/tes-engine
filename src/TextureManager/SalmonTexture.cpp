@@ -21,6 +21,7 @@ TTextureListClass::TTextureListClass()
     
     using namespace std;
  
+    
 	CreateFunctionMap[".bmp"] = boost::bind(&TTextureListClass::CreateTexDataFromBmp24, this, _1, _2);
 	CreateFunctionMap[".bmp32"] = boost::bind(&TTextureListClass::CreateTexDataFromBmp32, this, _1, _2);
 	CreateFunctionMap[".png"] = boost::bind(&TTextureListClass::CreateTexDataFromPng, this, _1, _2);
@@ -28,6 +29,8 @@ TTextureListClass::TTextureListClass()
     CreateFunctionMap[".jpg"] = boost::bind(&TTextureListClass::CreateTexDataFromJpg, this, _1, _2);
 	CreateFunctionMap[".jpeg"] = boost::bind(&TTextureListClass::CreateTexDataFromJpg, this, _1, _2);
    
+    
+    //CreateFunctionMap[".bmp"] = [this](const std::string& name, TTextureData& texData) ->bool {return this->CreateTexDataFromBmp24(name, texData);};
 
 	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> size_t
 	{
@@ -332,14 +335,14 @@ bool TTextureListClass::CreateTexDataFromBmp24(const std::string& filename, TTex
 	//This refers to BITMAPV5HEADER
 
 	strcpy(texData.Format, "bmp24");
-	texData.Width = *reinterpret_cast<size_t*>(&fileArr[18]);
-	texData.Height = *reinterpret_cast<size_t*>(&fileArr[22]);
+	texData.Width = *reinterpret_cast<uint32_t*>(&fileArr[18]);
+	texData.Height = *reinterpret_cast<uint32_t*>(&fileArr[22]);
 	
 	texData.DataSize = texData.Height * texData.Width * 3;
 
 	texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
 	
-	size_t pos = *reinterpret_cast<size_t*>(&fileArr[10]);
+	size_t pos = *reinterpret_cast<uint32_t*>(&fileArr[10]);
 	size_t x = 0;
 
 	for (size_t i=0; i<texData.Width; i++)
@@ -373,14 +376,14 @@ bool TTextureListClass::CreateTexDataFromBmp32(const std::string& filename, TTex
 	//Meaning BITMAPV5HEADER
 
 	strcpy(texData.Format, "bmp32");
-	texData.Width = *reinterpret_cast<size_t*>(&fileArr[18]);
-	texData.Height = *reinterpret_cast<size_t*>(&fileArr[22]);
+	texData.Width = *reinterpret_cast<uint32_t*>(&fileArr[18]);
+	texData.Height = *reinterpret_cast<uint32_t*>(&fileArr[22]);
 
 	texData.DataSize = texData.Height * texData.Width * 4;
 
 	texData.Data = boost::shared_array<char>(new char [texData.DataSize]);
 
-	size_t pos = *reinterpret_cast<size_t*>(&fileArr[10]);
+	size_t pos = *reinterpret_cast<uint32_t*>(&fileArr[10]);
 	size_t x = 0;
 
 	for (size_t i=0; i<texData.Width; i++)

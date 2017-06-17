@@ -12,9 +12,7 @@
 		4C5E512116B6E602005521AC /* SimpleTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5E512016B6E601005521AC /* SimpleTimer.h */; };
 		4C5E512416B6E620005521AC /* SimpleTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E512316B6E620005521AC /* SimpleTimer.cpp */; };
 		4C77831B15BABFA6003D5142 /* SoundManagerInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C77831A15BABFA6003D5142 /* SoundManagerInterface.h */; };
-		4C77832215BAC035003D5142 /* SoundManagerIos.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C77832115BAC035003D5142 /* SoundManagerIos.mm */; };
 		4C77832415BAC070003D5142 /* SoundManagerIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C77832315BAC070003D5142 /* SoundManagerIos.h */; };
-		4C79A59F15B1895B003F59D1 /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C79A59E15B1895B003F59D1 /* ScriptManager.cpp */; };
 		4C79A5A215B1896F003F59D1 /* ScriptManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C79A5A115B1896F003F59D1 /* ScriptManager.h */; };
 		4C79A5AF15B18A8B003F59D1 /* FrameManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C79A5AE15B18A8B003F59D1 /* FrameManager.h */; };
 		4C79A5B215B18A97003F59D1 /* FrameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C79A5B115B18A97003F59D1 /* FrameManager.cpp */; };
@@ -25,7 +23,6 @@
 		4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C7BD6E616C28D3100BB8788 /* IosWrapper.h */; };
 		4C8024B516D4BD9F001A4521 /* Network.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8024B316D4BD9F001A4521 /* Network.h */; };
 		4C8024B616D4BD9F001A4521 /* SignalSender.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8024B416D4BD9F001A4521 /* SignalSender.h */; };
-		4C8024BA16D4BDBC001A4521 /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8024B916D4BDBC001A4521 /* Network.cpp */; };
 		4C8CE90615B0A0F400078175 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8CE90515B0A0F400078175 /* Foundation.framework */; };
 		4C8CE91715B0A11A00078175 /* DataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE91515B0A11A00078175 /* DataTypes.h */; };
 		4C8CE91815B0A11A00078175 /* NewDataTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CE91615B0A11A00078175 /* NewDataTypes.h */; };
@@ -48,8 +45,6 @@
 		4C8CE97815B0BBA800078175 /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C8CE97715B0BBA800078175 /* ShaderManager.cpp */; };
 		4C902A2B15C565E900FBC901 /* Salmon Engine-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A2A15C565E900FBC901 /* Salmon Engine-Prefix.pch */; };
 		4C902A2E15C5667800FBC901 /* DataTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A2C15C5667800FBC901 /* DataTypes.cpp */; };
-		4C902A2F15C5667800FBC901 /* NewDataTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A2D15C5667800FBC901 /* NewDataTypes.cpp */; };
-		4C902A3715C56A4800FBC901 /* BackgroundCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A3415C56A4800FBC901 /* BackgroundCubemap.cpp */; };
 		4C902A3815C56A4800FBC901 /* SalmonRenderInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A3515C56A4800FBC901 /* SalmonRenderInterface.cpp */; };
 		4C902A3915C56A4800FBC901 /* SalmonRenderIos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A3615C56A4800FBC901 /* SalmonRenderIos.cpp */; };
 		4C902A3D15C56A7300FBC901 /* SalmonEngineInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A3B15C56A7300FBC901 /* SalmonEngineInterface.cpp */; };
@@ -59,10 +54,6 @@
 		4C902A4515C56AEA00FBC901 /* SalmonRenderIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A4215C56AEA00FBC901 /* SalmonRenderIos.h */; };
 		4C902A4C15C56B3700FBC901 /* SalmonEngineInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A4A15C56B3700FBC901 /* SalmonEngineInterface.h */; };
 		4C902A4D15C56B3700FBC901 /* SalmonEngineIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A4B15C56B3700FBC901 /* SalmonEngineIos.h */; };
-		4C902A5615C56BEE00FBC901 /* SalmonAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A4F15C56BEE00FBC901 /* SalmonAnimation.cpp */; };
-		4C902A5715C56BEE00FBC901 /* LightManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A5115C56BEE00FBC901 /* LightManager.cpp */; };
-		4C902A5815C56BEE00FBC901 /* ModelManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A5315C56BEE00FBC901 /* ModelManager.cpp */; };
-		4C902A5915C56BEE00FBC901 /* SimpleLand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C902A5515C56BEE00FBC901 /* SimpleLand.cpp */; };
 		4C902A6215C56C0900FBC901 /* SalmonAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A5B15C56C0900FBC901 /* SalmonAnimation.h */; };
 		4C902A6315C56C0900FBC901 /* LightManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A5D15C56C0900FBC901 /* LightManager.h */; };
 		4C902A6415C56C0900FBC901 /* ModelManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C902A5F15C56C0900FBC901 /* ModelManager.h */; };
@@ -72,7 +63,6 @@
 		4CBC58B016BE9D9B00B30DB2 /* ThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */; };
 		4CC1FC3D15B20E440025C6F7 /* IosApi.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC1FC3C15B20E440025C6F7 /* IosApi.h */; };
 		4CC1FC4015B20E5D0025C6F7 /* IosApi.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */; };
-		4CC857CD1693865C00110F77 /* NewModelManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CC857CC1693865C00110F77 /* NewModelManager.cpp */; };
 		4CC857D01693867D00110F77 /* RenderParams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CC857CF1693867D00110F77 /* RenderParams.cpp */; };
 		4CC857D2169386A300110F77 /* RenderParams.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC857D1169386A300110F77 /* RenderParams.h */; };
 		4CC857D4169386BD00110F77 /* NewModelManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC857D3169386BD00110F77 /* NewModelManager.h */; };
@@ -90,8 +80,6 @@
 		4CF8747916B65210009B1214 /* ButtonWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747616B65210009B1214 /* ButtonWidget.cpp */; };
 		4CF8747A16B65210009B1214 /* GUIManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747716B65210009B1214 /* GUIManager.cpp */; };
 		4CF8747B16B65210009B1214 /* WidgetXmlParsers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747816B65210009B1214 /* WidgetXmlParsers.cpp */; };
-		4CF8747D16B6521F009B1214 /* HalibutAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747C16B6521F009B1214 /* HalibutAnimation.cpp */; };
-		4CF8747F16B6522E009B1214 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8747E16B6522E009B1214 /* PhysicsManager.cpp */; };
 		4CF8748416B65263009B1214 /* PhysicsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748316B65263009B1214 /* PhysicsManager.h */; };
 		4CF8748616B65292009B1214 /* HalibutAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748516B65292009B1214 /* HalibutAnimation.h */; };
 		4CF8748B16B652A4009B1214 /* ButtonWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF8748716B652A4009B1214 /* ButtonWidget.h */; };
@@ -216,6 +204,8 @@
 		842067A51E273AA7003BC6DC /* jquant1.c in Sources */ = {isa = PBXBuildFile; fileRef = 842067A01E273AA7003BC6DC /* jquant1.c */; };
 		842067A61E273AA7003BC6DC /* jquant2.c in Sources */ = {isa = PBXBuildFile; fileRef = 842067A11E273AA7003BC6DC /* jquant2.c */; };
 		842067A71E273AA7003BC6DC /* jutils.c in Sources */ = {isa = PBXBuildFile; fileRef = 842067A21E273AA7003BC6DC /* jutils.c */; };
+		8426E3A81EF576FC003E7053 /* NewGuiManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8426E3A71EF576FC003E7053 /* NewGuiManager.h */; };
+		8426E3AA1EF57712003E7053 /* NewGuiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8426E3A91EF57712003E7053 /* NewGuiManager.cpp */; };
 		84D0FED01E27513100EC3FE5 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84D0FECF1E27513100EC3FE5 /* thread.cpp */; };
 		84D0FEE01E2751C100EC3FE5 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D0FED21E2751C100EC3FE5 /* compress.c */; };
 		84D0FEE11E2751C100EC3FE5 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 84D0FED31E2751C100EC3FE5 /* crc32.c */; };
@@ -236,9 +226,7 @@
 		4C5E512016B6E601005521AC /* SimpleTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleTimer.h; path = ../../../include/Utils/SimpleTimer.h; sourceTree = "<group>"; };
 		4C5E512316B6E620005521AC /* SimpleTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleTimer.cpp; path = ../../../src/Utils/SimpleTimer.cpp; sourceTree = "<group>"; };
 		4C77831A15BABFA6003D5142 /* SoundManagerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManagerInterface.h; path = ../../../include/SoundManager/SoundManagerInterface.h; sourceTree = "<group>"; };
-		4C77832115BAC035003D5142 /* SoundManagerIos.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SoundManagerIos.mm; path = ../../../src/SoundManager/SoundManagerIos.mm; sourceTree = "<group>"; };
 		4C77832315BAC070003D5142 /* SoundManagerIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundManagerIos.h; path = ../../../include/SoundManager/SoundManagerIos.h; sourceTree = "<group>"; };
-		4C79A59E15B1895B003F59D1 /* ScriptManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptManager.cpp; sourceTree = "<group>"; };
 		4C79A5A115B1896F003F59D1 /* ScriptManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScriptManager.h; sourceTree = "<group>"; };
 		4C79A5AE15B18A8B003F59D1 /* FrameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameManager.h; sourceTree = "<group>"; };
 		4C79A5B115B18A97003F59D1 /* FrameManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameManager.cpp; sourceTree = "<group>"; };
@@ -249,7 +237,6 @@
 		4C7BD6E616C28D3100BB8788 /* IosWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosWrapper.h; sourceTree = "<group>"; };
 		4C8024B316D4BD9F001A4521 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
 		4C8024B416D4BD9F001A4521 /* SignalSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalSender.h; sourceTree = "<group>"; };
-		4C8024B916D4BDBC001A4521 /* Network.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Network.cpp; sourceTree = "<group>"; };
 		4C8CE90215B0A0F400078175 /* libSalmon Engine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libSalmon Engine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CE90515B0A0F400078175 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C8CE91515B0A11A00078175 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
@@ -273,8 +260,6 @@
 		4C8CE97715B0BBA800078175 /* ShaderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderManager.cpp; sourceTree = "<group>"; };
 		4C902A2A15C565E900FBC901 /* Salmon Engine-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Salmon Engine-Prefix.pch"; path = "Salmon Engine/Salmon Engine-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		4C902A2C15C5667800FBC901 /* DataTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataTypes.cpp; sourceTree = "<group>"; };
-		4C902A2D15C5667800FBC901 /* NewDataTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NewDataTypes.cpp; sourceTree = "<group>"; };
-		4C902A3415C56A4800FBC901 /* BackgroundCubemap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BackgroundCubemap.cpp; path = ../../../src/Render/SalmonRender/BackgroundCubemap.cpp; sourceTree = "<group>"; };
 		4C902A3515C56A4800FBC901 /* SalmonRenderInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SalmonRenderInterface.cpp; path = ../../../src/Render/SalmonRender/SalmonRenderInterface.cpp; sourceTree = "<group>"; };
 		4C902A3615C56A4800FBC901 /* SalmonRenderIos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SalmonRenderIos.cpp; path = ../../../src/Render/SalmonRender/SalmonRenderIos.cpp; sourceTree = "<group>"; };
 		4C902A3B15C56A7300FBC901 /* SalmonEngineInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SalmonEngineInterface.cpp; path = ../../../src/SalmonEngineInterface.cpp; sourceTree = "<group>"; };
@@ -284,10 +269,6 @@
 		4C902A4215C56AEA00FBC901 /* SalmonRenderIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SalmonRenderIos.h; path = ../../../include/Render/SalmonRender/SalmonRenderIos.h; sourceTree = "<group>"; };
 		4C902A4A15C56B3700FBC901 /* SalmonEngineInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SalmonEngineInterface.h; path = ../../../include/SalmonEngineInterface.h; sourceTree = "<group>"; };
 		4C902A4B15C56B3700FBC901 /* SalmonEngineIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SalmonEngineIos.h; path = ../../../include/SalmonEngineIos.h; sourceTree = "<group>"; };
-		4C902A4F15C56BEE00FBC901 /* SalmonAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SalmonAnimation.cpp; sourceTree = "<group>"; };
-		4C902A5115C56BEE00FBC901 /* LightManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LightManager.cpp; sourceTree = "<group>"; };
-		4C902A5315C56BEE00FBC901 /* ModelManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModelManager.cpp; sourceTree = "<group>"; };
-		4C902A5515C56BEE00FBC901 /* SimpleLand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimpleLand.cpp; sourceTree = "<group>"; };
 		4C902A5B15C56C0900FBC901 /* SalmonAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SalmonAnimation.h; sourceTree = "<group>"; };
 		4C902A5D15C56C0900FBC901 /* LightManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightManager.h; sourceTree = "<group>"; };
 		4C902A5F15C56C0900FBC901 /* ModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelManager.h; sourceTree = "<group>"; };
@@ -297,7 +278,6 @@
 		4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThreadUtils.cpp; path = ../../../src/Utils/ThreadUtils.cpp; sourceTree = "<group>"; };
 		4CC1FC3C15B20E440025C6F7 /* IosApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosApi.h; sourceTree = "<group>"; };
 		4CC1FC3F15B20E5D0025C6F7 /* IosApi.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IosApi.mm; path = ../IosApi.mm; sourceTree = "<group>"; };
-		4CC857CC1693865C00110F77 /* NewModelManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NewModelManager.cpp; sourceTree = "<group>"; };
 		4CC857CF1693867D00110F77 /* RenderParams.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderParams.cpp; path = ../../../src/Render/RenderParams.cpp; sourceTree = "<group>"; };
 		4CC857D1169386A300110F77 /* RenderParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderParams.h; path = ../../../include/Render/RenderParams.h; sourceTree = "<group>"; };
 		4CC857D3169386BD00110F77 /* NewModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewModelManager.h; sourceTree = "<group>"; };
@@ -315,8 +295,6 @@
 		4CF8747616B65210009B1214 /* ButtonWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ButtonWidget.cpp; path = ../../../src/GUIManager/ButtonWidget.cpp; sourceTree = "<group>"; };
 		4CF8747716B65210009B1214 /* GUIManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GUIManager.cpp; path = ../../../src/GUIManager/GUIManager.cpp; sourceTree = "<group>"; };
 		4CF8747816B65210009B1214 /* WidgetXmlParsers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WidgetXmlParsers.cpp; path = ../../../src/GUIManager/WidgetXmlParsers.cpp; sourceTree = "<group>"; };
-		4CF8747C16B6521F009B1214 /* HalibutAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HalibutAnimation.cpp; path = ../../../src/HalibutAnimation/HalibutAnimation.cpp; sourceTree = "<group>"; };
-		4CF8747E16B6522E009B1214 /* PhysicsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PhysicsManager.cpp; path = ../../../src/PhysicsManager/PhysicsManager.cpp; sourceTree = "<group>"; };
 		4CF8748316B65263009B1214 /* PhysicsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsManager.h; path = ../../../include/PhysicsManager/PhysicsManager.h; sourceTree = "<group>"; };
 		4CF8748516B65292009B1214 /* HalibutAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HalibutAnimation.h; path = ../../../include/HalibutAnimation/HalibutAnimation.h; sourceTree = "<group>"; };
 		4CF8748716B652A4009B1214 /* ButtonWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButtonWidget.h; path = ../../../include/GUIManager/ButtonWidget.h; sourceTree = "<group>"; };
@@ -441,6 +419,8 @@
 		842067A01E273AA7003BC6DC /* jquant1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jquant1.c; path = "../../../libs/jpeg-9/jquant1.c"; sourceTree = "<group>"; };
 		842067A11E273AA7003BC6DC /* jquant2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jquant2.c; path = "../../../libs/jpeg-9/jquant2.c"; sourceTree = "<group>"; };
 		842067A21E273AA7003BC6DC /* jutils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jutils.c; path = "../../../libs/jpeg-9/jutils.c"; sourceTree = "<group>"; };
+		8426E3A71EF576FC003E7053 /* NewGuiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewGuiManager.h; path = ../../../include/GUIManager/NewGuiManager.h; sourceTree = "<group>"; };
+		8426E3A91EF57712003E7053 /* NewGuiManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NewGuiManager.cpp; path = ../../../src/GUIManager/NewGuiManager.cpp; sourceTree = "<group>"; };
 		84D0FECD1E27508500EC3FE5 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		84D0FECF1E27513100EC3FE5 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = thread.cpp; path = ../../../boost_1_63_0/libs/thread/src/pthread/thread.cpp; sourceTree = "<group>"; };
 		84D0FED21E2751C100EC3FE5 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "../../../libs/zlib-1.2.8/compress.c"; sourceTree = "<group>"; };
@@ -475,23 +455,6 @@
 				4C77832315BAC070003D5142 /* SoundManagerIos.h */,
 			);
 			name = SoundManager;
-			sourceTree = "<group>";
-		};
-		4C77831E15BABFC9003D5142 /* SoundManager */ = {
-			isa = PBXGroup;
-			children = (
-				4C77832115BAC035003D5142 /* SoundManagerIos.mm */,
-			);
-			name = SoundManager;
-			sourceTree = "<group>";
-		};
-		4C79A59D15B1895B003F59D1 /* ScriptManager */ = {
-			isa = PBXGroup;
-			children = (
-				4C79A59E15B1895B003F59D1 /* ScriptManager.cpp */,
-			);
-			name = ScriptManager;
-			path = ../../../src/ScriptManager;
 			sourceTree = "<group>";
 		};
 		4C79A5A015B1896F003F59D1 /* ScriptManager */ = {
@@ -549,15 +512,6 @@
 			path = ../../../include/Utils/Network;
 			sourceTree = "<group>";
 		};
-		4C8024B816D4BDBC001A4521 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				4C8024B916D4BDBC001A4521 /* Network.cpp */,
-			);
-			name = Network;
-			path = ../../../src/Utils/Network;
-			sourceTree = "<group>";
-		};
 		4C8CE8F715B0A0F400078175 = {
 			isa = PBXGroup;
 			children = (
@@ -608,20 +562,12 @@
 			children = (
 				4C8CE94015B0A57F00078175 /* Console */,
 				4CF8747416B65183009B1214 /* GUIManager */,
-				4CF8747316B65173009B1214 /* HalibutAnimation */,
-				4CF8747116B6514F009B1214 /* PhysicsManager */,
 				4CD18A1816727C3F00EDC335 /* SmartValueManager */,
-				4C902A4E15C56BEE00FBC901 /* Animation */,
-				4C902A5015C56BEE00FBC901 /* LightManager */,
-				4C902A5215C56BEE00FBC901 /* ModelManager */,
-				4C902A5415C56BEE00FBC901 /* SimpleLand */,
 				4C902A3B15C56A7300FBC901 /* SalmonEngineInterface.cpp */,
 				4C902A3C15C56A7300FBC901 /* SalmonEngineIos.cpp */,
-				4C77831E15BABFC9003D5142 /* SoundManager */,
 				4C7AD45515B1E3D000A599F6 /* GlobalConst.cpp */,
 				4C79A5B615B18B1C003F59D1 /* FontManager */,
 				4C79A5B015B18A97003F59D1 /* FrameManager */,
-				4C79A59D15B1895B003F59D1 /* ScriptManager */,
 				4C8CE97615B0BBA800078175 /* ShaderManager */,
 				4C8CE96615B0B1B700078175 /* TextureManager */,
 				4C8CE95715B0AC2700078175 /* Render */,
@@ -671,7 +617,6 @@
 			isa = PBXGroup;
 			children = (
 				4C902A2C15C5667800FBC901 /* DataTypes.cpp */,
-				4C902A2D15C5667800FBC901 /* NewDataTypes.cpp */,
 			);
 			name = DataTypes;
 			path = ../../../src/Utils/DataTypes;
@@ -701,7 +646,6 @@
 			children = (
 				4C470851175405210069C707 /* JpegHelper.cpp */,
 				4C470852175405220069C707 /* TgaLoader.cpp */,
-				4C8024B816D4BDBC001A4521 /* Network */,
 				4CBC58AF16BE9D9B00B30DB2 /* ThreadUtils.cpp */,
 				4C5E512316B6E620005521AC /* SimpleTimer.cpp */,
 				4CC1FC3E15B20E5D0025C6F7 /* IosApi */,
@@ -838,7 +782,6 @@
 			children = (
 				4CF8749116B652ED009B1214 /* Cameras.cpp */,
 				4CEE2DD415CDC57200C4D5F5 /* SalmonRenderGLES20.cpp */,
-				4C902A3415C56A4800FBC901 /* BackgroundCubemap.cpp */,
 				4C902A3515C56A4800FBC901 /* SalmonRenderInterface.cpp */,
 				4C902A3615C56A4800FBC901 /* SalmonRenderIos.cpp */,
 			);
@@ -855,43 +798,6 @@
 				4C902A4215C56AEA00FBC901 /* SalmonRenderIos.h */,
 			);
 			name = "Salmon Render";
-			sourceTree = "<group>";
-		};
-		4C902A4E15C56BEE00FBC901 /* Animation */ = {
-			isa = PBXGroup;
-			children = (
-				4C902A4F15C56BEE00FBC901 /* SalmonAnimation.cpp */,
-			);
-			name = Animation;
-			path = ../../../src/Animation;
-			sourceTree = "<group>";
-		};
-		4C902A5015C56BEE00FBC901 /* LightManager */ = {
-			isa = PBXGroup;
-			children = (
-				4C902A5115C56BEE00FBC901 /* LightManager.cpp */,
-			);
-			name = LightManager;
-			path = ../../../src/LightManager;
-			sourceTree = "<group>";
-		};
-		4C902A5215C56BEE00FBC901 /* ModelManager */ = {
-			isa = PBXGroup;
-			children = (
-				4CC857CC1693865C00110F77 /* NewModelManager.cpp */,
-				4C902A5315C56BEE00FBC901 /* ModelManager.cpp */,
-			);
-			name = ModelManager;
-			path = ../../../src/ModelManager;
-			sourceTree = "<group>";
-		};
-		4C902A5415C56BEE00FBC901 /* SimpleLand */ = {
-			isa = PBXGroup;
-			children = (
-				4C902A5515C56BEE00FBC901 /* SimpleLand.cpp */,
-			);
-			name = SimpleLand;
-			path = ../../../src/SimpleLand;
 			sourceTree = "<group>";
 		};
 		4C902A5A15C56C0900FBC901 /* Animation */ = {
@@ -988,25 +894,10 @@
 			path = ObjC;
 			sourceTree = "<group>";
 		};
-		4CF8747116B6514F009B1214 /* PhysicsManager */ = {
-			isa = PBXGroup;
-			children = (
-				4CF8747E16B6522E009B1214 /* PhysicsManager.cpp */,
-			);
-			name = PhysicsManager;
-			sourceTree = "<group>";
-		};
-		4CF8747316B65173009B1214 /* HalibutAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				4CF8747C16B6521F009B1214 /* HalibutAnimation.cpp */,
-			);
-			name = HalibutAnimation;
-			sourceTree = "<group>";
-		};
 		4CF8747416B65183009B1214 /* GUIManager */ = {
 			isa = PBXGroup;
 			children = (
+				8426E3A91EF57712003E7053 /* NewGuiManager.cpp */,
 				4CDAB6F7176A60620075FC65 /* KeyboardWidget.cpp */,
 				4CF8747616B65210009B1214 /* ButtonWidget.cpp */,
 				4CF8747716B65210009B1214 /* GUIManager.cpp */,
@@ -1034,6 +925,7 @@
 		4CF8748216B65249009B1214 /* GUIManager */ = {
 			isa = PBXGroup;
 			children = (
+				8426E3A71EF576FC003E7053 /* NewGuiManager.h */,
 				4CDAB6F9176A60750075FC65 /* KeyboardWidget.h */,
 				4CF8748716B652A4009B1214 /* ButtonWidget.h */,
 				4CF8748816B652A4009B1214 /* GUIManager.h */,
@@ -1336,6 +1228,7 @@
 				4CBC58AD16BE9D8200B30DB2 /* ThreadUtilsImpl.h in Headers */,
 				4C7BD6E716C28D3100BB8788 /* IosWrapper.h in Headers */,
 				4CD41A2916C2D23C0071E598 /* GLKViewTemplate.h in Headers */,
+				8426E3A81EF576FC003E7053 /* NewGuiManager.h in Headers */,
 				4CD41A2A16C2D23C0071E598 /* ViewControllerTemplate.h in Headers */,
 				4C8024B516D4BD9F001A4521 /* Network.h in Headers */,
 				4C8024B616D4BD9F001A4521 /* SignalSender.h in Headers */,
@@ -1420,7 +1313,6 @@
 				4C8CE97815B0BBA800078175 /* ShaderManager.cpp in Sources */,
 				8420677D1E273A90003BC6DC /* jcinit.c in Sources */,
 				84D0FEE71E2751C100EC3FE5 /* infback.c in Sources */,
-				4C79A59F15B1895B003F59D1 /* ScriptManager.cpp in Sources */,
 				842067371E2738A3003BC6DC /* SquirrelBindingsUtils.cpp in Sources */,
 				842067951E273A90003BC6DC /* jdsample.c in Sources */,
 				4C79A5B215B18A97003F59D1 /* FrameManager.cpp in Sources */,
@@ -1437,13 +1329,10 @@
 				842067341E2738A3003BC6DC /* SqPlus.cpp in Sources */,
 				842066DD1E2736FE003BC6DC /* icu.cpp in Sources */,
 				4CC1FC4015B20E5D0025C6F7 /* IosApi.mm in Sources */,
-				4C77832215BAC035003D5142 /* SoundManagerIos.mm in Sources */,
 				842067801E273A90003BC6DC /* jcmaster.c in Sources */,
 				842066DB1E2736FE003BC6DC /* cregex.cpp in Sources */,
 				4C902A2E15C5667800FBC901 /* DataTypes.cpp in Sources */,
-				4C902A2F15C5667800FBC901 /* NewDataTypes.cpp in Sources */,
 				842066B61E273661003BC6DC /* once.cpp in Sources */,
-				4C902A3715C56A4800FBC901 /* BackgroundCubemap.cpp in Sources */,
 				842067261E273863003BC6DC /* sqlexer.cpp in Sources */,
 				842067971E273A90003BC6DC /* jerror.c in Sources */,
 				842067A51E273AA7003BC6DC /* jquant1.c in Sources */,
@@ -1471,17 +1360,13 @@
 				842066EA1E2736FF003BC6DC /* winstances.cpp in Sources */,
 				842066F01E273742003BC6DC /* greg_month.cpp in Sources */,
 				84D0FEE91E2751C100EC3FE5 /* inflate.c in Sources */,
-				4C902A5615C56BEE00FBC901 /* SalmonAnimation.cpp in Sources */,
 				842067031E2737DA003BC6DC /* png.c in Sources */,
 				842067881E273A90003BC6DC /* jdarith.c in Sources */,
 				842067121E2737DA003BC6DC /* pngwutil.c in Sources */,
 				84D0FEEB1E2751C100EC3FE5 /* trees.c in Sources */,
 				842067941E273A90003BC6DC /* jdpostct.c in Sources */,
 				842067841E273A90003BC6DC /* jcsample.c in Sources */,
-				4C902A5715C56BEE00FBC901 /* LightManager.cpp in Sources */,
-				4C902A5815C56BEE00FBC901 /* ModelManager.cpp in Sources */,
 				842067051E2737DA003BC6DC /* pngget.c in Sources */,
-				4C902A5915C56BEE00FBC901 /* SimpleLand.cpp in Sources */,
 				842066DC1E2736FE003BC6DC /* fileiter.cpp in Sources */,
 				842067431E2738BC003BC6DC /* sqstdaux.cpp in Sources */,
 				842067271E273863003BC6DC /* sqmem.cpp in Sources */,
@@ -1491,7 +1376,6 @@
 				8420677B1E273A90003BC6DC /* jcdctmgr.c in Sources */,
 				842067771E273A90003BC6DC /* jcapistd.c in Sources */,
 				4CD18A1A16727C3F00EDC335 /* SmartValueManager.cpp in Sources */,
-				4CC857CD1693865C00110F77 /* NewModelManager.cpp in Sources */,
 				4CC857D01693867D00110F77 /* RenderParams.cpp in Sources */,
 				8420679D1E273A90003BC6DC /* jidctint.c in Sources */,
 				4CF8747916B65210009B1214 /* ButtonWidget.cpp in Sources */,
@@ -1512,8 +1396,6 @@
 				842067451E2738BC003BC6DC /* sqstdio.cpp in Sources */,
 				842067981E273A90003BC6DC /* jfdctflt.c in Sources */,
 				842067061E2737DA003BC6DC /* pngmem.c in Sources */,
-				4CF8747D16B6521F009B1214 /* HalibutAnimation.cpp in Sources */,
-				4CF8747F16B6522E009B1214 /* PhysicsManager.cpp in Sources */,
 				84D0FEEF1E27522800EC3FE5 /* adler32.c in Sources */,
 				842066E11E2736FE003BC6DC /* regex_debug.cpp in Sources */,
 				842067911E273A90003BC6DC /* jdmarker.c in Sources */,
@@ -1546,11 +1428,11 @@
 				84D0FEEA1E2751C100EC3FE5 /* inftrees.c in Sources */,
 				842067821E273A90003BC6DC /* jcparam.c in Sources */,
 				842067441E2738BC003BC6DC /* sqstdblob.cpp in Sources */,
+				8426E3AA1EF57712003E7053 /* NewGuiManager.cpp in Sources */,
 				842067381E2738A3003BC6DC /* SquirrelObject.cpp in Sources */,
 				842066EF1E273742003BC6DC /* date_generators.cpp in Sources */,
 				4CD41A3116C2D2490071E598 /* GLKViewTemplate.mm in Sources */,
 				4CD41A3216C2D2490071E598 /* ViewControllerTemplate.mm in Sources */,
-				4C8024BA16D4BDBC001A4521 /* Network.cpp in Sources */,
 				4C470853175405220069C707 /* JpegHelper.cpp in Sources */,
 				842067831E273A90003BC6DC /* jcprepct.c in Sources */,
 				8420670A1E2737DA003BC6DC /* pngrtran.c in Sources */,
@@ -1665,6 +1547,7 @@
 					"../../../libs/jpeg-9/vc10",
 					"../../../libs/jpeg-9",
 					"../../../libs/boost-gil-extension",
+					../../../eigen,
 				);
 				INSTALL_PATH = ./debug;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -1706,6 +1589,7 @@
 					"../../../libs/jpeg-9/vc10",
 					"../../../libs/jpeg-9",
 					"../../../libs/boost-gil-extension",
+					../../../eigen,
 				);
 				INSTALL_PATH = ./release;
 				OTHER_CPLUSPLUSFLAGS = (

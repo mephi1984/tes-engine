@@ -29,6 +29,8 @@ VBOObject::~VBOObject()
 
 	glDeleteBuffers(1, &Buffer);
 }
+    
+
 
 
 #endif
@@ -60,7 +62,8 @@ VBOObject::~VBOObject()
 
 	glDeleteBuffers(1, &Buffer);
 }
-
+    
+ 
 
 #endif
 
@@ -138,6 +141,12 @@ TTriangleListAncestor& TTriangleListAncestor::operator=(const TDataTriangleList&
 TTriangleListAncestor::~TTriangleListAncestor()
 {
 }
+    
+    
+    bool TTriangleListAncestor::VertBufferArrEmpty()
+    {
+        return false;
+    }
 
 
 #ifdef TARGET_WIN32
@@ -253,6 +262,12 @@ void TTriangleList::RefreshBuffer()
 		PerformInMainThreadAsync(std::bind(&TTriangleList::InnerRefreshBuffer, this));
 	}
 }
+    
+    
+    bool TTriangleList::VertBufferArrEmpty()
+    {
+        return VertBufferArr.size() == 0;
+    }
 
 #endif
 
@@ -371,6 +386,12 @@ void TTriangleList::RefreshBuffer()
 		PerformInMainThreadAsync(std::bind(&TTriangleList::InnerRefreshBuffer, this));
 	}
 }
+    
+    
+    bool TTriangleList::VertBufferArrEmpty()
+    {
+        return VertBufferArr.size() == 0;
+    }
 
 #endif
     
