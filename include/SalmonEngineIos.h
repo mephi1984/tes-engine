@@ -26,12 +26,12 @@ extern TApplication* App;
 
 
 template<typename APPTYPE>
-APPTYPE* AppInit(int width, int height)
+APPTYPE* AppInit(int width, int height, float matrixWidth, float matrixHeight)
 {
     CreateEngine();
     APPTYPE* result = new APPTYPE;
     App = result;
-    App->OuterInit(width, height, static_cast<float>(width), static_cast<float>(height));
+    App->OuterInit(width, height, matrixWidth, matrixHeight);
     
     return result;
 }
