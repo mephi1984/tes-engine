@@ -211,7 +211,7 @@
 		4C7BD6E616C28D3100BB8788 /* IosWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IosWrapper.h; sourceTree = "<group>"; };
 		4C8024B316D4BD9F001A4521 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
 		4C8024B416D4BD9F001A4521 /* SignalSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignalSender.h; sourceTree = "<group>"; };
-		4C8CE90215B0A0F400078175 /* libTesEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libTesEngine.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C8CE90215B0A0F400078175 /* libTesEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTesEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8CE90515B0A0F400078175 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C8CE91515B0A11A00078175 /* DataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataTypes.h; sourceTree = "<group>"; };
 		4C8CE91615B0A11A00078175 /* NewDataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDataTypes.h; sourceTree = "<group>"; };
@@ -494,7 +494,7 @@
 				4C8CE91215B0A0FB00078175 /* src */,
 				4C8CE90815B0A0F400078175 /* Supporting Files */,
 			);
-			path = "TesEngine";
+			path = TesEngine;
 			sourceTree = "<group>";
 		};
 		4C8CE90815B0A0F400078175 /* Supporting Files */ = {
