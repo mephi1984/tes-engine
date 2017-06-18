@@ -114,6 +114,8 @@ public:
 	~TTriangleList();
 
 	virtual void RefreshBuffer();
+
+	virtual bool VertBufferArrEmpty();
 	
 };
 
