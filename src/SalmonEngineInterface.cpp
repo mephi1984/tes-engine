@@ -130,7 +130,7 @@ void TApplicationAncestor::OuterDraw()
 
 	CheckGlError();
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 	glViewport(0, 0, Renderer->GetScreenWidth(), Renderer->GetScreenHeight());
@@ -144,14 +144,6 @@ void TApplicationAncestor::OuterDraw()
 	CheckGlError();
 	
 	InnerDraw();
-
-	CheckGlError();
-	
-	glDisable(GL_DEPTH_TEST);
-
-	Renderer->PushMatrix();
-	Renderer->PushOrthoProjection();
-	Renderer->LoadIdentity();
 
 	CheckGlError();
 
@@ -171,14 +163,8 @@ void TApplicationAncestor::OuterDraw()
 	{
 		Console->Draw();
 	}
-	
+
 	Renderer->PopShader();
-
-	CheckGlError();
-
-	Renderer->PopMatrix();
-	Renderer->PopProjectionMatrix();
-	glEnable(GL_DEPTH_TEST);
 
 	CheckGlError();
 }

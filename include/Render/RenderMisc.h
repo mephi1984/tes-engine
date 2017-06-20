@@ -186,7 +186,7 @@ public:
 
    
 
-void FillVertexCoordVec(std::vector<Vector3f>& coordVec, int pos, Vector2f posFrom, Vector2f posTo);
+void FillVertexCoordVec(std::vector<Vector3f>& coordVec, int pos, Vector2f posFrom, Vector2f posTo, float zLevel = 0);
 //Adds rect points (6 vertices) into coordVec
 
 void FillTexCoordVec(std::vector<Vector2f>& coordVec, int pos, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
@@ -201,13 +201,13 @@ void FillTexCoordVec_4Points(std::vector<Vector2f>& coordVec, int pos, Vector2f 
 std::vector<Vector4f> MakeColorCoordVec(Vector4f color);
 //Creates array of rect (6 colors)
 
-std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo);
+std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo, float zLevel);
 //Creates array of rect (6 vertices)
 
 std::vector<Vector2f> MakeTexCoordVec(Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Creates array of rect (6 tex coords)
 
-TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
+TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector4f color = Vector4f(1, 1, 1, 1), float zLevel = 0, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Creates a DataTriangleList just containing rect
 
 void MoveDataTriangleList(TDataTriangleList& triangleList, Vector3f shift);
@@ -236,7 +236,7 @@ void Replace6PointsInTriangleList_4Points(TDataTriangleList& triangleList, int p
 //Replaces one rect in triangleList at position pos by new rect. pos is position in array for first vertex of a rectangle
 
 
-TTriangleList MakeTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
+TTriangleList MakeTriangleList(Vector2f posFrom, Vector2f posTo, Vector4f color = Vector4f(1, 1, 1, 1), float zLevel = 0, Vector2f texCoordFrom = Vector2f(0,0), Vector2f texCoordTo = Vector2f(1,1));
 //Creates triangle list containing rect
 
 void CheckGlError(const std::string& msg = "");

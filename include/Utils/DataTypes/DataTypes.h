@@ -72,7 +72,7 @@ const float WhiteColor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 const float RedColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 const float NoColor[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-Matrix4f MakeOrthoMatrix(float width, float height);
+Matrix4f MakeOrthoMatrix(float width, float height, float zNear = 0, float zFar = 1.f);
 Matrix4f MakeFrustumMatrix(float left, float right, float bottom, float top, float nearVal, float farVal);
 Matrix4f MakePerspectiveMatrix(float angle, float aspect, float zNear, float zFar);
 

@@ -153,7 +153,7 @@ float TFontManager::DrawChar(Vector2f pos, size_t character)
 	return fontParams.Advance*scale_x;
 }
 
-float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList)
+float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList, float zLevel)
 {
 	//Also see DrawChar
 
@@ -182,7 +182,7 @@ float TFontManager::DrawCharToVBO(Vector2f pos, size_t character, TTriangleList&
 	Vector2f t1 = Vector2f(fontParams.ShiftX, 1 - fontParams.ShiftY - fontParams.BitmapHeight - fontParams.InternalShiftY);
 	Vector2f t2 = Vector2f(fontParams.ShiftX + fontParams.BitmapWidth, 1 - fontParams.ShiftY - fontParams.InternalShiftY);
 
-	triangleList.Data += MakeDataTriangleList(p1, p2, t1, t2);
+	triangleList.Data += MakeDataTriangleList(p1, p2, Vector4f(1, 1, 1, 1), zLevel, t1, t2);
 	
 	return fontParams.Advance * scale_x;
 }
@@ -308,7 +308,7 @@ Vector2f TFontManager::FitStringToBoxWithWordWrap(Vector2f posFrom, Vector2f pos
 
 }
 
-TTriangleList TFontManager::DrawStringToVBO(Vector2f realPos, TTextBasicAreaParams params, const std::string& str)
+TTriangleList TFontManager::DrawStringToVBO(Vector2f realPos, TTextBasicAreaParams params, const std::string& str, float zLevel)
 {
 
 	std::wstring ws;
@@ -346,7 +346,7 @@ TTriangleList TFontManager::DrawStringToVBO(Vector2f realPos, TTextBasicAreaPara
 
         for (size_t i=0; i<rowStr.size(); i++)
         {
-            width = DrawCharToVBO(realPos, rowStr[i], triangleList);            
+            width = DrawCharToVBO(realPos, rowStr[i], triangleList, zLevel);            
 			realPos(0) += width;
         }
 
@@ -362,7 +362,7 @@ TTriangleList TFontManager::DrawStringToVBO(Vector2f realPos, TTextBasicAreaPara
 
 void TFontManager::DrawString(Vector2f pos, TTextBasicAreaParams params, const std::string& str)
 {
-	TTriangleList triangleList = DrawStringToVBO(pos, params, str);
+	TTriangleList triangleList = DrawStringToVBO(pos, params, str, 0);
 
 	Renderer->DrawTriangleList(triangleList);
 
@@ -384,7 +384,7 @@ void TFontManager::DrawTextInBox(Vector2f posFrom, Vector2f posTo, TTextBasicAre
 	DrawString(realPosFrom, params, str);
 }
 
-TTriangleList TFontManager::DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap)
+TTriangleList TFontManager::DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap, float zLevel)
 {
 	// realPosFrom is the left top corner of the rectangle containing the text
 	Vector2f realPosFrom;
@@ -397,7 +397,7 @@ TTriangleList TFontManager::DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo,
 		throw ErrorToLog("Word wrap not supported!");
 		//realPosFrom = FitStringToBox(posFrom, posTo, params, str);
 	}
-	return DrawStringToVBO(realPosFrom, params, str);
+	return DrawStringToVBO(realPosFrom, params, str, zLevel);
 }
 
 } //namespace SE

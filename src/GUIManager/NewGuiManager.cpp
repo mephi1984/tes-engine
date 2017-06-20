@@ -9,12 +9,7 @@
 
 namespace SE
 {
-
     
-    const size_t EditText::CURSOR_WIDTH = 2;
-    const size_t EditText::CURSOR_FLASHING_HALFPERIOD_MS = 500;
-    
-
 	//==== Simple visitor solution from Habrahabr's user 0xd34df00d =======
 
 	namespace detail
@@ -114,6 +109,7 @@ namespace SE
 		, visible(true)
 		, childrenHA(HA_LEFT)
 		, childrenVA(VA_TOP)
+		, zLevel(0)
 	{
 		extraTranslation << 0.f, 0.f;
 		background = Vector4f(1, 1, 1, 1);
@@ -124,6 +120,11 @@ namespace SE
 	WidgetAncestor::~WidgetAncestor()
 	{
 
+	}
+
+	void WidgetAncestor::setZLevel(float Zlevel)
+	{
+		this->zLevel = Zlevel;
 	}
 
 	void WidgetAncestor::setVisibility(bool visible)
@@ -171,7 +172,7 @@ namespace SE
 		UpdateRenderPair();
 	}
 
-	std::vector<Vector3f> WidgetAncestor::MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo)
+	std::vector<Vector3f> WidgetAncestor::MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo, float zLevel)
 	{
 		std::vector<Vector3f> result(8);
 
@@ -180,14 +181,14 @@ namespace SE
 		Vector2f pos3 = posTo;
 		Vector2f pos4 = Vector2f(posTo(0), posFrom(1));
 
-		result[0] << pos1, 0;
-		result[1] << pos2, 0;
-		result[2] << pos2, 0;
-		result[3] << pos3, 0;
-		result[4] << pos3, 0;
-		result[5] << pos4, 0;
-		result[6] << pos4, 0;
-		result[7] << pos1, 0;
+		result[0] << pos1, zLevel;
+		result[1] << pos2, zLevel;
+		result[2] << pos2, zLevel;
+		result[3] << pos3, zLevel;
+		result[4] << pos3, zLevel;
+		result[5] << pos4, zLevel;
+		result[6] << pos4, zLevel;
+		result[7] << pos1, zLevel;
 
 		return result;
 	}
@@ -202,13 +203,15 @@ namespace SE
 		return std::vector<Vector2f>(8, Vector2f(0,0));
 	}
 
-	TDataTriangleList WidgetAncestor::MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color)
+	TTriangleList WidgetAncestor::MakeTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color, float zLevel)
 	{
-		TDataTriangleList triangleList;
+		TTriangleList triangleList;
 
-		triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorVecOfBorders(color);
-		triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo);
-		triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVecOfBorders();
+		triangleList.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorVecOfBorders(color);
+		triangleList.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVecOfBorders(posFrom, posTo, zLevel);
+		triangleList.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVecOfBorders();
+
+		triangleList.RefreshBuffer();
 
 		return triangleList;
 	}
@@ -233,35 +236,40 @@ namespace SE
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
 
+		renderPair.first.semiTransparent = color[3] < 1;
+		renderPair.first.fullyTransparent = color[3] == 0;
 		renderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		renderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+		renderPair.second = MakeTriangleList(posFrom, posTo, color, zLevelAbsolute);
 
-		for (auto& colorVec : renderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-
-		renderPair.second.RefreshBuffer();
-
+		bordersRenderPair.first.semiTransparent = color[3] < 1;
+		bordersRenderPair.first.fullyTransparent = color[3] == 0;
 		bordersRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
-		bordersRenderPair.second.Data = MakeDataTriangleListOfBorders(posFrom, posTo, borderColor);
+		bordersRenderPair.second = MakeTriangleListOfBorders(posFrom, posTo, borderColor, zLevelAbsolute + 0.8f);
 		
-		bordersRenderPair.second.RefreshBuffer();
 	}
 
 	void WidgetAncestor::Draw()
 	{
-		TRenderParamsSetter render1(renderPair.first);
-		Renderer->DrawTriangleList(renderPair.second);
-
-		CheckGlError();
-		
-		if (borderType == BorderType::BT_LINE)
+		if (!renderPair.first.fullyTransparent)
 		{
+			if (renderPair.first.semiTransparent) glDepthMask(false);
+
+			TRenderParamsSetter render1(renderPair.first);
+			Renderer->DrawTriangleList(renderPair.second);
+			CheckGlError();
+
+			if (renderPair.first.semiTransparent) glDepthMask(true);
+		}
+		
+		if (borderType == BorderType::BT_LINE && !bordersRenderPair.first.fullyTransparent)
+		{
+			if (bordersRenderPair.first.semiTransparent) glDepthMask(false);
+
 			TRenderParamsSetter render2(bordersRenderPair.first);
 			Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
-
 			CheckGlError();
+
+			if (bordersRenderPair.first.semiTransparent) glDepthMask(true);
 		}
 	}
 	
@@ -311,6 +319,15 @@ namespace SE
 				child->calculatedInnerWidth = child->calcInnerWidth();
 			}
 			child->shareLeftoverWidthBetweenChildren();
+		}
+	}
+
+	void WidgetAncestor::setChildrenZLevel()
+	{
+		for (auto &child : children)
+		{
+			child->zLevelAbsolute = zLevelAbsolute + child->zLevel + 1;
+			child->setChildrenZLevel();
 		}
 	}
 
@@ -365,7 +382,8 @@ namespace SE
 	{
 		return Visit(background,
 			[this](Vector4f color) { return 0.f; },
-			[this](std::string textureName) { return ResourceManager->TexList.GetTextureWidth(textureName); }) +
+			[this](std::string textureName) { return //textureName == "white.bmp" ? 0 : 
+			ResourceManager->TexList.GetTextureWidth(textureName); }) +
 			paddingLeft + paddingRight + marginLeft + marginRight;
 	}
 
@@ -373,7 +391,8 @@ namespace SE
 	{
 		return Visit(background,
 			[this](Vector4f color) { return 0.f; },
-			[this](std::string textureName) { return ResourceManager->TexList.GetTextureHeight(textureName); }) +
+			[this](std::string textureName) { return //textureName == "white.bmp" ? 0 : 
+			ResourceManager->TexList.GetTextureHeight(textureName); }) +
 			paddingBottom + paddingTop + marginTop + marginBottom;
 	}
 
@@ -2407,10 +2426,16 @@ namespace SE
 	{
 		WidgetAncestor::Draw();
 
-		TRenderParamsSetter render(textRenderPair.first);
-		Renderer->DrawTriangleList(textRenderPair.second);
+		if (!textRenderPair.first.fullyTransparent)
+		{
+			if (textRenderPair.first.semiTransparent) glDepthMask(false);
 
-		CheckGlError();
+			TRenderParamsSetter render(textRenderPair.first);
+			Renderer->DrawTriangleList(textRenderPair.second);
+			CheckGlError();
+
+			if (textRenderPair.first.semiTransparent) glDepthMask(true);
+		}
 	}
 
 
@@ -2454,7 +2479,7 @@ namespace SE
 			ResourceManager->FontManager.FitStringToBoxWithWordWrap(posFrom, posTo, textParams.BasicTextAreaParams, wrapped_text, textParams.FontName);
 
 		textRenderPair.second =
-			ResourceManager->FontManager.DrawStringToVBO(realPosFrom, textParams.BasicTextAreaParams, wrapped_text);
+			ResourceManager->FontManager.DrawStringToVBO(realPosFrom, textParams.BasicTextAreaParams, wrapped_text, zLevelAbsolute + 0.5);
 
 		textRenderPair.second.RefreshBuffer();
 
@@ -2562,15 +2587,10 @@ namespace SE
 
 		pressedMaxAlpha = isTexture ? 1.f : color(3);
 
+		pressedRenderPair.first.semiTransparent = pressedMaxAlpha < 1;
+		pressedRenderPair.first.fullyTransparent = pressedMaxAlpha == 0;
 		pressedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		pressedRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
-
-		for (auto& colorVec : pressedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec << color(0), color(1), color(2), 0;
-		}
-
-		pressedRenderPair.second.RefreshBuffer();
+		pressedRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(color[0], color[1], color[2], 0), zLevelAbsolute);
 
 		isTexture = Visit(hoverDrawable,
 			[this](Vector4f color) { return false; },
@@ -2586,39 +2606,48 @@ namespace SE
 
 		hoverMaxAlpha = isTexture ? 1.f : color(3);
 
+		hoverRenderPair.first.semiTransparent = hoverMaxAlpha < 1;
+		hoverRenderPair.first.fullyTransparent = hoverMaxAlpha == 0;
 		hoverRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		hoverRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
-
-		for (auto& colorVec : hoverRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec << color(0), color(1), color(2), 0;
-		}
-
-		hoverRenderPair.second.RefreshBuffer();
+		hoverRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(color[0], color[1], color[2], 0), zLevelAbsolute);
 	}
 
 	void Button::Draw()
 	{
 		WidgetAncestor::Draw();
 
-		TRenderParamsSetter render2(hoverRenderPair.first);
-		Renderer->DrawTriangleList(hoverRenderPair.second);
+		if (!hoverRenderPair.first.fullyTransparent)
+		{
+			if (hoverRenderPair.first.semiTransparent) glDepthMask(false);
 
-		CheckGlError();
+			TRenderParamsSetter render1(hoverRenderPair.first);
+			Renderer->DrawTriangleList(hoverRenderPair.second);
+			CheckGlError();
 
+			if (hoverRenderPair.first.semiTransparent) glDepthMask(true);
+		}
 
-		TRenderParamsSetter render1(pressedRenderPair.first);
+		if (!pressedRenderPair.first.fullyTransparent)
+		{
+			if (pressedRenderPair.first.semiTransparent) glDepthMask(false);
 
-		Renderer->DrawTriangleList(pressedRenderPair.second);
+			TRenderParamsSetter render2(pressedRenderPair.first);
+			Renderer->DrawTriangleList(pressedRenderPair.second);
+			CheckGlError();
 
-		CheckGlError();
+			if (pressedRenderPair.first.semiTransparent) glDepthMask(true);
+		}
 
+		if (!textRenderPair.first.fullyTransparent)
+		{
+			if (textRenderPair.first.semiTransparent) glDepthMask(false);
 
-		TRenderParamsSetter render3(textRenderPair.first);
+			TRenderParamsSetter render3(textRenderPair.first);
+			Renderer->DrawTriangleList(textRenderPair.second);
+			CheckGlError();
 
-		Renderer->DrawTriangleList(textRenderPair.second);
-
-		CheckGlError();
+			if (textRenderPair.first.semiTransparent) glDepthMask(true);
+		}
 	}
 
 	void Button::Update(size_t dt)
@@ -2819,25 +2848,15 @@ namespace SE
 		Vector2f posFrom = shift;
 		Vector2f posTo = shift + Vector2f(getDrawWidth(), getDrawHeight());
 
+		checkedRenderPair.first.semiTransparent = false;
+		checkedRenderPair.first.fullyTransparent = false;
 		checkedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = checkedSkin;
-		checkedRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
+		checkedRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(1, 1, 1, 1), zLevelAbsolute);
 
-		for (auto& colorVec : checkedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = { 1, 1, 1, 1 };
-		}
-
-		checkedRenderPair.second.RefreshBuffer();
-
+		uncheckedRenderPair.first.semiTransparent = false;
+		uncheckedRenderPair.first.fullyTransparent = false;
 		uncheckedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = uncheckedSkin;
-		uncheckedRenderPair.second.Data = MakeDataTriangleList(posFrom, posTo);
-
-		for (auto& colorVec : uncheckedRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = { 1, 1, 1, 1 };
-		}
-
-		uncheckedRenderPair.second.RefreshBuffer();
+		uncheckedRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(1, 1, 1, 1), zLevelAbsolute);
 	}
 
 	void CheckBox::Draw()
@@ -2848,14 +2867,14 @@ namespace SE
 		{
 			TRenderParamsSetter render(checkedRenderPair.first);
 			Renderer->DrawTriangleList(checkedRenderPair.second);
+			CheckGlError();
 		}
 		else
 		{
 			TRenderParamsSetter render(uncheckedRenderPair.first);
 			Renderer->DrawTriangleList(uncheckedRenderPair.second);
+			CheckGlError();
 		}
-
-		CheckGlError();
 	}
 
 	bool CheckBox::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2872,6 +2891,9 @@ namespace SE
 
 
 	//=======================================
+
+	const size_t EditText::CURSOR_WIDTH = 2;
+	const size_t EditText::CURSOR_FLASHING_HALFPERIOD_MS = 500;
 
 	EditText::EditText(WidgetParentInterface& widgetParent)
 		: Label(widgetParent),
@@ -2905,7 +2927,7 @@ namespace SE
 		cursorRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
 
 		cursorRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVec(Vector4f(0, 0, 0, 1));
-		cursorRenderPair.second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVec(posFrom, posTo);
+		cursorRenderPair.second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVec(posFrom, posTo, zLevelAbsolute + 0.5);
 		cursorRenderPair.second.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec(Vector2f(0,0), Vector2f(1, 1));
 
 		cursorRenderPair.second.RefreshBuffer();
@@ -3095,15 +3117,10 @@ namespace SE
 		from_point += shift;
 		to_point += shift;
 
+		trackRenderPair.first.semiTransparent = false;
+		trackRenderPair.first.fullyTransparent = false;
 		trackRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		trackRenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
-
-		for (auto& colorVec : trackRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-
-		trackRenderPair.second.RefreshBuffer();
+		trackRenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 
 		isTexture = Visit(buttonSkin,
 			[this](Vector4f color) { return false; },
@@ -3134,15 +3151,10 @@ namespace SE
 		from_point += shift;
 		to_point += shift;
 
+		buttonRenderPair.first.semiTransparent = false;
+		buttonRenderPair.first.fullyTransparent = false;
 		buttonRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		buttonRenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
-
-		for (auto& colorVec : buttonRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-
-		buttonRenderPair.second.RefreshBuffer();
+		buttonRenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 	}
 
 	void HorizontalSlider::setPosition(int position)
@@ -3260,7 +3272,6 @@ namespace SE
 
 		TRenderParamsSetter render1(trackRenderPair.first);
 		Renderer->DrawTriangleList(trackRenderPair.second);
-
 		CheckGlError();
 
 
@@ -3275,11 +3286,9 @@ namespace SE
 
 		TRenderParamsSetter render2(buttonRenderPair.first);
 		Renderer->DrawTriangleList(buttonRenderPair.second);
-
-		Renderer->PopMatrix();
-
 		CheckGlError();
 
+		Renderer->PopMatrix();
 	}
 
 	bool HorizontalSlider::isPointAboveTrack(Vector2f point)
@@ -3369,15 +3378,10 @@ namespace SE
 		from_point += shift;
 		to_point += shift;
 
+		trackRenderPair.first.semiTransparent = false;
+		trackRenderPair.first.fullyTransparent = false;
 		trackRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		trackRenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
-
-		for (auto& colorVec : trackRenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-
-		trackRenderPair.second.RefreshBuffer();
+		trackRenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 
 		isTexture = Visit(button1Skin,
 			[this](Vector4f color) { return false; },
@@ -3409,14 +3413,7 @@ namespace SE
 		to_point += shift;
 
 		button1RenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		button1RenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
-
-		for (auto& colorVec : button1RenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-
-		button1RenderPair.second.RefreshBuffer();
+		button1RenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 
 		isTexture = Visit(button2Skin,
 			[this](Vector4f color) { return false; },
@@ -3448,14 +3445,7 @@ namespace SE
 		to_point += shift;
 
 		button2RenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
-		button2RenderPair.second.Data = MakeDataTriangleList(from_point, to_point);
-
-		for (auto& colorVec : button2RenderPair.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB])
-		{
-			colorVec = color;
-		}
-
-		button2RenderPair.second.RefreshBuffer();
+		button2RenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 	}
 
 	void HorizontalDoubleSlider::Draw()
@@ -3742,6 +3732,10 @@ namespace SE
 	}
 
 	//======================================
+
+	const int NewGuiManager::UI_RENDERING_ZNEAR = 0;
+	const int NewGuiManager::UI_RENDERING_ZFAR = 1000;
+	const int NewGuiManager::UI_RENDERING_ZSTART = 100;
 	
 	NewGuiManager::NewGuiManager()
 		: inited(false)
@@ -3794,6 +3788,11 @@ namespace SE
 
 	void NewGuiManager::Draw()
 	{
+		glEnable(GL_DEPTH_TEST);
+		glClearDepth(1.f);
+
+		Renderer->PushProjectionMatrix(Renderer->GetMatrixWidth(), Renderer->GetMatrixHeight(), UI_RENDERING_ZNEAR, UI_RENDERING_ZFAR);
+
 		for (auto &child : children)
 		{
 			if (!child->visible)
@@ -3802,6 +3801,8 @@ namespace SE
 			}
 			child->Draw();
 		}
+
+		Renderer->PopProjectionMatrix();
 	}
 
 	bool NewGuiManager::OnMouseDown(Vector2f pos, int touchNumber)
@@ -3978,6 +3979,15 @@ namespace SE
 		shareLeftoverHeightBetweenChildren();
 	}
 
+	void NewGuiManager::setChildrenZLevel()
+	{
+		for (auto &child : children)
+		{
+			child->zLevelAbsolute = UI_RENDERING_ZSTART + child->zLevel;
+			child->setChildrenZLevel();
+		}
+	}
+
 	void NewGuiManager::shareLeftoverHeightBetweenChildren()
 	{
 		if (children.size() == 0) return;
@@ -4024,8 +4034,8 @@ namespace SE
 
 		AddWidgetsRecursively(*this, children, ptree.get_child("widgets"));
 
+		setChildrenZLevel(); // before UpdateRenderPair
 		UpdateOnWindowResize();
-
 	}
 
 	void NewGuiManager::AddWidgetsRecursively(WidgetParentInterface& parentWidget, std::vector<std::shared_ptr<WidgetAncestor>>& widgetArr, boost::property_tree::ptree& ptree)
@@ -4216,9 +4226,11 @@ namespace SE
 
 			widget->name = pWidgetRecord.second.get<std::string>("name", "");
 
-			widget->setPadding(pWidgetRecord.second.get<float>("paddingTop", 0.f), pWidgetRecord.second.get<float>("paddingBottom", 0.f), pWidgetRecord.second.get<float>("paddingLeft", 0.f), pWidgetRecord.second.get<float>("paddingRight", 0.f));
+			widget->setPadding(pWidgetRecord.second.get<float>("paddingTop", 0.f), pWidgetRecord.second.get<float>("paddingBottom", 0.f),
+				pWidgetRecord.second.get<float>("paddingLeft", 0.f), pWidgetRecord.second.get<float>("paddingRight", 0.f));
 
-			widget->setMargin(pWidgetRecord.second.get<float>("marginTop", 0.f), pWidgetRecord.second.get<float>("marginBottom", 0.f), pWidgetRecord.second.get<float>("marginLeft", 0.f), pWidgetRecord.second.get<float>("marginRight", 0.f));
+			widget->setMargin(pWidgetRecord.second.get<float>("marginTop", 0.f), pWidgetRecord.second.get<float>("marginBottom", 0.f),
+				pWidgetRecord.second.get<float>("marginLeft", 0.f), pWidgetRecord.second.get<float>("marginRight", 0.f));
 			
 			widget->setExtraTranslation(pWidgetRecord.second.get<float>("extraTranslationX", 0.f), pWidgetRecord.second.get<float>("extraTranslationY", 0.f));
 
@@ -4235,6 +4247,8 @@ namespace SE
 			widget->setChildrenHorizontalAlignment(layoutHorizontalAlignmentFromConfigValue(pWidgetRecord.second.get<std::string>("horizontalAlignment", "HA_LEFT")));
 
 			widget->setChildrenVerticalAlignment(layoutVerticalAlignmentFromConfigValue(pWidgetRecord.second.get<std::string>("verticalAlignment", "VA_TOP")));
+
+			widget->setZLevel(pWidgetRecord.second.get<float>("zLevel", 0));
 			
 			widget->visible = pWidgetRecord.second.get<int>("visible", 1);
 			

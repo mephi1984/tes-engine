@@ -23,7 +23,8 @@ namespace SE
 		virtual void recalculateInnerHeight() = 0;
 
 		virtual void shareLeftoverWidthBetweenChildren() = 0;
-		virtual void shareLeftoverHeightBetweenChildren() = 0;		
+		virtual void shareLeftoverHeightBetweenChildren() = 0;
+		virtual void setChildrenZLevel() = 0;
 
 		virtual void UpdateRenderPair() = 0;
 
@@ -82,7 +83,6 @@ namespace SE
 		boost::variant<std::string, Vector4f> background;
 		
 		Vector4f borderColor;
-		
 		BorderType borderType;
 
 		TRenderPair renderPair, bordersRenderPair;
@@ -94,6 +94,9 @@ namespace SE
 
 		float calculatedInnerWidth;
 		float calculatedInnerHeight;
+
+		float zLevel;
+		float zLevelAbsolute;
 
 		bool inited;
 
@@ -133,10 +136,10 @@ namespace SE
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
 		
-		std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo);
+		std::vector<Vector3f> MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo, float zLevel = 0);
 		std::vector<Vector4f> MakeColorVecOfBorders(Vector4f color);
 		std::vector<Vector2f> MakeTexCoordVecOfBorders();
-		TDataTriangleList MakeDataTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color);
+		TTriangleList MakeTriangleListOfBorders(Vector2f posFrom, Vector2f posTo, Vector4f color, float zLevel = 0);
 			
 		virtual void UpdateRenderPair();
 
@@ -169,7 +172,9 @@ namespace SE
 
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
+		virtual void setChildrenZLevel();
 
+		virtual void setZLevel(float zLevel);
 		virtual void setBackground(boost::variant<std::string, Vector4f> background);
 		virtual void setBorderColor(Vector4f color);
 		virtual void setBorderType(BorderType newBorderType);
@@ -681,12 +686,13 @@ namespace SE
 		TRenderPair BackgroundRenderPair;
 
 	public:
-
+		
+		const static int UI_RENDERING_ZNEAR;
+		const static int UI_RENDERING_ZFAR;
+		const static int UI_RENDERING_ZSTART; // allows to draw behind all other widgets, if needed (now is 100)
 		
 		NewGuiManager();
-
 		~NewGuiManager();
-
 
 		float getHeight();
 		float getWidth();
@@ -717,6 +723,7 @@ namespace SE
 
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
+		virtual void setChildrenZLevel();
 
 		virtual void UpdateRenderPair();
 		virtual void UpdateOnWindowResize();

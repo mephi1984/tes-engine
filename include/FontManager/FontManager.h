@@ -152,7 +152,7 @@ protected:
 	std::stack<std::string> FontStack;
 
 	float DrawChar(Vector2f pos, size_t character);
-	float DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList);
+	float DrawCharToVBO(Vector2f pos, size_t character, TTriangleList& triangleList, float zLevel = 0);
 
 public:
 	TFontManager() { }
@@ -169,14 +169,14 @@ public:
 
 	void DrawString(Vector2f pos, TTextBasicAreaParams params, const std::string& str);
 	
-	TTriangleList DrawStringToVBO(Vector2f pos, TTextBasicAreaParams params, const std::string& str);
+	TTriangleList DrawStringToVBO(Vector2f pos, TTextBasicAreaParams params, const std::string& str, float zLevel = 0);
 	
 	void DrawTextInBox(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
 
 	std::string GetCurrentFontName();
 	std::string GetCurrentFontTextureName();
 
-	TTriangleList DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true);
+	TTriangleList DrawTextInBoxToVBO(Vector2f posFrom, Vector2f posTo, TTextBasicAreaParams params, std::string str, bool wordWrap = true, float zLevel = 0);
 
 
 template<typename CHARTYPE>

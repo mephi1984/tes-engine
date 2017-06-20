@@ -80,7 +80,7 @@ public:
     virtual void PopMatrix();
 
 	virtual void SetProjectionMatrix(float width, float height);
-    virtual void PushProjectionMatrix(float width, float height);
+    virtual void PushProjectionMatrix(float width, float height, float zNear = 0.f, float zFar = 1.f);
 	virtual void PushProjectionMatrix(const Matrix4f& m);
     virtual void PopProjectionMatrix();
 

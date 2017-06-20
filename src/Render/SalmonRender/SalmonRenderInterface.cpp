@@ -102,6 +102,7 @@ void TSalmonRendererInterface::InitOpenGL(int screenWidth, int screenHeight, flo
 	#endif
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthFunc(GL_LEQUAL);
 
 	CheckGlError();
 
@@ -390,9 +391,9 @@ void TSalmonRendererInterface::PopMatrix()
 	SetMatrix();
 }
 
-void TSalmonRendererInterface::PushProjectionMatrix(float width, float height)
+void TSalmonRendererInterface::PushProjectionMatrix(float width, float height, float zNear, float zFar)
 {
-    Matrix4f m = MakeOrthoMatrix(width, height);
+    Matrix4f m = MakeOrthoMatrix(width, height, zNear, zFar);
     ProjectionMatrixStack.push(m);
 	SetMatrix();
     

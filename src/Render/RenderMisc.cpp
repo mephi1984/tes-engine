@@ -148,7 +148,6 @@ TTriangleListAncestor::~TTriangleListAncestor()
         return false;
     }
 
-
 #ifdef TARGET_WIN32
 
 TTriangleList::TTriangleList()
@@ -395,19 +394,19 @@ void TTriangleList::RefreshBuffer()
 
 #endif
     
-void FillVertexCoordVec(std::vector<Vector3f>& coordVec, int pos, Vector2f posFrom, Vector2f posTo)
+void FillVertexCoordVec(std::vector<Vector3f>& coordVec, int pos, Vector2f posFrom, Vector2f posTo, float zLevel)
 {
     Vector2f pos1 = posFrom;
 	Vector2f pos2 = Vector2f(posFrom(0), posTo(1));
 	Vector2f pos3 = posTo;
 	Vector2f pos4 = Vector2f(posTo(0), posFrom(1));
     
-    coordVec[pos] << pos1, 0;
-	coordVec[pos + 1] << pos2, 0;
-	coordVec[pos + 2] << pos3, 0;
-	coordVec[pos + 3] << pos3, 0;
-	coordVec[pos + 4] << pos4, 0;
-	coordVec[pos + 5] << pos1, 0;
+    coordVec[pos] << pos1, zLevel;
+	coordVec[pos + 1] << pos2, zLevel;
+	coordVec[pos + 2] << pos3, zLevel;
+	coordVec[pos + 3] << pos3, zLevel;
+	coordVec[pos + 4] << pos4, zLevel;
+	coordVec[pos + 5] << pos1, zLevel;
 
 }
     
@@ -464,12 +463,12 @@ std::vector<Vector4f> MakeColorCoordVec(Vector4f color)
 	return r;
 }
 
-std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo)
+std::vector<Vector3f> MakeVertexCoordVec(Vector2f posFrom, Vector2f posTo, float zLevel)
 {
 	std::vector<Vector3f> r;
     r.resize(6);
     
-    FillVertexCoordVec(r, 0, posFrom, posTo);
+    FillVertexCoordVec(r, 0, posFrom, posTo, zLevel);
 
 	return r;
 }
@@ -484,12 +483,12 @@ std::vector<Vector2f> MakeTexCoordVec(Vector2f texCoordFrom, Vector2f texCoordTo
 }
 
 
-TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom, Vector2f texCoordTo)
+TDataTriangleList MakeDataTriangleList(Vector2f posFrom, Vector2f posTo, Vector4f color, float zLevel, Vector2f texCoordFrom, Vector2f texCoordTo)
 {
 	TDataTriangleList triangleList;
 
-	triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVec(Vector4f(1,1,1,1));
-	triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVec(posFrom, posTo);
+	triangleList.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB] = MakeColorCoordVec(color);
+	triangleList.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB] = MakeVertexCoordVec(posFrom, posTo, zLevel);
 	triangleList.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB] = MakeTexCoordVec(texCoordFrom, texCoordTo);
 
 	return triangleList;
@@ -579,11 +578,11 @@ TDataTriangleList& InsertIntoDataTriangleList(TDataTriangleList& triangleList, c
 }
 
 
-TTriangleList MakeTriangleList(Vector2f posFrom, Vector2f posTo, Vector2f texCoordFrom, Vector2f texCoordTo)
+TTriangleList MakeTriangleList(Vector2f posFrom, Vector2f posTo, Vector4f color, float zLevel, Vector2f texCoordFrom, Vector2f texCoordTo)
 {
 	TTriangleList triangleList;
 
-	triangleList.Data = MakeDataTriangleList(posFrom, posTo, texCoordFrom, texCoordTo);
+	triangleList.Data = MakeDataTriangleList(posFrom, posTo, color, zLevel, texCoordFrom, texCoordTo);
 
 	triangleList.RefreshBuffer();
 

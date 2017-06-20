@@ -46,8 +46,12 @@ namespace std {
 namespace SE
 {
 
-Matrix4f MakeOrthoMatrix(float width, float height)
+Matrix4f MakeOrthoMatrix(float width, float height, float zNear, float zFar)
 {
+	float depthRange = zFar - zNear;
+
+	if (depthRange <= 0) ErrorToLog("zFar must be greater than zNear");
+
 	Matrix4f r;
 	r(0) = 2.f / width;
 	r(1) = 0;
@@ -61,12 +65,12 @@ Matrix4f MakeOrthoMatrix(float width, float height)
 	
 	r(8) = 0;
 	r(9) = 0;
-	r(10) = -1;
+	r(10) = -1 / depthRange;
 	r(11) = 0;
 	
 	r(12) = -1;
 	r(13) = -1;
-	r(14) = 0;
+	r(14) = zNear / depthRange; 
 	r(15) = 1;
 	
 	return r;

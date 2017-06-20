@@ -24,6 +24,9 @@ struct TRenderParams : public TSerializeInterface
 {
 	std::string ShaderName;
 
+	bool fullyTransparent; // do not draw
+	bool semiTransparent; // to set glDepthMask(false)
+
 	mutable std::map<std::string, std::string> SamplerMap;
 	mutable std::map<std::string, float> FloatMap;
 	mutable std::map<std::string, Vector4f> Vec4Map;
