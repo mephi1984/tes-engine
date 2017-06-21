@@ -364,8 +364,56 @@ namespace SE
 
 	};
 
+	class FlingGestureInterface
+	{
+	private:
+		static const size_t ACCELERATION_AWAITING_MS; // time between OnMouseDown & OnMouseUpAfterMove for acceleration of current speed
+		static const float DECELERATION_PER_MS;
+		static const float OFFSET_THRESHOLD; // stop, if there was a tap down, not scrolling
+		static const float ACCELERATION_RATIO_PER_SPEED_UNIT; // allows to accelerate scrolling infinitely ...
+		static const float DECELERATION_RATIO_PER_SPEED_UNIT; // but as scrolling is faster as deceleration is greater
+		static const float EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS; // to block tap events if scrollable widget is accelerated too much
+		static const size_t TRACK_RECORD_SIZE; // to remember several previous offsets to find average for smoothing
+		static const size_t TRACK_RECORD_TIME_MS; // to trunc old OnMove offsets
+		static const float BOUNCING_BRAKING_PER_TRESPASSING_UNIT; // as more we outside as braking is greater
+		static const float BOUNCING_WALL; // you shall not pass
 
-	class VerticalScrollLayout : public VerticalLinearLayout
+		float flingOffset = 0;
+		size_t flingTimer = 0;
+		size_t flingTimerOld = 0;
+		bool flingAwaiting = false;
+		bool ignoreEvents = false;
+
+		size_t bottom;
+		size_t top;
+		float bouncingMax;
+
+		bool recordIsCycled = false;
+		std::list<std::pair<float, float>>::iterator recordIndex;
+		std::list<std::pair<float, float>> trackRecord;
+
+		inline float calculateSmoothedFlingSpeed();
+
+	protected:
+		FlingGestureInterface();
+
+	public:
+
+		float speed = 0; // per millisecond
+		bool bouncingEffect;
+
+		inline bool isTapEventsBlockedByFlingerGesture();
+
+		void setBounds(size_t bottom, size_t top);
+
+		void FlingGestureOnTapDown();
+		void FlingGestureOnUpdate(size_t dt, float currentScrollPosition);
+		void FlingGestureOnMove(float delta);
+		void FlingGestureOnTapUp();
+	};
+
+
+	class VerticalScrollLayout : public VerticalLinearLayout, public FlingGestureInterface
 	{
 	protected:
 
@@ -384,13 +432,17 @@ namespace SE
 
 		virtual bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
 
+		virtual void Update(size_t dt);
+
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 		virtual void OnMouseMoveOutside();
 
 		virtual void OnMouseMove(Vector2f pos);
+
+		virtual void UpdateRenderPair();
 	};
 
-	class HorizontalScrollLayout : public HorizontalLinearLayout
+	class HorizontalScrollLayout : public HorizontalLinearLayout, public FlingGestureInterface
 	{
 	protected:
 

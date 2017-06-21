@@ -1895,6 +1895,177 @@ namespace SE
 
 	//=======================================
 
+	const size_t FlingGestureInterface::ACCELERATION_AWAITING_MS = 250;
+	const float FlingGestureInterface::DECELERATION_PER_MS = 0.0005f;
+	const float FlingGestureInterface::OFFSET_THRESHOLD = 20.f;
+	const float FlingGestureInterface::ACCELERATION_RATIO_PER_SPEED_UNIT = 0.f;
+	const float FlingGestureInterface::DECELERATION_RATIO_PER_SPEED_UNIT = 2.f;
+	const float FlingGestureInterface::EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS = 0.1f;
+	const size_t FlingGestureInterface::TRACK_RECORD_SIZE = 4;
+	const size_t FlingGestureInterface::TRACK_RECORD_TIME_MS = 100;
+	const float FlingGestureInterface::BOUNCING_BRAKING_PER_TRESPASSING_UNIT = 0.01f;
+	const float FlingGestureInterface::BOUNCING_WALL = 50;
+
+	FlingGestureInterface::FlingGestureInterface()
+	{
+		trackRecord.resize(TRACK_RECORD_SIZE);
+		recordIndex = trackRecord.begin();
+	}
+
+	bool FlingGestureInterface::isTapEventsBlockedByFlingerGesture()
+	{
+		return ignoreEvents;
+	}
+
+	void FlingGestureInterface::setBounds(size_t bottom, size_t top)
+	{
+		this->bottom = bottom;
+		this->top = top;
+	}
+
+	float FlingGestureInterface::calculateSmoothedFlingSpeed()
+	{
+		size_t count = 0;
+		float sum = 0;
+
+		std::reverse_iterator<std::list<std::pair<float, float>>::iterator> recordEnd(recordIndex);
+		auto iter = recordEnd;
+
+		if (iter == trackRecord.rend())
+		{
+			if (!recordIsCycled) return 0;
+			else iter = trackRecord.rbegin();
+		}
+
+		size_t lastMoment = iter->first;
+		size_t firstMoment;
+
+		while (flingTimer - iter->first < TRACK_RECORD_TIME_MS)
+		{
+			firstMoment = iter->first;
+			sum += iter->second;
+			++count;
+			++iter;
+
+			if (iter == recordEnd) break;
+
+			if (iter == trackRecord.rend())
+			{
+				if (!recordIsCycled) break;
+				iter = trackRecord.rbegin();
+				if (iter == recordEnd) break;
+			}
+		}
+
+		return count > 1 ? sum / count / (lastMoment - firstMoment) : 0;
+	}
+
+	void FlingGestureInterface::FlingGestureOnTapDown()
+	{
+		flingTimerOld = 0;
+		flingTimer = 0;
+		flingOffset = 0;
+		flingAwaiting = true;
+		recordIndex = trackRecord.begin();
+		recordIsCycled = false;
+	}
+
+	void FlingGestureInterface::FlingGestureOnMove(float delta)
+	{
+		if (flingAwaiting)
+		{
+			flingOffset += delta;
+
+			*recordIndex = { flingTimer, delta };
+			if (++recordIndex == trackRecord.end())
+			{
+				recordIndex = trackRecord.begin();
+				recordIsCycled = true;
+			}
+		}
+	}
+
+	void FlingGestureInterface::FlingGestureOnUpdate(size_t dt, float currentScrollPosition)
+	{
+		static bool bounced = false;
+		if (currentScrollPosition < bottom)
+		{
+			bounced = true;
+
+			if (speed < 0)
+			{
+				speed += (bottom - currentScrollPosition) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+				if (speed > 0)
+				{
+					speed = 0;
+					bouncingMax = bottom - currentScrollPosition;
+				}
+			}
+			else
+			{
+				speed += (bottom - currentScrollPosition - bouncingMax / 2) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+				if (speed < 0) speed = 1;
+				else if (currentScrollPosition + speed > bottom) speed = bottom - currentScrollPosition;
+			}
+		}
+		else
+		{
+			if (bounced)
+			{
+				bounced = false;
+				speed = 0;
+				ignoreEvents = false;
+			}
+			else if (speed)
+			{
+				int oldSign = sign(speed);
+				speed -= dt * DECELERATION_PER_MS * (1 + abs(speed) * DECELERATION_RATIO_PER_SPEED_UNIT) * sign(speed);
+				if (abs(oldSign - sign(speed)) == 2) speed = 0;
+				ignoreEvents = abs(speed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+			}
+		}
+		if (flingAwaiting)
+		{
+			flingTimerOld = flingTimer;
+			flingTimer += dt;
+			if (flingTimer >= ACCELERATION_AWAITING_MS)
+			{
+				speed = 0;
+				ignoreEvents = false;
+			}
+		}
+	}
+
+	void FlingGestureInterface::FlingGestureOnTapUp()
+	{
+		flingAwaiting = false;
+
+		float flingSpeed = calculateSmoothedFlingSpeed();
+
+		if (abs(flingOffset) > OFFSET_THRESHOLD)
+		{
+			if (abs(sign(speed) - sign(flingSpeed)) < 2) speed = 0;
+			speed -= flingSpeed * (1 + abs(speed) * ACCELERATION_RATIO_PER_SPEED_UNIT);
+			ignoreEvents = abs(speed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+		}
+		else
+		{
+			speed = 0;
+			ignoreEvents = false;
+		}
+
+		*SE::Console << "Fling Gesture OnTapUp:" + tostr(flingTimer);
+		*SE::Console << "Time = " + tostr(flingTimer);
+		*SE::Console << "Add Speed = " + tostr(flingSpeed);
+		*SE::Console << "Total Speed = " + tostr(speed);
+ 		for (auto &record : trackRecord)
+ 		{
+ 			*SE::Console << "moment: " + tostr(record.first) + " | " + "offset " + tostr(record.second);
+ 		}
+	}
+
+	//=======================================
+
 	VerticalScrollLayout::VerticalScrollLayout(WidgetParentInterface& widgetParent)
 		: VerticalLinearLayout(widgetParent)
 		, scroll(0)
@@ -1941,6 +2112,9 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
+		FlingGestureOnTapDown();
+		if (isTapEventsBlockedByFlingerGesture()) return false;
+
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -1976,6 +2150,9 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
+		FlingGestureOnTapUp();
+		if (isTapEventsBlockedByFlingerGesture()) return false;
+
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -2012,6 +2189,9 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
+		FlingGestureOnTapUp();
+		if (isTapEventsBlockedByFlingerGesture()) return false;
+
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
@@ -2046,9 +2226,37 @@ namespace SE
 		return handled;
 	}
 
+	void VerticalScrollLayout::UpdateRenderPair()
+	{
+		VerticalLinearLayout::UpdateRenderPair();
+		setBounds(0, getInnerHeight());
+	}
+
+	void VerticalScrollLayout::Update(size_t dt)
+	{
+		VerticalLinearLayout::Update(dt);
+		FlingGestureOnUpdate(dt, scroll);
+		scroll += speed * dt;
+// 		if (getInnerHeight() > getContentAreaHeight())
+// 		{
+// 			if (scroll < 0)
+// 			{
+// 				scroll = 0;
+// 				speed = 0;
+// 			}
+// 			else if (scroll > getInnerHeight() - getContentAreaHeight())
+// 			{
+// 				scroll = getInnerHeight() - getContentAreaHeight();
+// 				speed = 0;
+// 			}
+// 		}
+	}
 
 	bool VerticalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
+		FlingGestureOnMove(shift[1]);
+		if (isTapEventsBlockedByFlingerGesture()) return false;
+
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
@@ -4217,6 +4425,8 @@ namespace SE
 				{
 					button->textParams = TTextParams();
 				}
+				button->textParams.BasicTextAreaParams.TextHorizontalAlignment = THA_CENTER;
+				button->textParams.BasicTextAreaParams.TextVerticalAlignment = TVA_CENTER;
 
 				button->setPressedDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("pressedDrawable", "#00000000")));
 				button->setHoverDrawable(layoutBackgroundFromConfigValue(pWidgetRecord.second.get<std::string>("hoverDrawable", "#00000000")));
