@@ -235,14 +235,15 @@ namespace SE
 			[this](Vector4f color) { return  color; },
 			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
 
+		renderPair.first.transparencyFlag = color[3] == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(color[3] == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
 
-		renderPair.first.semiTransparent = color[3] < 1;
-		renderPair.first.fullyTransparent = color[3] == 0;
 		renderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		renderPair.second = MakeTriangleList(posFrom, posTo, color, zLevelAbsolute);
 
-		bordersRenderPair.first.semiTransparent = color[3] < 1;
-		bordersRenderPair.first.fullyTransparent = color[3] == 0;
+		bordersRenderPair.first.transparencyFlag = borderColor[3] == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(borderColor[3] == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
 		bordersRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = "white.bmp";
 		bordersRenderPair.second = MakeTriangleListOfBorders(posFrom, posTo, borderColor, zLevelAbsolute + 0.8f);
 		
@@ -250,26 +251,41 @@ namespace SE
 
 	void WidgetAncestor::Draw()
 	{
-		if (!renderPair.first.fullyTransparent)
+		if (name == "textSettingsDialogCancel")
+			int s = 0;
+
+		if (renderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
 		{
-			if (renderPair.first.semiTransparent) glDepthMask(false);
+			if (renderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
 
 			TRenderParamsSetter render1(renderPair.first);
 			Renderer->DrawTriangleList(renderPair.second);
 			CheckGlError();
 
-			if (renderPair.first.semiTransparent) glDepthMask(true);
+			if (renderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
 		}
 		
-		if (borderType == BorderType::BT_LINE && !bordersRenderPair.first.fullyTransparent)
+		if (borderType == BorderType::BT_LINE && bordersRenderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
 		{
-			if (bordersRenderPair.first.semiTransparent) glDepthMask(false);
+			if (bordersRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
 
 			TRenderParamsSetter render2(bordersRenderPair.first);
 			Renderer->DrawTriangleList(bordersRenderPair.second, GL_LINES);
 			CheckGlError();
 
-			if (bordersRenderPair.first.semiTransparent) glDepthMask(true);
+			if (bordersRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
 		}
 	}
 	
@@ -2426,15 +2442,21 @@ namespace SE
 	{
 		WidgetAncestor::Draw();
 
-		if (!textRenderPair.first.fullyTransparent)
+		if (textRenderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
 		{
-			if (textRenderPair.first.semiTransparent) glDepthMask(false);
+			if (textRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
 
 			TRenderParamsSetter render(textRenderPair.first);
 			Renderer->DrawTriangleList(textRenderPair.second);
 			CheckGlError();
 
-			if (textRenderPair.first.semiTransparent) glDepthMask(true);
+			if (textRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
 		}
 	}
 
@@ -2587,8 +2609,9 @@ namespace SE
 
 		pressedMaxAlpha = isTexture ? 1.f : color(3);
 
-		pressedRenderPair.first.semiTransparent = pressedMaxAlpha < 1;
-		pressedRenderPair.first.fullyTransparent = pressedMaxAlpha == 0;
+		pressedRenderPair.first.transparencyFlag = pressedMaxAlpha == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(pressedMaxAlpha == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
 		pressedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		pressedRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(color[0], color[1], color[2], 0), zLevelAbsolute);
 
@@ -2606,8 +2629,9 @@ namespace SE
 
 		hoverMaxAlpha = isTexture ? 1.f : color(3);
 
-		hoverRenderPair.first.semiTransparent = hoverMaxAlpha < 1;
-		hoverRenderPair.first.fullyTransparent = hoverMaxAlpha == 0;
+		hoverRenderPair.first.transparencyFlag = hoverMaxAlpha == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(hoverMaxAlpha == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
 		hoverRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		hoverRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(color[0], color[1], color[2], 0), zLevelAbsolute);
 	}
@@ -2616,37 +2640,55 @@ namespace SE
 	{
 		WidgetAncestor::Draw();
 
-		if (!hoverRenderPair.first.fullyTransparent)
+		if (hoverRenderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
 		{
-			if (hoverRenderPair.first.semiTransparent) glDepthMask(false);
+			if (hoverRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
 
 			TRenderParamsSetter render1(hoverRenderPair.first);
 			Renderer->DrawTriangleList(hoverRenderPair.second);
 			CheckGlError();
 
-			if (hoverRenderPair.first.semiTransparent) glDepthMask(true);
+			if (hoverRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
 		}
 
-		if (!pressedRenderPair.first.fullyTransparent)
+		if (pressedRenderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
 		{
-			if (pressedRenderPair.first.semiTransparent) glDepthMask(false);
+			if (pressedRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
 
 			TRenderParamsSetter render2(pressedRenderPair.first);
 			Renderer->DrawTriangleList(pressedRenderPair.second);
 			CheckGlError();
 
-			if (pressedRenderPair.first.semiTransparent) glDepthMask(true);
+			if (pressedRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
 		}
 
-		if (!textRenderPair.first.fullyTransparent)
+		if (textRenderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
 		{
-			if (textRenderPair.first.semiTransparent) glDepthMask(false);
+			if (textRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
 
 			TRenderParamsSetter render3(textRenderPair.first);
 			Renderer->DrawTriangleList(textRenderPair.second);
 			CheckGlError();
 
-			if (textRenderPair.first.semiTransparent) glDepthMask(true);
+			if (textRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
 		}
 	}
 
@@ -2848,13 +2890,11 @@ namespace SE
 		Vector2f posFrom = shift;
 		Vector2f posTo = shift + Vector2f(getDrawWidth(), getDrawHeight());
 
-		checkedRenderPair.first.semiTransparent = false;
-		checkedRenderPair.first.fullyTransparent = false;
+		checkedRenderPair.first.transparencyFlag = TRenderParams::TTransparencyFlag::opaque;
 		checkedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = checkedSkin;
 		checkedRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(1, 1, 1, 1), zLevelAbsolute);
 
-		uncheckedRenderPair.first.semiTransparent = false;
-		uncheckedRenderPair.first.fullyTransparent = false;
+		uncheckedRenderPair.first.transparencyFlag = TRenderParams::TTransparencyFlag::opaque;
 		uncheckedRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = uncheckedSkin;
 		uncheckedRenderPair.second = MakeTriangleList(posFrom, posTo, Vector4f(1, 1, 1, 1), zLevelAbsolute);
 	}
@@ -3117,8 +3157,7 @@ namespace SE
 		from_point += shift;
 		to_point += shift;
 
-		trackRenderPair.first.semiTransparent = false;
-		trackRenderPair.first.fullyTransparent = false;
+		trackRenderPair.first.transparencyFlag = TRenderParams::TTransparencyFlag::opaque;
 		trackRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		trackRenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 
@@ -3151,8 +3190,9 @@ namespace SE
 		from_point += shift;
 		to_point += shift;
 
-		buttonRenderPair.first.semiTransparent = false;
-		buttonRenderPair.first.fullyTransparent = false;
+		buttonRenderPair.first.transparencyFlag = color[3] == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(color[3] == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
 		buttonRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		buttonRenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 	}
@@ -3378,8 +3418,7 @@ namespace SE
 		from_point += shift;
 		to_point += shift;
 
-		trackRenderPair.first.semiTransparent = false;
-		trackRenderPair.first.fullyTransparent = false;
+		trackRenderPair.first.transparencyFlag = TRenderParams::TTransparencyFlag::opaque;
 		trackRenderPair.first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = textureName;
 		trackRenderPair.second = MakeTriangleList(from_point, to_point, color, zLevelAbsolute);
 
@@ -3789,7 +3828,6 @@ namespace SE
 	void NewGuiManager::Draw()
 	{
 		glEnable(GL_DEPTH_TEST);
-		glClearDepth(1.f);
 
 		Renderer->PushProjectionMatrix(Renderer->GetMatrixWidth(), Renderer->GetMatrixHeight(), UI_RENDERING_ZNEAR, UI_RENDERING_ZFAR);
 

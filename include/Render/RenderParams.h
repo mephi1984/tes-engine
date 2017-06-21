@@ -22,10 +22,16 @@ namespace SE
 
 struct TRenderParams : public TSerializeInterface
 {
+	enum TTransparencyFlag
+	{
+		opaque,
+		semiTransparent, // to set glDepthMask(false)
+		fullyTransparent // do not draw
+	};
+
 	std::string ShaderName;
 
-	bool fullyTransparent; // do not draw
-	bool semiTransparent; // to set glDepthMask(false)
+	TTransparencyFlag transparencyFlag; 
 
 	mutable std::map<std::string, std::string> SamplerMap;
 	mutable std::map<std::string, float> FloatMap;
