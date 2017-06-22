@@ -1923,7 +1923,19 @@ namespace SE
 	{
 		trackRecord.resize(TRACK_RECORD_SIZE);
 		recordIndex = trackRecord.begin();
+
 		bouncingWall = this->bouncingEnabled ? BOUNCING_WALL : 0;
+
+		acceleratonAwaiting = ACCELERATION_AWAITING_MS;
+		deceleration = DECELERATION_PER_MS;
+		threshold = OFFSET_THRESHOLD;
+		accelerationRatio = ACCELERATION_RATIO_PER_SPEED_UNIT;
+		decelerationRatio = DECELERATION_RATIO_PER_SPEED_UNIT;
+		ignoringSpeed = EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+		recordSize = TRACK_RECORD_SIZE;
+		recordTime = TRACK_RECORD_TIME_MS;
+		bouncingBraking = BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+		bouncingWall_const = BOUNCING_WALL;
 	}
 
 	bool FlingGestureSupport::isTapEventsBlockedByFlingerGesture()
@@ -1941,7 +1953,7 @@ namespace SE
 	{
 		bouncingEnabled = enabled;
 		if (!enabled) bouncingDelta = 0;
-		bouncingWall = enabled ? BOUNCING_WALL : 0;
+		bouncingWall = enabled ? bouncingWall_const : 0;
 	}
 
 	void FlingGestureSupport::setFlingEnabled(bool enabled)
@@ -1988,7 +2000,7 @@ namespace SE
 		size_t lastMoment = iter->first;
 		size_t firstMoment;
 
-		while (flingTimer - iter->first < TRACK_RECORD_TIME_MS)
+		while (flingTimer - iter->first < recordTime)
 		{
 			firstMoment = iter->first;
 			sum += iter->second;
@@ -2012,7 +2024,7 @@ namespace SE
 	{
 		if (flingSpeed < 0)
 		{
-			flingSpeed += (bottom - currentScrollPosition) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			flingSpeed += (bottom - currentScrollPosition) * bouncingBraking;
 			if (flingSpeed > 0)
 			{
 				flingSpeed = 0;
@@ -2021,7 +2033,7 @@ namespace SE
 		}
 		else
 		{
-			flingSpeed += (bottom - currentScrollPosition - bouncingDelta / 2) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			flingSpeed += (bottom - currentScrollPosition - bouncingDelta / 2) * bouncingBraking;
 			if (flingSpeed < 0.01f) flingSpeed = 0.01f;
 			if (currentScrollPosition + flingSpeed * dt > bottom) flingSpeed = (bottom - currentScrollPosition) / dt;
 		}
@@ -2031,7 +2043,7 @@ namespace SE
 	{
 		if (flingSpeed > 0)
 		{
-			flingSpeed += (top - currentScrollPosition) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			flingSpeed += (top - currentScrollPosition) * bouncingBraking;
 			if (flingSpeed < 0)
 			{
 				flingSpeed = 0;
@@ -2040,7 +2052,7 @@ namespace SE
 		}
 		else
 		{
-			flingSpeed += (top - currentScrollPosition + bouncingDelta / 2) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			flingSpeed += (top - currentScrollPosition + bouncingDelta / 2) * bouncingBraking;
 			if (flingSpeed > -0.01f) flingSpeed = -0.01f;
 			if (currentScrollPosition + flingSpeed * dt < top) flingSpeed = (top - currentScrollPosition) / dt;
 		}
@@ -2087,12 +2099,12 @@ namespace SE
 			if (currentScrollPosition < bottom)
 			{
 				BouncingBottom(dt, currentScrollPosition);
-				ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+				ignoreEvents = abs(flingSpeed) > ignoringSpeed;
 			}
 			else if (currentScrollPosition > top)
 			{
 				BouncingTop(dt, currentScrollPosition);
-				ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+				ignoreEvents = abs(flingSpeed) > ignoringSpeed;
 			}
 			else if (bouncingDelta != 0)
 			{
@@ -2104,16 +2116,16 @@ namespace SE
 		if (bouncingDelta == 0 && flingSpeed != 0)
 		{
 			int oldSign = sign(flingSpeed);
-			flingSpeed -= dt * DECELERATION_PER_MS * (1 + abs(flingSpeed) * DECELERATION_RATIO_PER_SPEED_UNIT) * sign(flingSpeed);
+			flingSpeed -= dt * deceleration * (1 + abs(flingSpeed) * decelerationRatio) * sign(flingSpeed);
 			if (abs(oldSign - sign(flingSpeed)) == 2) flingSpeed = 0;
-			ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+			ignoreEvents = abs(flingSpeed) > ignoringSpeed;
 		}
 
 		if (flingAwaiting) 
 		{
 			flingTimerOld = flingTimer;
 			flingTimer += dt;
-			if (flingTimer >= ACCELERATION_AWAITING_MS)
+			if (flingTimer >= acceleratonAwaiting)
 			{
 				flingSpeed = 0;
 				ignoreEvents = false;
@@ -2127,11 +2139,11 @@ namespace SE
 
 		float flingSpeedDelta = calculateSmoothedFlingSpeed();
 
-		if (abs(flingOffset) > OFFSET_THRESHOLD)
+		if (abs(flingOffset) > threshold)
 		{
 			if (abs(sign(flingSpeed) - sign(flingSpeedDelta)) == 0)	flingSpeed = 0;
-			flingSpeed -= flingSpeedDelta * (1 + abs(flingSpeed) * ACCELERATION_RATIO_PER_SPEED_UNIT);
-			ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+			flingSpeed -= flingSpeedDelta * (1 + abs(flingSpeed) * accelerationRatio);
+			ignoreEvents = abs(flingSpeed) > ignoringSpeed;
 		}
 		else
 		{
@@ -2146,6 +2158,23 @@ namespace SE
 // 		{
 // 			*SE::Console << "moment: " + tostr(record.first) + " | " + "offset " + tostr(record.second);
 // 		}
+	}
+
+	void FlingGestureSupport::FlingGestureSerialize(boost::property_tree::ptree& propertyTree)
+	{
+		flingEnabled = propertyTree.get<size_t>("flingEnabled", 1);
+		bouncingEnabled = propertyTree.get<size_t>("bouncingEnabled", 1);
+		acceleratonAwaiting = propertyTree.get<size_t>("ACCELERATION_AWAITING_MS", ACCELERATION_AWAITING_MS);
+		deceleration = propertyTree.get<float>("DECELERATION_PER_MS", DECELERATION_PER_MS);
+		threshold = propertyTree.get<float>("OFFSET_THRESHOLD", OFFSET_THRESHOLD);
+		accelerationRatio = propertyTree.get<float>("ACCELERATION_RATIO_PER_SPEED_UNIT", ACCELERATION_RATIO_PER_SPEED_UNIT);
+		decelerationRatio = propertyTree.get<float>("DECELERATION_RATIO_PER_SPEED_UNIT", DECELERATION_RATIO_PER_SPEED_UNIT);
+		ignoringSpeed = propertyTree.get<float>("EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS", EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS);
+		recordSize = propertyTree.get<size_t>("TRACK_RECORD_SIZE", TRACK_RECORD_SIZE);
+		trackRecord.resize(recordSize);
+		recordTime = propertyTree.get<size_t>("TRACK_RECORD_TIME_MS", TRACK_RECORD_TIME_MS);
+		bouncingBraking = propertyTree.get<float>("BOUNCING_BRAKING_PER_TRESPASSING_UNIT", BOUNCING_BRAKING_PER_TRESPASSING_UNIT);
+		bouncingWall = propertyTree.get<float>("BOUNCING_WALL",BOUNCING_WALL);
 	}
 
 	//=======================================
@@ -4473,6 +4502,11 @@ namespace SE
 
 				verticalScrollLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
 
+				if (pWidgetRecord.second.get_child_optional("flingGestureParams"))
+				{
+					verticalScrollLayout->FlingGestureSerialize(pWidgetRecord.second.find("flingGestureParams")->second);
+				}
+
 				auto child = pWidgetRecord.second.get_child_optional("children");
 
 				if (child)
@@ -4488,6 +4522,11 @@ namespace SE
 				auto horizontalScrollLayout = parentWidget.CreateAndAddChildOfType<HorizontalScrollLayout>();
 
 				horizontalScrollLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+
+				if (pWidgetRecord.second.get_child_optional("flingGestureParams"))
+				{
+					horizontalScrollLayout->FlingGestureSerialize(pWidgetRecord.second.find("flingGestureParams")->second);
+				}
 
 				auto child = pWidgetRecord.second.get_child_optional("children");
 

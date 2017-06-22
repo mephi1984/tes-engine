@@ -397,6 +397,17 @@ namespace SE
 		std::list<std::pair<float, float>>::iterator recordIndex;
 		std::list<std::pair<float, float>> trackRecord;
 
+		size_t acceleratonAwaiting;
+		float deceleration;
+		float threshold;
+		float accelerationRatio;
+		float decelerationRatio;
+		float ignoringSpeed;
+		size_t recordSize;
+		size_t recordTime;
+		float bouncingBraking;
+		float bouncingWall_const;
+
 		inline float calculateSmoothedFlingSpeed();
 		inline void BouncingBottom(size_t dt, float currentScrollPosition);
 		inline void BouncingTop(size_t dt, float currentScrollPosition);
@@ -420,6 +431,8 @@ namespace SE
 		void FlingGestureOnUpdate(size_t dt, float currentScrollPosition);
 		void FlingGestureOnMove(float delta);
 		void FlingGestureOnTapUp();
+
+		void FlingGestureSerialize(boost::property_tree::ptree& propertyTree);
 	};
 
 
