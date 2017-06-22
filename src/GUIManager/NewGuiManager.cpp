@@ -1902,7 +1902,7 @@ namespace SE
 	const float FlingGestureSupport::DECELERATION_RATIO_PER_SPEED_UNIT = 2.f;
 	const float FlingGestureSupport::EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS = 0.1f;
 	const size_t FlingGestureSupport::TRACK_RECORD_SIZE = 4;
-	const size_t FlingGestureSupport::TRACK_RECORD_TIME_MS = 200;
+	const size_t FlingGestureSupport::TRACK_RECORD_TIME_MS = 100;
 	const float FlingGestureSupport::BOUNCING_BRAKING_PER_TRESPASSING_UNIT = 0.01f;
 	const float FlingGestureSupport::BOUNCING_WALL = 100;
 
@@ -2129,7 +2129,7 @@ namespace SE
 
 		if (abs(flingOffset) > OFFSET_THRESHOLD)
 		{
-			if (abs(sign(flingSpeed) - sign(flingSpeedDelta)) < 2) flingSpeed = 0;
+			if (abs(sign(flingSpeed) - sign(flingSpeedDelta)) == 0)	flingSpeed = 0;
 			flingSpeed -= flingSpeedDelta * (1 + abs(flingSpeed) * ACCELERATION_RATIO_PER_SPEED_UNIT);
 			ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
 		}
