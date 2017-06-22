@@ -1915,11 +1915,12 @@ namespace SE
 		, flingAwaiting(false)
 		, bottom(0)
 		, top(0)
-		, bouncingDelta(0)
 		, bouncingWall(0)
 		, flingSpeed(0)
 		, ignoreEvents(false)
 		, recordIsCycled(false)
+		, bouncingHappened(false)
+		, tappedDown(false)
 	{
 		trackRecord.resize(TRACK_RECORD_SIZE);
 		recordIndex = trackRecord.begin();
@@ -1952,7 +1953,6 @@ namespace SE
 	void FlingGestureSupport::setBouncingEnabled(bool enabled)
 	{
 		bouncingEnabled = enabled;
-		if (!enabled) bouncingDelta = 0;
 		bouncingWall = enabled ? bouncingWall_const : 0;
 	}
 
@@ -1961,11 +1961,7 @@ namespace SE
 		flingEnabled = enabled;
 		flingAwaiting = false;
 		ignoreEvents = false;
-		if (!enabled)
-		{
-			flingSpeed = 0;
-			bouncingDelta = 0;
-		}
+		if (!enabled) flingSpeed = 0;
 	}
 
 	float FlingGestureSupport::getFlingSpeed()
@@ -1981,6 +1977,11 @@ namespace SE
 	bool FlingGestureSupport::getBouncingEnabled()
 	{
 		return bouncingEnabled;
+	}
+
+	float FlingGestureSupport::getBouncingThreshold()
+	{
+		return bouncingWall;
 	}
 
 	float FlingGestureSupport::calculateSmoothedFlingSpeed()
@@ -2017,7 +2018,7 @@ namespace SE
 			}
 		}
 
-		return count > 1 ? sum / count / (lastMoment - firstMoment) : 0;
+		return count > 1 ? -sum / count / (lastMoment - firstMoment) : 0;
 	}
 
 	void FlingGestureSupport::BouncingBottom(size_t dt, float currentScrollPosition)
@@ -2025,17 +2026,17 @@ namespace SE
 		if (flingSpeed < 0)
 		{
 			flingSpeed += (bottom - currentScrollPosition) * bouncingBraking;
-			if (flingSpeed > 0)
-			{
-				flingSpeed = 0;
-				bouncingDelta = bottom - currentScrollPosition;
-			}
+			if (flingSpeed > 0) flingSpeed = 0;
 		}
 		else
 		{
-			flingSpeed += (bottom - currentScrollPosition - bouncingDelta / 2) * bouncingBraking;
+			flingSpeed += (bottom - currentScrollPosition) * bouncingBraking;
 			if (flingSpeed < 0.01f) flingSpeed = 0.01f;
-			if (currentScrollPosition + flingSpeed * dt > bottom) flingSpeed = (bottom - currentScrollPosition) / dt;
+			if (currentScrollPosition + flingSpeed * dt > bottom)
+			{
+				flingSpeed = (bottom - currentScrollPosition) / dt;
+				bouncingHappened = true;
+			}
 		}
 	}
 
@@ -2044,17 +2045,17 @@ namespace SE
 		if (flingSpeed > 0)
 		{
 			flingSpeed += (top - currentScrollPosition) * bouncingBraking;
-			if (flingSpeed < 0)
-			{
-				flingSpeed = 0;
-				bouncingDelta = currentScrollPosition - top;
-			}
+			if (flingSpeed < 0)	flingSpeed = 0;
 		}
 		else
 		{
-			flingSpeed += (top - currentScrollPosition + bouncingDelta / 2) * bouncingBraking;
+			flingSpeed += (top - currentScrollPosition) * bouncingBraking;
 			if (flingSpeed > -0.01f) flingSpeed = -0.01f;
-			if (currentScrollPosition + flingSpeed * dt < top) flingSpeed = (top - currentScrollPosition) / dt;
+			if (currentScrollPosition + flingSpeed * dt < top)
+			{
+				flingSpeed = (top - currentScrollPosition) / dt;
+				bouncingHappened = true;
+			}
 		}
 	}
 
@@ -2064,6 +2065,7 @@ namespace SE
 		flingTimer = 0;
 		flingOffset = 0;
 		flingAwaiting = true;
+		tappedDown = true;
 		recordIndex = trackRecord.begin();
 		recordIsCycled = false;
 	}
@@ -2087,14 +2089,14 @@ namespace SE
 	{
 		if (currentScrollPosition + flingSpeed * dt < bottom - bouncingWall)
 		{
-			flingSpeed = (-bouncingWall - currentScrollPosition) / dt;
+			flingSpeed = (bottom - bouncingWall - currentScrollPosition) / dt;
 		}
 		else if (currentScrollPosition + flingSpeed * dt > top + bouncingWall)
 		{
 			flingSpeed = (top + bouncingWall - currentScrollPosition) / dt;
 		}
 
-		if (bouncingEnabled)
+		if (bouncingEnabled && !tappedDown)
 		{
 			if (currentScrollPosition < bottom)
 			{
@@ -2106,14 +2108,14 @@ namespace SE
 				BouncingTop(dt, currentScrollPosition);
 				ignoreEvents = abs(flingSpeed) > ignoringSpeed;
 			}
-			else if (bouncingDelta != 0)
+			else if (bouncingHappened)
 			{
 				flingSpeed = 0;
 				ignoreEvents = false;
-				bouncingDelta = 0;
+				bouncingHappened = false;
 			}
 		}
-		if (bouncingDelta == 0 && flingSpeed != 0)
+		if (flingSpeed != 0)
 		{
 			int oldSign = sign(flingSpeed);
 			flingSpeed -= dt * deceleration * (1 + abs(flingSpeed) * decelerationRatio) * sign(flingSpeed);
@@ -2136,13 +2138,14 @@ namespace SE
 	void FlingGestureSupport::FlingGestureOnTapUp()
 	{
 		flingAwaiting = false;
+		tappedDown = false;
 
 		float flingSpeedDelta = calculateSmoothedFlingSpeed();
 
 		if (abs(flingOffset) > threshold)
 		{
-			if (abs(sign(flingSpeed) - sign(flingSpeedDelta)) == 0)	flingSpeed = 0;
-			flingSpeed -= flingSpeedDelta * (1 + abs(flingSpeed) * accelerationRatio);
+			if (abs(sign(flingSpeed) - sign(flingSpeedDelta)) == 2)	flingSpeed = 0;
+			flingSpeed += flingSpeedDelta * (1 + abs(flingSpeed) * accelerationRatio);
 			ignoreEvents = abs(flingSpeed) > ignoringSpeed;
 		}
 		else
@@ -2411,14 +2414,14 @@ namespace SE
 		{
 			scroll -= shift(1);
 
-			if (scroll < 0)
+			if (scroll < -getBouncingThreshold())
 			{
-				scroll = 0;
+				scroll = -getBouncingThreshold();
 			}
 
-			if (scroll > contentHeight - viewHeight)
+			if (scroll > contentHeight - viewHeight + getBouncingThreshold())
 			{
-				scroll = contentHeight - viewHeight;
+				scroll = contentHeight - viewHeight + getBouncingThreshold();
 			}
 		}
 
@@ -2709,14 +2712,14 @@ namespace SE
 		{
 			scroll += shift(0);
 
-			if (scroll < 0)
+			if (scroll < -getBouncingThreshold())
 			{
-				scroll = 0;
+				scroll = -getBouncingThreshold();
 			}
 
-			if (scroll > contentWidth - viewWidth)
+			if (scroll > contentWidth - viewWidth + getBouncingThreshold())
 			{
-				scroll = contentWidth - viewWidth;
+				scroll = contentWidth - viewWidth + getBouncingThreshold();
 			}
 		}
 

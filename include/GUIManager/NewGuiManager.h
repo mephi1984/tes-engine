@@ -378,22 +378,23 @@ namespace SE
 		static const float BOUNCING_BRAKING_PER_TRESPASSING_UNIT; // as more we outside as braking is greater
 		static const float BOUNCING_WALL; // you shall not pass
 
-		float flingOffset = 0;
-		size_t flingTimer = 0;
-		size_t flingTimerOld = 0;
-		bool flingAwaiting = false;
+		float flingOffset;
+		size_t flingTimer;
+		size_t flingTimerOld;
+		bool flingAwaiting;
 		bool flingEnabled;
 
-		size_t bottom = 0;
-		size_t top = 0;
-		float bouncingDelta = 0;
-		float bouncingWall = 0;
+		size_t bottom;
+		size_t top;
+		float bouncingWall;
+		bool bouncingHappened;
 		bool bouncingEnabled;
 
-		float flingSpeed = 0; // per millisecond
-		bool ignoreEvents = false;
+		float flingSpeed; // per millisecond
+		bool ignoreEvents;
+		bool tappedDown;
 
-		bool recordIsCycled = false;
+		bool recordIsCycled;
 		std::list<std::pair<float, float>>::iterator recordIndex;
 		std::list<std::pair<float, float>> trackRecord;
 
@@ -426,6 +427,7 @@ namespace SE
 		inline float getFlingSpeed();
 		inline bool getFlingEnabled();
 		inline bool getBouncingEnabled();
+		inline float getBouncingThreshold();
 
 		void FlingGestureOnTapDown();
 		void FlingGestureOnUpdate(size_t dt, float currentScrollPosition);
