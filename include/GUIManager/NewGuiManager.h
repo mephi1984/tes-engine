@@ -364,7 +364,7 @@ namespace SE
 
 	};
 
-	class FlingGestureInterface
+	class FlingGestureSupport
 	{
 	private:
 		static const size_t ACCELERATION_AWAITING_MS; // time between OnMouseDown & OnMouseUpAfterMove for acceleration of current speed
@@ -382,29 +382,39 @@ namespace SE
 		size_t flingTimer = 0;
 		size_t flingTimerOld = 0;
 		bool flingAwaiting = false;
-		bool ignoreEvents = false;
+		bool flingEnabled;
 
-		size_t bottom;
-		size_t top;
-		float bouncingMax;
+		size_t bottom = 0;
+		size_t top = 0;
+		float bouncingDelta = 0;
+		float bouncingWall = 0;
+		bool bouncingEnabled;
+
+		float flingSpeed = 0; // per millisecond
+		bool ignoreEvents = false;
 
 		bool recordIsCycled = false;
 		std::list<std::pair<float, float>>::iterator recordIndex;
 		std::list<std::pair<float, float>> trackRecord;
 
 		inline float calculateSmoothedFlingSpeed();
+		inline void BouncingBottom(size_t dt, float currentScrollPosition);
+		inline void BouncingTop(size_t dt, float currentScrollPosition);
 
 	protected:
-		FlingGestureInterface();
+		FlingGestureSupport(bool flingEnabled, bool bouncingEnabled);
 
 	public:
 
-		float speed = 0; // per millisecond
-		bool bouncingEffect;
-
 		inline bool isTapEventsBlockedByFlingerGesture();
 
-		void setBounds(size_t bottom, size_t top);
+		inline void setBounds(size_t bottom, size_t top);
+		inline void setBouncingEnabled(bool enabled);
+		inline void setFlingEnabled(bool enabled);
+
+		inline float getFlingSpeed();
+		inline bool getFlingEnabled();
+		inline bool getBouncingEnabled();
 
 		void FlingGestureOnTapDown();
 		void FlingGestureOnUpdate(size_t dt, float currentScrollPosition);
@@ -413,7 +423,7 @@ namespace SE
 	};
 
 
-	class VerticalScrollLayout : public VerticalLinearLayout, public FlingGestureInterface
+	class VerticalScrollLayout : public VerticalLinearLayout, public FlingGestureSupport
 	{
 	protected:
 
@@ -442,7 +452,7 @@ namespace SE
 		virtual void UpdateRenderPair();
 	};
 
-	class HorizontalScrollLayout : public HorizontalLinearLayout, public FlingGestureInterface
+	class HorizontalScrollLayout : public HorizontalLinearLayout, public FlingGestureSupport
 	{
 	protected:
 
@@ -465,6 +475,10 @@ namespace SE
 
 		virtual void OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
+
+		virtual void Update(size_t dt);
+
+		virtual void UpdateRenderPair();
 	};
 
 

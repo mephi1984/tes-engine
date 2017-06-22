@@ -1895,35 +1895,83 @@ namespace SE
 
 	//=======================================
 
-	const size_t FlingGestureInterface::ACCELERATION_AWAITING_MS = 250;
-	const float FlingGestureInterface::DECELERATION_PER_MS = 0.0005f;
-	const float FlingGestureInterface::OFFSET_THRESHOLD = 20.f;
-	const float FlingGestureInterface::ACCELERATION_RATIO_PER_SPEED_UNIT = 0.f;
-	const float FlingGestureInterface::DECELERATION_RATIO_PER_SPEED_UNIT = 2.f;
-	const float FlingGestureInterface::EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS = 0.1f;
-	const size_t FlingGestureInterface::TRACK_RECORD_SIZE = 4;
-	const size_t FlingGestureInterface::TRACK_RECORD_TIME_MS = 100;
-	const float FlingGestureInterface::BOUNCING_BRAKING_PER_TRESPASSING_UNIT = 0.01f;
-	const float FlingGestureInterface::BOUNCING_WALL = 50;
+	const size_t FlingGestureSupport::ACCELERATION_AWAITING_MS = 250;
+	const float FlingGestureSupport::DECELERATION_PER_MS = 0.0005f;
+	const float FlingGestureSupport::OFFSET_THRESHOLD = 20.f;
+	const float FlingGestureSupport::ACCELERATION_RATIO_PER_SPEED_UNIT = 0.f;
+	const float FlingGestureSupport::DECELERATION_RATIO_PER_SPEED_UNIT = 2.f;
+	const float FlingGestureSupport::EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS = 0.1f;
+	const size_t FlingGestureSupport::TRACK_RECORD_SIZE = 4;
+	const size_t FlingGestureSupport::TRACK_RECORD_TIME_MS = 200;
+	const float FlingGestureSupport::BOUNCING_BRAKING_PER_TRESPASSING_UNIT = 0.01f;
+	const float FlingGestureSupport::BOUNCING_WALL = 100;
 
-	FlingGestureInterface::FlingGestureInterface()
+	FlingGestureSupport::FlingGestureSupport(bool flingEnabled, bool bouncingEnabled)
+		: flingEnabled(flingEnabled)
+		, bouncingEnabled(bouncingEnabled)
+		, flingOffset(0)
+		, flingTimer(0)
+		, flingTimerOld(0)
+		, flingAwaiting(false)
+		, bottom(0)
+		, top(0)
+		, bouncingDelta(0)
+		, bouncingWall(0)
+		, flingSpeed(0)
+		, ignoreEvents(false)
+		, recordIsCycled(false)
 	{
 		trackRecord.resize(TRACK_RECORD_SIZE);
 		recordIndex = trackRecord.begin();
+		bouncingWall = this->bouncingEnabled ? BOUNCING_WALL : 0;
 	}
 
-	bool FlingGestureInterface::isTapEventsBlockedByFlingerGesture()
+	bool FlingGestureSupport::isTapEventsBlockedByFlingerGesture()
 	{
 		return ignoreEvents;
 	}
 
-	void FlingGestureInterface::setBounds(size_t bottom, size_t top)
+	void FlingGestureSupport::setBounds(size_t bottom, size_t top)
 	{
 		this->bottom = bottom;
 		this->top = top;
 	}
 
-	float FlingGestureInterface::calculateSmoothedFlingSpeed()
+	void FlingGestureSupport::setBouncingEnabled(bool enabled)
+	{
+		bouncingEnabled = enabled;
+		if (!enabled) bouncingDelta = 0;
+		bouncingWall = enabled ? BOUNCING_WALL : 0;
+	}
+
+	void FlingGestureSupport::setFlingEnabled(bool enabled)
+	{
+		flingEnabled = enabled;
+		flingAwaiting = false;
+		ignoreEvents = false;
+		if (!enabled)
+		{
+			flingSpeed = 0;
+			bouncingDelta = 0;
+		}
+	}
+
+	float FlingGestureSupport::getFlingSpeed()
+	{
+		return flingSpeed;
+	}
+
+	bool FlingGestureSupport::getFlingEnabled()
+	{
+		return flingEnabled;
+	}
+
+	bool FlingGestureSupport::getBouncingEnabled()
+	{
+		return bouncingEnabled;
+	}
+
+	float FlingGestureSupport::calculateSmoothedFlingSpeed()
 	{
 		size_t count = 0;
 		float sum = 0;
@@ -1960,7 +2008,45 @@ namespace SE
 		return count > 1 ? sum / count / (lastMoment - firstMoment) : 0;
 	}
 
-	void FlingGestureInterface::FlingGestureOnTapDown()
+	void FlingGestureSupport::BouncingBottom(size_t dt, float currentScrollPosition)
+	{
+		if (flingSpeed < 0)
+		{
+			flingSpeed += (bottom - currentScrollPosition) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			if (flingSpeed > 0)
+			{
+				flingSpeed = 0;
+				bouncingDelta = bottom - currentScrollPosition;
+			}
+		}
+		else
+		{
+			flingSpeed += (bottom - currentScrollPosition - bouncingDelta / 2) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			if (flingSpeed < 0.01f) flingSpeed = 0.01f;
+			if (currentScrollPosition + flingSpeed * dt > bottom) flingSpeed = (bottom - currentScrollPosition) / dt;
+		}
+	}
+
+	void FlingGestureSupport::BouncingTop(size_t dt, float currentScrollPosition)
+	{
+		if (flingSpeed > 0)
+		{
+			flingSpeed += (top - currentScrollPosition) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			if (flingSpeed < 0)
+			{
+				flingSpeed = 0;
+				bouncingDelta = currentScrollPosition - top;
+			}
+		}
+		else
+		{
+			flingSpeed += (top - currentScrollPosition + bouncingDelta / 2) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
+			if (flingSpeed > -0.01f) flingSpeed = -0.01f;
+			if (currentScrollPosition + flingSpeed * dt < top) flingSpeed = (top - currentScrollPosition) / dt;
+		}
+	}
+
+	void FlingGestureSupport::FlingGestureOnTapDown()
 	{
 		flingTimerOld = 0;
 		flingTimer = 0;
@@ -1970,7 +2056,7 @@ namespace SE
 		recordIsCycled = false;
 	}
 
-	void FlingGestureInterface::FlingGestureOnMove(float delta)
+	void FlingGestureSupport::FlingGestureOnMove(float delta)
 	{
 		if (flingAwaiting)
 		{
@@ -1985,89 +2071,88 @@ namespace SE
 		}
 	}
 
-	void FlingGestureInterface::FlingGestureOnUpdate(size_t dt, float currentScrollPosition)
+	void FlingGestureSupport::FlingGestureOnUpdate(size_t dt, float currentScrollPosition)
 	{
-		static bool bounced = false;
-		if (currentScrollPosition < bottom)
+		if (currentScrollPosition + flingSpeed * dt < bottom - bouncingWall)
 		{
-			bounced = true;
+			flingSpeed = (-bouncingWall - currentScrollPosition) / dt;
+		}
+		else if (currentScrollPosition + flingSpeed * dt > top + bouncingWall)
+		{
+			flingSpeed = (top + bouncingWall - currentScrollPosition) / dt;
+		}
 
-			if (speed < 0)
-			{
-				speed += (bottom - currentScrollPosition) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
-				if (speed > 0)
-				{
-					speed = 0;
-					bouncingMax = bottom - currentScrollPosition;
-				}
-			}
-			else
-			{
-				speed += (bottom - currentScrollPosition - bouncingMax / 2) * BOUNCING_BRAKING_PER_TRESPASSING_UNIT;
-				if (speed < 0) speed = 1;
-				else if (currentScrollPosition + speed > bottom) speed = bottom - currentScrollPosition;
-			}
-		}
-		else
+		if (bouncingEnabled)
 		{
-			if (bounced)
+			if (currentScrollPosition < bottom)
 			{
-				bounced = false;
-				speed = 0;
-				ignoreEvents = false;
+				BouncingBottom(dt, currentScrollPosition);
+				ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
 			}
-			else if (speed)
+			else if (currentScrollPosition > top)
 			{
-				int oldSign = sign(speed);
-				speed -= dt * DECELERATION_PER_MS * (1 + abs(speed) * DECELERATION_RATIO_PER_SPEED_UNIT) * sign(speed);
-				if (abs(oldSign - sign(speed)) == 2) speed = 0;
-				ignoreEvents = abs(speed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+				BouncingTop(dt, currentScrollPosition);
+				ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+			}
+			else if (bouncingDelta != 0)
+			{
+				flingSpeed = 0;
+				ignoreEvents = false;
+				bouncingDelta = 0;
 			}
 		}
-		if (flingAwaiting)
+		if (bouncingDelta == 0 && flingSpeed != 0)
+		{
+			int oldSign = sign(flingSpeed);
+			flingSpeed -= dt * DECELERATION_PER_MS * (1 + abs(flingSpeed) * DECELERATION_RATIO_PER_SPEED_UNIT) * sign(flingSpeed);
+			if (abs(oldSign - sign(flingSpeed)) == 2) flingSpeed = 0;
+			ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+		}
+
+		if (flingAwaiting) 
 		{
 			flingTimerOld = flingTimer;
 			flingTimer += dt;
 			if (flingTimer >= ACCELERATION_AWAITING_MS)
 			{
-				speed = 0;
+				flingSpeed = 0;
 				ignoreEvents = false;
 			}
 		}
 	}
 
-	void FlingGestureInterface::FlingGestureOnTapUp()
+	void FlingGestureSupport::FlingGestureOnTapUp()
 	{
 		flingAwaiting = false;
 
-		float flingSpeed = calculateSmoothedFlingSpeed();
+		float flingSpeedDelta = calculateSmoothedFlingSpeed();
 
 		if (abs(flingOffset) > OFFSET_THRESHOLD)
 		{
-			if (abs(sign(speed) - sign(flingSpeed)) < 2) speed = 0;
-			speed -= flingSpeed * (1 + abs(speed) * ACCELERATION_RATIO_PER_SPEED_UNIT);
-			ignoreEvents = abs(speed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
+			if (abs(sign(flingSpeed) - sign(flingSpeedDelta)) < 2) flingSpeed = 0;
+			flingSpeed -= flingSpeedDelta * (1 + abs(flingSpeed) * ACCELERATION_RATIO_PER_SPEED_UNIT);
+			ignoreEvents = abs(flingSpeed) > EVENTS_IGNORING_SPEED_THRESHOLD_PER_MS;
 		}
 		else
 		{
-			speed = 0;
+			flingSpeed = 0;
 			ignoreEvents = false;
 		}
-
-		*SE::Console << "Fling Gesture OnTapUp:" + tostr(flingTimer);
-		*SE::Console << "Time = " + tostr(flingTimer);
-		*SE::Console << "Add Speed = " + tostr(flingSpeed);
-		*SE::Console << "Total Speed = " + tostr(speed);
- 		for (auto &record : trackRecord)
- 		{
- 			*SE::Console << "moment: " + tostr(record.first) + " | " + "offset " + tostr(record.second);
- 		}
+// 		*SE::Console << "Fling Gesture OnTapUp:" + tostr(flingTimer);
+// 		*SE::Console << "Time = " + tostr(flingTimer);
+// 		*SE::Console << "Delta Speed = " + tostr(flingSpeedDelta);
+// 		*SE::Console << "Total Speed = " + tostr(flingSpeed);
+// 		for (auto &record : trackRecord)
+// 		{
+// 			*SE::Console << "moment: " + tostr(record.first) + " | " + "offset " + tostr(record.second);
+// 		}
 	}
 
 	//=======================================
 
 	VerticalScrollLayout::VerticalScrollLayout(WidgetParentInterface& widgetParent)
 		: VerticalLinearLayout(widgetParent)
+		, FlingGestureSupport(true, true)
 		, scroll(0)
 	{
 	}
@@ -2112,8 +2197,11 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
-		FlingGestureOnTapDown();
-		if (isTapEventsBlockedByFlingerGesture()) return false;
+		if (getFlingEnabled())
+		{
+			FlingGestureOnTapDown();
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
@@ -2150,8 +2238,11 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
-		FlingGestureOnTapUp();
-		if (isTapEventsBlockedByFlingerGesture()) return false;
+		if (getFlingEnabled())
+		{
+			FlingGestureOnTapUp();
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
@@ -2189,8 +2280,11 @@ namespace SE
 
 	bool VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
-		FlingGestureOnTapUp();
-		if (isTapEventsBlockedByFlingerGesture()) return false;
+		if (getFlingEnabled())
+		{
+			FlingGestureOnTapUp();
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
@@ -2229,33 +2323,27 @@ namespace SE
 	void VerticalScrollLayout::UpdateRenderPair()
 	{
 		VerticalLinearLayout::UpdateRenderPair();
-		setBounds(0, getInnerHeight());
+		setBounds(0, getInnerHeight() - getContentAreaHeight());
 	}
 
 	void VerticalScrollLayout::Update(size_t dt)
 	{
 		VerticalLinearLayout::Update(dt);
-		FlingGestureOnUpdate(dt, scroll);
-		scroll += speed * dt;
-// 		if (getInnerHeight() > getContentAreaHeight())
-// 		{
-// 			if (scroll < 0)
-// 			{
-// 				scroll = 0;
-// 				speed = 0;
-// 			}
-// 			else if (scroll > getInnerHeight() - getContentAreaHeight())
-// 			{
-// 				scroll = getInnerHeight() - getContentAreaHeight();
-// 				speed = 0;
-// 			}
-// 		}
+
+		if (getFlingEnabled())
+		{
+			FlingGestureOnUpdate(dt, scroll);
+			scroll += getFlingSpeed() * dt;
+		}
 	}
 
 	bool VerticalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
-		FlingGestureOnMove(shift[1]);
-		if (isTapEventsBlockedByFlingerGesture()) return false;
+		if (getFlingEnabled())
+		{
+			FlingGestureOnMove(shift[1]);
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
 
 		bool childMoved = false;
 
@@ -2360,6 +2448,7 @@ namespace SE
 
 	HorizontalScrollLayout::HorizontalScrollLayout(WidgetParentInterface& widgetParent)
 		: HorizontalLinearLayout(widgetParent)
+		, FlingGestureSupport(true, true)
 		, scroll(0)
 	{
 	}
@@ -2398,12 +2487,33 @@ namespace SE
 		Renderer->PopMatrix();
 
 		CheckGlError();
+	}
 
+	void HorizontalScrollLayout::UpdateRenderPair()
+	{
+		HorizontalLinearLayout::UpdateRenderPair();
+		setBounds(0, getInnerWidth() - getContentAreaWidth());
+	}
 
+	void HorizontalScrollLayout::Update(size_t dt)
+	{
+		HorizontalLinearLayout::Update(dt);
+
+		if (getFlingEnabled())
+		{
+			FlingGestureOnUpdate(dt, scroll);
+			scroll += getFlingSpeed() * dt;
+		}
 	}
 
 	bool HorizontalScrollLayout::OnMouseDown(Vector2f pos, int touchNumber)
 	{
+		if (getFlingEnabled())
+		{
+			FlingGestureOnTapDown();
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
+
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2441,6 +2551,12 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
+		if (getFlingEnabled())
+		{
+			FlingGestureOnTapUp();
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
+
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2478,6 +2594,12 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
+		if (getFlingEnabled())
+		{
+			FlingGestureOnTapUp();
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
+
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
@@ -2515,6 +2637,12 @@ namespace SE
 
 	bool HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
 	{
+		if (getFlingEnabled())
+		{
+			FlingGestureOnMove(-shift[0]);
+			if (isTapEventsBlockedByFlingerGesture()) return false;
+		}
+
 		bool childMoved = false;
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
