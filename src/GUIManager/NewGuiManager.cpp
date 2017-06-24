@@ -688,6 +688,7 @@ namespace SE
 	VerticalLinearLayout::VerticalLinearLayout(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
 		, itemSpacing(0)
+		, touchTransparency(1)
 	{
 		UpdateRenderPair();
 	}
@@ -781,6 +782,11 @@ namespace SE
 		itemSpacing = newItemSpacing;
 
 		UpdateRenderPair();
+	}
+
+	void VerticalLinearLayout::setTouchTransparency(bool touchTransparency)
+	{
+		this->touchTransparency = touchTransparency;
 	}
 
 	void VerticalLinearLayout::UpdateRenderPair()
@@ -911,7 +917,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -947,7 +953,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -983,7 +989,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1055,9 +1061,9 @@ namespace SE
 			}
 		}
 
-		if (!childMoved)
+		if (!childMoved && !touchTransparency)
 		{
-			WidgetAncestor::OnMove(pos, shift, touchNumber);
+			 WidgetAncestor::OnMove(pos, shift, touchNumber);
 		}
 		return childMoved;
 	}
@@ -1131,6 +1137,7 @@ namespace SE
 	HorizontalLinearLayout::HorizontalLinearLayout(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
 		, itemSpacing(0)
+		, touchTransparency(1)
 	{
 		UpdateRenderPair();
 	}
@@ -1224,6 +1231,11 @@ namespace SE
 		itemSpacing = newItemSpacing;
 
 		UpdateRenderPair();
+	}
+
+	void HorizontalLinearLayout::setTouchTransparency(bool touchTransparency)
+	{
+		this->touchTransparency = touchTransparency;
 	}
 
 	void HorizontalLinearLayout::UpdateRenderPair()
@@ -1354,7 +1366,7 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1390,7 +1402,7 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1423,7 +1435,7 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1479,7 +1491,7 @@ namespace SE
 
 		}
 
-		if (!childMoved)
+		if (!childMoved && !touchTransparency)
 		{
 			WidgetAncestor::OnMove(pos, shift, touchNumber);
 		}
@@ -1568,7 +1580,13 @@ namespace SE
 
 	FrameLayout::FrameLayout(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
+		, touchTransparency(1)
 	{
+	}
+
+	void FrameLayout::setTouchTransparency(bool touchTransparency)
+	{
+		this->touchTransparency = touchTransparency;
 	}
 
 	float FrameLayout::calcInnerWidth()
@@ -1689,7 +1707,7 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1723,7 +1741,7 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1757,7 +1775,7 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -1812,7 +1830,7 @@ namespace SE
 
 		}
 
-		if (!childMoved)
+		if (!childMoved && !touchTransparency)
 		{
 			WidgetAncestor::OnMove(pos, shift, touchNumber);
 		}
@@ -2238,7 +2256,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2279,7 +2297,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2321,7 +2339,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2411,9 +2429,14 @@ namespace SE
 			}
 		}
 
+		if (!childMoved && !touchTransparency)
+		{
+			WidgetAncestor::OnMove(pos, shift, touchNumber);
+		}
+
 		if (childMoved) return true;
-		
-		WidgetAncestor::OnMove(pos, shift, touchNumber);
+
+		if (touchTransparency) return false;
 
 		float threshold = getFlingEnabled() ? (getBouncingEnabled() ? getBouncingThreshold() : 0) : 0;
 		if (getInnerHeight() + threshold * 2 > getDrawHeight())
@@ -2563,7 +2586,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2606,7 +2629,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2649,7 +2672,7 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		bool handled = false;
+		bool handled = !touchTransparency;
 
 		for (size_t i = 0; i < children.size(); i++)
 		{
@@ -2715,9 +2738,14 @@ namespace SE
 			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
 		}
 
+		if (!childMoved && !touchTransparency)
+		{
+			WidgetAncestor::OnMove(pos, shift, touchNumber);
+		}
+
 		if (childMoved) return true;
 
-		WidgetAncestor::OnMove(pos, shift, touchNumber);
+		if (touchTransparency) return false;
 
 		float threshold = getFlingEnabled() ? (getBouncingEnabled() ? getBouncingThreshold() : 0) : 0;
 		if (getInnerWidth() + threshold > getViewWidth())
@@ -4469,6 +4497,7 @@ namespace SE
 				auto verticalLinearLayout = parentWidget.CreateAndAddChildOfType<VerticalLinearLayout>();
 
 				verticalLinearLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+				verticalLinearLayout->setTouchTransparency(pWidgetRecord.second.get<bool>("touchTransparency", 1));
 				
 				auto child = pWidgetRecord.second.get_child_optional("children");
 
@@ -4485,6 +4514,7 @@ namespace SE
 				auto horizontalLinearLayout = parentWidget.CreateAndAddChildOfType<HorizontalLinearLayout>();
 
 				horizontalLinearLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+				horizontalLinearLayout->setTouchTransparency(pWidgetRecord.second.get<bool>("touchTransparency", 1));
 
 				auto child = pWidgetRecord.second.get_child_optional("children");
 
@@ -4501,6 +4531,8 @@ namespace SE
 			{
 				auto frameLayout = parentWidget.CreateAndAddChildOfType<FrameLayout>();
 
+				frameLayout->setTouchTransparency(pWidgetRecord.second.get<bool>("touchTransparency", 1));
+
 				auto child = pWidgetRecord.second.get_child_optional("children");
 
 				if (child)
@@ -4516,6 +4548,7 @@ namespace SE
 				auto verticalScrollLayout = parentWidget.CreateAndAddChildOfType<VerticalScrollLayout>();
 
 				verticalScrollLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+				verticalScrollLayout->setTouchTransparency(pWidgetRecord.second.get<bool>("touchTransparency", 1));
 
 				if (pWidgetRecord.second.get_child_optional("flingGestureParams"))
 				{
@@ -4537,6 +4570,7 @@ namespace SE
 				auto horizontalScrollLayout = parentWidget.CreateAndAddChildOfType<HorizontalScrollLayout>();
 
 				horizontalScrollLayout->setItemSpacing(pWidgetRecord.second.get<float>("itemSpacing", 0.f));
+				horizontalScrollLayout->setTouchTransparency(pWidgetRecord.second.get<bool>("touchTransparency", 1));
 
 				if (pWidgetRecord.second.get_child_optional("flingGestureParams"))
 				{

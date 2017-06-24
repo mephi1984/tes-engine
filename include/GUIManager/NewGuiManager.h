@@ -234,6 +234,7 @@ namespace SE
 	public:
 
 		float itemSpacing;
+		bool touchTransparency;
 
 		bool heightIsFilled;
 
@@ -248,6 +249,7 @@ namespace SE
 		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
 
 		void setItemSpacing(float newItemSpacing);
+		void setTouchTransparency(bool touchTransparency);
 
 		virtual void UpdateRenderPair();
 
@@ -283,13 +285,13 @@ namespace SE
 	public:
 
 		bool widthIsFilled;
+		bool touchTransparency;
 
 		float itemSpacing;
 
 		TRenderPair renderPair;
 
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
-
 
 		virtual void shareLeftoverWidthBetweenChildren();
 
@@ -300,6 +302,7 @@ namespace SE
 		virtual float calcInnerHeight();
 
 		void setItemSpacing(float itemSpacing);
+		void setTouchTransparency(bool touchTransparency);
 
 		virtual void UpdateRenderPair();
 
@@ -331,10 +334,13 @@ namespace SE
 	{
 	protected:
 
-
 	public:
 
+		bool touchTransparency;
+
 		FrameLayout(WidgetParentInterface& widgetParent);
+
+		void setTouchTransparency(bool touchTransparency);
 
 		virtual float calcInnerWidth();
 		virtual float calcInnerHeight();
