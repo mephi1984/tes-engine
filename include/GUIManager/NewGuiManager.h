@@ -24,7 +24,7 @@ namespace SE
 
 		virtual void shareLeftoverWidthBetweenChildren() = 0;
 		virtual void shareLeftoverHeightBetweenChildren() = 0;
-		virtual void setChildrenZLevel() = 0;
+		virtual void InitChildrenZOrder() = 0;
 
 		virtual void UpdateRenderPair() = 0;
 
@@ -41,7 +41,6 @@ namespace SE
 		}
 
 		std::shared_ptr<WidgetAncestor> findWidgetByName(const std::string& name);
-
 	};
 
 
@@ -108,10 +107,9 @@ namespace SE
 
 		boost::signals2::signal<void(Vector2f, Vector2f, int)> onMoveSignal;
 		boost::signals2::signal<void(Vector2f, int)> onMouseUpAfterMoveSignal;
-
-
 		boost::signals2::signal<void(Vector2f, int)> onMouseDownSignal;
 		boost::signals2::signal<void(Vector2f, int)> onMouseUpSignal;
+		boost::signals2::signal<void(int)> onMouseCancelSignal;
 
 		WidgetParentInterface& parent;
 
@@ -172,7 +170,7 @@ namespace SE
 
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
-		virtual void setChildrenZLevel();
+		virtual void InitChildrenZOrder();
 
 		virtual void setZLevel(float zLevel);
 		virtual void setBackground(boost::variant<std::string, Vector4f> background);
@@ -205,7 +203,7 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
 
 		virtual void RemoveFocusRecursively();
@@ -241,6 +239,7 @@ namespace SE
 		VerticalLinearLayout(WidgetParentInterface& widgetParent);
 
 		virtual void shareLeftoverHeightBetweenChildren();
+		virtual void InitChildrenZOrder();
 
 		virtual float calcInnerWidth();
 		virtual float calcInnerHeight();
@@ -269,7 +268,7 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
 
 		virtual void RemoveFocusRecursively();
@@ -294,6 +293,7 @@ namespace SE
 		HorizontalLinearLayout(WidgetParentInterface& widgetParent);
 
 		virtual void shareLeftoverWidthBetweenChildren();
+		virtual void InitChildrenZOrder();
 
 		virtual Vector2f getContentTranslate();
 		virtual Vector2f getChildTranslate(std::shared_ptr<WidgetAncestor> child);
@@ -322,7 +322,7 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
 
 		virtual void RemoveFocusRecursively();
@@ -363,7 +363,7 @@ namespace SE
 
 		virtual void OnKeyPressed(int key);
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
 
 		virtual void RemoveFocusRecursively();
@@ -468,7 +468,7 @@ namespace SE
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 		virtual void OnMouseMoveOutside();
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 
 		virtual void UpdateRenderPair();
 	};
@@ -494,7 +494,7 @@ namespace SE
 
 		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
 
 		virtual void Update(size_t dt);
@@ -586,7 +586,7 @@ namespace SE
 
 		virtual void OnMouseCancel(int touchNumber);
 
-		virtual void OnMouseMove(Vector2f pos);
+		virtual bool OnMouseMove(Vector2f pos);
 		virtual void OnMouseMoveOutside();
 	};
 
@@ -803,14 +803,14 @@ namespace SE
 
 		void OnKeyPressed(int key);
 
-		void OnMouseMove(Vector2f pos);
+		bool OnMouseMove(Vector2f pos);
 
 		virtual void recalculateInnerWidth();
 		virtual void recalculateInnerHeight();
 
 		virtual void shareLeftoverWidthBetweenChildren();
 		virtual void shareLeftoverHeightBetweenChildren();
-		virtual void setChildrenZLevel();
+		virtual void InitChildrenZOrder();
 
 		virtual void UpdateRenderPair();
 		virtual void UpdateOnWindowResize();

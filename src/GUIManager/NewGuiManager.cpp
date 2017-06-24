@@ -65,17 +65,17 @@ namespace SE
 
 	std::shared_ptr<WidgetAncestor> WidgetParentInterface::findWidgetByName(const std::string& name)
 	{
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (children[i]->name == name)
+			if (child->name == name)
 			{
-				return children[i];
+				return child;
 			}
 		}
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			auto result = children[i]->findWidgetByName(name);
+			auto result = child->findWidgetByName(name);
 
 			if (result != nullptr)
 			{
@@ -129,7 +129,8 @@ namespace SE
 
 	void WidgetAncestor::setVisibility(bool visible)
 	{
-		this->visible = visible; // temporary
+		if (this->visible == visible) return;
+		this->visible = visible;
 		UpdateRenderPair();
 		parent.recalculateInnerWidth();
 		parent.recalculateInnerHeight();
@@ -338,13 +339,18 @@ namespace SE
 		}
 	}
 
-	void WidgetAncestor::setChildrenZLevel()
+	void WidgetAncestor::InitChildrenZOrder()
 	{
 		for (auto &child : children)
 		{
 			child->zLevelAbsolute = zLevelAbsolute + child->zLevel + 1;
-			child->setChildrenZLevel();
+			child->InitChildrenZOrder();
 		}
+		
+		std::sort(children.begin(), children.end(), [](std::shared_ptr<WidgetAncestor> A, std::shared_ptr<WidgetAncestor> B)
+		{
+			return A->zLevelAbsolute > B->zLevelAbsolute;
+		});
 	}
 
 	void WidgetAncestor::shareLeftoverHeightBetweenChildren()
@@ -645,14 +651,16 @@ namespace SE
 
 	void WidgetAncestor::OnMouseCancel(int touchNumber)
 	{
+		onMouseCancelSignal(touchNumber);
 	}
 
 	void WidgetAncestor::OnKeyPressed(int key)
 	{
 	}
 
-	void WidgetAncestor::OnMouseMove(Vector2f pos)
+	bool WidgetAncestor::OnMouseMove(Vector2f pos)
 	{
+		return true;
 	}
 
 	void WidgetAncestor::OnMouseMoveOutside()
@@ -691,6 +699,15 @@ namespace SE
 		, touchTransparency(1)
 	{
 		UpdateRenderPair();
+	}
+
+	void VerticalLinearLayout::InitChildrenZOrder()
+	{
+		for (auto &child : children)
+		{
+			child->zLevelAbsolute = zLevelAbsolute + child->zLevel + 1;
+			child->InitChildrenZOrder();
+		}
 	}
 
 	void VerticalLinearLayout::shareLeftoverHeightBetweenChildren()
@@ -734,18 +751,18 @@ namespace SE
 	{
 		float result = 0;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			if (getLayoutStyle(children[i]->layoutWidth) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
+			if (getLayoutStyle(child->layoutWidth) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
-				if (result < children[i]->getViewWidth())
+				if (result < child->getViewWidth())
 				{
-					result = children[i]->getViewWidth();
+					result = child->getViewWidth();
 				}
 			}
 		}
@@ -758,16 +775,16 @@ namespace SE
 
 		float result = 0;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			result += children[i]->getViewHeight();
+			result += child->getViewHeight();
 			
-			if (i > 0)
+			if (child != *children.begin())
 			{
 				result += itemSpacing;
 			}
@@ -798,9 +815,9 @@ namespace SE
 
 		WidgetAncestor::UpdateRenderPair();
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->UpdateRenderPair();
+			child->UpdateRenderPair();
 		}
 
 	}
@@ -875,21 +892,21 @@ namespace SE
 
 		Renderer->TranslateMatrix(shift);
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Renderer->TranslateMatrix(Vector3f(0, -children[i]->getViewHeight() - itemSpacing, 0));
+			Renderer->TranslateMatrix(Vector3f(0, -child->getViewHeight() - itemSpacing, 0));
 			
-			childShift << getChildTranslate(children[i]), 0;
+			childShift << getChildTranslate(child), 0;
 
 			Renderer->PushMatrix();
 			Renderer->TranslateMatrix(childShift);
 
-			children[i]->Draw();
+			child->Draw();
 
 			Renderer->PopMatrix();
 
@@ -917,35 +934,35 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 			
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 			
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				if (child->OnMouseDown(innerRelativePos, touchNumber))
 				{
 					handled = true;
+					break;
 				}
-			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
 			}
 		}
 
-		WidgetAncestor::OnMouseDown(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseDown(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency ;
 	}
 
 	bool VerticalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -953,35 +970,38 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				if (child->OnMouseUp(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
-		WidgetAncestor::OnMouseUp(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUp(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool VerticalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -989,47 +1009,52 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				if (child->OnMouseUpAfterMove(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	void VerticalLinearLayout::OnMouseCancel(int touchNumber)
 	{
-		for (size_t i = 0; i < children.size(); i++)
+		WidgetAncestor::OnMouseCancel(touchNumber);
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			children[i]->OnMouseCancel(touchNumber);
+			child->OnMouseCancel(touchNumber);
 		}
 	}
 
@@ -1040,24 +1065,24 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+				childMoved = childMoved | child->OnMove(innerRelativePos, shift, touchNumber);
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
@@ -1084,39 +1109,49 @@ namespace SE
 	{
 		focused = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->RemoveFocusRecursively();;
+			child->RemoveFocusRecursively();
 		}
 	}
 
-	void VerticalLinearLayout::OnMouseMove(Vector2f pos)
+	bool VerticalLinearLayout::OnMouseMove(Vector2f pos)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing;
 
-		for (size_t i = 0; i < children.size(); i++)
+		bool handled = false;
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				children[i]->OnMouseMove(innerRelativePos);
+				if (child->OnMouseMove(innerRelativePos))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
-				children[i]->OnMouseMoveOutside();
+				child->OnMouseMoveOutside();
 			}
 		}
 
-		WidgetAncestor::OnMouseMove(pos);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseMove(pos);
+		}
+
+		return handled | !touchTransparency;
 	}
 
 	void VerticalLinearLayout::OnMouseMoveOutside()
@@ -1140,6 +1175,15 @@ namespace SE
 		, touchTransparency(1)
 	{
 		UpdateRenderPair();
+	}
+
+	void HorizontalLinearLayout::InitChildrenZOrder()
+	{
+		for (auto &child : children)
+		{
+			child->zLevelAbsolute = zLevelAbsolute + child->zLevel + 1;
+			child->InitChildrenZOrder();
+		}
 	}
 
 	void HorizontalLinearLayout::shareLeftoverWidthBetweenChildren()
@@ -1184,18 +1228,18 @@ namespace SE
 
 		float result = 0;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			if (getLayoutStyle(children[i]->layoutHeight) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
+			if (getLayoutStyle(child->layoutHeight) != WidgetAncestor::LayoutStyle::LS_MATCH_PARENT)
 			{
-				if (result < children[i]->getViewHeight())
+				if (result < child->getViewHeight())
 				{
-					result = children[i]->getViewHeight();
+					result = child->getViewHeight();
 				}
 			}
 		}
@@ -1207,16 +1251,16 @@ namespace SE
 	{
 		float result = 0;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			result += children[i]->getViewWidth();
+			result += child->getViewWidth();
 
-			if (i > 0)
+			if (child != *children.begin())
 			{
 				result += itemSpacing;
 			}
@@ -1247,9 +1291,9 @@ namespace SE
 
 		WidgetAncestor::UpdateRenderPair();
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->UpdateRenderPair();
+			child->UpdateRenderPair();
 		}
 
 	}
@@ -1324,22 +1368,22 @@ namespace SE
 
 		Renderer->TranslateMatrix(shift);
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 			
-			childShift << getChildTranslate(children[i]), 0;
+			childShift << getChildTranslate(child), 0;
 
 			Renderer->PushMatrix();
 			Renderer->TranslateMatrix(childShift);
 
-			children[i]->Draw();
+			child->Draw();
 
 			Renderer->PopMatrix();
-			Renderer->TranslateMatrix(Vector3f(children[i]->getViewWidth() + itemSpacing, 0, 0));
+			Renderer->TranslateMatrix(Vector3f(child->getViewWidth() + itemSpacing, 0, 0));
 
 		}
 
@@ -1366,100 +1410,109 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child)
 			{
 				continue;
 			}
 			
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 	
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				if (child->OnMouseDown(innerRelativePos, touchNumber))
 				{
 					handled = true;
+					break;
 				}
 			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
-			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
-		WidgetAncestor::OnMouseDown(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseDown(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool HorizontalLinearLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				children[i]->OnMouseUp(innerRelativePos, touchNumber);
-			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
-			}
-
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
-
-		}
-
-		WidgetAncestor::OnMouseUp(pos, touchNumber);
-
-		return handled;
-	}
-
-	bool HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
-	{
-		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
-
-		bool handled = !touchTransparency;
-
-		for (size_t i = 0; i < children.size(); i++)
-		{
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
-
-			if (pointIsInsideView(innerRelativePos, children[i]))
-			{
-				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				if (child->OnMouseUp(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUp(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
+	}
+
+	bool HorizontalLinearLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
+	{
+		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
+
+		bool handled = false;
+
+		for (auto &child : children)
+		{
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
+
+			if (pointIsInsideView(innerRelativePos, child))
+			{
+				if (child->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				{
+					handled = true;
+				}
+			}
+			else
+			{
+				child->OnMouseCancel(touchNumber);
+			}
+
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
+
+		}
+
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		}
+
+		return handled | !touchTransparency;
 	}
 
 	bool HorizontalLinearLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1468,26 +1521,25 @@ namespace SE
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				
-				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+				childMoved = childMoved | child->OnMove(innerRelativePos, shift, touchNumber);
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
@@ -1500,14 +1552,16 @@ namespace SE
 
 	void HorizontalLinearLayout::OnMouseCancel(int touchNumber)
 	{
-		for (size_t i = 0; i < children.size(); i++)
+		WidgetAncestor::OnMouseCancel(touchNumber);
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			children[i]->OnMouseCancel(touchNumber);
+			child->OnMouseCancel(touchNumber);
 		}
 	}
 
@@ -1523,35 +1577,43 @@ namespace SE
 		}
 	}
 
-	void HorizontalLinearLayout::OnMouseMove(Vector2f pos)
+	bool HorizontalLinearLayout::OnMouseMove(Vector2f pos)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		for (size_t i = 0; i < children.size(); i++)
+		bool handled = false;
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-
-				children[i]->OnMouseMove(innerRelativePos);
+				if (child->OnMouseMove(innerRelativePos))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
-				children[i]->OnMouseMoveOutside();
+				child->OnMouseMoveOutside();
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
-		WidgetAncestor::OnMouseMove(pos);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseMove(pos);
+		}
 		
+		return handled | !touchTransparency;
 	}
 
 	void HorizontalLinearLayout::OnMouseMoveOutside()
@@ -1570,9 +1632,9 @@ namespace SE
 	{
 		focused = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->RemoveFocusRecursively();;
+			child->RemoveFocusRecursively();
 		}
 	}
 
@@ -1593,20 +1655,20 @@ namespace SE
 	{
 		float result = 0;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			LayoutStyle style = getLayoutStyle(children[i]->layoutWidth);
+			LayoutStyle style = getLayoutStyle(child->layoutWidth);
 
 			if (style == LS_FIXED || style == LS_WRAP_CONTENT)
 			{
-				if (result < children[i]->getViewWidth())
+				if (result < child->getViewWidth())
 				{
-					result = children[i]->getViewWidth();
+					result = child->getViewWidth();
 				}
 			}
 		}
@@ -1618,20 +1680,20 @@ namespace SE
 	{
 		float result = 0;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			LayoutStyle style = getLayoutStyle(children[i]->layoutHeight);
+			LayoutStyle style = getLayoutStyle(child->layoutHeight);
 
 			if (style == LS_FIXED || style == LS_WRAP_CONTENT)
 			{
-				if (result < children[i]->getViewHeight())
+				if (result < child->getViewHeight())
 				{
-					result = children[i]->getViewHeight();
+					result = child->getViewHeight();
 				}
 			}
 		}
@@ -1648,9 +1710,9 @@ namespace SE
 
 		WidgetAncestor::UpdateRenderPair();
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->UpdateRenderPair();
+			child->UpdateRenderPair();
 		}
 
 	}
@@ -1668,19 +1730,19 @@ namespace SE
 
 		Renderer->TranslateMatrix(shift);
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child = children.rbegin(); child != children.rend(); ++child)
 		{
-			if (!children[i]->visible)
+			if (!(*child)->visible)
 			{
 				continue;
 			}
 
-			childShift << getChildTranslate(children[i]), 0;
+			childShift << getChildTranslate((*child)), 0;
 
 			Renderer->PushMatrix();
 			Renderer->TranslateMatrix(childShift);
 
-			children[i]->Draw();
+			(*child)->Draw();
 
 			Renderer->PopMatrix();
 		}
@@ -1707,101 +1769,107 @@ namespace SE
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				if (child->OnMouseDown(innerRelativePos, touchNumber))
 				{
 					handled = true;
+					break;
 				}
-			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
 			}
 
 		}
 
-		WidgetAncestor::OnMouseDown(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseDown(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool FrameLayout::OnMouseUp(Vector2f pos, int touchNumber)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				if (child->OnMouseUp(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
 		}
 
-		WidgetAncestor::OnMouseUp(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUp(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool FrameLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				if (child->OnMouseUpAfterMove(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool FrameLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -1810,22 +1878,22 @@ namespace SE
 
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+				childMoved = childMoved | child->OnMove(innerRelativePos, shift, touchNumber);
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
 		}
@@ -1839,14 +1907,16 @@ namespace SE
 
 	void FrameLayout::OnMouseCancel(int touchNumber)
 	{
-		for (size_t i = 0; i < children.size(); i++)
+		WidgetAncestor::OnMouseCancel(touchNumber);
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			children[i]->OnMouseCancel(touchNumber);
+			child->OnMouseCancel(touchNumber);
 		}
 	}
 
@@ -1862,31 +1932,41 @@ namespace SE
 		}
 	}
 
-	void FrameLayout::OnMouseMove(Vector2f pos)
+	bool FrameLayout::OnMouseMove(Vector2f pos)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 
-		for (size_t i = 0; i < children.size(); i++)
+		bool handled = false;
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				children[i]->OnMouseMove(innerRelativePos);
+				if (child->OnMouseMove(innerRelativePos))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
-				children[i]->OnMouseMoveOutside();
+				child->OnMouseMoveOutside();
 			}
 
 		}
 
-		WidgetAncestor::OnMouseMove(pos);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseMove(pos);
+		}
+
+		return handled | !touchTransparency;
 	}
 
 	void FrameLayout::OnMouseMoveOutside()
@@ -1905,9 +1985,9 @@ namespace SE
 	{
 		focused = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->RemoveFocusRecursively();;
+			child->RemoveFocusRecursively();
 		}
 	}
 
@@ -2219,21 +2299,21 @@ namespace SE
 
 		Renderer->TranslateMatrix(shift);
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Renderer->TranslateMatrix(Vector3f(0, -children[i]->getViewHeight() - itemSpacing, 0));
+			Renderer->TranslateMatrix(Vector3f(0, -child->getViewHeight() - itemSpacing, 0));
 
-			shift_child << getChildTranslate(children[i]), 0;
+			shift_child << getChildTranslate(child), 0;
 
 			Renderer->PushMatrix();
 			Renderer->TranslateMatrix(shift_child);
 
-			children[i]->Draw();
+			child->Draw();
 
 			Renderer->PopMatrix();
 
@@ -2256,34 +2336,35 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				if (child->OnMouseDown(innerRelativePos, touchNumber))
 				{
 					handled = true;
+					break;
 				}
 			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
-			}
 		}
-		WidgetAncestor::OnMouseDown(pos, touchNumber);
 
-		return handled;
+		if (!handled & !touchTransparency)
+		{
+			WidgetAncestor::OnMouseDown(pos, touchNumber);
+		}
+
+		return handled | !touchTransparency;
 	}
 
 	bool VerticalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2297,35 +2378,38 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				if (child->OnMouseUp(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
-		WidgetAncestor::OnMouseUp(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUp(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool VerticalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -2339,35 +2423,38 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				if (child->OnMouseUpAfterMove(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	void VerticalScrollLayout::UpdateRenderPair()
@@ -2408,24 +2495,24 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+				childMoved = childMoved | child->OnMove(innerRelativePos, shift, touchNumber);
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
@@ -2464,32 +2551,43 @@ namespace SE
 		}
 	}
 
-	void VerticalScrollLayout::OnMouseMove(Vector2f pos)
+	bool VerticalScrollLayout::OnMouseMove(Vector2f pos)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(1) -= itemSpacing + scroll;
 
-		for (size_t i = 0; i < children.size(); i++)
+		bool handled = false;
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			relativePos(1) += children[i]->getViewHeight() + itemSpacing;
+			relativePos(1) += child->getViewHeight() + itemSpacing;
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				children[i]->OnMouseMove(innerRelativePos);
+				if (child->OnMouseMove(innerRelativePos))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
-				children[i]->OnMouseMoveOutside();
+				child->OnMouseMoveOutside();
 			}
 		}
 
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseMove(pos);
+		}
+
+		return handled | !touchTransparency;
 	}
 
 	void VerticalScrollLayout::OnMouseMoveOutside()
@@ -2526,22 +2624,22 @@ namespace SE
 
 		Renderer->TranslateMatrix(shift);
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			shift_child << getChildTranslate(children[i]), 0;
+			shift_child << getChildTranslate(child), 0;
 
 			Renderer->PushMatrix();
 			Renderer->TranslateMatrix(shift_child);
 
-			children[i]->Draw();
+			child->Draw();
 
 			Renderer->PopMatrix();
-			Renderer->TranslateMatrix(Vector3f(children[i]->getViewWidth() + itemSpacing, 0, 0));
+			Renderer->TranslateMatrix(Vector3f(child->getViewWidth() + itemSpacing, 0, 0));
 
 		}
 
@@ -2586,36 +2684,36 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				if (child->OnMouseDown(innerRelativePos, touchNumber))
 				{
 					handled = true;
+					break;
 				}
 			}
-			else
-			{
-				children[i]->OnMouseCancel(touchNumber);
-			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
+		
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseDown(pos, touchNumber);
+		}
 
-		WidgetAncestor::OnMouseDown(pos, touchNumber);
-
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool HorizontalScrollLayout::OnMouseUp(Vector2f pos, int touchNumber)
@@ -2629,36 +2727,39 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				if (child->OnMouseUp(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
-		WidgetAncestor::OnMouseUp(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUp(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool HorizontalScrollLayout::OnMouseUpAfterMove(Vector2f pos, int touchNumber)
@@ -2672,36 +2773,39 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		bool handled = !touchTransparency;
+		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				if (child->OnMouseUpAfterMove(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
-		WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseUpAfterMove(pos, touchNumber);
+		}
 
-		return handled;
+		return handled | !touchTransparency;
 	}
 
 	bool HorizontalScrollLayout::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
@@ -2717,25 +2821,25 @@ namespace SE
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				childMoved = childMoved | children[i]->OnMove(innerRelativePos, shift, touchNumber);
+				childMoved = childMoved | child->OnMove(innerRelativePos, shift, touchNumber);
 			}
 			else
 			{
-				children[i]->OnMouseCancel(touchNumber);
+				child->OnMouseCancel(touchNumber);
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 		}
 
 		if (!childMoved && !touchTransparency)
@@ -2773,33 +2877,44 @@ namespace SE
 		}
 	}
 
-	void HorizontalScrollLayout::OnMouseMove(Vector2f pos)
+	bool HorizontalScrollLayout::OnMouseMove(Vector2f pos)
 	{
 		Vector2f relativePos = pos - getContentTranslate() - getDrawTranslate();
 		relativePos(0) += scroll;
 
-		for (size_t i = 0; i < children.size(); i++)
+		bool handled = false;
+
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			Vector2f innerRelativePos = relativePos - getChildTranslate(children[i]);
+			Vector2f innerRelativePos = relativePos - getChildTranslate(child);
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				children[i]->OnMouseMove(innerRelativePos);
+				if (child->OnMouseMove(innerRelativePos))
+				{
+					handled = true;
+				}
 			}
 			else
 			{
-				children[i]->OnMouseMoveOutside();
+				child->OnMouseMoveOutside();
 			}
 
-			relativePos(0) -= children[i]->getViewWidth() + itemSpacing;
+			relativePos(0) -= child->getViewWidth() + itemSpacing;
 
 		}
 
+		if (!handled && !touchTransparency)
+		{
+			WidgetAncestor::OnMouseMove(pos);
+		}
+
+		return handled | !touchTransparency;
 	}
 
 
@@ -3219,12 +3334,13 @@ namespace SE
 		}
 	}
 
-	void Button::OnMouseMove(Vector2f pos)
+	bool Button::OnMouseMove(Vector2f pos)
 	{
 		if (hoverButtonState == ButtonState::BS_NONE || hoverButtonState == ButtonState::BS_EASING)
 		{
 			hoverButtonState = BS_PRESSING;
 		}
+		return true;
 	}
 
 	void Button::OnMouseMoveOutside()
@@ -4239,13 +4355,13 @@ namespace SE
 
 		Renderer->PushProjectionMatrix(Renderer->GetMatrixWidth(), Renderer->GetMatrixHeight(), UI_RENDERING_ZNEAR, UI_RENDERING_ZFAR);
 
-		for (auto &child : children)
+		for (auto &child = children.rbegin(); child != children.rend(); ++child)
 		{
-			if (!child->visible)
+			if (!(*child)->visible)
 			{
 				continue;
 			}
-			child->Draw();
+			(*child)->Draw();
 		}
 
 		Renderer->PopProjectionMatrix();
@@ -4258,23 +4374,24 @@ namespace SE
 
 		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
-			children[i]->RemoveFocusRecursively();
+			child->RemoveFocusRecursively();
 
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - child->getViewHeight();
 		
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseDown(innerRelativePos, touchNumber))
+				if (child->OnMouseDown(innerRelativePos, touchNumber))
 				{
 					handled = true;
+					break;
 				}
 			}
 		}
@@ -4291,22 +4408,26 @@ namespace SE
 
 		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - child->getViewHeight();
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUp(innerRelativePos, touchNumber))
+				if (child->OnMouseUp(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
+			}
+			else
+			{
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
@@ -4322,22 +4443,26 @@ namespace SE
 
 		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - child->getViewHeight();
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (!handled && pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMouseUpAfterMove(innerRelativePos, touchNumber))
+				if (child->OnMouseUpAfterMove(innerRelativePos, touchNumber))
 				{
 					handled = true;
 				}
+			}
+			else
+			{
+				child->OnMouseCancel(touchNumber);
 			}
 		}
 
@@ -4354,21 +4479,22 @@ namespace SE
 
 		bool handled = false;
 
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			if (!children[i]->visible)
+			if (!child->visible)
 			{
 				continue;
 			}
 
 			Vector2f innerRelativePos = pos;
-			innerRelativePos(1) -= getHeight() - children[i]->getViewHeight();
+			innerRelativePos(1) -= getHeight() - child->getViewHeight();
 
-			if (pointIsInsideView(innerRelativePos, children[i]))
+			if (pointIsInsideView(innerRelativePos, child))
 			{
-				if (children[i]->OnMove(innerRelativePos, shift, touchNumber))
+				if (child->OnMove(innerRelativePos, shift, touchNumber))
 				{
 					handled = true;
+					break;
 				}
 			}
 		}
@@ -4388,16 +4514,24 @@ namespace SE
 		}
 	}
 
-	void NewGuiManager::OnMouseMove(Vector2f pos)
+	bool NewGuiManager::OnMouseMove(Vector2f pos)
 	{
+		bool handled = false;
+
 		for (auto &child : children)
 		{
 			if (!child->visible)
 			{
 				continue;
 			}
-			child->OnMouseMove(pos);
+			if (child->OnMouseMove(pos))
+			{
+				handled = true;
+				break;
+			}
 		}
+
+		return handled;
 	}
 
 	void NewGuiManager::shareLeftoverWidthBetweenChildren()
@@ -4425,13 +4559,18 @@ namespace SE
 		shareLeftoverHeightBetweenChildren();
 	}
 
-	void NewGuiManager::setChildrenZLevel()
+	void NewGuiManager::InitChildrenZOrder()
 	{
 		for (auto &child : children)
 		{
 			child->zLevelAbsolute = UI_RENDERING_ZSTART + child->zLevel;
-			child->setChildrenZLevel();
+			child->InitChildrenZOrder();
 		}
+
+		std::sort(children.begin(), children.end(), [](std::shared_ptr<WidgetAncestor> A, std::shared_ptr<WidgetAncestor> B)
+		{
+			return A->zLevelAbsolute > B->zLevelAbsolute;
+		});
 	}
 
 	void NewGuiManager::shareLeftoverHeightBetweenChildren()
@@ -4459,9 +4598,9 @@ namespace SE
 
 	void NewGuiManager::UpdateRenderPair()
 	{
-		for (size_t i = 0; i < children.size(); i++)
+		for (auto &child : children)
 		{
-			children[i]->UpdateRenderPair();
+			child->UpdateRenderPair();
 		}
 	}
 
@@ -4480,7 +4619,7 @@ namespace SE
 
 		AddWidgetsRecursively(*this, children, ptree.get_child("widgets"));
 
-		setChildrenZLevel(); // before UpdateRenderPair
+		InitChildrenZOrder(); // before UpdateRenderPair
 		UpdateOnWindowResize();
 	}
 
@@ -4719,8 +4858,6 @@ namespace SE
 			widget->inited = true;			
 
 		}
-
-
 	}
 
 	WidgetAncestor::childrenHorizontalAlignment NewGuiManager::layoutHorizontalAlignmentFromConfigValue(std::string configValue)
