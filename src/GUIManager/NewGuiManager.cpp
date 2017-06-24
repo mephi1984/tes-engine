@@ -1904,7 +1904,7 @@ namespace SE
 	const size_t FlingGestureSupport::TRACK_RECORD_SIZE = 4;
 	const size_t FlingGestureSupport::TRACK_RECORD_TIME_MS = 100;
 	const float FlingGestureSupport::BOUNCING_BRAKING_PER_TRESPASSING_UNIT = 0.01f;
-	const float FlingGestureSupport::BOUNCING_WALL = 100;
+	const float FlingGestureSupport::BOUNCING_WALL = 40;
 
 	FlingGestureSupport::FlingGestureSupport(bool flingEnabled, bool bouncingEnabled)
 		: flingEnabled(flingEnabled)
@@ -2355,7 +2355,15 @@ namespace SE
 	void VerticalScrollLayout::UpdateRenderPair()
 	{
 		VerticalLinearLayout::UpdateRenderPair();
-		setBounds(0, getInnerHeight() - getContentAreaHeight());
+		if (getInnerHeight() - getViewHeight() >= 0)
+		{
+			setFlingEnabled(true);
+			setBounds(0, getInnerHeight() - getViewHeight());
+		}
+		else
+		{
+			setFlingEnabled(false);
+		}
 	}
 
 	void VerticalScrollLayout::Update(size_t dt)
@@ -2407,21 +2415,19 @@ namespace SE
 		
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
 
-		float viewHeight = getContentAreaHeight();
-		float contentHeight = getInnerHeight();
-
-		if (contentHeight > viewHeight)
+		float threshold = getFlingEnabled() ? (getBouncingEnabled() ? getBouncingThreshold() : 0) : 0;
+		if (getInnerHeight() + threshold * 2 > getDrawHeight())
 		{
 			scroll -= shift(1);
 
-			if (scroll < -getBouncingThreshold())
+			if (scroll < -threshold)
 			{
-				scroll = -getBouncingThreshold();
+				scroll = -threshold;
 			}
 
-			if (scroll > contentHeight - viewHeight + getBouncingThreshold())
+			if (scroll > getInnerHeight() - getDrawHeight() + threshold)
 			{
-				scroll = contentHeight - viewHeight + getBouncingThreshold();
+				scroll = getInnerHeight() - getDrawHeight() + threshold;
 			}
 		}
 
@@ -2524,7 +2530,15 @@ namespace SE
 	void HorizontalScrollLayout::UpdateRenderPair()
 	{
 		HorizontalLinearLayout::UpdateRenderPair();
-		setBounds(0, getInnerWidth() - getContentAreaWidth());
+		if (getInnerWidth() - getViewWidth() >= 0)
+		{
+			setFlingEnabled(true);
+			setBounds(0, getInnerWidth() - getViewWidth());
+		}
+		else
+		{
+			setFlingEnabled(false);
+		}
 	}
 
 	void HorizontalScrollLayout::Update(size_t dt)
@@ -2705,21 +2719,19 @@ namespace SE
 
 		WidgetAncestor::OnMove(pos, shift, touchNumber);
 
-		float viewWidth = getContentAreaWidth();
-		float contentWidth = getInnerWidth();
-
-		if (contentWidth > viewWidth)
+		float threshold = getFlingEnabled() ? (getBouncingEnabled() ? getBouncingThreshold() : 0) : 0;
+		if (getInnerWidth() + threshold > getViewWidth())
 		{
 			scroll += shift(0);
 
-			if (scroll < -getBouncingThreshold())
+			if (scroll < -threshold)
 			{
-				scroll = -getBouncingThreshold();
+				scroll = -threshold;
 			}
 
-			if (scroll > contentWidth - viewWidth + getBouncingThreshold())
+			if (scroll > getInnerWidth() - getViewWidth() + threshold)
 			{
-				scroll = contentWidth - viewWidth + getBouncingThreshold();
+				scroll = getInnerWidth() - getViewWidth() + threshold;
 			}
 		}
 
