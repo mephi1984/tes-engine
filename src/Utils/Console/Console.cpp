@@ -23,7 +23,7 @@ const std::string CONST_CONSOLE_TEX_NAME = "console_bkg.bmp";
 void TSimpleConsole::Draw()
 {
 
-
+	
 	RenderUniform1f("Transparency", 1.f);
 
 	if (HistoryTriangeList.get() == 0)
@@ -64,7 +64,7 @@ void TSimpleConsole::Draw()
 	
 	Renderer->PopMatrix();
 	Renderer->PopProjectionMatrix();
-
+	
 }
 
 #endif

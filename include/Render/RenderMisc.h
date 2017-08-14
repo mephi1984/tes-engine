@@ -42,8 +42,8 @@ namespace SE
 
 struct T2DQuad
 {
-	Vector3f VertexCoord[4];
-	Vector2f TextureCoord[4];
+	std::array<Vector3f, 4> VertexCoord;
+	std::array<Vector2f, 4> TextureCoord;
 };
 
 struct TDataTriangleList
@@ -84,7 +84,7 @@ public:
 class VBOObject //Must stay in shared ptr only!
 {
 public:
-	size_t Buffer;
+	GLuint Buffer;
 
 	VBOObject();
 

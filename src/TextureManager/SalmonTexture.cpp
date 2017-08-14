@@ -32,17 +32,17 @@ TTextureListClass::TTextureListClass()
     
     //CreateFunctionMap[".bmp"] = [this](const std::string& name, TTextureData& texData) ->bool {return this->CreateTexDataFromBmp24(name, texData);};
 
-	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> size_t
+	AddFunctionMap["bmp24"] = [this](TTextureData& texData) -> GLuint
 	{
-		std::function<size_t()> f = std::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
-		return PerformInMainThread<size_t>(f);
+		std::function<GLuint()> f = [this, &texData]() -> GLuint { return this->AddTextureBmp24Data(texData); }; //std::bind(&TTextureListClass::AddTextureBmp24Data, this, texData);
+		return PerformInMainThread<GLuint>(f);
 	};
 
 
-	AddFunctionMap["bmp32"] = [this](TTextureData& texData) -> size_t
+	AddFunctionMap["bmp32"] = [this](TTextureData& texData) -> GLuint
 	{
-		std::function<size_t()> f = std::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
-		return PerformInMainThread<size_t>(f);
+		std::function<GLuint()> f = [this, &texData]() -> GLuint { return this->AddTextureBmp32Data(texData); }; //std::bind(&TTextureListClass::AddTextureBmp32Data, this, texData);
+		return PerformInMainThread<GLuint>(f);
 	};
 	
     
@@ -60,7 +60,7 @@ void TTextureListClass::Clear()
 	PerformInMainThreadAsync(std::bind(&TTextureListClass::InnerClear, this));
 }
 
-size_t TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height)
+GLuint TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 
@@ -98,7 +98,7 @@ size_t TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_
 
 
 }
-size_t TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
+GLuint TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 
@@ -153,13 +153,13 @@ size_t TTextureListClass::InnerAddEmptyCubemapTexture(const std::string& texName
 	return texID;
 }
 
-size_t TTextureListClass::InnerAddDepthTexture(const std::string& texName, size_t width, size_t height)
+GLuint TTextureListClass::InnerAddDepthTexture(const std::string& texName, size_t width, size_t height)
 {
 	AssertIfInMainThread();
 
 	
 	#ifdef TARGET_WIN32
-	size_t texID;
+	GLuint texID;
 
 	if (TexMap.count(texName) == 0)
 	{
@@ -490,7 +490,7 @@ bool TTextureListClass::CreateTexDataFromPng(const std::string& filename, TTextu
 
 }
 
-size_t TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
+GLuint TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
 {
 	AssertIfInMainThread();
 
@@ -516,7 +516,7 @@ size_t TTextureListClass::AddTextureBmp24Data(const TTextureData& texData)
     return TexID;
 }
 
-size_t TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
+GLuint TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
 {
 	AssertIfInMainThread();
 
@@ -542,7 +542,7 @@ size_t TTextureListClass::AddTextureBmp32Data(const TTextureData& texData)
     return TexID;
 }
 
-size_t TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
+GLuint TTextureListClass::AddCubemapTextureBmp24Data(TTextureData* texData)
 {
 	AssertIfInMainThread();
 
@@ -588,9 +588,9 @@ size_t TTextureListClass::GetTextureWidth(const std::string& texName)
 }
 
 
-size_t TTextureListClass::AddTextureDirectly(const std::string& filename, std::string texName)
+GLuint TTextureListClass::AddTextureDirectly(const std::string& filename, std::string texName)
 {
-	size_t TexID;
+	GLuint TexID;
 
 	//Basically:
 	if (filename == "")
@@ -633,12 +633,12 @@ size_t TTextureListClass::AddTextureDirectly(const std::string& filename, std::s
 
 }
 
-size_t TTextureListClass::AddTexture(const std::string& fileName)
+GLuint TTextureListClass::AddTexture(const std::string& fileName)
 {
 	return AddTexture(fileName, GetFileName(fileName));
 }
 
-size_t TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
+GLuint TTextureListClass::AddTexture(const std::string& fileName, std::string texName)
 {
 	if (texName == "")
 	{
@@ -667,7 +667,7 @@ size_t TTextureListClass::AddTexture(const std::string& fileName, std::string te
 }
 
 
-size_t TTextureListClass::AddTextureFromUserdata(const std::string& fileName, std::string texName)
+GLuint TTextureListClass::AddTextureFromUserdata(const std::string& fileName, std::string texName)
 {
 	
 	if (!IsFileExistsInUserData(fileName))
@@ -681,7 +681,7 @@ size_t TTextureListClass::AddTextureFromUserdata(const std::string& fileName, st
 }
 
 
-size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
+GLuint TTextureListClass::AddCubemapTexture(std::string filename[6])
 {
 
 	filename[0] = ST::PathToResources + filename[0];
@@ -693,7 +693,7 @@ size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 	std::string texname = GetFileName(filename[0]);
 	std::string texext;
-	size_t TexID;
+	GLuint TexID;
 	int i;
 
 	if (TexMap.count(texname) == 0)
@@ -722,9 +722,9 @@ size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 		//All textures have been inserted into texData[6], lets add them
 
-		std::function<size_t()> f = std::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
+		std::function<GLuint()> f = [this, &texData]() -> GLuint {return this->AddCubemapTextureBmp24Data(texData); };//std::bind(&TTextureListClass::AddCubemapTextureBmp24Data, this, texData);
 
-		TexID = PerformInMainThread<size_t>(f);
+		TexID = PerformInMainThread<GLuint>(f);
 
 		if (TexID != 0)
 		{
@@ -750,27 +750,27 @@ size_t TTextureListClass::AddCubemapTexture(std::string filename[6])
 
 }
 
-size_t TTextureListClass::AddEmptyTexture(const std::string& texName, size_t width, size_t height)
+GLuint TTextureListClass::AddEmptyTexture(const std::string& texName, size_t width, size_t height)
 {
-	std::function<size_t()> f = std::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
+	std::function<GLuint()> f = [this, &texName, width, height]() -> GLuint {return this->InnerAddEmptyTexture(texName, width, height); };//std::bind(&TTextureListClass::InnerAddEmptyTexture, this, texName, width, height);
 
-	return PerformInMainThread<size_t>(f);
+	return PerformInMainThread<GLuint>(f);
 }
 
 
-size_t TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
+GLuint TTextureListClass::AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height)
 {
-	std::function<size_t()> f = std::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
+	std::function<GLuint()> f = [this, &texName, width, height]() -> GLuint {return this->InnerAddEmptyCubemapTexture(texName, width, height); };//std::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
-	return PerformInMainThread<size_t>(f);
+	return PerformInMainThread<GLuint>(f);
 }
 
 
-size_t TTextureListClass::AddDepthTexture(const std::string& texName, size_t width, size_t height)
+GLuint TTextureListClass::AddDepthTexture(const std::string& texName, size_t width, size_t height)
 {
-	std::function<size_t()> f = std::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
+	std::function<GLuint()> f = [this, &texName, width, height]() -> GLuint {return this->InnerAddEmptyCubemapTexture(texName, width, height); };//std::bind(&TTextureListClass::InnerAddEmptyCubemapTexture, this, texName, width, height);
 
-	return PerformInMainThread<size_t>(f);
+	return PerformInMainThread<GLuint>(f);
 }
 
 void TTextureListClass::DeleteTexture(const std::string& texName)
@@ -781,7 +781,7 @@ void TTextureListClass::DeleteTexture(const std::string& texName)
 	}
 }
 
-void TTextureListClass::DeleteTexture(size_t texID)
+void TTextureListClass::DeleteTexture(GLuint texID)
 {
 	TTextureMap::iterator i = TexMap.begin();
 

@@ -38,7 +38,7 @@
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>TARGET_WIN32;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TARGET_WIN32;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;EIGEN_DONT_VECTORIZE;EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>../../../boost_1_63_0/stage/lib</AdditionalLibraryDirectories>
@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../;../../../eigen;../../../boost_1_63_0;../../../libs/boost-gil-extension;../../../libs/jpeg-9;../../../libs/jpeg-9/vc10;../../../libs/lpng1510;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>TARGET_WIN32;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TARGET_WIN32;TARGET_WIN32;WIN32_LEAN_AND_MEAN;_WIN32_WINNT=0x0600;_MBCS;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;EIGEN_DONT_ALIGN_STATICALLY;_MBCS;EIGEN_DONT_VECTORIZE;EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,11 +130,11 @@
     <ClCompile Include="..\..\src\GUIManager\KeyboardWidget.cpp" />
     <ClCompile Include="..\..\src\GUIManager\NewGuiManager.cpp" />
     <ClCompile Include="..\..\src\GUIManager\WidgetXmlParsers.cpp" />
+    <ClCompile Include="..\..\src\ModelManager\NewModelManager.cpp" />
     <ClCompile Include="..\..\src\OpenGLExt\OpenGlExt.cpp" />
     <ClCompile Include="..\..\src\Render\RenderMisc.cpp" />
     <ClCompile Include="..\..\src\Render\RenderParams.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\Cameras.cpp" />
-    <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderGLES20.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderInterface.cpp" />
     <ClCompile Include="..\..\src\Render\SalmonRender\SalmonRenderWindows.cpp" />
     <ClCompile Include="..\..\src\SalmonEngineInterface.cpp" />
@@ -165,12 +165,12 @@
     <ClInclude Include="..\..\include\GUIManager\WidgetTemplatesImpl.h" />
     <ClInclude Include="..\..\include\GUIManager\WidgetXmlParsers.h" />
     <ClInclude Include="..\..\include\LightManager\LightManager.h" />
+    <ClInclude Include="..\..\include\ModelManager\NewModelManager.h" />
     <ClInclude Include="..\..\include\OpenGLExt\OpenGlExt.h" />
     <ClInclude Include="..\..\include\Render\RenderMisc.h" />
     <ClInclude Include="..\..\include\Render\RenderParams.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\Cameras.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderAndroid.h" />
-    <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderGLES20.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderInterface.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderIos.h" />
     <ClInclude Include="..\..\include\Render\SalmonRender\SalmonRenderWindows.h" />

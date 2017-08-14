@@ -59,7 +59,7 @@ protected:
 	TTextureMap TexMap;
     
     std::map<std::string, boost::function<bool(const std::string&, TTextureData&)>> CreateFunctionMap;
-    std::map<std::string, boost::function<size_t(TTextureData&)>> AddFunctionMap;
+    std::map<std::string, boost::function<GLuint(TTextureData&)>> AddFunctionMap;
 
 	void NormalizeTexData(TTextureData& texData);
 
@@ -69,15 +69,15 @@ protected:
 	bool CreateTexDataFromPng(const std::string& filename, TTextureData& texData);
 	bool CreateTexDataFromJpg(const std::string& filename, TTextureData& texData);
 	
-	size_t AddTextureBmp24Data(const TTextureData& texData); //MAIN THREAD ONLY
-	size_t AddTextureBmp32Data(const TTextureData& texData); //MAIN THREAD ONLY
-	size_t AddCubemapTextureBmp24Data(TTextureData* texData); //MAIN THREAD ONLY
+	GLuint AddTextureBmp24Data(const TTextureData& texData); //MAIN THREAD ONLY
+	GLuint AddTextureBmp32Data(const TTextureData& texData); //MAIN THREAD ONLY
+	GLuint AddCubemapTextureBmp24Data(TTextureData* texData); //MAIN THREAD ONLY
 	//size_t AddCubemapTextureBmp32Data(TTextureData* texData); Not implemented yet
 
 
-	size_t InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
-	size_t InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
-	size_t InnerAddDepthTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
+	GLuint InnerAddEmptyTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
+	GLuint InnerAddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
+	GLuint InnerAddDepthTexture(const std::string& texName, size_t width, size_t height);  //MAIN THREAD ONLY
 	void InnerDeleteTexture(TTextureMap::iterator itr);  //MAIN THREAD ONLY //MAIN THREAD ONLY
 	
 
@@ -91,7 +91,7 @@ public:
 
 	virtual void Serialize(boost::property_tree::ptree& propertyTree);
 
-	size_t operator[](const std::string& s)
+	GLuint operator[](const std::string& s)
 	{
 		if (TexMap.find(s) != TexMap.end())
 			return TexMap[s].TexID;
@@ -102,19 +102,19 @@ public:
 	size_t GetTextureHeight(const std::string& texName);
 	size_t GetTextureWidth(const std::string& texName);
 
-	size_t AddTextureDirectly(const std::string& filename, std::string texName = ""); //Loads texture directly from this file or fails
-	size_t AddTexture(const std::string& fileName);
-	size_t AddTexture(const std::string& fileName, std::string texName); //Adds path to resources to the filename then call previous one
-	size_t AddTextureFromUserdata(const std::string& fileName, std::string texName = ""); //Same as above but checks if file is created in user data
+	GLuint AddTextureDirectly(const std::string& filename, std::string texName = ""); //Loads texture directly from this file or fails
+	GLuint AddTexture(const std::string& fileName);
+	GLuint AddTexture(const std::string& fileName, std::string texName); //Adds path to resources to the filename then call previous one
+	GLuint AddTextureFromUserdata(const std::string& fileName, std::string texName = ""); //Same as above but checks if file is created in user data
 
-	size_t AddCubemapTexture(std::string filename[6]); // "posx.bmp","negx.bmp","posy.bmp","negy.bmp","posz.bmp","negz.bmp"
+	GLuint AddCubemapTexture(std::string filename[6]); // "posx.bmp","negx.bmp","posy.bmp","negy.bmp","posz.bmp","negz.bmp"
 
 
-	size_t AddEmptyTexture(const std::string& texName, size_t width, size_t height);
-	size_t AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height);
-	size_t AddDepthTexture(const std::string& texName, size_t width, size_t height);
+	GLuint AddEmptyTexture(const std::string& texName, size_t width, size_t height);
+	GLuint AddEmptyCubemapTexture(const std::string& texName, size_t width, size_t height);
+	GLuint AddDepthTexture(const std::string& texName, size_t width, size_t height);
 	void DeleteTexture(const std::string& texName);
-	void DeleteTexture(size_t texID);
+	void DeleteTexture(GLuint texID);
 
 	void PrintTextureList();
 

@@ -13,8 +13,8 @@ void TSalmonRendererGLES20::DrawQuad(const T2DQuad& quad)
 	//EnableVertexAttribArray("vPosition");
 	//EnableVertexAttribArray("vTexCoord");
 	
-	VertexAttribPointer3fv("vPosition", 0, reinterpret_cast<const char*>(quad.VertexCoord));
-	VertexAttribPointer2fv("vTexCoord", 0, reinterpret_cast<const char*>(quad.TextureCoord));
+	VertexAttribPointer3fv("vPosition", 0, reinterpret_cast<const char*>(&quad.VertexCoord[0]));
+	VertexAttribPointer2fv("vTexCoord", 0, reinterpret_cast<const char*>(&quad.TextureCoord[0]));
    
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
