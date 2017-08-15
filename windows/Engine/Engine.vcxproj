@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\Utils\DataTypes\DataTypes.cpp" />
     <ClCompile Include="..\..\src\Utils\FileUtils\FileUtils.cpp" />
     <ClCompile Include="..\..\src\Utils\JpegHelper.cpp" />
+    <ClCompile Include="..\..\src\Utils\ObjHelper.cpp" />
     <ClCompile Include="..\..\src\Utils\PngHelper.cpp" />
     <ClCompile Include="..\..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
     <ClCompile Include="..\..\src\Utils\SimpleTimer.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="..\..\include\Utils\JpegHelper.h" />
     <ClInclude Include="..\..\include\Utils\Network\Server.h" />
     <ClInclude Include="..\..\include\Utils\Network\SignalSender.h" />
+    <ClInclude Include="..\..\include\Utils\ObjHelper.h" />
     <ClInclude Include="..\..\include\Utils\PngHelper.h" />
     <ClInclude Include="..\..\include\Utils\SerializeInterface\SerializeInterface.h" />
     <ClInclude Include="..\..\include\Utils\SimpleTimer.h" />

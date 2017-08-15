@@ -27,6 +27,7 @@ This code combines additional routines (such as console/log, exceptions, math ut
 #include "include/Utils/BindableVar.h"
 #include "include/Utils/SimpleTimer.h"
 #include "include/Utils/ThreadUtils.h"
+#include "include/Utils/ObjHelper.h"
 
 #ifdef TARGET_WIN32
 #include "WinApi/WinApi.h"
