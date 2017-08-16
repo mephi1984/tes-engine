@@ -57,12 +57,12 @@ namespace SE
 
 		std::vector<ObjModel> models;
 
-		std::string OBJfolder;
+		std::string MTLroot;
 	};
 
 	// loads an OBJ file with the given full name relativly SE::PathToResources,
 	// then swaps .obj to .mtl, reads MTL, then truncs file name & loads textures from MTL, adding textures paths to folder's
-	ObjData loadObjFile(const std::string &OBJfile);
+	ObjData loadObjFile(const std::string &OBJfile, const std::string &MTLfile);
 
 	boost::property_tree::ptree loadMtlFile(const std::string &filename);
 

@@ -31,7 +31,7 @@ namespace SE
 			for (; srcGroup != srcModel->groups.end(); ++srcGroup, ++dstGroup)
 			{
 				auto textureRecord = srcGroup->MTL.get_optional<string>("Texture");
-				string texture = textureRecord ? data.OBJfolder + textureRecord.get() : DEFAULT_TEXTURE;
+				string texture = textureRecord ? data.MTLroot + textureRecord.get() : DEFAULT_TEXTURE;
 				dstGroup->first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = GetFileName(texture);
 				ResourceManager->TexList.AddTexture(texture);
 
@@ -125,7 +125,7 @@ namespace SE
 
 	// loads an OBJ file with the given full name relativly SE::PathToResources,
 	// then swaps .obj to .mtl, reads MTL, then truncs file name & loads textures from MTL, adding textures paths to folder's
-	ObjData loadObjFile(const string &OBJfile)
+	ObjData loadObjFile(const string &OBJfile, const std::string &MTLfile)
 	{
 		ifstream ifs;
 		ifs.open(ST::PathToResources + OBJfile);
@@ -136,13 +136,12 @@ namespace SE
 
 		ObjData data;
 
-		data.OBJfolder = GetFilePath(OBJfile);
+		data.MTLroot = GetFilePath(MTLfile);
 
 		boost::property_tree::ptree MTLtree;
-		string MTLpath = data.OBJfolder + GetFileNameWithoutExt(OBJfile) + ".mtl";
-		if (!MTLpath.empty())
+		if (!MTLfile.empty())
 		{
-			MTLtree = loadMtlFile(MTLpath);
+			MTLtree = loadMtlFile(MTLfile);
 		}
 
 		data.vertexes.push_back(Vector3f(0, 0, 0));
