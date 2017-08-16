@@ -1,16 +1,20 @@
 #ifndef OBJ_HELPER_INCLUDED
 #define OBJ_HELPER_INCLUDED
 
-#include "include/Render/RenderParams.h"
-#include "include/Render/RenderMisc.h"
-#include "include/ShaderManager/ShaderManager.h"
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 
-#include "boost/regex.hpp"
+#include "boost/property_tree/ptree.hpp"
+//#include "boost/regex.hpp"
+
+#include "include/Utils/FileUtils/FileUtils.h"
+#include "include/Render/RenderParams.h"
+#include "include/Utils/JSONVectorReader.h"
 
 namespace SE
 {
+	class TResourceManager;
+
 	extern const std::string UNNAMED_MODEL;
 	extern const std::string UNNAMED_GROUP;
 	extern const std::string DEFAULT_TEXTURE;
@@ -34,8 +38,7 @@ namespace SE
 	{
 		std::string name;
 
-		Vector4f color; // from usemtl
-		std::string texture; // from usemap
+		boost::property_tree::ptree MTL;
 
 		std::vector<TriangleIndexes> indexes;
 	};
@@ -53,9 +56,15 @@ namespace SE
 		std::vector<Vector3f> normals;
 
 		std::vector<ObjModel> models;
+
+		std::string OBJfolder;
 	};
 
-	ObjData loadObjFile(const std::string &filename);
+	// loads an OBJ file with the given full name relativly SE::PathToResources,
+	// then swaps .obj to .mtl, reads MTL, then truncs file name & loads textures from MTL, adding textures paths to folder's
+	ObjData loadObjFile(const std::string &OBJfile);
+
+	boost::property_tree::ptree loadMtlFile(const std::string &filename);
 
 	std::vector<std::vector<TRenderPair>> ObjDataToRenderPairs(const ObjData &data);
 

@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\Utils\DataTypes\DataTypes.cpp" />
     <ClCompile Include="..\..\src\Utils\FileUtils\FileUtils.cpp" />
     <ClCompile Include="..\..\src\Utils\JpegHelper.cpp" />
+    <ClCompile Include="..\..\src\Utils\JSONVectorReader.cpp" />
     <ClCompile Include="..\..\src\Utils\ObjHelper.cpp" />
     <ClCompile Include="..\..\src\Utils\PngHelper.cpp" />
     <ClCompile Include="..\..\src\Utils\SerializeInterface\SerializeInterface.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="..\..\include\Utils\IosApi\ObjC\GLKViewTemplate.h" />
     <ClInclude Include="..\..\include\Utils\IosApi\ObjC\ViewControllerTemplate.h" />
     <ClInclude Include="..\..\include\Utils\JpegHelper.h" />
+    <ClInclude Include="..\..\include\Utils\JSONVectorReader.h" />
     <ClInclude Include="..\..\include\Utils\Network\Server.h" />
     <ClInclude Include="..\..\include\Utils\Network\SignalSender.h" />
     <ClInclude Include="..\..\include\Utils\ObjHelper.h" />

@@ -23,11 +23,11 @@ This code combines additional routines (such as console/log, exceptions, math ut
 #include "../GlobalConst.h"
 #include "include/Utils/FileUtils/FileUtils.h"
 #include "include/Utils/SerializeInterface/SerializeInterface.h"
-
 #include "include/Utils/BindableVar.h"
 #include "include/Utils/SimpleTimer.h"
 #include "include/Utils/ThreadUtils.h"
 #include "include/Utils/ObjHelper.h"
+#include "include/Utils/JSONVectorReader.h"
 
 #ifdef TARGET_WIN32
 #include "WinApi/WinApi.h"

@@ -1,6 +1,9 @@
 #include "include/Utils/ObjHelper.h"
 
-#include <chrono>
+#include "include/Engine.h"
+
+//#include "boost/property_tree/json_parser.hpp"
+//#include <chrono>
 
 using namespace std;
 
@@ -27,7 +30,21 @@ namespace SE
 			
 			for (; srcGroup != srcModel->groups.end(); ++srcGroup, ++dstGroup)
 			{
-				dstGroup->first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = srcGroup->texture;
+				auto textureRecord = srcGroup->MTL.get_optional<string>("Texture");
+				string texture = textureRecord ? data.OBJfolder + textureRecord.get() : DEFAULT_TEXTURE;
+				dstGroup->first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = GetFileName(texture);
+				ResourceManager->TexList.AddTexture(texture);
+
+				auto ambientLight = srcGroup->MTL.get_child_optional("ambientLight");
+				Vector4f color;
+				if (ambientLight)
+				{
+					color << JSONVectorReader::readVector3f(ambientLight.get()), 1.f;
+				}
+				else
+				{
+					color = DEFAULT_COLOR;
+				}
 
 				auto indexes = srcGroup->indexes.begin();
 
@@ -35,6 +52,7 @@ namespace SE
 				auto& dstNormalsArr = dstGroup->second.Data.Vec3CoordArr[CONST_STRING_NORMAL_ATTRIB];
 				auto& dstTexVertexArr = dstGroup->second.Data.Vec2CoordArr[CONST_STRING_TEXCOORD_ATTRIB];
 				auto& dstColorArr = dstGroup->second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB];
+
 
 				try
 				{
@@ -54,9 +72,9 @@ namespace SE
 							dstTexVertexArr.push_back(data.texCoords[indexes->texCoords[1] >= 0 ? indexes->texCoords[1] : data.texCoords.size() + indexes->texCoords[1]]);
 							dstTexVertexArr.push_back(data.texCoords[indexes->texCoords[2] >= 0 ? indexes->texCoords[2] : data.texCoords.size() + indexes->texCoords[2]]);
 
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
 						}
 						else if (indexes->vertexes.size() == 4)
 						{
@@ -81,12 +99,12 @@ namespace SE
 							dstTexVertexArr.push_back(data.texCoords[indexes->texCoords[3] >= 0 ? indexes->texCoords[3] : data.texCoords.size() + indexes->texCoords[3]]);
 							dstTexVertexArr.push_back(data.texCoords[indexes->texCoords[0] >= 0 ? indexes->texCoords[0] : data.texCoords.size() + indexes->texCoords[0]]);
 
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
-							dstColorArr.push_back(srcGroup->color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
+							dstColorArr.push_back(color);
 						}
 					}
 				}
@@ -101,18 +119,31 @@ namespace SE
 		return result;
 	}
 
-	Vector3f loadVertex(string &line);
-	Vector2f loadTexCoord(string &line);
-	Vector3f loadNormal(string &line);
+	Vector3f loadVector3f(char* dateBegin);
+	Vector2f loadVector2f(char* dateBegin);
 	TriangleIndexes loadIndexes(string &line);
-	Vector4f loadColor(std::string &value);
 
-	ObjData loadObjFile(const string &filename)
+	// loads an OBJ file with the given full name relativly SE::PathToResources,
+	// then swaps .obj to .mtl, reads MTL, then truncs file name & loads textures from MTL, adding textures paths to folder's
+	ObjData loadObjFile(const string &OBJfile)
 	{
-		string test = "v 1 2 3";
-		auto arr = loadVertex(test);
+		ifstream ifs;
+		ifs.open(ST::PathToResources + OBJfile);
+		if (!ifs.good())
+		{
+			throw ErrorFileNotFound(ST::PathToResources + OBJfile);
+		}
 
 		ObjData data;
+
+		data.OBJfolder = GetFilePath(OBJfile);
+
+		boost::property_tree::ptree MTLtree;
+		string MTLpath = data.OBJfolder + GetFileNameWithoutExt(OBJfile) + ".mtl";
+		if (!MTLpath.empty())
+		{
+			MTLtree = loadMtlFile(MTLpath);
+		}
 
 		data.vertexes.push_back(Vector3f(0, 0, 0));
 		data.texCoords.push_back(Vector2f(0, 0));
@@ -127,27 +158,21 @@ namespace SE
 		ObjGroup curGroup;
 		curGroup.name = UNNAMED_GROUP;
 
-		Vector4f color = DEFAULT_COLOR;
-		string texture = DEFAULT_TEXTURE;
-
 		string line;
 		line.reserve(255);
 
 // 		float currentLine = 0;
 // 		float totalLines = 0;
 // 		float progress = 0;
-
- 		ifstream ifs;
- 		ifs.open(ST::PathToResources + filename);
 // 
-// 		while (ifs.good())
+//		ifstream quickReader;
+//		quickReader.open(ST::PathToResources + OBJpath);
+// 		while (quickReader.good())
 // 		{
-// 			ifs.ignore(numeric_limits<streamsize>::max(), '\n');
+// 			quickReader.ignore(numeric_limits<streamsize>::max(), '\n');
 // 			totalLines += 1.f;
 // 		}
-// 
-// 		ifs.close();
-// 		ifs.open(ST::PathToResources + filename);
+// 		quickReader.close();
 //		
 // 		auto lastMoment = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 // 		float lastProgress = 0;
@@ -157,15 +182,13 @@ namespace SE
 
 		while (ifs.good())
 		{
-			std::getline(ifs, line);
+			getline(ifs, line);
 
 			switch (line[0])
 			{
 			case 'o':
 				if (dataLoadedToModel)
 				{
-					curGroup.color = color;
-					curGroup.texture = texture;
 					curModel.groups.push_back(curGroup);
 					data.models.push_back(curModel);
 					curModel.groups.clear();
@@ -179,8 +202,6 @@ namespace SE
 			case 'g':
 				if (dataLoadedToGroup)
 				{
-					curGroup.color = color;
-					curGroup.texture = texture;
 					curModel.groups.push_back(curGroup);
 					curGroup.indexes.clear();
 					dataLoadedToGroup = false;
@@ -192,15 +213,15 @@ namespace SE
 				switch (line[1])
 				{
 				case ' ':
-					data.vertexes.push_back(loadVertex(line));
+					data.vertexes.push_back(loadVector3f(line._Myptr() + 2));
 					break;
 
 				case 't':
-					data.texCoords.push_back(loadTexCoord(line));
+					data.texCoords.push_back(loadVector2f(line._Myptr() + 3));
 					break;
 
 				case 'n':
-					data.normals.push_back(loadNormal(line));
+					data.normals.push_back(loadVector3f(line._Myptr() + 3));
 					break;
 				}
 				break;
@@ -215,14 +236,13 @@ namespace SE
 
 			case 'u':
 			{
-				string keyword = line.substr(0, 6);
-				if (keyword == "usemtl")
+				if (line.substr(0, 6) == "usemtl")
 				{
-					color = loadColor(line.substr(7));
-				}
-				else if (keyword == "usemap")
-				{
-					texture = line.substr(7);
+					auto MTL = MTLtree.get_child_optional(line.substr(7));
+					if (MTL)
+					{
+						curGroup.MTL = MTL.get();
+					}
 				}
 				break;
 			}
@@ -245,8 +265,6 @@ namespace SE
 
 		if (dataLoadedToGroup)
 		{
-			curGroup.color = color;
-			curGroup.texture = texture;
 			curModel.groups.push_back(curGroup);
 			data.models.push_back(curModel);
 		}
@@ -257,17 +275,141 @@ namespace SE
 		return data;
 	}
 
-	Vector3f loadVertex(string &line)
+	boost::property_tree::ptree loadMtlFile(const string &MTLpath)
+	{
+		ifstream ifs(ST::PathToResources + MTLpath);
+
+		if (!ifs.good())
+		{
+			throw ErrorFileNotFound(ST::PathToResources + MTLpath);
+		}
+
+		boost::property_tree::ptree MTLs;
+		boost::property_tree::ptree newMTL;
+
+		string name;
+		name.reserve(32);
+
+		string line;
+		line.reserve(255);
+
+		bool isEmptyMTL = true;
+
+		while (ifs.good())
+		{
+			getline(ifs, line);
+
+			switch (line[0])
+			{
+			case 'n':
+			{
+				if (line.substr(0, 6) == "newmtl")
+				{
+					if (!isEmptyMTL)
+					{
+						MTLs.put_child(name, newMTL);
+					}
+					name = line.substr(7);
+					newMTL.clear();
+					isEmptyMTL = true;
+				}
+				break;
+			}
+
+			case 'K':
+			{
+				boost::property_tree::ptree vector3fTree;
+
+				Vector3f vector3f = loadVector3f(line._Myptr() + 3);
+
+				for (int i = 0; i < 3; ++i)
+				{
+					boost::property_tree::ptree vector3fTreeChild;
+					vector3fTreeChild.put("", vector3f[i]);
+					vector3fTree.push_back(make_pair("", vector3fTreeChild));
+				}
+
+				switch (line[1])
+				{
+				case 'a':
+				{
+					newMTL.put_child("ambientLight", vector3fTree);
+					isEmptyMTL = false;
+					break;
+				}
+				case 'd':
+				{
+					newMTL.put_child("diffuseLight", vector3fTree);
+					isEmptyMTL = false;
+					break;
+				}
+				case 's':
+				{
+					newMTL.put_child("specularLight", vector3fTree);
+					isEmptyMTL = false;
+					break;
+				}
+				}
+				break;
+			}
+
+			case 'N':
+			{
+				if (line[1] == 's')
+				{
+					newMTL.put("specularPower", line.substr(3));
+					isEmptyMTL = false;
+				}
+				break;
+			}
+
+			case 'm':
+			{
+				if (line.substr(0, 5) == "map_K")
+				{
+					switch (line[5])
+					{
+					case 'a':
+					case 'd':
+					{
+						newMTL.put("Texture", line.substr(line[7] == '/' || line[7] == '\\' ? 8 : 7));
+						isEmptyMTL = false;
+						break;
+					}
+					case 's':
+					{
+						newMTL.put("NormalMap", line.substr(line[7] == '/' || line[7] == '\\' ? 8 : 7));
+						isEmptyMTL = false;
+						break;
+					}
+					}
+				}
+				break;
+			}
+
+			}
+		}
+
+		ifs.close();
+
+		if (!isEmptyMTL)
+		{
+			MTLs.put_child(name, newMTL);
+		}
+
+		//boost::property_tree::json_parser::write_json("MTLtree.json", MTLs);
+
+		return MTLs;
+	}
+
+	Vector3f loadVector3f(char *dataBegin)
 	{
 		Vector3f result;
-		char
-			*begin,
-			*end = line._Myptr() + 1;
+		char *begin = dataBegin;
+		char *end = dataBegin;
 
 		for (int i = 0; i < 3; ++i)
 		{
-			++end;
-			begin = end;
 			while (*end != ' ' && *end != 0) ++end;
 			try
 			{
@@ -275,23 +417,22 @@ namespace SE
 			}
 			catch (const invalid_argument &e)
 			{
-				throw ErrorFileNotCorrect("Invalid OBJ file line: " + line);
+				throw ErrorFileNotCorrect("Invalid OBJ file line: " + string(dataBegin));
 			}
+
+			begin = ++end; // skip only one whitespace
 		}
 		return result;
 	}
 
-	Vector2f loadTexCoord(string &line)
+	Vector2f loadVector2f(char *dataBegin)
 	{
 		Vector2f result;
-		char
-			*begin,
-			*end = line._Myptr() + 2;
+		char *begin = dataBegin;
+		char *end = dataBegin;
 
 		for (int i = 0; i < 2; ++i)
 		{
-			++end;
-			begin = end;
 			while (*end != ' ' && *end != 0) ++end;
 			try
 			{
@@ -299,32 +440,9 @@ namespace SE
 			}
 			catch (const invalid_argument &e)
 			{
-				throw ErrorFileNotCorrect("Invalid OBJ file line: " + line);
+				throw ErrorFileNotCorrect("Invalid OBJ file line: " + string(dataBegin));
 			}
-		}
-		return result;
-	}
-
-	Vector3f loadNormal(string &line)
-	{
-		Vector3f result;
-		char
-			*begin,
-			*end = line._Myptr() + 2;
-
-		for (int i = 0; i < 3; ++i)
-		{
-			++end;
-			begin = end;
-			while (*end != ' ' && *end != 0) ++end;
-			try
-			{
-				result[i] = stof(string(begin, end));
-			}
-			catch (const invalid_argument &e)
-			{
-				throw ErrorFileNotCorrect("Invalid OBJ file line: " + line);
-			}
+			begin = ++end;  // skip only one whitespace
 		}
 		return result;
 	}
@@ -413,23 +531,6 @@ namespace SE
  			}
  		}
  		return result;
-	}
-
-	Vector4f loadColor(std::string &value)
-	{
-		unsigned int color;
-		stringstream ss;
-		ss << hex << value;
-		ss >> color;
-
-		Vector4f result;
-
-		result(3) = (color % 256) / 255.f;
-		result(2) = ((color >> 8) % 256) / 255.f;
-		result(1) = ((color >> 16) % 256) / 255.f;
-		result(0) = ((color >> 24) % 256) / 255.f;
-
-		return result;
 	}
 
 } // SE
