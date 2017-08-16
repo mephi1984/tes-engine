@@ -690,6 +690,20 @@ namespace SE
 		WidgetAncestor::Draw();
 	}
 
+	void ImageView::setBackground(boost::variant<std::string, Vector4f> background)
+	{
+		this->background = background;
+
+		Visit(background,
+			[this](Vector4f color) {},
+			[this](std::string textureName)
+			{ 
+				if(textureName.length() > 0)
+					ResourceManager->TexList.AddTextureFromUserdata(textureName, textureName); 
+			});
+
+		UpdateRenderPair();
+	}
 	//========================================
 
 
@@ -1730,7 +1744,7 @@ namespace SE
 
 		Renderer->TranslateMatrix(shift);
 
-		for (auto &child = children.rbegin(); child != children.rend(); ++child)
+		for (auto child = children.rbegin(); child != children.rend(); ++child)
 		{
 			if (!(*child)->visible)
 			{
@@ -3728,10 +3742,10 @@ namespace SE
 		if (this->position != position)
 		{
 			this->position = position;
-			if (maxValue != minValue)
+			/*if (maxValue != minValue)
 			{
 				onValueChanged(maxValue != minValue ? (position - minValue) / (float)(maxValue- minValue) : 0);
-			}
+			}*/
 		}
 	}
 
@@ -3871,6 +3885,8 @@ namespace SE
 		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
 		if (!isPointAboveTrack(pos)) return false;
 		setPosition(getTrackPositionFromPoint(pos));
+		signalValueChange();
+
 		WidgetAncestor::OnMouseDown(pos, touchNumber);
 		return true;
 	}
@@ -3881,10 +3897,18 @@ namespace SE
 
 		pos -= Vector2f(paddingLeft + sidesPadding, paddingBottom) + getDrawTranslate();
 		setPosition(getTrackPositionFromPoint(pos));
-		
+		signalValueChange();
+
 		return true;
 	}
 
+	void HorizontalSlider::signalValueChange()
+	{
+		if (maxValue != minValue)
+		{
+			onValueChanged(maxValue != minValue ? (position - minValue) / (float)(maxValue - minValue) : 0);
+		}
+	}
 	//---------------------------------------------------------------------
 
 	HorizontalDoubleSlider::HorizontalDoubleSlider(WidgetParentInterface& widgetParent) :
@@ -4355,7 +4379,7 @@ namespace SE
 
 		Renderer->PushProjectionMatrix(Renderer->GetMatrixWidth(), Renderer->GetMatrixHeight(), UI_RENDERING_ZNEAR, UI_RENDERING_ZFAR);
 
-		for (auto &child = children.rbegin(); child != children.rend(); ++child)
+		for (auto child = children.rbegin(); child != children.rend(); ++child)
 		{
 			if (!(*child)->visible)
 			{
@@ -4628,7 +4652,7 @@ namespace SE
 		for (auto& pWidgetRecord : ptree)
 		{
 			std::string type = pWidgetRecord.second.get<std::string>("type");
-
+			std::string name = pWidgetRecord.second.get<std::string>("name", "");
 			std::shared_ptr<WidgetAncestor> widget;
 
 			if (type == "VerticalLinearLayout")

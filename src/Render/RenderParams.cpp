@@ -35,7 +35,8 @@ TRenderParamsSetter::TRenderParamsSetter(const TRenderParams& renderParams)
 
 	if (RenderParams.SamplerMap.count(CONST_STRING_TEXTURE_UNIFORM))
 	{
-		glBindTexture(GL_TEXTURE_2D, ResourceManager->TexList[RenderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM]]);
+		size_t textureID = ResourceManager->TexList[RenderParams.SamplerMap[CONST_STRING_TEXTURE_UNIFORM]];
+		glBindTexture(GL_TEXTURE_2D, textureID);
 	}
 	else
 	{

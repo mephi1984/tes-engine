@@ -220,6 +220,7 @@ namespace SE
 		
 		ImageView(WidgetParentInterface& widgetParent);
 
+		virtual void setBackground(boost::variant<std::string, Vector4f> background);
 		virtual void Draw();
 	};
 
@@ -704,6 +705,7 @@ namespace SE
 		bool OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
+		void signalValueChange();
 	};
 	
 	class HorizontalDoubleSlider : public WidgetAncestor
