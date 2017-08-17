@@ -15,11 +15,6 @@ namespace SE
 {
 	class TResourceManager;
 
-	extern const std::string UNNAMED_MODEL;
-	extern const std::string UNNAMED_GROUP;
-	extern const std::string DEFAULT_TEXTURE;
-	extern const Vector4f DEFAULT_MATERIAL;
-
 	struct TriangleIndexes
 	{
 		std::vector<int> vertexes;
@@ -60,8 +55,6 @@ namespace SE
 		std::string MTLroot;
 	};
 
-	// loads an OBJ file with the given full name relativly SE::PathToResources,
-	// then swaps .obj to .mtl, reads MTL, then truncs file name & loads textures from MTL, adding textures paths to folder's
 	ObjData loadObjFile(const std::string &OBJfile, const std::string &MTLfile);
 
 	boost::property_tree::ptree loadMtlFile(const std::string &filename);

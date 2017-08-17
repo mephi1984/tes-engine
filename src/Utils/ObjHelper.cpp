@@ -11,8 +11,10 @@ namespace SE
 {
 	const string UNNAMED_MODEL = "unnamed_model";
 	const string UNNAMED_GROUP = "unnamed_group";
-	const string DEFAULT_TEXTURE = "white.bmp";
+	const Vector4f NO_COLOR = { 1, 0, 1, 1 };
 	const Vector4f DEFAULT_COLOR = { 1, 1, 1, 1 };
+	const std::string DEFAULT_TEXTURE = "white.bmp";
+	const std::string NO_TEXTURE = "noTexture.bmp";
 
 	vector<vector<TRenderPair>> ObjDataToRenderPairs(const ObjData &data)
 	{
@@ -31,20 +33,43 @@ namespace SE
 			for (; srcGroup != srcModel->groups.end(); ++srcGroup, ++dstGroup)
 			{
 				auto textureRecord = srcGroup->MTL.get_optional<string>("Texture");
-				string texture = textureRecord ? data.MTLroot + textureRecord.get() : DEFAULT_TEXTURE;
+				auto ambientRecord = srcGroup->MTL.get_child_optional("ambientLight");
+				auto diffuseRecord = srcGroup->MTL.get_child_optional("ambientLight");
+
+				string texture;
+				Vector4f color;
+
+				if (textureRecord)
+				{
+					texture = data.MTLroot + textureRecord.get();
+
+					if (!ambientRecord && !diffuseRecord)
+					{
+						color = DEFAULT_COLOR;
+					}
+				}
+				
+				if (ambientRecord || diffuseRecord)
+				{
+					Vector3f ambientLight = ambientRecord ? JSONVectorReader::readVector3f(ambientRecord.get()) : Vector3f(0, 0, 0);
+					Vector3f diffuseLight = diffuseRecord ? JSONVectorReader::readVector3f(diffuseRecord.get()) : Vector3f(0, 0, 0);
+
+					color << ambientLight + diffuseLight, 1.f;
+
+					if (!textureRecord)
+					{
+						texture = DEFAULT_TEXTURE;
+					}
+				}
+				
+				if (!textureRecord && !ambientRecord && !diffuseRecord)
+				{
+					color = NO_COLOR;
+					texture = NO_TEXTURE;
+				}
+
 				dstGroup->first.SamplerMap[CONST_STRING_TEXTURE_UNIFORM] = GetFileName(texture);
 				ResourceManager->TexList.AddTexture(texture);
-
-				auto ambientLight = srcGroup->MTL.get_child_optional("ambientLight");
-				Vector4f color;
-				if (ambientLight)
-				{
-					color << JSONVectorReader::readVector3f(ambientLight.get()), 1.f;
-				}
-				else
-				{
-					color = DEFAULT_COLOR;
-				}
 
 				auto indexes = srcGroup->indexes.begin();
 
@@ -123,8 +148,6 @@ namespace SE
 	Vector2f loadVector2f(char* dateBegin);
 	TriangleIndexes loadIndexes(string &line);
 
-	// loads an OBJ file with the given full name relativly SE::PathToResources,
-	// then swaps .obj to .mtl, reads MTL, then truncs file name & loads textures from MTL, adding textures paths to folder's
 	ObjData loadObjFile(const string &OBJfile, const std::string &MTLfile)
 	{
 		ifstream ifs;
