@@ -17,9 +17,9 @@ const float CONST_MAX_CAM_DIST = 20.0f;
 const float CONST_MIN_CAM_DIST = 0.0f;
 //How near camera could be from game field
 
-const float CONST_MIN_CAM_PHI = pi/48;
+const float CONST_MIN_CAM_PHI = -pi / 2 + pi / 48;
 
-const float CONST_MAX_CAM_PHI = pi/2;
+const float CONST_MAX_CAM_PHI = pi / 2 - pi / 48;
 
 const int CONST_MAX_SHADER_LIGHTS = 8;
 //Max light sources count (for shader)
