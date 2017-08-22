@@ -177,6 +177,7 @@ namespace SE
 		virtual void setBorderColor(Vector4f color);
 		virtual void setBorderType(BorderType newBorderType);
 		virtual void setVisibility(bool visible);
+		virtual void setOwnerDrawBackground(const std::string& backgroundName);
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
@@ -215,7 +216,7 @@ namespace SE
 	class ImageView : public WidgetAncestor
 	{
 	protected:
-
+		
 	public:
 		
 		ImageView(WidgetParentInterface& widgetParent);

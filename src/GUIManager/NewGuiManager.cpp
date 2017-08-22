@@ -173,6 +173,13 @@ namespace SE
 		UpdateRenderPair();
 	}
 
+	void WidgetAncestor::setOwnerDrawBackground(const std::string& backgroundName)
+	{
+		this->background = backgroundName;
+
+		UpdateRenderPair();
+	}
+
 	std::vector<Vector3f> WidgetAncestor::MakeVertexCoordVecOfBorders(Vector2f posFrom, Vector2f posTo, float zLevel)
 	{
 		std::vector<Vector3f> result(8);
@@ -252,7 +259,7 @@ namespace SE
 
 	void WidgetAncestor::Draw()
 	{
-		if (name == "textSettingsDialogCancel")
+		if (name == "colorView1")
 			int s = 0;
 
 		if (renderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
@@ -698,8 +705,11 @@ namespace SE
 			[this](Vector4f color) {},
 			[this](std::string textureName)
 			{ 
-				if(textureName.length() > 0)
-					ResourceManager->TexList.AddTextureFromUserdata(textureName, textureName); 
+				if (textureName.length() > 0)
+				{
+					ResourceManager->TexList.AddTextureFromUserdata(textureName, textureName);
+				}
+					
 			});
 
 		UpdateRenderPair();

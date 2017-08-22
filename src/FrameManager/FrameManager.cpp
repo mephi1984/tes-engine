@@ -322,8 +322,6 @@ size_t TFrameManager::AddDepthBuffer(const std::string& frameName, size_t width,
 	#endif
 }
 
-
-
 size_t TFrameManager::GetFrameTexture(const std::string& frameName)
 {
 	if (FrameMap.count(frameName) > 0)
@@ -334,7 +332,6 @@ size_t TFrameManager::GetFrameTexture(const std::string& frameName)
 		return 0;
 }
 
-
 Vector2i TFrameManager::GetFrameWidthHeight(const std::string& frameName)
 {
 	if (FrameMap.count(frameName) == 0)
@@ -344,7 +341,6 @@ Vector2i TFrameManager::GetFrameWidthHeight(const std::string& frameName)
 
 	return Vector2i(FrameMap[frameName].Width, FrameMap[frameName].Height);
 }
-
 
 TTextureData TFrameManager::ReadFromBufferToTexData(const std::string& frameName)
 {
