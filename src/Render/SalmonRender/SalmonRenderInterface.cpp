@@ -284,6 +284,10 @@ void TSalmonRendererInterface::TranslateMatrix(const Vector3f& p)
     m(12) = p(0);
     m(13) = p(1);
     m(14) = p(2);
+
+	//m(3) = p(0);
+	//m(7) = p(1);
+	//m(11) = p(2);
     //m = MultMatrixMatrix(ModelviewMatrixStack.top(), m);
 
 	m = ModelviewMatrixStack.top() * m;
@@ -341,6 +345,8 @@ void TSalmonRendererInterface::ScaleMatrix(const Vector3f& scale)
 
 void TSalmonRendererInterface::RotateMatrix(const Vector4f& q)
 {
+
+
 	/*
     Matrix3f m3(q);
     Matrix4f m = Matrix4f::Identity();
@@ -366,6 +372,15 @@ void TSalmonRendererInterface::RotateMatrix(const Vector4f& q)
     ModelviewMatrixStack.pop();
     ModelviewMatrixStack.push(m);
     */
+
+	Eigen::Matrix3f mat3 = Eigen::Quaternionf(q(3), q(0), q(1), q(2)).toRotationMatrix();
+	Eigen::Matrix4f mat4 = Eigen::Matrix4f::Identity();
+	mat4.block(0, 0, 3, 3) = mat3;
+
+	mat4 = ModelviewMatrixStack.top() * mat4;
+	ModelviewMatrixStack.pop();
+	ModelviewMatrixStack.push(mat4);
+
 	SetMatrix();
 }
 

@@ -3,6 +3,8 @@
 #include "include/SalmonEngineWindows.h"
 
 
+#include "Windowsx.h"
+
 namespace SE
 {
 
@@ -223,8 +225,10 @@ LONG WINAPI WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 case WM_MOUSEMOVE:
-		mouseState.X = (lParam << 16) >> 16;
-		mouseState.Y = lParam >> 16;
+		mouseState.X = GET_X_LPARAM(lParam);
+		mouseState.Y = GET_Y_LPARAM(lParam);
+
+
 		mouseState.LeftButtonPressed = (wParam & MK_LBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.RightButtonPressed = (wParam & MK_RBUTTON);
@@ -256,8 +260,8 @@ case WM_MOUSEMOVE:
 
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
-		mouseState.X = (lParam << 16) >> 16;
-		mouseState.Y = lParam >> 16;
+		mouseState.X = GET_X_LPARAM(lParam);
+		mouseState.Y = GET_Y_LPARAM(lParam);
 		mouseState.LeftButtonPressed = (wParam & MK_LBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.RightButtonPressed = (wParam & MK_RBUTTON);
@@ -284,8 +288,8 @@ case WM_MOUSEMOVE:
 		break;
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
-		mouseState.X = (lParam << 16) >> 16;
-		mouseState.Y = lParam >> 16;
+		mouseState.X = GET_X_LPARAM(lParam);
+		mouseState.Y = GET_Y_LPARAM(lParam);
 		mouseState.LeftButtonPressed = (wParam & MK_LBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_MBUTTON);
 		mouseState.MiddleButtonPressed = (wParam & MK_RBUTTON);

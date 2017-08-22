@@ -6,7 +6,8 @@ namespace SE
 
 TCameraInterface::TCameraInterface()
 {
-	CamVec = Vector3f(0,0,-1);
+	CamVec = Vector3f(0, 0, -1);
+	CamShift = { 0, 0, 0 };
 }
 
 TPanoramicCamera::TPanoramicCamera()
@@ -188,7 +189,7 @@ void TPanoramicCamera::CalcCamVec()
 void TPanoramicCamera::SetCamView()
 {
 	
-	Renderer->LoadIdentity();
+	//Renderer->LoadIdentity();
 	Renderer->TranslateMatrix(Vector3f(0.0f, 0.0f, -CamDist));
 	Renderer->RotateMatrix(Vector4f(1.f * sin(CamPhi/2.f), 0.f, 0.f, 1.f * cos(CamPhi/2.f)));
 	Renderer->RotateMatrix(Vector4f(0.f, 1.f * sin(CamAlpha/2.f), 0.f, 1.f * cos(CamAlpha/2.f)));

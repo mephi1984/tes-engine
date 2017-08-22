@@ -33,6 +33,7 @@ This code combines all headers for Salmon engine into one header file
 #include "include/GUIManager/GUIManager.h"
 #include "include/GUIManager/NewGuiManager.h"
 
+#include "include/ModelManager/NewModelManager.h"
 
 namespace SE
 {
@@ -49,6 +50,8 @@ public:
 	TGUIManager GUIManager;
 
 	NewGuiManager newGuiManager;
+
+	TFlexModelManager FlexModelManager;
 
 	void Update(size_t timer);
 
