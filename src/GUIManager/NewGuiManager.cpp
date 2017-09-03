@@ -50,10 +50,13 @@ namespace SE
 
 	inline bool pointIsInsideView(Vector2f point, std::shared_ptr<WidgetAncestor> widget)
 	{
+		return WidgetAncestor::pointIsInsideView(point, widget);
+		/*	
 		point -= widget->extraTranslation;
 		float viewWidth = widget->getViewWidth();
 		float viewHeight = widget->getViewHeight();
 		return (point(0) >= 0) && (point(1) >= 0) && (point(0) <= viewWidth) && (point(1) <= viewHeight);
+		*/
 	}
 
 	//===================================
@@ -120,6 +123,14 @@ namespace SE
 	WidgetAncestor::~WidgetAncestor()
 	{
 
+	}
+
+	bool WidgetAncestor::pointIsInsideView(Vector2f point, std::shared_ptr<WidgetAncestor> widget)
+	{
+		point -= widget->extraTranslation;
+		float viewWidth = widget->getViewWidth();
+		float viewHeight = widget->getViewHeight();
+		return (point(0) >= 0) && (point(1) >= 0) && (point(0) <= viewWidth) && (point(1) <= viewHeight);
 	}
 
 	void WidgetAncestor::setZLevel(float Zlevel)
@@ -222,6 +233,15 @@ namespace SE
 		triangleList.RefreshBuffer();
 
 		return triangleList;
+	}
+
+	Vector4f WidgetAncestor::getBackgroundColor()
+	{
+		Vector4f color = Visit(background,
+			[this](Vector4f color) { return  color; },
+			[this](std::string textureName) { return Vector4f(1, 1, 1, 1); });
+
+		return color;
 	}
 
 	void WidgetAncestor::UpdateRenderPair()
@@ -663,6 +683,8 @@ namespace SE
 
 	void WidgetAncestor::OnKeyPressed(int key)
 	{
+		if(!OnKeyPressedSignal.empty())
+			OnKeyPressedSignal(key);
 	}
 
 	bool WidgetAncestor::OnMouseMove(Vector2f pos)
@@ -686,6 +708,7 @@ namespace SE
 
 	ImageView::ImageView(WidgetParentInterface& widgetParent)
 		: WidgetAncestor(widgetParent)
+		, selected(false)
 	{
 
 	}
@@ -695,24 +718,286 @@ namespace SE
 	void ImageView::Draw()
 	{
 		WidgetAncestor::Draw();
+
+		if (selected)
+		{
+			if (focusRenderPair.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
+			{
+				if (focusRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+				{
+					glDepthMask(false);
+				}
+
+				TRenderParamsSetter render(focusRenderPair.first);
+				Renderer->DrawTriangleList(focusRenderPair.second, GL_LINES);
+				CheckGlError();
+
+				if (focusRenderPair.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+				{
+					glDepthMask(true);
+				}
+			}
+		}
 	}
 
-	void ImageView::setBackground(boost::variant<std::string, Vector4f> background)
+	void ImageView::UpdateRenderPair()
+	{
+		WidgetAncestor::UpdateRenderPair();
+
+		
+		if (selected)
+		{
+			Vector2f shift = getDrawTranslate();
+			Vector2f posFrom = shift - Vector2f(2.0, 2.0);
+			Vector2f posTo = shift + Vector2f(getDrawWidth(), getDrawHeight()) + Vector2f(2.0, 2.0);
+
+			Vector4f focuseColor(0.0, 0.0, 0.0, 1.0);
+
+			focusRenderPair.first.transparencyFlag = focuseColor[3] == 1 ? TRenderParams::TTransparencyFlag::opaque :
+				(focuseColor[3] == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
+			focusRenderPair.second = MakeTriangleListOfBorders(posFrom, posTo, focuseColor, zLevelAbsolute + 0.9);
+		}
+	}
+
+	/*void ImageView::setBackground(boost::variant<std::string, Vector4f> background)
 	{
 		this->background = background;
+
 
 		Visit(background,
 			[this](Vector4f color) {},
 			[this](std::string textureName)
-			{ 
-				if (textureName.length() > 0)
-				{
-					ResourceManager->TexList.AddTextureFromUserdata(textureName, textureName);
-				}
-					
-			});
+		{
+			if (textureName.length() > 0)
+			{
+				ResourceManager->TexList.AddTextureFromUserdata(textureName, textureName);
+			}
+
+		});
 
 		UpdateRenderPair();
+	}*/
+
+	void ImageView::setSelected(bool val)
+	{
+		selected = val;
+		UpdateRenderPair();
+	}
+
+	bool ImageView::isSelected()
+	{
+		return selected;
+	}
+	//========================================
+
+	//=======================================
+
+	ColorPickerHueSat::ColorPickerHueSat(WidgetParentInterface& widgetParent)
+		: ImageView(widgetParent)
+		, currentPointUV(0,0)
+	{
+		rectColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+	}
+
+	void ColorPickerHueSat::Draw()
+	{
+		ImageView::Draw();
+
+		if (rectPointRender.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
+		{
+			if (rectPointRender.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
+
+			TRenderParamsSetter render(rectPointRender.first);
+			Renderer->DrawTriangleList(rectPointRender.second, GL_LINES);
+			CheckGlError();
+
+			if (rectPointRender.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
+		}		
+	}
+
+	void ColorPickerHueSat::UpdateRenderPair()
+	{
+		ImageView::UpdateRenderPair();
+
+		float drawCenterX = (getDrawWidth() * currentPointUV(0)) / 100.0f;
+		float drawCenterY = (getDrawHeight() * currentPointUV(1)) / 100.0f;
+		float halfRectWidth = (getDrawWidth() * 0.03f);
+		Vector2f shift = getDrawTranslate() + Vector2f(drawCenterX, drawCenterY);
+		Vector2f posFrom = shift - Vector2f(halfRectWidth, halfRectWidth);
+		Vector2f posTo = shift + Vector2f(halfRectWidth, halfRectWidth);
+
+		rectPointRender.first.transparencyFlag = rectColor[3] == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(rectColor[3] == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
+		rectPointRender.first.ShaderName = "Color";
+
+		rectPointRender.second = MakeTriangleListOfBorders(posFrom, posTo, rectColor, zLevelAbsolute + 0.9);
+	}
+
+	bool ColorPickerHueSat::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		int currentPointX = 100 * pos(0) / getDrawWidth();
+		if (currentPointX < 0)
+			currentPointX = 0;
+
+		if (currentPointX > 100)
+			currentPointX = 100;
+
+		int currentPointY = 100 * pos(1) / getDrawHeight();
+		if (currentPointY < 0)
+			currentPointY = 0;
+
+		if (currentPointY > 100)
+			currentPointY = 100;
+
+		currentPointUV = Vector2i(currentPointX, currentPointY);
+		onMoveSignal(pos, shift, touchNumber);
+
+		UpdateRenderPair();
+		return false;
+	}
+
+	bool ColorPickerHueSat::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		OnMove(pos, Vector2f(0, 0), touchNumber);
+		return true;
+	}
+
+
+	Vector2i ColorPickerHueSat::getCurrentPointUV()
+	{
+		return currentPointUV;
+	}
+
+	void ColorPickerHueSat::setCurrentPointUV(Vector2i point)
+	{
+		currentPointUV = point;
+		UpdateRenderPair();
+	}
+	//========================================
+
+	//=======================================
+
+	ColorPickerLum::ColorPickerLum(WidgetParentInterface& widgetParent)
+		: ImageView(widgetParent)
+		, currentPointT(50)
+	{
+		rectColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+	}
+
+	void ColorPickerLum::Draw()
+	{
+		ImageView::Draw();
+
+		if (rectPointRender.first.transparencyFlag != TRenderParams::TTransparencyFlag::fullyTransparent)
+		{
+			if (rectPointRender.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(false);
+			}
+
+			TRenderParamsSetter render(rectPointRender.first);
+			Renderer->DrawTriangleList(rectPointRender.second, GL_LINES);
+			CheckGlError();
+
+			if (rectPointRender.first.transparencyFlag == TRenderParams::TTransparencyFlag::semiTransparent)
+			{
+				glDepthMask(true);
+			}
+		}
+
+		TRenderParamsSetter render(colorPaletteRender.first);
+		Renderer->DrawTriangleList(colorPaletteRender.second, GL_TRIANGLE_STRIP);
+		CheckGlError();
+	}
+
+	void ColorPickerLum::UpdateRenderPair()
+	{
+		ImageView::UpdateRenderPair();
+
+		float drawCenterX = (getDrawWidth() * 0.5f);
+		float drawCenterY = (getDrawHeight() * currentPointT) / 100.0f;
+		float halfRectWidth = (getDrawWidth() * 0.5f) + 2.5;
+		Vector2f shift = getDrawTranslate() + Vector2f(drawCenterX, drawCenterY);
+		Vector2f posFrom = shift - Vector2f(halfRectWidth, halfRectWidth/3.0f);
+		Vector2f posTo = shift + Vector2f(halfRectWidth, halfRectWidth/3.0f);
+
+
+		rectPointRender.first.transparencyFlag = rectColor[3] == 1 ? TRenderParams::TTransparencyFlag::opaque :
+			(rectColor[3] == 0 ? TRenderParams::TTransparencyFlag::fullyTransparent : TRenderParams::TTransparencyFlag::semiTransparent);
+
+		rectPointRender.first.ShaderName = "Color";
+
+		rectPointRender.second = MakeTriangleListOfBorders(posFrom, posTo, rectColor, zLevelAbsolute + 0.9);
+
+		colorPaletteRender.first.ShaderName = "Color";
+		colorPaletteRender.second.Data.Vec4CoordArr.clear();
+		colorPaletteRender.second.Data.Vec3CoordArr.clear();
+		
+		float hStep = (float)getDrawHeight() / 100.0f;
+		shift = getDrawTranslate();
+		for (auto i = 0; i < paletteColors.size(); i++)
+		{
+			Vector2f pos1 = shift;
+			Vector2f pos2 = shift + Vector2f(getDrawWidth(), 0);
+			shift = shift + Vector2f(0, hStep);
+
+			colorPaletteRender.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB].push_back(paletteColors[i]);
+			colorPaletteRender.second.Data.Vec4CoordArr[CONST_STRING_COLOR_ATTRIB].push_back(paletteColors[i]);
+
+			colorPaletteRender.second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(Vector3f(pos1(0), pos1(1), zLevelAbsolute + 0.8));
+			colorPaletteRender.second.Data.Vec3CoordArr[CONST_STRING_POSITION_ATTRIB].push_back(Vector3f(pos2(0), pos2(1), zLevelAbsolute + 0.8));
+		}
+		colorPaletteRender.second.RefreshBuffer();
+	}
+
+	bool ColorPickerLum::OnMove(Vector2f pos, Vector2f shift, int touchNumber)
+	{
+		currentPointT = 100 * pos(1) / getDrawHeight();
+		if (currentPointT < 0)
+			currentPointT = 0;
+
+		if (currentPointT > 100)
+			currentPointT = 100;
+
+		onMoveSignal(pos, shift, touchNumber);
+
+		UpdateRenderPair();
+		return false;
+	}
+
+	bool ColorPickerLum::OnMouseUp(Vector2f pos, int touchNumber)
+	{
+		OnMove(pos, Vector2f(0, 0), touchNumber);
+		return true;
+	}
+
+	int ColorPickerLum::getCurrentPointT()
+	{
+		return currentPointT;
+	}
+
+	void ColorPickerLum::setCurrentPointT(int point)
+	{
+		currentPointT = point;
+		UpdateRenderPair();
+	}
+
+	void ColorPickerLum::clearColorPalette()
+	{
+		paletteColors.clear();
+	}
+
+	void ColorPickerLum::addColorToPalette(Vector4f color)
+	{
+		paletteColors.push_back(color);
 	}
 	//========================================
 
@@ -3637,6 +3922,8 @@ namespace SE
 			}
 
 			UpdateRenderPair();
+
+			WidgetAncestor::OnKeyPressed(key);
 		}
 	}
 
@@ -4825,6 +5112,18 @@ namespace SE
 			if (type == "ImageView")
 			{
 				auto imageView = parentWidget.CreateAndAddChildOfType<ImageView>();
+
+				widget = imageView;
+			}
+			if (type == "ColorPickerHueSat")
+			{
+				auto imageView = parentWidget.CreateAndAddChildOfType<ColorPickerHueSat>();
+
+				widget = imageView;
+			}
+			if (type == "ColorPickerLum")
+			{
+				auto imageView = parentWidget.CreateAndAddChildOfType<ColorPickerLum>();
 
 				widget = imageView;
 			}
