@@ -108,13 +108,13 @@ inline int toint(const std::string& str)
 //#ifndef TARGET_WIN32 //Already defined in windows.h
 
 template<typename T>
-inline T min(T a, T b)
+inline T min_t(T a, T b)
 {
 	return a < b ? a : b;
 }
 
 template<typename T>
-inline T max(T a, T b)
+inline T max_t(T a, T b)
 {
 	return a > b ? a : b;
 }

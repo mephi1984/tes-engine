@@ -655,6 +655,7 @@ void TSalmonRendererInterface::SwitchToFrameBuffer(const std::string& frameName)
 
 		SetFrameViewport(frameName);
 
+	
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 }

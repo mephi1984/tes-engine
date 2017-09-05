@@ -19,7 +19,7 @@ void TSimpleTimer::Update(size_t dt)
 {
 	if (Timer > 0)
 	{
-		Timer = max(Timer - static_cast<int>(dt), 0);
+		Timer = max_t(Timer - static_cast<int>(dt), 0);
 	}
 }
 

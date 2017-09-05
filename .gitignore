@@ -357,3 +357,7 @@ __pycache__/
 
 #other
 log.txt
+/android/Engine/.workspace/.metadata/.plugins/org.eclipse.core.resources/.projects/Engine
+/android/Engine/.workspace/.metadata/.plugins
+/.gitattributes
+/android/Engine/.workspace

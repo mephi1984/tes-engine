@@ -9,7 +9,6 @@
 
 namespace SE
 {
-
 	class WidgetAncestor;
 
 	class WidgetParentInterface
@@ -110,6 +109,7 @@ namespace SE
 		boost::signals2::signal<void(Vector2f, int)> onMouseDownSignal;
 		boost::signals2::signal<void(Vector2f, int)> onMouseUpSignal;
 		boost::signals2::signal<void(int)> onMouseCancelSignal;
+		boost::signals2::signal<void(int)> OnKeyPressedSignal;
 
 		WidgetParentInterface& parent;
 
@@ -123,6 +123,8 @@ namespace SE
 		float marginLeft;
 		float marginRight;
 
+		static bool pointIsInsideView(Vector2f point, std::shared_ptr<WidgetAncestor> widget);
+		
 		Vector2f extraTranslation;
 
 		std::string name;
@@ -130,6 +132,8 @@ namespace SE
 		bool focused;
 
 		bool visible;
+
+		Vector4f getBackgroundColor();
 
 		WidgetAncestor(WidgetParentInterface& widgetParent);
 		virtual ~WidgetAncestor();
@@ -177,6 +181,7 @@ namespace SE
 		virtual void setBorderColor(Vector4f color);
 		virtual void setBorderType(BorderType newBorderType);
 		virtual void setVisibility(bool visible);
+		virtual void setOwnerDrawBackground(const std::string& backgroundName);
 
 		virtual void setLayoutWidth(boost::variant<float, LayoutStyle> layoutWidth);
 		virtual void setLayoutHeight(boost::variant<float, LayoutStyle> layoutHeight);
@@ -204,6 +209,7 @@ namespace SE
 		virtual void OnKeyPressed(int key);
 
 		virtual bool OnMouseMove(Vector2f pos);
+
 		virtual void OnMouseMoveOutside();
 
 		virtual void RemoveFocusRecursively();
@@ -215,14 +221,64 @@ namespace SE
 	class ImageView : public WidgetAncestor
 	{
 	protected:
-
+		TRenderPair focusRenderPair;
+		bool selected;
 	public:
 		
 		ImageView(WidgetParentInterface& widgetParent);
 
+		//virtual void setBackground(boost::variant<std::string, Vector4f> background);
 		virtual void Draw();
+		virtual void UpdateRenderPair();
+		void setSelected(bool val);
+		bool isSelected();
 	};
 
+	class ColorPickerHueSat : public ImageView
+	{
+	protected:
+		TRenderPair rectPointRender;
+		Vector2i currentPointUV;
+		Vector4f rectColor;
+	public:
+
+		ColorPickerHueSat(WidgetParentInterface& widgetParent);
+
+		//virtual void setBackground(boost::variant<std::string, Vector4f> background);
+		virtual void Draw();
+		virtual void UpdateRenderPair();
+
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
+
+		Vector2i getCurrentPointUV();
+		void setCurrentPointUV(Vector2i point);
+	};
+
+	class ColorPickerLum : public ImageView
+	{
+	protected:
+		TRenderPair rectPointRender;
+		TRenderPair colorPaletteRender;
+		int currentPointT;
+		Vector4f rectColor;
+		std::vector<Vector4f> paletteColors;
+	public:
+
+		ColorPickerLum(WidgetParentInterface& widgetParent);
+
+		//virtual void setBackground(boost::variant<std::string, Vector4f> background);
+		virtual void Draw();
+		virtual void UpdateRenderPair();
+
+		virtual bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
+		virtual bool OnMouseUp(Vector2f pos, int touchNumber);
+
+		int getCurrentPointT();
+		void setCurrentPointT(int point);
+		void clearColorPalette();
+		void addColorToPalette(Vector4f color);
+	};
 
 	class VerticalLinearLayout : public WidgetAncestor
 	{
@@ -364,6 +420,7 @@ namespace SE
 		virtual void OnKeyPressed(int key);
 
 		virtual bool OnMouseMove(Vector2f pos);
+
 		virtual void OnMouseMoveOutside();
 
 		virtual void RemoveFocusRecursively();
@@ -704,6 +761,7 @@ namespace SE
 		bool OnMouseDown(Vector2f pos, int touchNumber);
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 
+		void signalValueChange();
 	};
 	
 	class HorizontalDoubleSlider : public WidgetAncestor
@@ -761,6 +819,8 @@ namespace SE
 		bool OnMove(Vector2f pos, Vector2f shift, int touchNumber);
 		bool OnMouseUp(Vector2f pos, int touchNumber);
 		bool OnMouseUpAfterMove(Vector2f pos, int touchNumber);
+
+		
 
 	};
 
@@ -826,7 +886,7 @@ namespace SE
 		WidgetAncestor::childrenVerticalAlignment layoutVerticalAlignmentFromConfigValue(std::string configValue);
 		WidgetAncestor::BorderType borderTypeFromConfigValue(std::string configValue);
 
-
+		
 	};
 
 
