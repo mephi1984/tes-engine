@@ -85,6 +85,12 @@ GLuint TTextureListClass::InnerAddEmptyTexture(const std::string& texName, size_
 		#ifndef TARGET_WIN32 //TARGET_ANDROID or TARGET_IOS
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		#endif
+
+
+		TexMap[texName].RefCount = 1;
+		TexMap[texName].TexID = texID;
+		*Console << "ResourceManager::TexList empty texture added succesfuly: " + texName;
+
 	
 		
 	}
